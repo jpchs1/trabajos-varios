@@ -1,6 +1,11 @@
-# Copy listo para Redes Sociales
+# Copy listo para Redes Sociales — SMASH HOUSE
 
-Reemplaza `EL PAPERO`, `+569XXXXXXXX` e `@elpapero.elmonte` por los datos reales antes de publicar.
+**Marca:** SMASH HOUSE
+**WhatsApp referencial:** +56 9 1234 5678
+**Instagram referencial:** @smashhouse.elmonte
+**Operación:** sin alcohol
+
+> Cambia los datos referenciales (WhatsApp e Instagram) por los reales antes de publicar.
 
 ---
 
@@ -8,40 +13,40 @@ Reemplaza `EL PAPERO`, `+569XXXXXXXX` e `@elpapero.elmonte` por los datos reales
 
 **Versión corta:**
 
-> ¡Llegó EL PAPERO a El Monte!
-> Hamburguesas que se sienten en la mano, completos como deben ser y papas fritas que crujen de verdad.
+> ¡SMASH HOUSE llegó a El Monte!
+> Burgers smash, hot dogs como deben ser y fries que crujen de verdad.
 >
-> Pide por WhatsApp +569XXXXXXXX
+> Pide por WhatsApp +56 9 1234 5678
 > Despacho en El Monte · Jueves a Domingo · 18:00 a 23:00
 >
-> #ElMonte #HamburguesasElMonte #DeliveryElMonte #ComidaElMonte #Talagante
+> #SmashHouse #ElMonte #BurgersElMonte #DeliveryElMonte #ComidaElMonte #Talagante
 
 **Versión larga:**
 
-> Algo bueno se está cocinando en El Monte 🍔
+> Real burgers. Real fries. Real smashed.
 >
-> En EL PAPERO hacemos las hamburguesas, los completos y las papas como nos gusta a nosotros: con buena carne, pan fresco y papas que llegan crujientes a tu casa.
+> En SMASH HOUSE hacemos las hamburguesas, los hot dogs y las papas como nos gusta a nosotros: con buena carne, pan fresco y papas que llegan crujientes a tu casa.
 >
 > Sin local, sin filas. Pides, pagas y te llega caliente.
 >
-> 📲 WhatsApp +569XXXXXXXX
+> 📲 WhatsApp +56 9 1234 5678
 > 🛵 Despacho en El Monte
-> 🕕 Jueves a Domingo, 18:00 a 23:00
+> 🕕 Thursday to Sunday, 18:00 - 23:00
 >
-> Síguenos para enterarte de las promos de la semana 👇
-> @elpapero.elmonte
+> Síguenos para no perderte la promo de la semana 👇
+> @smashhouse.elmonte
 
 ---
 
 ## 2. Mensaje WhatsApp para difundir
 
-> 🍔 *EL PAPERO — El Monte* 🍟
+> 🍔 *SMASH HOUSE — El Monte* 🍟
 >
-> Hamburguesas, completos y papas fritas con despacho a tu casa.
+> Burgers, hot dogs y fries con despacho a tu casa.
 >
-> *Combo Familia*: 4 hamburguesas + papas grandes + bebida 1.5L = *$19.900*
+> *Family Combo*: 4 burgers + large fries + bebida 1.5L = *$19.900*
 >
-> Hace tu pedido al +569XXXXXXXX
+> Pedidos al +56 9 1234 5678
 > Jue-Dom · 18:00 a 23:00
 >
 > 👉 Reenvía este mensaje a quien le guste comer rico 😉
@@ -50,32 +55,33 @@ Reemplaza `EL PAPERO`, `+569XXXXXXXX` e `@elpapero.elmonte` por los datos reales
 
 ## 3. Historia Instagram (texto sobre el flyer)
 
-Línea 1: **YA ABRIMOS EN EL MONTE**
-Línea 2: Hamburguesas · Completos · Papas
-Línea 3: Pide por WhatsApp ↓
-CTA: stickers "Mensaje" + link al WhatsApp
+Línea 1: **NOW OPEN IN EL MONTE**
+Línea 2: Burgers · Hot Dogs · Fries
+Línea 3: Order via WhatsApp ↓
+CTA: sticker "Mensaje" + link a +56 9 1234 5678
 
 ---
 
-## 4. Promo "Noche de la Papa" (días flojos)
+## 4. Promo "Fries Night" (días flojos)
 
-> 🥔 NOCHE DE LA PAPA 🥔
+> 🥔 FRIES NIGHT 🥔
 > Solo este *MARTES y MIÉRCOLES*
 >
-> Papas grandes con queso a *$2.500* (antes $3.800)
+> Loaded Fries (queso + tocino) a *$2.990* (antes $4.500)
 >
 > Tu noche de Netflix la salvamos nosotros 🎬🍟
-> Pide al +569XXXXXXXX
+> Pide al +56 9 1234 5678
 
 ---
 
 ## 5. Combo gancho de fin de semana
 
-> 🍔 COMBO PAPERO 🍟🥤
-> Hamburguesa Italiana + Papas Medianas + Bebida = *$7.900*
+> 🍔 SMASH COMBO 🍟🥤
+> Smash Italiana + Medium Fries + bebida = *$7.900*
 >
 > Listo en 25 minutos en tu puerta.
-> Solo este finde 👉 +569XXXXXXXX
+> Solo este finde 👉 +56 9 1234 5678
+> @smashhouse.elmonte
 
 ---
 
@@ -107,8 +113,9 @@ Tu flyer está en `flyer-menu-instagram.svg`. Para usarlo en Instagram/WhatsApp/
 ---
 
 ## 7. Antes de publicar revisa
-- [ ] Cambiaste el número de WhatsApp real.
-- [ ] Pusiste el @ de Instagram correcto.
-- [ ] El nombre del local es el definitivo (o sigue siendo "EL PAPERO" si te quedas con ese).
-- [ ] Tienes la resolución sanitaria visible o disponible (la gente la pide).
+- [ ] Reemplazaste el WhatsApp referencial +56 9 1234 5678 por el real.
+- [ ] Reemplazaste @smashhouse.elmonte por el handle real (o creaste el handle).
+- [ ] El nombre SMASH HOUSE es definitivo (o lo cambiaste).
+- [ ] Tienes resolución sanitaria visible o disponible (la gente la pide).
 - [ ] Confirmaste los precios con tu costo real de la primera compra.
+- [ ] *Sin alcohol* → no necesitas patente de alcoholes, ojo con no incluir cervezas en los posts.

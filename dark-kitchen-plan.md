@@ -3,11 +3,11 @@
 ## Concepto
 Cocina fantasma (sin salón, solo delivery + retiro) enfocada en 3 productos hechos en casa + reventa de complementos.
 
-**Nombre tentativo (elige uno o mándame uno):**
-- *El Papero*
-- *BunBox*
-- *Mr. Papa & Burger*
-- *Don Papa*
+**Marca:** *SMASH HOUSE* — Burgers · Hot Dogs · Fries
+
+**Datos referenciales (cambiar por los reales antes de publicar):**
+- WhatsApp: +56 9 1234 5678
+- Instagram: @smashhouse.elmonte
 
 ## 1. Carta propia (alto margen, hechos por ti)
 
@@ -55,14 +55,17 @@ Compra al por mayor en Alvi/Mayorista 10 o distribuidores y revende:
 | Bebida lata 350 ml | $500 | $1.200 | 58% |
 | Bebida 1.5 L | $1.300 | $2.500 | 48% |
 | Agua mineral 500 ml | $400 | $1.000 | 60% |
-| Cerveza individual (con patente alcoholes) | $900 | $2.500 | 64% |
+| Bebida energética (Monster / Red Bull) | $1.100 | $2.500 | 56% |
+| Jugo natural envasado individual | $700 | $1.700 | 59% |
 | Helado palito | $500 | $1.500 | 67% |
 | Helado tarrito | $900 | $2.500 | 64% |
 | Brownie / queque casero (compra a productor local) | $700 | $2.000 | 65% |
 | Papitas Marco Polo / Lay's bolsa | $400 | $1.000 | 60% |
 | Salsa extra (bbq, ají, mayo casera) | $150 | $500 | 70% |
 
-**Tip clave**: el margen de reventa en bebidas y helados puede pagarte el arriendo solo. La gente que pide hamburguesa + papas fritas casi siempre suma bebida.
+**Tip clave**: el margen de reventa en bebidas, helados y energéticas puede pagarte el arriendo solo. La gente que pide hamburguesa + papas fritas casi siempre suma bebida.
+
+> *Esta operación es 100% sin alcohol* → no requiere patente de alcoholes, simplifica trámites y permite operar con resolución sanitaria base.
 
 ## 3. Inversión inicial (estimada)
 

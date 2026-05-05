@@ -86,6 +86,100 @@ Pasos concretos para validar:
 3. Revisar el **PLADECO** (Plan de Desarrollo Comunal) en la municipalidad: dice qué están priorizando.
 4. Mirar los permisos de patente comercial ya otorgados el último año en transparencia municipal: indica qué se está abriendo.
 
+## 6. Más ideas por nicho (ampliación)
+
+### A. Servicios para parcelas de agrado (boom en la comuna)
+- **Mantención integral de jardines y piscinas** con plan mensual fijo (modelo "abono"): los dueños viven en Santiago entre semana.
+- **Cierres perimetrales y portones automáticos**: cada parcela nueva los necesita.
+- **Limpieza y mantención de canales, pozos y APR**: muy demandado, baja oferta formal.
+- **Fumigación y control de plagas rural** (avispas, alacranes, ratones, garrapatas).
+- **Mudanzas locales y fletes a parcelas** con pickup propio.
+- **Pequeña empresa de movimiento de tierras** (mini-retro, mini-cargador en arriendo con operador).
+
+### B. Mejoramiento del hogar / construcción
+- **Constructora especializada en quinchos, terrazas y piscinas pequeñas**.
+- **Mueblería a medida con showroom** (cocinas, closets) — hoy se compra en Maipú o Talagante.
+- **Vidriería y termopaneles** con instalación.
+- **Cerrajería 24/7** (no hay servicio de urgencia local).
+- **Tienda de eficiencia energética**: paneles solares chicos, aislación, calefones a gas/leña certificados.
+
+### C. Agroindustria de pequeña escala
+- **Centro de acopio y distribución de hortalizas**: comprar a productores chicos y vender a restaurantes / ferias de Santiago.
+- **Maquila de envasado y etiquetado** para emprendedores agroalimentarios (mermeladas, miel, conservas, deshidratados).
+- **Vivero con plantas ornamentales, frutales y suculentas** + asesoría de paisajismo.
+- **Producción y venta de compost / tierra de hoja / sustratos** envasados.
+- **Apicultura comercial** con venta directa y agroturismo.
+
+### D. Turismo en eje Pomaire–Carretera del Sol–Río Maipo
+- **Glamping o cabañas pequeñas junto al río Maipo** (3-6 unidades, ticket fin de semana).
+- **Restaurant temático de cocina campesina** con huerta propia.
+- **Tienda de paso** (almacén gourmet + baño + café) en Ruta 78.
+- **Centro de eventos al aire libre** (matrimonios 80-150 personas) en parcela arrendada.
+- **Tour gastronómico-artesanal** que conecte Pomaire, viñas chicas y El Monte.
+- **Arriendo de bicicletas / e-bikes** con ruta señalizada al río.
+
+### E. Infancia y familias jóvenes
+- **Centro de estimulación temprana** (0-3 años) con metodología Montessori o similar.
+- **Salón de cumpleaños infantiles** con juegos inflables y animación.
+- **Escuela de fútbol, vóley o gimnasia artística** para niños.
+- **Academia de robótica, programación o inglés lúdico** los fines de semana.
+- **After-school con apoyo escolar y colación** (papás llegan tarde de Santiago).
+
+### F. Adulto mayor (segmento que crece rápido)
+- **Centro de día** con almuerzo, talleres y traslado puerta a puerta.
+- **Servicio domiciliario de enfermería, kinesiología y podología**.
+- **Adaptación de viviendas** (barras, rampas, baños accesibles).
+- **Residencia de larga estadía pequeña** (8-15 camas) en parcela.
+- **Telemedicina asistida** con técnico que va a la casa.
+
+### G. Servicios automotores y para la Ruta 78
+- **Vulcanización rápida + alineación** con buena vereda hacia la carretera.
+- **Lavado y detailing** con sala de espera y wifi.
+- **Taller mecánico especializado** en una marca (Hyundai, Suzuki o chinas: las más vendidas).
+- **Asistencia en ruta** (grúa, batería, combustible) con cobertura Talagante–Melipilla.
+- **Punto de carga rápida para autos eléctricos** junto a estación de servicio (apuesta 3-5 años).
+
+### H. Tecnología y oficina
+- **WISP rural** (internet inalámbrico): hay sectores donde no llega VTR/Movistar.
+- **Servicio técnico computacional con visita a domicilio** + venta de notebooks reacondicionados.
+- **Instalación de cámaras y alarmas con monitoreo**: la inseguridad rural es preocupación N°1.
+- **Coworking pequeño** (8-12 puestos) con sala de reunión arrendable por hora.
+- **Imprenta digital y serigrafía local** (poleras, gigantografías, regalos corporativos).
+
+### I. Belleza y cuidado personal
+- **Barbería moderna** con identidad (no peluquería de barrio).
+- **Centro estético** (depilación láser, faciales, masajes) — hoy se viaja a Talagante o Maipú.
+- **Spa pequeño** en parcela con quincho y tinajas.
+- **Estudio de uñas** con pestañas y cejas.
+
+### J. Economía circular y sostenibilidad
+- **Reciclaje pagando**: chatarra, cobre, RAEE, baterías.
+- **Tienda a granel** (legumbres, detergente, shampoo, sin envase).
+- **Compraventa de muebles y artículos usados** con consignación.
+- **Composta comunitaria** + venta de tierra mejorada.
+
+### K. Alimentación B2B
+- **Cocina central que provee colaciones** a empresas, colegios y casinos.
+- **Banquetería para eventos** en parcelas (servicio integral con loza, mozos, mobiliario).
+- **Pastelería de pedidos** (matrimonios, cumpleaños, bautizos).
+- **Panadería artesanal** con masa madre y entrega a casa.
+
+### L. Educación de adultos y oficios
+- **OTEC con cursos SENCE**: gasfitería, electricidad, soldadura, manipulación de alimentos.
+- **Escuela de conducción** (clase B y profesional).
+- **Centro de exámenes libres** y nivelación de estudios.
+- **Academia de inglés conversacional** para trabajadores adultos.
+
+## 7. Filtro rápido: ¿cómo elegir entre tantas?
+
+Antes de enamorarte de una idea, pásala por estos 5 filtros:
+
+1. **¿Cuánta plata tienes y cuánto puedes perder?** Si es tu primer negocio, parte con algo bajo CapEx (ideas tipo punto de retiro, barbería, vivero, servicio a parcelas).
+2. **¿Qué sabes hacer tú o tu socio?** El know-how propio reduce el riesgo a la mitad. No abras una vulcanización si nunca has visto una neumática.
+3. **¿Hay flujo o lo tienes que crear?** Los negocios "de paso" en Av. Libertadores y Ruta 78 ya tienen flujo; los de destino (centro médico, salón de eventos) tienen que atraerlo.
+4. **¿Cuánto demora en estar al día?** Punto de retiro o pastelería: 2-3 meses. Centro médico o glamping: 12-18 meses.
+5. **¿Tiene "foso"?** ¿Qué te protege cuando el de al lado quiera copiarte? (especialidad médica, marca, contrato exclusivo con un courier, ubicación única).
+
 ---
 
 **Fuentes:**

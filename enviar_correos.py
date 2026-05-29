@@ -88,6 +88,7 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--dry-run", action="store_true", help="No envía; solo muestra.")
     ap.add_argument("--only", help="Lista de números, ej: 1,4,15")
+    ap.add_argument("--test", metavar="CORREO", help="Modo prueba: redirige TODOS los correos SOLO a CORREO (no envía a los destinatarios reales).")
     args = ap.parse_args()
 
     emails = parse_emails()
@@ -106,9 +107,12 @@ def main():
             print(f"   📎 {p.name}")
     else:
         print(f"Sin adjuntos (carpeta {ADJUNTOS_DIR}/ vacía o inexistente).")
+    if args.test:
+        print(f"\n*** MODO PRUEBA *** Todos se enviarán SOLO a: {args.test} (NO a los destinatarios reales).")
     print()
     for e in emails:
-        print(f"  #{e['num']:>2}  -> {e['to']:<34} cc={e['cc']}")
+        destino = args.test if args.test else e["to"]
+        print(f"  #{e['num']:>2}  -> {destino:<34} cc={'' if args.test else e['cc']}")
 
     if args.dry_run:
         print("\n[DRY-RUN] No se envió nada.")
@@ -116,7 +120,8 @@ def main():
     if not user or not pwd:
         sys.exit("\nFalta GMAIL_USER y/o GMAIL_APP_PASSWORD. Define las variables de entorno (ver cabecera).")
 
-    if input(f"\n¿Enviar {len(emails)} correos reales desde {user}? Escribe 'ENVIAR' para confirmar: ").strip() != "ENVIAR":
+    destino_txt = f"SOLO a {args.test} (prueba)" if args.test else "a los destinatarios reales"
+    if input(f"\n¿Enviar {len(emails)} correo(s) {destino_txt} desde {user}? Escribe 'ENVIAR' para confirmar: ").strip() != "ENVIAR":
         sys.exit("Cancelado.")
 
     ctx = ssl.create_default_context()
@@ -124,10 +129,16 @@ def main():
         s.starttls(context=ctx)
         s.login(user, pwd)
         for e in emails:
-            msg = construir_mensaje(user, e, adjuntos)
-            rcpts = [x.strip() for x in (e["to"] + "," + e["cc"]).split(",") if x.strip()]
+            if args.test:
+                e_eff = dict(e); e_eff["to"] = args.test; e_eff["cc"] = ""
+                e_eff["subject"] = "[PRUEBA] " + e["subject"]
+                rcpts = [args.test]
+            else:
+                e_eff = e
+                rcpts = [x.strip() for x in (e["to"] + "," + e["cc"]).split(",") if x.strip()]
+            msg = construir_mensaje(user, e_eff, adjuntos)
             s.sendmail(user, rcpts, msg.as_string())
-            print(f"  ✅ enviado #{e['num']} -> {e['to']}")
+            print(f"  ✅ enviado #{e['num']} -> {', '.join(rcpts)}")
     print("\nListo. Revisa tu carpeta de Enviados en Gmail.")
 
 if __name__ == "__main__":

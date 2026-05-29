@@ -89,6 +89,7 @@ def main():
     ap.add_argument("--dry-run", action="store_true", help="No envía; solo muestra.")
     ap.add_argument("--only", help="Lista de números, ej: 1,4,15")
     ap.add_argument("--test", metavar="CORREO", help="Modo prueba: redirige TODOS los correos SOLO a CORREO (no envía a los destinatarios reales).")
+    ap.add_argument("--insecure", action="store_true", help="Omite la verificación del certificado TLS (úsalo si un antivirus/proxy intercepta la conexión y da CERTIFICATE_VERIFY_FAILED).")
     args = ap.parse_args()
 
     emails = parse_emails()
@@ -124,7 +125,11 @@ def main():
     if input(f"\n¿Enviar {len(emails)} correo(s) {destino_txt} desde {user}? Escribe 'ENVIAR' para confirmar: ").strip() != "ENVIAR":
         sys.exit("Cancelado.")
 
-    ctx = ssl.create_default_context()
+    if args.insecure:
+        ctx = ssl._create_unverified_context()
+        print("⚠️  Modo --insecure: NO se verifica el certificado TLS (un antivirus/proxy intercepta la conexión).")
+    else:
+        ctx = ssl.create_default_context()
     with smtplib.SMTP("smtp.gmail.com", 587) as s:
         s.starttls(context=ctx)
         s.login(user, pwd)

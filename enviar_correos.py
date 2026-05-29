@@ -17,15 +17,50 @@ Uso:
   python3 enviar_correos.py               # envía de verdad (pide confirmación)
   python3 enviar_correos.py --only 1,4,15 # envía solo esos números
 
-Antes de enviar: edita correos-envio-reclamo.md y reemplaza [teléfono] y [RUT] en la firma.
+Adjuntos: deja los archivos a adjuntar (comprobante de pago, factura, etc.) dentro de una
+carpeta llamada "adjuntos/" junto a este script. Se adjuntarán automáticamente a TODOS los correos.
+Ejemplo:
+  adjuntos/comprobante_pago.png
+  adjuntos/factura_551879.pdf
 """
-import os, re, sys, ssl, smtplib, argparse, pathlib
+import os, re, sys, ssl, smtplib, argparse, pathlib, mimetypes
 from email.mime.text import MIMEText
+from email.mime.multipart import MIMEMultipart
+from email.mime.base import MIMEBase
+from email import encoders
 from email.utils import formataddr
 
 SRC = pathlib.Path(__file__).parent / "correos-envio-reclamo.md"
+ADJUNTOS_DIR = pathlib.Path(__file__).parent / "adjuntos"   # deja aquí el comprobante, la factura, etc.
 GLOBAL_CC = "fchaparro@gmail.com"
 SENDER_NAME = "Juan Pablo Chaparro Soumastre"
+
+def cargar_adjuntos():
+    """Devuelve la lista de archivos a adjuntar (todo lo que haya en ./adjuntos/)."""
+    if not ADJUNTOS_DIR.is_dir():
+        return []
+    return sorted(p for p in ADJUNTOS_DIR.iterdir() if p.is_file() and not p.name.startswith("."))
+
+def construir_mensaje(user, e, adjuntos):
+    """MIMEText simple si no hay adjuntos; multipart con archivos si los hay."""
+    if not adjuntos:
+        msg = MIMEText(e["body"], "plain", "utf-8")
+    else:
+        msg = MIMEMultipart()
+        msg.attach(MIMEText(e["body"], "plain", "utf-8"))
+        for path in adjuntos:
+            ctype, _ = mimetypes.guess_type(path.name)
+            maintype, subtype = (ctype.split("/", 1) if ctype else ("application", "octet-stream"))
+            part = MIMEBase(maintype, subtype)
+            part.set_payload(path.read_bytes())
+            encoders.encode_base64(part)
+            part.add_header("Content-Disposition", "attachment", filename=path.name)
+            msg.attach(part)
+    msg["From"] = formataddr((SENDER_NAME, user))
+    msg["To"] = e["to"]
+    msg["Cc"] = e["cc"]
+    msg["Subject"] = e["subject"]
+    return msg
 
 def parse_emails():
     text = SRC.read_text(encoding="utf-8")
@@ -63,10 +98,17 @@ def main():
     user = os.environ.get("GMAIL_USER")
     pwd = os.environ.get("GMAIL_APP_PASSWORD")
 
-    print(f"Se procesarán {len(emails)} correos. CC global: {GLOBAL_CC}\n")
+    adjuntos = cargar_adjuntos()
+    print(f"Se procesarán {len(emails)} correos. CC global: {GLOBAL_CC}")
+    if adjuntos:
+        print("Adjuntos (se añaden a TODOS los correos):")
+        for p in adjuntos:
+            print(f"   📎 {p.name}")
+    else:
+        print(f"Sin adjuntos (carpeta {ADJUNTOS_DIR}/ vacía o inexistente).")
+    print()
     for e in emails:
-        warn = "  ⚠️ revisa [teléfono]/[RUT]" if "[completar]" in e["body"] else ""
-        print(f"  #{e['num']:>2}  -> {e['to']:<34} cc={e['cc']}{warn}")
+        print(f"  #{e['num']:>2}  -> {e['to']:<34} cc={e['cc']}")
 
     if args.dry_run:
         print("\n[DRY-RUN] No se envió nada.")
@@ -82,11 +124,7 @@ def main():
         s.starttls(context=ctx)
         s.login(user, pwd)
         for e in emails:
-            msg = MIMEText(e["body"], "plain", "utf-8")
-            msg["From"] = formataddr((SENDER_NAME, user))
-            msg["To"] = e["to"]
-            msg["Cc"] = e["cc"]
-            msg["Subject"] = e["subject"]
+            msg = construir_mensaje(user, e, adjuntos)
             rcpts = [x.strip() for x in (e["to"] + "," + e["cc"]).split(",") if x.strip()]
             s.sendmail(user, rcpts, msg.as_string())
             print(f"  ✅ enviado #{e['num']} -> {e['to']}")

@@ -34,7 +34,6 @@ Quedo atento a su pronta respuesta.
 
 Atentamente,
 Juan Pablo Chaparro Soumastre
-Correo: jpchs1@gmail.com
 
 ---
 
@@ -56,7 +55,6 @@ Agradezco su orientación y quedo atento.
 
 Atentamente,
 Juan Pablo Chaparro Soumastre
-Correo: jpchs1@gmail.com
 
 ---
 
@@ -80,7 +78,6 @@ Quedo atento a su respuesta.
 
 Atentamente,
 Juan Pablo Chaparro Soumastre
-Correo: jpchs1@gmail.com
 
 ---
 
@@ -102,7 +99,6 @@ Agradezco de antemano su orientación.
 
 Atentamente,
 Juan Pablo Chaparro Soumastre
-Correo: jpchs1@gmail.com
 
 ---
 
@@ -122,7 +118,6 @@ Quedo atento y agradecido por su ayuda.
 
 Atentamente,
 Juan Pablo Chaparro Soumastre
-Correo: jpchs1@gmail.com
 
 ---
 
@@ -144,7 +139,6 @@ Agradezco desde ya su orientación.
 
 Atentamente,
 Juan Pablo Chaparro Soumastre
-Correo: jpchs1@gmail.com
 
 ---
 
@@ -164,7 +158,6 @@ Quedo muy agradecido por su ayuda.
 
 Atentamente,
 Juan Pablo Chaparro Soumastre
-Correo: jpchs1@gmail.com
 
 ---
 
@@ -188,7 +181,6 @@ Quedo atento y agradecido.
 
 Atentamente,
 Juan Pablo Chaparro Soumastre
-Correo: jpchs1@gmail.com
 
 ---
 
@@ -210,7 +202,6 @@ Agradezco su ayuda.
 
 Atentamente,
 Juan Pablo Chaparro Soumastre
-Correo: jpchs1@gmail.com
 
 ---
 
@@ -232,7 +223,6 @@ Quedo atento a sus comentarios.
 
 Atentamente,
 Juan Pablo Chaparro Soumastre
-Correo: jpchs1@gmail.com
 
 ---
 
@@ -252,7 +242,6 @@ Agradezco su atención.
 
 Atentamente,
 Juan Pablo Chaparro Soumastre
-Correo: jpchs1@gmail.com
 
 ---
 
@@ -272,7 +261,6 @@ Quedo atento y agradecido.
 
 Atentamente,
 Juan Pablo Chaparro Soumastre
-Correo: jpchs1@gmail.com
 
 ---
 
@@ -292,7 +280,6 @@ Quedo atento a su aclaración.
 
 Atentamente,
 Juan Pablo Chaparro Soumastre
-Correo: jpchs1@gmail.com
 
 ---
 
@@ -310,7 +297,6 @@ Muchas gracias por su apoyo.
 
 Atentamente,
 Juan Pablo Chaparro Soumastre
-Correo: jpchs1@gmail.com
 
 ---
 
@@ -335,4 +321,3 @@ Quedo a disposición para aportar cualquier documento adicional.
 
 Atentamente,
 Juan Pablo Chaparro Soumastre
-Correo: jpchs1@gmail.com

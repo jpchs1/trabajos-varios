@@ -18,7 +18,7 @@ El problema principal no es solo el monto, sino la **falta de explicación, falt
 
 La provisión inicial informada por la Agencia de Aduanas Rubio para gastos portuarios fue de aproximadamente **$620.000**. Sin embargo, la factura final emitida por Puerto Columbo asciende a **$1.127.005**, prácticamente el doble de lo provisionado inicialmente.
 
-La situación se agrava porque la respuesta práctica recibida es que, si no se paga, la carga no puede ser retirada y podría "irse a piso" o generar nuevos cobros, más almacenaje y otros cargos adicionales. En la práctica, esto coloca al importador en una posición de presión económica: pagar primero cobros que no entiende o exponerse a una escalada de costos aún mayor.
+Ante la advertencia de que, si no se pagaba, la carga no podría retirarse y seguiría generando costos ("piso", almacenaje y otros), **con fecha 28-05-2026 me vi obligado a pagar la totalidad de la factura como única forma de retirar la mercancía**. El pago se efectuó de buena fe y **bajo protesta**, sin haber recibido una explicación de los cargos, y **no implica aceptación de su procedencia**. Por ello solicito ahora la revisión y, de constatarse cobros sin respaldo, su **devolución**.
 
 ---
 
@@ -29,8 +29,9 @@ La situación se agrava porque la respuesta práctica recibida es que, si no se 
 3. Posteriormente, Puerto Columbo S.A. emitió la **Factura Electrónica Nº 551879**, de fecha **28-05-2026**, por un total de **$1.127.005**.
 4. La factura contiene ítems que no se explican suficientemente, especialmente dos cobros documentales que parecen superponerse o duplicarse.
 5. Se ha intentado obtener una explicación clara, pero no existen canales efectivos de atención: los teléfonos disponibles públicamente no permiten resolver el caso y no se obtiene una persona responsable que explique los cargos.
-6. La respuesta práctica es que, si no se paga, la carga no puede retirarse y seguirá generando costos.
-7. Por lo anterior, se solicita formalmente la revisión, explicación, respaldo y eventual rebaja o anulación de cobros no justificados.
+6. La respuesta práctica fue que, si no se pagaba, la carga no podría retirarse y seguiría generando costos.
+7. Ante esa advertencia, **con fecha 28-05-2026 pagué la totalidad de la factura para poder retirar la carga**, bajo protesta y dejando constancia de mi disconformidad; el pago no implica aceptación de los cobros.
+8. Por lo anterior, se solicita formalmente la revisión, explicación y respaldo de cada cargo y, de constatarse cobros no justificados, su rebaja y la **devolución de lo pagado en exceso**.
 
 ---
 
@@ -94,7 +95,7 @@ La ausencia de una respuesta efectiva convierte el cobro en una imposición prá
 
 ## 6. Riesgo de nuevos costos y presión económica
 
-Si el importador no paga una factura que no comprende, la carga no puede retirarse y se expone a nuevos costos (almacenaje adicional, movimiento a "piso" u otros). Se produce una asimetría evidente: el operador tiene control sobre la carga y sobre la generación de costos futuros, mientras el importador queda obligado a pagar primero y reclamar después.
+Como el importador no podía retirar una carga que seguiría acumulando costos (almacenaje, "piso" u otros) mientras no pagara, **el pago se volvió inevitable**: hubo que pagar primero —el 28-05-2026— y reclamar después. Se produce una asimetría evidente: el operador tiene control sobre la carga y sobre la generación de costos futuros, mientras el importador queda forzado a pagar montos no explicados y luego perseguir su revisión y eventual devolución.
 
 ---
 
@@ -131,8 +132,8 @@ En **abril de 2026** la **Fiscalía Nacional Económica (FNE)** presentó un req
 5. Identificación de quién solicitó o autorizó los servicios documentales.
 6. Información sobre si dichos servicios eran obligatorios o voluntarios.
 7. Información sobre alternativas para retirar la carga sin contratar esos servicios.
-8. Revisión, rebaja o anulación de todo cargo no explicado ni respaldado.
-9. Congelamiento de nuevos cobros mientras el reclamo esté pendiente.
+8. Revisión de todo cargo no explicado ni respaldado y, de no corresponder, su rebaja y la **devolución de lo pagado en exceso** (la factura ya fue pagada el 28-05-2026 bajo protesta).
+9. Constancia de que el pago se efectuó bajo protesta y no implica aceptación de los cobros, conservando el derecho a reclamar y a la devolución.
 10. Habilitación de un canal efectivo de atención, con nombre, teléfono y correo de una persona responsable.
 11. Revisión por Aduanas desde la perspectiva del régimen extraportuario.
 12. Orientación de DIRECTEMAR y Empresa Portuaria San Antonio sobre la autoridad competente.
@@ -143,16 +144,16 @@ En **abril de 2026** la **Fiscalía Nacional Económica (FNE)** presentó un req
 
 ## 9. Petición de solución urgente
 
-Solicito una respuesta urgente, considerando que cada día de demora puede generar nuevos costos. Mi intención es pagar lo que corresponda conforme a derecho y retirar la carga lo antes posible, pero no resulta razonable que se me obligue a pagar montos que no han sido debidamente explicados bajo la presión de costos adicionales. Este documento se difunde con el único objetivo de dejar constancia formal, solicitar transparencia y pedir intervención u orientación de las autoridades competentes.
+Solicito una respuesta urgente. **Ya pagué la totalidad de la factura el 28-05-2026, de forma obligada y bajo protesta**, como única vía para retirar mi carga y no seguir acumulando costos. Mi intención es y ha sido pagar solo lo que corresponda conforme a derecho; por ello no resulta razonable que se me haya obligado a pagar montos no explicados bajo la presión de costos adicionales. En consecuencia, solicito la revisión de los cargos y la **devolución de todo monto que no se encuentre respaldado**. Este documento se difunde con el único objetivo de dejar constancia formal, solicitar transparencia y pedir intervención u orientación de las autoridades competentes.
 
 ---
 
 ## 10. Documentos de respaldo
 
 - [Factura Electrónica Nº 551879](evidencia/factura_551879_puerto_columbo.pdf), emitida por Puerto Columbo S.A., 28-05-2026.
+- Comprobante de transferencia por $1.127.005 a Puerto Columbo S.A. (RUT 76.008.959-1), 28-05-2026 15:43, concepto "Pago de Proveedores" (pago bajo protesta).
 - Provisión inicial informada por Agencia de Aduanas Rubio (~$620.000).
 - Antecedentes de intentos de contacto y falta de respuesta efectiva.
-- Comunicaciones sobre el riesgo de nuevos costos por demora en el retiro.
 
 **Datos públicos de la empresa (para contraste):** sitio web [puertocolumbo.com](https://www.puertocolumbo.com) · Terminal San Antonio: Ruta 78 Nº 2375, Barrio Industrial · Teléfono publicado: (56) 35 220 3701.
 

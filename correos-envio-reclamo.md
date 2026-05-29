@@ -2,19 +2,22 @@
 
 **Remitente:** Juan Pablo Chaparro Soumastre — jpchs1@gmail.com
 **Documento base:** Factura Electrónica Nº 551879, Puerto Columbo S.A., 28-05-2026, total $1.127.005
-**Estado:** Factura **pagada el 28-05-2026 (ayer), de forma obligada y bajo protesta**, como única vía para retirar la carga.
+**Estado:** Factura **pagada el 28-05-2026 a las 15:43, de forma obligada y bajo protesta**, como única vía para retirar la carga.
+**Pago:** Transferencia electrónica por $1.127.005 a Puerto Columbo S.A. (RUT 76.008.959-1), Banco BCI, cuenta 000045501297, concepto "Pago de Proveedores".
 **Reclamo público (link a incluir):** https://jpchs1.github.io/trabajos-varios/reclamo-puerto-columbo/
 
 > **CC en TODOS los correos:** fchaparro@gmail.com (en el correo a la FNE va además contactenos@fne.gob.cl).
-> Sugerencia: completa los campos [teléfono] y [RUT] en la firma antes de enviar. Para Puerto Columbo,
-> envía los 3 correos por separado.
+> **Comprobante de pago (imagen):** https://imgur.com/a/FtFYbQ4
+> **Adjuntar en Gmail:** la captura del comprobante (y, si la tienes, la factura Nº 551879). Los enlaces
+> "Abrir en Gmail" prellenan el texto, pero los archivos adjuntos debes añadirlos tú a mano.
+> Para Puerto Columbo, envía los 3 correos por separado.
 
 ---
 
 ## GRUPO A — PUERTO COLUMBO S.A. (la empresa reclamada)
 
 ### 1) Rodrigo Mancilla — Gerente General
-**Para:** customerservice@puertocolumbo.com
+**Para:** facturacion.vap@puertocolumbo.com, customerservice@puertocolumbo.com
 **Asunto:** Dirigido a Gerencia General (Sr. Rodrigo Mancilla) — Pago obligado de Factura Nº 551879: solicito revisión y devolución de cargos no justificados
 
 Estimado señor Rodrigo Mancilla, Gerente General de Puerto Columbo S.A.:
@@ -25,18 +28,18 @@ Soy importador y mi carga quedó vinculada a servicios de Puerto Columbo S.A. **
 
 Habiendo ya pagado, solicito respetuosamente: (1) una explicación detallada y por escrito de cada ítem (COL-702, COL-720, COL-913 y COL-919); (2) la tabla tarifaria pública vigente aplicable y la fórmula de cálculo de cada cargo; (3) que se aclare especialmente la diferencia entre COL-913 y COL-919, que parecen superponerse; (4) que, de constatarse cargos sin respaldo, **se proceda a su rebaja y a la devolución de lo pagado en exceso**; y (5) que se designe a una persona responsable, con nombre, teléfono y correo.
 
-Dejo dar fe de que pagué de buena fe para no perjudicar mi operación; lo que pido es transparencia y la corrección de lo que no corresponda. El detalle está aquí: https://jpchs1.github.io/trabajos-varios/reclamo-puerto-columbo/
+Adjunto el comprobante de la transferencia realizada el 28-05-2026 a las 15:43 por $1.127.005 (también disponible en https://imgur.com/a/FtFYbQ4). Pagué de buena fe para no perjudicar mi operación; lo que pido es transparencia y la corrección de lo que no corresponda. El detalle está aquí: https://jpchs1.github.io/trabajos-varios/reclamo-puerto-columbo/
 
 Quedo atento a su pronta respuesta.
 
 Atentamente,
 Juan Pablo Chaparro Soumastre
-Correo: jpchs1@gmail.com · Teléfono: [completar] · RUT: [completar]
+Correo: jpchs1@gmail.com
 
 ---
 
 ### 2) Juan Acuña — Gerente Terminal San Antonio
-**Para:** jacuna@puertocolumbo.com
+**Para:** jacuna@puertocolumbo.com, facturacion.vap@puertocolumbo.com
 **Asunto:** Factura Nº 551879 ya pagada para retirar la carga — solicito aclaración operacional y revisión
 
 Estimado señor Juan Acuña, Gerente del Terminal San Antonio de Puerto Columbo S.A.:
@@ -55,12 +58,12 @@ Agradezco su orientación y quedo atento.
 
 Atentamente,
 Juan Pablo Chaparro Soumastre
-Correo: jpchs1@gmail.com · Teléfono: [completar] · RUT: [completar]
+Correo: jpchs1@gmail.com
 
 ---
 
 ### 3) Francisco Riffo — Gerente Comercial
-**Para:** ventas@puertocolumbo.com
+**Para:** ventas@puertocolumbo.com, facturacion.vap@puertocolumbo.com
 **Asunto:** Atención Sr. Francisco Riffo (Gerencia Comercial) — Factura Nº 551879 pagada: solicito respaldo tarifario y revisión de servicios documentales
 
 Estimado señor Francisco Riffo, Gerente Comercial de Puerto Columbo S.A.:
@@ -79,7 +82,7 @@ Quedo atento a su respuesta.
 
 Atentamente,
 Juan Pablo Chaparro Soumastre
-Correo: jpchs1@gmail.com · Teléfono: [completar] · RUT: [completar]
+Correo: jpchs1@gmail.com
 
 ---
 
@@ -95,13 +98,13 @@ En el marco de una operación de importación, recibí de Puerto Columbo S.A. la
 
 Considerando que los almacenes extraportuarios se rigen por el artículo 56 de la Ordenanza de Aduanas y el Decreto Nº 1114/1997, solicito respetuosamente orientación sobre: (1) si los servicios facturados se encuentran correctamente habilitados y respaldados; (2) si las tarifas aplicadas corresponden a las tarifas públicas informadas a esa fecha; y (3) las vías formales que tengo, **habiendo ya pagado**, para solicitar la revisión y, si procede, la devolución de cobros no justificados.
 
-Acompaño el detalle del caso: https://jpchs1.github.io/trabajos-varios/reclamo-puerto-columbo/
+Acompaño el detalle del caso y el comprobante de la transferencia (28-05-2026, 15:43, por $1.127.005; imagen en https://imgur.com/a/FtFYbQ4): https://jpchs1.github.io/trabajos-varios/reclamo-puerto-columbo/
 
 Agradezco de antemano su orientación.
 
 Atentamente,
 Juan Pablo Chaparro Soumastre
-Correo: jpchs1@gmail.com · Teléfono: [completar] · RUT: [completar]
+Correo: jpchs1@gmail.com
 
 ---
 
@@ -115,13 +118,13 @@ Le escribo para solicitar su orientación respecto de cobros que no logré compr
 
 Agradecería que la Aduana de San Antonio pudiera indicarme si estos servicios y tarifas se ajustan a la normativa aplicable a los recintos de depósito aduanero, y orientarme sobre el procedimiento para formalizar, **ya habiendo pagado**, una solicitud de revisión y eventual devolución.
 
-Detalle completo: https://jpchs1.github.io/trabajos-varios/reclamo-puerto-columbo/
+Adjunto el comprobante de la transferencia (28-05-2026, 15:43, por $1.127.005; imagen en https://imgur.com/a/FtFYbQ4). Detalle completo: https://jpchs1.github.io/trabajos-varios/reclamo-puerto-columbo/
 
 Quedo atento y agradecido por su ayuda.
 
 Atentamente,
 Juan Pablo Chaparro Soumastre
-Correo: jpchs1@gmail.com · Teléfono: [completar] · RUT: [completar]
+Correo: jpchs1@gmail.com
 
 ---
 
@@ -143,7 +146,7 @@ Agradezco desde ya su orientación.
 
 Atentamente,
 Juan Pablo Chaparro Soumastre
-Correo: jpchs1@gmail.com · Teléfono: [completar] · RUT: [completar]
+Correo: jpchs1@gmail.com
 
 ---
 
@@ -163,7 +166,7 @@ Quedo muy agradecido por su ayuda.
 
 Atentamente,
 Juan Pablo Chaparro Soumastre
-Correo: jpchs1@gmail.com · Teléfono: [completar] · RUT: [completar]
+Correo: jpchs1@gmail.com
 
 ---
 
@@ -187,7 +190,7 @@ Quedo atento y agradecido.
 
 Atentamente,
 Juan Pablo Chaparro Soumastre
-Correo: jpchs1@gmail.com · Teléfono: [completar] · RUT: [completar]
+Correo: jpchs1@gmail.com
 
 ---
 
@@ -209,7 +212,7 @@ Agradezco su ayuda.
 
 Atentamente,
 Juan Pablo Chaparro Soumastre
-Correo: jpchs1@gmail.com · Teléfono: [completar] · RUT: [completar]
+Correo: jpchs1@gmail.com
 
 ---
 
@@ -231,7 +234,7 @@ Quedo atento a sus comentarios.
 
 Atentamente,
 Juan Pablo Chaparro Soumastre
-Correo: jpchs1@gmail.com · Teléfono: [completar] · RUT: [completar]
+Correo: jpchs1@gmail.com
 
 ---
 
@@ -251,7 +254,7 @@ Agradezco su atención.
 
 Atentamente,
 Juan Pablo Chaparro Soumastre
-Correo: jpchs1@gmail.com · Teléfono: [completar] · RUT: [completar]
+Correo: jpchs1@gmail.com
 
 ---
 
@@ -271,7 +274,7 @@ Quedo atento y agradecido.
 
 Atentamente,
 Juan Pablo Chaparro Soumastre
-Correo: jpchs1@gmail.com · Teléfono: [completar] · RUT: [completar]
+Correo: jpchs1@gmail.com
 
 ---
 
@@ -293,7 +296,7 @@ Agradezco su aclaración.
 
 Atentamente,
 Juan Pablo Chaparro Soumastre
-Correo: jpchs1@gmail.com · Teléfono: [completar] · RUT: [completar]
+Correo: jpchs1@gmail.com
 
 ---
 
@@ -313,7 +316,7 @@ Muchas gracias por su apoyo.
 
 Atentamente,
 Juan Pablo Chaparro Soumastre
-Correo: jpchs1@gmail.com · Teléfono: [completar] · RUT: [completar]
+Correo: jpchs1@gmail.com
 
 ---
 
@@ -332,10 +335,10 @@ Recibí de Puerto Columbo S.A. (recinto extraportuario de San Antonio) la Factur
 
 Tengo presente que la FNE ya ha planteado preocupaciones por cobros portuarios a usuarios cautivos (requerimiento ante el TDLC de abril de 2026 respecto de terminales de Valparaíso y San Antonio). Sin afirmar que mi caso sea idéntico ni que exista infracción de Puerto Columbo, solicito que estos antecedentes sean recibidos y evaluados en el ámbito de sus competencias.
 
-Detalle documentado: https://jpchs1.github.io/trabajos-varios/reclamo-puerto-columbo/
+Detalle documentado y comprobante de pago (transferencia del 28-05-2026, 15:43, por $1.127.005; imagen en https://imgur.com/a/FtFYbQ4) disponibles; los adjunto a este correo: https://jpchs1.github.io/trabajos-varios/reclamo-puerto-columbo/
 
 Quedo a disposición para aportar cualquier documento adicional.
 
 Atentamente,
 Juan Pablo Chaparro Soumastre
-Correo: jpchs1@gmail.com · Teléfono: [completar] · RUT: [completar]
+Correo: jpchs1@gmail.com

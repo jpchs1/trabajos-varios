@@ -32,6 +32,8 @@ Pagué de buena fe para no perjudicar mi operación; lo que pido es transparenci
 
 Quedo atento a su pronta respuesta.
 
+Adjunto además el reclamo formal en PDF; si lo prefiere, también puede visualizarlo en línea en https://jpchs1.github.io/trabajos-varios/reclamo-puerto-columbo/
+
 Atentamente,
 Juan Pablo Chaparro Soumastre
 
@@ -52,6 +54,8 @@ Aun habiendo pagado, necesito comprender los cargos operacionales, en particular
 Si de la revisión resulta que algún cargo no correspondía o estaba mal calculado, solicito su rebaja y la **devolución del monto pagado en exceso**. Agradeceré además saber si existía alguna alternativa para retirar la carga sin incurrir en estos servicios. Adjunto el comprobante de pago.
 
 Agradezco su orientación y quedo atento.
+
+Adjunto además el reclamo formal en PDF; si lo prefiere, también puede visualizarlo en línea en https://jpchs1.github.io/trabajos-varios/reclamo-puerto-columbo/
 
 Atentamente,
 Juan Pablo Chaparro Soumastre
@@ -76,6 +80,8 @@ Agradeceré contar con la tabla tarifaria pública aplicable a la fecha de la fa
 
 Quedo atento a su respuesta.
 
+Adjunto además el reclamo formal en PDF; si lo prefiere, también puede visualizarlo en línea en https://jpchs1.github.io/trabajos-varios/reclamo-puerto-columbo/
+
 Atentamente,
 Juan Pablo Chaparro Soumastre
 
@@ -97,6 +103,8 @@ Acompaño el detalle del caso y el comprobante de pago.
 
 Agradezco de antemano su orientación.
 
+Adjunto además el reclamo formal en PDF; si lo prefiere, también puede visualizarlo en línea en https://jpchs1.github.io/trabajos-varios/reclamo-puerto-columbo/
+
 Atentamente,
 Juan Pablo Chaparro Soumastre
 
@@ -115,6 +123,8 @@ Agradecería que la Aduana de San Antonio pudiera indicarme si estos servicios y
 Acompaño el detalle del caso y el comprobante de pago.
 
 Quedo atento y agradecido por su ayuda.
+
+Adjunto además el reclamo formal en PDF; si lo prefiere, también puede visualizarlo en línea en https://jpchs1.github.io/trabajos-varios/reclamo-puerto-columbo/
 
 Atentamente,
 Juan Pablo Chaparro Soumastre
@@ -137,6 +147,8 @@ Acompaño los antecedentes del caso y el comprobante de pago.
 
 Agradezco desde ya su orientación.
 
+Adjunto además el reclamo formal en PDF; si lo prefiere, también puede visualizarlo en línea en https://jpchs1.github.io/trabajos-varios/reclamo-puerto-columbo/
+
 Atentamente,
 Juan Pablo Chaparro Soumastre
 
@@ -155,6 +167,8 @@ Agradecería que me indicara, en lo que esté a su alcance, hacia qué organismo
 Acompaño los antecedentes del caso y el comprobante de pago.
 
 Quedo muy agradecido por su ayuda.
+
+Adjunto además el reclamo formal en PDF; si lo prefiere, también puede visualizarlo en línea en https://jpchs1.github.io/trabajos-varios/reclamo-puerto-columbo/
 
 Atentamente,
 Juan Pablo Chaparro Soumastre
@@ -179,6 +193,8 @@ Acompaño los antecedentes del caso y el comprobante de pago.
 
 Quedo atento y agradecido.
 
+Adjunto además el reclamo formal en PDF; si lo prefiere, también puede visualizarlo en línea en https://jpchs1.github.io/trabajos-varios/reclamo-puerto-columbo/
+
 Atentamente,
 Juan Pablo Chaparro Soumastre
 
@@ -199,6 +215,8 @@ Dado que estos servicios forman parte del ecosistema operativo del puerto, agrad
 Acompaño los antecedentes del caso y el comprobante de pago.
 
 Agradezco su ayuda.
+
+Adjunto además el reclamo formal en PDF; si lo prefiere, también puede visualizarlo en línea en https://jpchs1.github.io/trabajos-varios/reclamo-puerto-columbo/
 
 Atentamente,
 Juan Pablo Chaparro Soumastre
@@ -221,6 +239,8 @@ Acompaño el detalle documentado del caso y el comprobante de pago.
 
 Quedo atento a sus comentarios.
 
+Adjunto además el reclamo formal en PDF; si lo prefiere, también puede visualizarlo en línea en https://jpchs1.github.io/trabajos-varios/reclamo-puerto-columbo/
+
 Atentamente,
 Juan Pablo Chaparro Soumastre
 
@@ -239,6 +259,8 @@ Considero que el caso refleja la dificultad práctica de los usuarios para cuest
 Acompaño los antecedentes del caso y el comprobante de pago.
 
 Agradezco su atención.
+
+Adjunto además el reclamo formal en PDF; si lo prefiere, también puede visualizarlo en línea en https://jpchs1.github.io/trabajos-varios/reclamo-puerto-columbo/
 
 Atentamente,
 Juan Pablo Chaparro Soumastre
@@ -259,6 +281,8 @@ Acompaño los antecedentes del caso y el comprobante de pago.
 
 Quedo atento y agradecido.
 
+Adjunto además el reclamo formal en PDF; si lo prefiere, también puede visualizarlo en línea en https://jpchs1.github.io/trabajos-varios/reclamo-puerto-columbo/
+
 Atentamente,
 Juan Pablo Chaparro Soumastre
 
@@ -278,6 +302,8 @@ Quisiera confirmar si DP World San Antonio tuvo alguna intervención en la opera
 
 Quedo atento a su aclaración.
 
+Adjunto además el reclamo formal en PDF; si lo prefiere, también puede visualizarlo en línea en https://jpchs1.github.io/trabajos-varios/reclamo-puerto-columbo/
+
 Atentamente,
 Juan Pablo Chaparro Soumastre
 
@@ -294,6 +320,8 @@ Le escribo para solicitar su ayuda en la trazabilidad de una operación. Una car
 Agradecería confirmar si en esta operación intervino DP World San Antonio en alguna etapa (recepción, transferencia u otro servicio) y, en caso afirmativo, los detalles que correspondan. Esto me ayuda a entender el origen de cada cargo y a dirigir mis consultas a quien corresponda.
 
 Muchas gracias por su apoyo.
+
+Adjunto además el reclamo formal en PDF; si lo prefiere, también puede visualizarlo en línea en https://jpchs1.github.io/trabajos-varios/reclamo-puerto-columbo/
 
 Atentamente,
 Juan Pablo Chaparro Soumastre
@@ -318,6 +346,27 @@ Tengo presente que la FNE ya ha planteado preocupaciones por cobros portuarios a
 Acompaño el detalle documentado del caso y el comprobante de pago.
 
 Quedo a disposición para aportar cualquier documento adicional.
+
+Adjunto además el reclamo formal en PDF; si lo prefiere, también puede visualizarlo en línea en https://jpchs1.github.io/trabajos-varios/reclamo-puerto-columbo/
+
+Atentamente,
+Juan Pablo Chaparro Soumastre
+
+---
+
+## GRUPO H — CORREO BREVE / EJECUTIVO (presentación del reclamo)
+
+### 16) Correo breve — Reclamo formal adjunto + link
+**Para:** facturacion.vap@puertocolumbo.com, customerservice@puertocolumbo.com
+**Asunto:** Reclamo formal por cobros no aclarados — Factura Nº 551879 (Puerto Columbo S.A.)
+
+Estimados:
+
+Adjunto el reclamo formal por los cobros no aclarados de la Factura Electrónica Nº 551879 (28-05-2026, por $1.127.005), que pagué bajo protesta como única vía para retirar la carga.
+
+Solicito la revisión y explicación de cada cargo y, de no encontrarse debidamente respaldados, su devolución. El reclamo completo también puede visualizarse en línea: https://jpchs1.github.io/trabajos-varios/reclamo-puerto-columbo/
+
+Quedo atento a su respuesta.
 
 Atentamente,
 Juan Pablo Chaparro Soumastre

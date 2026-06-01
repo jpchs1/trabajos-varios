@@ -975,6 +975,10 @@ class MarketplaceAssistantApp(ctk.CTk):
             return
         query = keywords[0]
 
+        # Limpiamos los resultados de la busqueda anterior antes de empezar.
+        self.direct_links = []
+        self._refresh_direct_links_table()
+
         self.auto_fetch_button.configure(state="disabled", text="Buscando... (logueate en el navegador)")
         self._set_status(f"Abriendo navegador para buscar '{query}'. La 1ra vez, logueate a Facebook en la ventana.")
         threading.Thread(target=self._auto_fetch_worker, args=(query,), daemon=True).start()
@@ -999,25 +1003,37 @@ class MarketplaceAssistantApp(ctk.CTk):
             self._set_status("Fallo la busqueda automatica.")
             return
 
-        urls = [item["url"] for item in listings if item.get("url")]
-        added, skipped = self._merge_specific_listing_links(urls)
-        # Enriquecer las filas con titulo/precio/ubicacion del parser.
-        info_by_url = {item["url"]: item for item in listings}
-        for row in self.direct_links:
-            info = info_by_url.get(row["url"])
-            if info:
-                row.setdefault("title", info.get("title", ""))
-                row.setdefault("price", info.get("price_text") or info.get("price"))
-                row.setdefault("location", info.get("location", ""))
+        # Cada busqueda nueva REEMPLAZA los resultados anteriores: limpiamos la
+        # tabla y la llenamos solo con los productos de esta busqueda.
+        nuevos: list[dict] = []
+        vistos: set[str] = set()
+        for item in listings:
+            url = item.get("url")
+            if not url or url in vistos:
+                continue
+            vistos.add(url)
+            nuevos.append(
+                {
+                    "item_id": self._marketplace_item_id(url),
+                    "url": url,
+                    "opened": "No",
+                    "saved": "No",
+                    "title": item.get("title", ""),
+                    "price": item.get("price_text") or item.get("price"),
+                    "location": item.get("location", ""),
+                }
+            )
+
+        self.direct_links = nuevos
         self._refresh_direct_links_table()
-        if added or skipped:
+        if nuevos:
             self._set_status(
-                f"Busqueda automatica de '{query}': {added} productos especificos nuevos. "
-                f"Duplicados omitidos: {skipped}."
+                f"Busqueda de '{query}': {len(nuevos)} productos especificos. "
+                "Lista anterior reemplazada."
             )
         else:
             self._set_status(
-                f"No se encontraron productos para '{query}'. Probá revisar que estes logueado a Facebook."
+                f"No se encontraron productos para '{query}'. Revisá que estes logueado a Facebook."
             )
 
     def _paste_specific_links_into_search_table(self) -> None:

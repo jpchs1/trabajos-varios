@@ -35,15 +35,15 @@ if [ ! -f ".venv/.setup_done" ]; then
     echo "Instalando dependencias, esto puede tardar unos minutos..."
     "$PY" -m pip install --upgrade pip
     "$PY" -m pip install -r requirements.txt
-    "$PY" -m pip install playwright PyQt6 beautifulsoup4
+    "$PY" -m pip install playwright beautifulsoup4
     echo "Descargando el navegador para la búsqueda automática..."
     "$PY" -m playwright install chromium
     echo "listo" > ".venv/.setup_done"
 fi
 
-# --- Abrir la app gráfica ---
+# --- Abrir la app gráfica (app completa con todas las mejoras) ---
 echo "Abriendo la aplicación..."
-"$PY" paste_app.py
+"$PY" app/main.py
 
 status=$?
 if [ $status -ne 0 ]; then

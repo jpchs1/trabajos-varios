@@ -34,15 +34,15 @@ if not exist ".venv\.setup_done" (
     echo Instalando dependencias, esto puede tardar unos minutos...
     "%PY%" -m pip install --upgrade pip
     "%PY%" -m pip install -r requirements.txt
-    "%PY%" -m pip install playwright PyQt6 beautifulsoup4
+    "%PY%" -m pip install playwright beautifulsoup4
     echo Descargando el navegador para la busqueda automatica...
     "%PY%" -m playwright install chromium
     echo listo> ".venv\.setup_done"
 )
 
-REM --- Abrir la app grafica ---
+REM --- Abrir la app grafica (app completa con todas las mejoras) ---
 echo Abriendo la aplicacion...
-"%PY%" paste_app.py
+"%PY%" app\main.py
 
 if errorlevel 1 (
     echo.

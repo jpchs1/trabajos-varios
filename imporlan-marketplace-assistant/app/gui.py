@@ -97,7 +97,7 @@ class MarketplaceAssistantApp(ctk.CTk):
 
         subtitle = ctk.CTkLabel(
             header,
-            text=f"{APP_SUBTITLE}  |  Manual, seguro y sin scraping",
+            text=f"{APP_SUBTITLE}  |  Busca productos especificos en Marketplace",
             font=ctk.CTkFont(size=14),
             text_color="#d7e5f8",
         )
@@ -105,7 +105,7 @@ class MarketplaceAssistantApp(ctk.CTk):
 
         safety = ctk.CTkLabel(
             header,
-            text="No login  |  No cookies  |  No automatizacion de Facebook",
+            text="Usa tu propia sesion de Facebook  |  No guarda contrasenas",
             font=ctk.CTkFont(size=13, weight="bold"),
             text_color="#b9f6d1",
         )
@@ -137,19 +137,23 @@ class MarketplaceAssistantApp(ctk.CTk):
     def _build_search_tab(self) -> None:
         self.search_tab.grid_columnconfigure(0, weight=0)
         self.search_tab.grid_columnconfigure(1, weight=1)
-        self.search_tab.grid_rowconfigure(0, weight=1)
+        # Fila 0 = barra de busqueda protagonista; fila 1 = opciones + resultados.
+        self.search_tab.grid_rowconfigure(1, weight=1)
 
-        controls = ctk.CTkScrollableFrame(self.search_tab, fg_color=CARD, width=370)
-        controls.grid(row=0, column=0, padx=(10, 12), pady=10, sticky="nsw")
+        # ---- BARRA DE BUSQUEDA PRINCIPAL (lo mas importante, arriba y a lo ancho) ----
+        self._build_hero_search_bar()
+
+        controls = ctk.CTkScrollableFrame(self.search_tab, fg_color=CARD, width=320)
+        controls.grid(row=1, column=0, padx=(10, 12), pady=(0, 10), sticky="nsw")
         controls.grid_columnconfigure(0, weight=1)
 
-        self._section_label(controls, "Busqueda", 0)
+        self._section_label(controls, "Busqueda multiple (opcional)", 0)
         ctk.CTkLabel(
             controls,
-            text="Ingresa keywords, una por linea. Puedes pegar listas completas.",
+            text="Para el dia a dia usa el buscador grande de arriba. Si queres lanzar varios terminos a la vez (modo manual), escribilos aca, uno por linea.",
             font=ctk.CTkFont(size=12),
             text_color=TEXT_MUTED,
-            wraplength=315,
+            wraplength=270,
             justify="left",
         ).grid(row=1, column=0, padx=16, pady=(0, 8), sticky="w")
 
@@ -279,33 +283,6 @@ class MarketplaceAssistantApp(ctk.CTk):
         self.search_preview_label.grid(row=row, column=0, padx=16, pady=(0, 12), sticky="w")
         row += 1
 
-        # ---- ACCION PRINCIPAL: busqueda automatica de productos especificos ----
-        self.auto_fetch_button = ctk.CTkButton(
-            controls,
-            text="🔎  Buscar productos especificos",
-            height=52,
-            fg_color="#7c3aed",
-            hover_color="#6d28d9",
-            font=ctk.CTkFont(size=15, weight="bold"),
-            command=self._auto_fetch_specific_listings,
-        )
-        self.auto_fetch_button.grid(row=row, column=0, padx=16, pady=(4, 4), sticky="ew")
-        row += 1
-
-        ctk.CTkLabel(
-            controls,
-            text=(
-                "Escribi arriba lo que buscas (ej.: Mercruiser 4.5L) y apreta este boton. "
-                "Se abre una sola ventana de navegador: la primera vez logueate a Facebook ahi. "
-                "Despues la tabla de la derecha se llena con los productos especificos."
-            ),
-            font=ctk.CTkFont(size=12, weight="bold"),
-            text_color="#6d28d9",
-            wraplength=330,
-            justify="left",
-        ).grid(row=row, column=0, padx=16, pady=(0, 14), sticky="w")
-        row += 1
-
         # ---- Modo manual (avanzado), plegado en una seccion aparte ----
         self._section_label(controls, "Modo manual (avanzado)", row)
         row += 1
@@ -370,7 +347,7 @@ class MarketplaceAssistantApp(ctk.CTk):
 
 
         table_frame = ctk.CTkFrame(self.search_tab, fg_color=CARD)
-        table_frame.grid(row=0, column=1, padx=(0, 10), pady=10, sticky="nsew")
+        table_frame.grid(row=1, column=1, padx=(0, 10), pady=(0, 10), sticky="nsew")
         table_frame.grid_columnconfigure(0, weight=1)
         table_frame.grid_rowconfigure(3, weight=1)
 
@@ -378,7 +355,7 @@ class MarketplaceAssistantApp(ctk.CTk):
 
         helper = ctk.CTkLabel(
             table_frame,
-            text="Aca aparecen los productos especificos (link, titulo, precio). Usa el boton violeta 'Buscar productos especificos' de la izquierda. Doble clic abre la publicacion.",
+            text="Aca aparecen los productos (foto, titulo, precio, ubicacion) de tu busqueda. Doble clic abre la publicacion en el navegador.",
             font=ctk.CTkFont(size=12),
             text_color=TEXT_MUTED,
             anchor="w",
@@ -409,6 +386,62 @@ class MarketplaceAssistantApp(ctk.CTk):
         search_tree.bind("<Double-1>", lambda _event: self._open_selected_specific_links())
         search_tree.bind("<Button-3>", self._show_search_context_menu)
         self._update_search_preview()
+
+    def _build_hero_search_bar(self) -> None:
+        """Barra de busqueda protagonista: cuadro grande + boton Buscar al lado.
+
+        Es lo primero que ve el usuario y la accion principal de la app. El boton
+        queda pegado al cuadro de texto y Enter tambien dispara la busqueda.
+        """
+        hero = ctk.CTkFrame(self.search_tab, fg_color=CARD, corner_radius=14)
+        hero.grid(row=0, column=0, columnspan=2, padx=10, pady=(12, 10), sticky="ew")
+        hero.grid_columnconfigure(0, weight=1)
+
+        ctk.CTkLabel(
+            hero,
+            text="¿Que estas buscando en Marketplace?",
+            font=ctk.CTkFont(size=19, weight="bold"),
+            text_color=NAVY,
+        ).grid(row=0, column=0, columnspan=2, padx=24, pady=(18, 2), sticky="w")
+
+        ctk.CTkLabel(
+            hero,
+            text=(
+                "Escribi el producto y apreta Buscar. Se abre el navegador (la 1ra vez logueate a "
+                "Facebook) y abajo aparecen los productos de las ciudades tildadas."
+            ),
+            font=ctk.CTkFont(size=12),
+            text_color=TEXT_MUTED,
+            anchor="w",
+            justify="left",
+        ).grid(row=1, column=0, columnspan=2, padx=24, pady=(0, 12), sticky="w")
+
+        search_row = ctk.CTkFrame(hero, fg_color="transparent")
+        search_row.grid(row=2, column=0, columnspan=2, padx=24, pady=(0, 20), sticky="ew")
+        search_row.grid_columnconfigure(0, weight=1)
+
+        self.search_entry = ctk.CTkEntry(
+            search_row,
+            height=54,
+            font=ctk.CTkFont(size=18),
+            placeholder_text="Ej: Mercruiser 4.5L",
+            border_width=2,
+            border_color=BLUE,
+        )
+        self.search_entry.grid(row=0, column=0, padx=(0, 12), sticky="ew")
+        self.search_entry.bind("<Return>", lambda _event: self._auto_fetch_specific_listings())
+
+        self.auto_fetch_button = ctk.CTkButton(
+            search_row,
+            text="🔎  Buscar",
+            width=190,
+            height=54,
+            fg_color="#7c3aed",
+            hover_color="#6d28d9",
+            font=ctk.CTkFont(size=18, weight="bold"),
+            command=self._auto_fetch_specific_listings,
+        )
+        self.auto_fetch_button.grid(row=0, column=1)
 
     def _build_search_dashboard(self, parent: ctk.CTkFrame) -> None:
         dashboard = ctk.CTkFrame(parent, fg_color="transparent")
@@ -980,11 +1013,19 @@ class MarketplaceAssistantApp(ctk.CTk):
             )
             return
 
-        keywords = normalize_keywords(self.keywords_text.get("1.0", "end"))
-        if not keywords:
-            messagebox.showinfo("Sin keywords", "Ingresa una keyword, por ejemplo: MerCruiser 4.5L")
+        # El buscador grande de arriba manda; si esta vacio, usamos la 1ra
+        # keyword del cuadro de "busqueda multiple" (modo avanzado).
+        query = self.search_entry.get().strip()
+        if not query:
+            keywords = normalize_keywords(self.keywords_text.get("1.0", "end"))
+            query = keywords[0] if keywords else ""
+        if not query:
+            messagebox.showinfo(
+                "¿Que buscas?",
+                "Escribi un producto en el buscador de arriba. Por ejemplo: Mercruiser 4.5L",
+            )
+            self.search_entry.focus_set()
             return
-        query = keywords[0]
 
         # Ciudades tildadas (con su slug de Facebook) y radio elegido.
         locations: list[dict] = []
@@ -1007,7 +1048,7 @@ class MarketplaceAssistantApp(ctk.CTk):
         self.direct_links = []
         self._refresh_direct_links_table()
 
-        self.auto_fetch_button.configure(state="disabled", text="Buscando... (logueate en el navegador)")
+        self.auto_fetch_button.configure(state="disabled", text="Buscando...")
         nombres = ", ".join(loc["name"] for loc in locations)
         self._set_status(
             f"Abriendo navegador para buscar '{query}' en {len(locations)} ciudades ({nombres}). "
@@ -1033,7 +1074,7 @@ class MarketplaceAssistantApp(ctk.CTk):
             self.after(0, self._auto_fetch_done, [], query, str(error))
 
     def _auto_fetch_done(self, listings: list, query: str, error: str | None) -> None:
-        self.auto_fetch_button.configure(state="normal", text="🔎  Buscar productos especificos")
+        self.auto_fetch_button.configure(state="normal", text="🔎  Buscar")
         if error:
             messagebox.showerror("Error en busqueda automatica", error)
             self._set_status("Fallo la busqueda automatica.")
@@ -1249,7 +1290,7 @@ class MarketplaceAssistantApp(ctk.CTk):
                 "end",
                 iid="empty",
                 values=(
-                    "Apreta 'Buscar productos especificos' (boton violeta) para llenar esta lista.",
+                    "Escribi un producto en el buscador de arriba y apreta 'Buscar' para llenar esta lista.",
                     "",
                     "",
                     "",

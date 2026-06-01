@@ -42,6 +42,10 @@ _JSON_STR = r'((?:[^"\\]|\\.)*)'
 _TITLE_RE = re.compile(r'"marketplace_listing_title":"' + _JSON_STR + r'"')
 _PRICE_RE = re.compile(r'"formatted_amount":"' + _JSON_STR + r'"')
 _ID_RE = re.compile(r'"id":"(\d{6,})"')
+# Foto principal del anuncio. Facebook la serializa como la "uri" de una imagen
+# (dentro de listing_photos / primary_listing_photo). Tomamos cualquier uri de
+# imagen de su CDN cercana al anuncio.
+_PHOTO_RE = re.compile(r'"(?:uri|image_uri|playable_url)":"(https:\\?/\\?/[^"]*?(?:scontent|fbcdn)[^"]*?)"')
 # Ubicación: Facebook la serializa de varias formas según la vista.
 _LOCATION_RES = [
     re.compile(r'"location_text":\{"text":"' + _JSON_STR + r'"'),
@@ -142,6 +146,7 @@ def _parse_embedded_json(html: str) -> dict[str, dict]:
 
     ids = [(m.start(), m.group(1)) for m in _ID_RE.finditer(html)]
     prices = [(m.start(), _unescape(m.group(1))) for m in _PRICE_RE.finditer(html)]
+    photos = [(m.start(), _unescape(m.group(1))) for m in _PHOTO_RE.finditer(html)]
     locations: list[tuple[int, str]] = []
     for rgx in _LOCATION_RES:
         locations.extend((m.start(), _unescape(m.group(1))) for m in rgx.finditer(html))
@@ -154,6 +159,7 @@ def _parse_embedded_json(html: str) -> dict[str, dict]:
             continue
         price_text = _nearest_after(prices, pos)
         location = _nearest_after(locations, pos) or _nearest_before(locations, pos)
+        photo = _nearest_after(photos, pos) or _nearest_before(photos, pos)
         # Si ya teníamos este id pero sin título, mejoramos los datos.
         prev = out.get(item_id)
         if prev and prev.get("title") and not title:
@@ -163,6 +169,7 @@ def _parse_embedded_json(html: str) -> dict[str, dict]:
             "price_text": price_text or (prev or {}).get("price_text"),
             "price": _parse_price(price_text) if price_text else (prev or {}).get("price"),
             "location": location or (prev or {}).get("location", ""),
+            "photo": photo or (prev or {}).get("photo", ""),
         }
     return out
 
@@ -230,6 +237,7 @@ def parse_listings(html: str, query: str = "") -> list[dict]:
                 "price": info.get("price"),
                 "price_text": info.get("price_text"),
                 "location": info.get("location", ""),
+                "photo": info.get("photo", ""),
                 "query": query,
             }
         )

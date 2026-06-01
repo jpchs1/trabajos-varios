@@ -27,6 +27,7 @@ SAMPLE_JSON_HTML = (
     '{"__typename":"GroupCommerceProductItem","id":"1301127085457538",'
     '"marketplace_listing_title":"Mercruiser 4.5L 250HP","listing_price":'
     '{"formatted_amount":"$5,000","amount":"5000","currency":"USD"},'
+    '"primary_listing_photo":{"image":{"uri":"https:\\/\\/scontent.fbcdn.net\\/foto1.jpg"}},'
     '"location_text":{"text":"Miami, FL"}}'
     '{"__typename":"GroupCommerceProductItem","id":"2002002002002002",'
     '"marketplace_listing_title":"Volvo Penta 350 Mag","listing_price":'
@@ -96,6 +97,10 @@ class TestParseEmbeddedJson(unittest.TestCase):
         self.assertEqual(it["price"], 5000.0)
         self.assertEqual(it["price_text"], "$5,000")
         self.assertEqual(it["location"], "Miami, FL")
+
+    def test_photo_extracted(self):
+        it = self.by_id["1301127085457538"]
+        self.assertEqual(it["photo"], "https://scontent.fbcdn.net/foto1.jpg")
 
     def test_second_item_not_cross_contaminated(self):
         it = self.by_id["2002002002002002"]

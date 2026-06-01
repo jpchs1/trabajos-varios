@@ -11,6 +11,9 @@ playwright>=1.40.0
 # Mejora la extracción desde HTML renderizado (app/listing_parser.py).
 beautifulsoup4>=4.12.0
 
+# Muestra la foto principal del producto en la tabla de resultados.
+pillow>=10.0.0
+
 # Opcional: app gráfica simple "pegar HTML" (paste_app.py).
 # La app completa (app/main.py, el .exe) usa customtkinter, no hace falta.
 # PyQt6>=6.6.0

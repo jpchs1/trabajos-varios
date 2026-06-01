@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Imporlan Marketplace</title>
+  <style>
+    :root { --navy:#10233f; --accent:#7c3aed; --line:#e2e8f0; }
+    * { box-sizing: border-box; }
+    body { margin:0; font-family: -apple-system, Segoe UI, Roboto, sans-serif; background:#f1f5f9; color:#0f172a; }
+    header { background:var(--navy); color:#fff; padding:14px 16px; position:sticky; top:0; z-index:5; }
+    header h1 { margin:0; font-size:18px; }
+    header .sub { font-size:12px; opacity:.8; }
+    .wrap { max-width:780px; margin:0 auto; padding:12px; }
+    .card { background:#fff; border:1px solid var(--line); border-radius:12px; padding:14px; margin-bottom:12px; }
+    .status { font-size:13px; color:#334155; }
+    .btn { display:inline-block; background:var(--accent); color:#fff; border:none; padding:11px 16px; border-radius:10px; font-size:15px; font-weight:600; cursor:pointer; text-decoration:none; }
+    .btn[disabled] { opacity:.55; }
+    label { display:block; font-size:13px; font-weight:600; margin:10px 0 4px; }
+    input[type=text], textarea, select { width:100%; padding:9px; border:1px solid var(--line); border-radius:8px; font-size:15px; }
+    textarea { min-height:64px; }
+    .row { display:flex; gap:10px; flex-wrap:wrap; }
+    .row > div { flex:1; min-width:130px; }
+    .cities { display:flex; flex-wrap:wrap; gap:6px 14px; max-height:170px; overflow:auto; border:1px solid var(--line); border-radius:8px; padding:8px; }
+    .cities label { display:flex; align-items:center; gap:6px; font-weight:400; margin:0; }
+    details summary { cursor:pointer; font-weight:600; }
+    .item { display:flex; gap:12px; padding:10px 0; border-bottom:1px solid var(--line); }
+    .item:last-child { border-bottom:none; }
+    .thumb { width:104px; height:78px; object-fit:cover; border-radius:8px; background:#e2e8f0; flex:none; }
+    .meta { flex:1; min-width:0; }
+    .meta .price { font-weight:700; color:var(--navy); }
+    .meta .title { font-size:14px; margin:2px 0; }
+    .meta .loc { font-size:12px; color:#64748b; }
+    .meta a { font-size:13px; color:var(--accent); word-break:break-all; }
+    .kwhead { font-size:15px; font-weight:700; margin:4px 0 2px; }
+    .muted { color:#64748b; font-size:12px; }
+    .warn { background:#fef3c7; border:1px solid #fde68a; color:#92400e; padding:10px; border-radius:8px; font-size:13px; }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Imporlan Marketplace</h1>
+    <div class="sub">Búsqueda online · USA &amp; Canadá</div>
+  </header>
+
+  <div class="wrap">
+    <div class="card">
+      <div class="status" id="status">{{ state.message }}</div>
+      {% if results.updated_at %}
+        <div class="muted">Última actualización: {{ results.updated_at }}</div>
+      {% endif %}
+      <div style="margin-top:10px;">
+        <form method="post" action="/buscar" style="display:inline;">
+          <button class="btn" type="submit">🔎 Buscar ahora</button>
+        </form>
+      </div>
+    </div>
+
+    <div class="card">
+      <details>
+        <summary>⚙️ Configuración (keywords, ciudades, automático)</summary>
+        <form method="post" action="/config">
+          <label>Qué buscar (una por línea)</label>
+          <textarea name="keywords">{{ cfg.keywords | join('\n') }}</textarea>
+
+          <div class="row">
+            <div>
+              <label>Radio</label>
+              <select name="radius_miles">
+                {% for m in [100, 250, 500] %}
+                  <option value="{{ m }}" {{ 'selected' if cfg.radius_miles==m else '' }}>{{ m }} millas</option>
+                {% endfor %}
+              </select>
+            </div>
+            <div>
+              <label>Buscar sola cada (minutos)</label>
+              <input type="text" name="interval_minutes" value="{{ cfg.interval_minutes }}">
+            </div>
+          </div>
+
+          <label>Ciudades (ninguna tildada = todas)</label>
+          <div class="cities">
+            {% for loc in locations %}
+              <label>
+                <input type="checkbox" name="cities" value="{{ loc.slug }}"
+                  {{ 'checked' if loc.slug in cfg.cities else '' }}>
+                {{ loc.name }}
+              </label>
+            {% endfor %}
+          </div>
+
+          <div style="margin-top:12px;">
+            <button class="btn" type="submit">Guardar configuración</button>
+          </div>
+        </form>
+      </details>
+    </div>
+
+    {% if not results.by_keyword %}
+      <div class="card muted">Todavía no hay resultados. Apretá "Buscar ahora".</div>
+    {% endif %}
+
+    {% for kw, data in results.by_keyword.items() %}
+      <div class="card">
+        <div class="kwhead">{{ kw }} <span class="muted">({{ data.count }} productos · {{ data.updated_at }})</span></div>
+        {% for it in data.listings %}
+          <div class="item">
+            {% if it.photo %}
+              <img class="thumb" src="{{ it.photo }}" loading="lazy" referrerpolicy="no-referrer">
+            {% else %}
+              <div class="thumb"></div>
+            {% endif %}
+            <div class="meta">
+              <div class="price">{{ it.price_text or (it.price | string if it.price else '—') }}</div>
+              <div class="title">{{ it.title }}</div>
+              {% if it.location %}<div class="loc">📍 {{ it.location }}</div>{% endif %}
+              <a href="{{ it.url }}" target="_blank" rel="noopener">Abrir publicación →</a>
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+    {% endfor %}
+  </div>
+
+  <script>
+    // Refresca el estado cada 4s para ver el progreso de la búsqueda.
+    async function poll() {
+      try {
+        const r = await fetch('/api/status');
+        const s = await r.json();
+        document.getElementById('status').textContent = s.message;
+        // Si estaba buscando y terminó, recargamos para ver resultados nuevos.
+        if (window._wasRunning && !s.running) location.reload();
+        window._wasRunning = s.running;
+      } catch (e) {}
+    }
+    setInterval(poll, 4000); poll();
+  </script>
+</body>
+</html>

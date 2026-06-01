@@ -279,81 +279,95 @@ class MarketplaceAssistantApp(ctk.CTk):
         self.search_preview_label.grid(row=row, column=0, padx=16, pady=(0, 12), sticky="w")
         row += 1
 
-        ctk.CTkButton(
+        # ---- ACCION PRINCIPAL: busqueda automatica de productos especificos ----
+        self.auto_fetch_button = ctk.CTkButton(
             controls,
-            text="Abrir busquedas e iniciar captura",
-            height=42,
-            fg_color=BLUE,
-            font=ctk.CTkFont(size=14, weight="bold"),
-            command=self._generate_searches,
-        ).grid(row=row, column=0, padx=16, pady=(4, 8), sticky="ew")
+            text="🔎  Buscar productos especificos",
+            height=52,
+            fg_color="#7c3aed",
+            hover_color="#6d28d9",
+            font=ctk.CTkFont(size=15, weight="bold"),
+            command=self._auto_fetch_specific_listings,
+        )
+        self.auto_fetch_button.grid(row=row, column=0, padx=16, pady=(4, 4), sticky="ew")
+        row += 1
+
+        ctk.CTkLabel(
+            controls,
+            text=(
+                "Escribi arriba lo que buscas (ej.: Mercruiser 4.5L) y apreta este boton. "
+                "Se abre una sola ventana de navegador: la primera vez logueate a Facebook ahi. "
+                "Despues la tabla de la derecha se llena con los productos especificos."
+            ),
+            font=ctk.CTkFont(size=12, weight="bold"),
+            text_color="#6d28d9",
+            wraplength=330,
+            justify="left",
+        ).grid(row=row, column=0, padx=16, pady=(0, 14), sticky="w")
+        row += 1
+
+        # ---- Modo manual (avanzado), plegado en una seccion aparte ----
+        self._section_label(controls, "Modo manual (avanzado)", row)
+        row += 1
+        ctk.CTkLabel(
+            controls,
+            text=(
+                "Solo si preferis hacerlo a mano: abri las busquedas en tu navegador, "
+                "copia los links /marketplace/item/... y pegalos aca."
+            ),
+            font=ctk.CTkFont(size=11),
+            text_color=TEXT_MUTED,
+            wraplength=330,
+            justify="left",
+        ).grid(row=row, column=0, padx=16, pady=(0, 6), sticky="w")
         row += 1
 
         ctk.CTkButton(
             controls,
-            text="Abrir primeras 10 busquedas manuales",
-            height=38,
-            fg_color=GREEN,
-            command=self._open_first_ten_searches,
-        ).grid(row=row, column=0, padx=16, pady=4, sticky="ew")
+            text="Abrir busquedas en el navegador",
+            height=34,
+            fg_color=NAVY_2,
+            command=self._generate_searches,
+        ).grid(row=row, column=0, padx=16, pady=3, sticky="ew")
         row += 1
 
         ctk.CTkButton(
             controls,
             text="Abrir primeras 10",
-            height=38,
+            height=32,
             fg_color=NAVY_2,
             command=self._open_first_ten_searches,
-        ).grid(row=row, column=0, padx=16, pady=4, sticky="ew")
+        ).grid(row=row, column=0, padx=16, pady=3, sticky="ew")
         row += 1
 
         ctk.CTkButton(
             controls,
             text="Abrir todas",
-            height=38,
-            fg_color=ORANGE,
+            height=32,
+            fg_color="#64748b",
             command=self._open_all_searches,
-        ).grid(row=row, column=0, padx=16, pady=4, sticky="ew")
+        ).grid(row=row, column=0, padx=16, pady=3, sticky="ew")
         row += 1
 
         ctk.CTkButton(
             controls,
             text="Pegar links especificos",
-            height=36,
+            height=32,
             fg_color="#64748b",
             command=self._paste_specific_links_into_search_table,
-        ).grid(row=row, column=0, padx=16, pady=4, sticky="ew")
-        row += 1
-
-        self.auto_fetch_button = ctk.CTkButton(
-            controls,
-            text="Buscar productos automaticamente",
-            height=40,
-            fg_color="#7c3aed",
-            font=ctk.CTkFont(size=13, weight="bold"),
-            command=self._auto_fetch_specific_listings,
-        )
-        self.auto_fetch_button.grid(row=row, column=0, padx=16, pady=4, sticky="ew")
+        ).grid(row=row, column=0, padx=16, pady=3, sticky="ew")
         row += 1
 
         self.capture_button = ctk.CTkButton(
             controls,
             text="Captura portapapeles: OFF",
-            height=36,
+            height=32,
             fg_color="#64748b",
             command=self._toggle_clipboard_capture,
         )
-        self.capture_button.grid(row=row, column=0, padx=16, pady=4, sticky="ew")
+        self.capture_button.grid(row=row, column=0, padx=16, pady=(3, 16), sticky="ew")
         row += 1
 
-        ctk.CTkLabel(
-            controls,
-            text="Paso 1: genera busqueda. Paso 2: abre Facebook. Paso 3: copia links /marketplace/item/...; apareceran en la tabla.",
-            font=ctk.CTkFont(size=12, weight="bold"),
-            text_color=GREEN,
-            wraplength=330,
-            justify="left",
-        ).grid(row=row, column=0, padx=16, pady=(8, 18), sticky="w")
 
         table_frame = ctk.CTkFrame(self.search_tab, fg_color=CARD)
         table_frame.grid(row=0, column=1, padx=(0, 10), pady=10, sticky="nsew")
@@ -364,7 +378,7 @@ class MarketplaceAssistantApp(ctk.CTk):
 
         helper = ctk.CTkLabel(
             table_frame,
-            text="La app no extrae resultados desde Facebook. Esta tabla se llena cuando copias links reales /marketplace/item/... desde el navegador.",
+            text="Aca aparecen los productos especificos (link, titulo, precio). Usa el boton violeta 'Buscar productos especificos' de la izquierda. Doble clic abre la publicacion.",
             font=ctk.CTkFont(size=12),
             text_color=TEXT_MUTED,
             anchor="w",
@@ -381,9 +395,9 @@ class MarketplaceAssistantApp(ctk.CTk):
 
         self.search_tree_frame = self._create_treeview(
             table_frame,
-            columns=("item_id", "opened", "saved", "url"),
-            headings=("Item ID", "Opened", "Saved", "Specific listing URL copied from Facebook"),
-            widths=(180, 90, 90, 940),
+            columns=("title", "price", "location", "opened", "saved", "url"),
+            headings=("Producto", "Precio", "Ubicacion", "Abierto", "Guardado", "Link de la publicacion"),
+            widths=(300, 100, 160, 80, 80, 560),
         )
         self.search_tree_frame.grid(row=3, column=0, padx=12, pady=(0, 12), sticky="nsew")
         search_tree = self._get_search_tree()
@@ -841,22 +855,11 @@ class MarketplaceAssistantApp(ctk.CTk):
         self._extract_direct_links_from_textbox()
 
     def _refresh_direct_links_table(self) -> None:
-        tree = self._get_direct_links_tree()
-        tree.delete(*tree.get_children())
-        opened = 0
-        saved = 0
-        for index, item in enumerate(self.direct_links):
-            if item["opened"] == "Yes":
-                opened += 1
-            if item["saved"] == "Yes":
-                saved += 1
-            tree.insert(
-                "",
-                "end",
-                iid=str(index),
-                values=(item["item_id"], item["opened"], item["saved"], item["url"]),
-            )
+        # La tabla de links especificos y la de la pestania Search son la misma
+        # vista; _refresh_search_table arma las filas con producto/precio/etc.
         if hasattr(self, "direct_total_card"):
+            opened = sum(1 for item in self.direct_links if item["opened"] == "Yes")
+            saved = sum(1 for item in self.direct_links if item["saved"] == "Yes")
             self.direct_total_card.configure(text=str(len(self.direct_links)))
             self.direct_opened_card.configure(text=str(opened))
             self.direct_saved_card.configure(text=str(saved))
@@ -990,7 +993,7 @@ class MarketplaceAssistantApp(ctk.CTk):
             self.after(0, self._auto_fetch_done, [], query, str(error))
 
     def _auto_fetch_done(self, listings: list, query: str, error: str | None) -> None:
-        self.auto_fetch_button.configure(state="normal", text="Buscar productos automaticamente")
+        self.auto_fetch_button.configure(state="normal", text="🔎  Buscar productos especificos")
         if error:
             messagebox.showerror("Error en busqueda automatica", error)
             self._set_status("Fallo la busqueda automatica.")
@@ -1185,18 +1188,24 @@ class MarketplaceAssistantApp(ctk.CTk):
                 "end",
                 iid="empty",
                 values=(
+                    "Apreta 'Buscar productos especificos' (boton violeta) para llenar esta lista.",
                     "",
                     "",
                     "",
-                    "Copia desde Facebook un link tipo https://www.facebook.com/marketplace/item/1295383876095976/ y aparecera aqui.",
+                    "",
+                    "",
                 ),
             )
         for index, item in enumerate(self.direct_links):
+            title = item.get("title") or f"Item {item.get('item_id', '')}"
+            price = item.get("price")
+            price = "" if price is None else str(price)
+            location = item.get("location") or ""
             tree.insert(
                 "",
                 "end",
                 iid=str(index),
-                values=(item["item_id"], item["opened"], item["saved"], item["url"]),
+                values=(title, price, location, item["opened"], item["saved"], item["url"]),
             )
         opened = sum(1 for item in self.direct_links if item["opened"] == "Yes")
         saved = sum(1 for item in self.direct_links if item["saved"] == "Yes")

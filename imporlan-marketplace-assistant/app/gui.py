@@ -1012,6 +1012,9 @@ class MarketplaceAssistantApp(ctk.CTk):
             if not url or url in vistos:
                 continue
             vistos.add(url)
+            # price = numero (para ordenar) ; price_text = como se muestra.
+            price_num = item.get("price")
+            price_txt = item.get("price_text") or (str(price_num) if price_num is not None else "")
             nuevos.append(
                 {
                     "item_id": self._marketplace_item_id(url),
@@ -1019,17 +1022,22 @@ class MarketplaceAssistantApp(ctk.CTk):
                     "opened": "No",
                     "saved": "No",
                     "title": item.get("title", ""),
-                    "price": item.get("price_text") or item.get("price"),
+                    "price": price_num,
+                    "price_text": price_txt,
                     "location": item.get("location", ""),
                 }
             )
+
+        # Ordenamos de menor a mayor precio (los sin precio van al final).
+        from app.listing_parser import sort_by_price
+        nuevos = sort_by_price(nuevos)
 
         self.direct_links = nuevos
         self._refresh_direct_links_table()
         if nuevos:
             self._set_status(
-                f"Busqueda de '{query}': {len(nuevos)} productos especificos. "
-                "Lista anterior reemplazada."
+                f"Busqueda de '{query}': {len(nuevos)} productos especificos, "
+                "ordenados de menor a mayor precio. Lista anterior reemplazada."
             )
         else:
             self._set_status(
@@ -1214,8 +1222,10 @@ class MarketplaceAssistantApp(ctk.CTk):
             )
         for index, item in enumerate(self.direct_links):
             title = item.get("title") or f"Item {item.get('item_id', '')}"
-            price = item.get("price")
-            price = "" if price is None else str(price)
+            price = item.get("price_text")
+            if not price:
+                num = item.get("price")
+                price = "" if num is None else str(num)
             location = item.get("location") or ""
             tree.insert(
                 "",

@@ -16,6 +16,7 @@ from app.listing_parser import (
     parse_listings,
     filter_by_query,
     matches_query,
+    sort_by_price,
     _parse_price,
 )
 
@@ -136,6 +137,36 @@ class TestFiltering(unittest.TestCase):
     def test_empty_query_passes_all(self):
         listings = parse_listings(SAMPLE_JSON_HTML, "")
         self.assertEqual(len(filter_by_query(listings, "")), 3)
+
+    def test_number_must_be_exact_not_substring(self):
+        # "4.5" no debe matchear con "450" ni con "14.5".
+        self.assertFalse(matches_query("Mercruiser 450 HP", "Mercruiser 4.5L"))
+        self.assertFalse(matches_query("Mercruiser 14.5 algo", "Mercruiser 4.5L"))
+        self.assertTrue(matches_query("Mercruiser 4.5 L MPI", "Mercruiser 4.5L"))
+
+    def test_displacement_comma_decimal(self):
+        # "4,5" (coma) en el título también cuenta como 4.5.
+        self.assertTrue(matches_query("Motor Mercruiser 4,5 litros", "Mercruiser 4.5L"))
+
+    def test_motor_synonym_engine(self):
+        # "motor" en la búsqueda acepta "engine" en el título (y viceversa).
+        self.assertTrue(matches_query("Mercruiser 4.5L engine complete", "motor mercruiser 4.5L"))
+        self.assertTrue(matches_query("Mercruiser 4.5L motor", "engine mercruiser 4.5L"))
+
+    def test_motor_query_rejects_wrong_displacement(self):
+        # "motor mercruiser 4.5L" no debe aceptar un 5.0L aunque sea motor mercruiser.
+        self.assertFalse(matches_query("Mercruiser 5.0L engine", "motor mercruiser 4.5L"))
+
+
+class TestSortByPrice(unittest.TestCase):
+    def test_sorts_ascending_none_last(self):
+        items = [
+            {"url": "a", "price": 500.0},
+            {"url": "b", "price": None},
+            {"url": "c", "price": 120.0},
+        ]
+        ordered = [x["url"] for x in sort_by_price(items)]
+        self.assertEqual(ordered, ["c", "a", "b"])
 
 
 if __name__ == "__main__":

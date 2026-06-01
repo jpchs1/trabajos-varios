@@ -45,6 +45,65 @@ class PlaywrightNotInstalled(RuntimeError):
     """Playwright no está disponible en el entorno."""
 
 
+class NotLoggedIn(RuntimeError):
+    """No se detectó una sesión de Facebook iniciada."""
+
+
+def _is_logged_in(page) -> bool:
+    """¿La página actual indica que hay sesión de Facebook iniciada?
+
+    Si seguimos en login/checkpoint o hay un campo de contraseña, NO está
+    logueado. Si aparecen elementos típicos de la sesión, asumimos que sí.
+    """
+    try:
+        url = (page.url or "").lower()
+    except Exception:
+        return False
+    if any(x in url for x in ("login", "checkpoint", "/recover")):
+        return False
+    try:
+        if page.query_selector('input[name="pass"]'):
+            return False
+        markers = (
+            'div[role="navigation"]',
+            '[aria-label="Tu perfil"]',
+            '[aria-label="Your profile"]',
+            'a[href*="/marketplace/"]',
+        )
+        for sel in markers:
+            if page.query_selector(sel):
+                return True
+    except Exception:
+        pass
+    return "login" not in url
+
+
+def _safe_content(page, retries: int = 6) -> str:
+    """Devuelve el HTML de la página, reintentando si está navegando.
+
+    Facebook hace muchas redirecciones; ``page.content()`` falla si se lo llama
+    justo en medio ("page is navigating"). Esperamos a que se estabilice y
+    reintentamos; como último recurso leemos el DOM directo.
+    """
+    last_error: Exception | None = None
+    for _ in range(max(1, retries)):
+        try:
+            try:
+                page.wait_for_load_state("networkidle", timeout=8000)
+            except Exception:
+                pass
+            return page.content()
+        except Exception as exc:
+            last_error = exc
+            time.sleep(1.5)
+    try:
+        return page.evaluate("() => document.documentElement.outerHTML")
+    except Exception:
+        if last_error:
+            raise last_error
+        return ""
+
+
 def build_search_url(query: str, location_slug: str | None = None, radius_km: int | None = None) -> str:
     """Arma la URL de búsqueda de Marketplace.
 
@@ -144,32 +203,58 @@ def fetch_search_html(
             viewport={"width": 1366, "height": 900},
         )
         page = context.pages[0] if context.pages else context.new_page()
-        status(f"Navegando a: {url}")
-        page.goto(url, timeout=load_timeout_ms, wait_until="domcontentloaded")
 
-        # Si no hay sesión, Facebook redirige a login. Avisamos y esperamos.
-        if "login" in page.url:
+        # 1) Abrimos Facebook a secas para chequear/forzar el login.
+        status("Verificando tu sesión de Facebook…")
+        try:
+            page.goto("https://www.facebook.com/", timeout=load_timeout_ms, wait_until="domcontentloaded")
+        except Exception:
+            pass
+        time.sleep(2)
+
+        if not _is_logged_in(page):
             status(
-                "Parece que no estás logueado. Iniciá sesión en la ventana del "
-                "navegador; cuando veas los resultados, dejá que continúe."
+                "INICIÁ SESIÓN en la ventana del navegador que se abrió. "
+                "Cuando ya estés dentro de Facebook, esperá: el programa sigue solo."
             )
-            # Damos tiempo para que el usuario se loguee manualmente.
-            try:
-                page.wait_for_url("**/marketplace/**", timeout=180000)
-            except Exception:
-                pass
-            if "login" not in page.url:
-                page.goto(url, timeout=load_timeout_ms, wait_until="domcontentloaded")
+            # Esperamos (hasta 5 min) a que el usuario complete el login a mano.
+            deadline = time.time() + 300
+            while time.time() < deadline:
+                if _is_logged_in(page):
+                    break
+                time.sleep(2)
+            if not _is_logged_in(page):
+                context.close()
+                raise NotLoggedIn(
+                    "No se detectó tu sesión de Facebook. Iniciá sesión en la "
+                    "ventana del navegador y volvé a apretar el botón."
+                )
+
+        status("Sesión OK. Buscando los productos…")
+
+        # 2) Ya logueados, vamos a la búsqueda y esperamos a que cargue.
+        try:
+            page.goto(url, timeout=load_timeout_ms, wait_until="domcontentloaded")
+        except Exception:
+            pass
+        time.sleep(3)
+        try:
+            page.wait_for_selector('a[href*="/marketplace/item/"]', timeout=30000)
+        except Exception:
+            status("No aparecieron resultados todavía; intento cargar igual…")
 
         status("Cargando resultados (scroll)…")
         for i in range(max(0, scrolls)):
-            page.mouse.wheel(0, 4000)
+            try:
+                page.mouse.wheel(0, 4000)
+            except Exception:
+                pass
             time.sleep(scroll_pause)
             status(f"Scroll {i + 1}/{scrolls}…")
 
-        html = page.content()
+        html = _safe_content(page)
         context.close()
-        status("HTML capturado.")
+        status("Resultados capturados.")
         return html
 
 

@@ -27,6 +27,7 @@ Requisitos
 
 from __future__ import annotations
 
+import sys
 import time
 from pathlib import Path
 from typing import Callable, Optional
@@ -72,6 +73,39 @@ def _require_playwright():
         ) from exc
 
 
+def _ensure_chromium(on_status: Optional[Callable[[str], None]] = None) -> None:
+    """Descarga el navegador Chromium de Playwright si todavía no está.
+
+    Así el .exe puede ser chico: en vez de empaquetar el navegador (que pesa
+    cientos de MB y no se lleva bien con PyInstaller --onefile), lo baja solo
+    la primera vez que se usa la búsqueda automática.
+    """
+    import subprocess
+
+    def status(msg: str) -> None:
+        if on_status:
+            on_status(msg)
+
+    try:
+        from playwright._impl._driver import compute_driver_executable  # type: ignore
+    except Exception:
+        compute_driver_executable = None  # type: ignore
+
+    status("Verificando el navegador (se descarga solo la primera vez)…")
+    # Reutiliza el Python actual; dentro de un .exe usa el módulo de Playwright.
+    cmd = [sys.executable, "-m", "playwright", "install", "chromium"]
+    if getattr(sys, "frozen", False):
+        # En un ejecutable congelado, sys.executable es el .exe; igual sabe
+        # interpretar "-m playwright" porque Playwright queda embebido.
+        pass
+    try:
+        subprocess.run(cmd, check=True, capture_output=True, text=True)
+        status("Navegador listo.")
+    except Exception as exc:  # pragma: no cover - depende del entorno
+        # No abortamos: puede que ya esté instalado. Dejamos que el launch lo diga.
+        status(f"No se pudo verificar/instalar el navegador automáticamente: {exc}")
+
+
 def fetch_search_html(
     query: str,
     *,
@@ -101,6 +135,7 @@ def fetch_search_html(
     profile_dir.mkdir(parents=True, exist_ok=True)
     url = build_search_url(query, location_slug, radius_km)
 
+    _ensure_chromium(on_status)
     status(f"Abriendo navegador (perfil: {profile_dir})…")
     with sync_playwright() as p:
         context = p.chromium.launch_persistent_context(

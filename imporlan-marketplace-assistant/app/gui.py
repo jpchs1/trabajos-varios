@@ -325,6 +325,17 @@ class MarketplaceAssistantApp(ctk.CTk):
         ).grid(row=row, column=0, padx=16, pady=4, sticky="ew")
         row += 1
 
+        self.auto_fetch_button = ctk.CTkButton(
+            controls,
+            text="Buscar productos automaticamente",
+            height=40,
+            fg_color="#7c3aed",
+            font=ctk.CTkFont(size=13, weight="bold"),
+            command=self._auto_fetch_specific_listings,
+        )
+        self.auto_fetch_button.grid(row=row, column=0, padx=16, pady=4, sticky="ew")
+        row += 1
+
         self.capture_button = ctk.CTkButton(
             controls,
             text="Captura portapapeles: OFF",
@@ -935,6 +946,76 @@ class MarketplaceAssistantApp(ctk.CTk):
             existing.add(key)
             added += 1
         return added, skipped
+
+    def _auto_fetch_specific_listings(self) -> None:
+        """Busca productos especificos automaticamente abriendo el navegador.
+
+        Usa app.auto_fetch (Playwright) con el perfil de Facebook del usuario.
+        Corre en un hilo aparte para no congelar la ventana. La primera keyword
+        de la lista se usa como termino de busqueda.
+        """
+        try:
+            from app.auto_fetch import fetch_listings  # noqa: F401
+        except Exception as error:
+            messagebox.showwarning(
+                "Falta Playwright",
+                "La busqueda automatica necesita Playwright. Instalalo con:\n\n"
+                "    pip install playwright\n"
+                "    playwright install chromium\n\n"
+                f"Detalle: {error}",
+            )
+            return
+
+        keywords = normalize_keywords(self.keywords_text.get("1.0", "end"))
+        if not keywords:
+            messagebox.showinfo("Sin keywords", "Ingresa una keyword, por ejemplo: MerCruiser 4.5L")
+            return
+        query = keywords[0]
+
+        self.auto_fetch_button.configure(state="disabled", text="Buscando... (logueate en el navegador)")
+        self._set_status(f"Abriendo navegador para buscar '{query}'. La 1ra vez, logueate a Facebook en la ventana.")
+        threading.Thread(target=self._auto_fetch_worker, args=(query,), daemon=True).start()
+
+    def _auto_fetch_worker(self, query: str) -> None:
+        from app.auto_fetch import fetch_listings
+
+        try:
+            listings = fetch_listings(
+                query,
+                match="all",
+                on_status=lambda m: self.after(0, self._set_status, f"Buscando '{query}': {m}"),
+            )
+            self.after(0, self._auto_fetch_done, listings, query, None)
+        except Exception as error:  # pragma: no cover - depende del entorno
+            self.after(0, self._auto_fetch_done, [], query, str(error))
+
+    def _auto_fetch_done(self, listings: list, query: str, error: str | None) -> None:
+        self.auto_fetch_button.configure(state="normal", text="Buscar productos automaticamente")
+        if error:
+            messagebox.showerror("Error en busqueda automatica", error)
+            self._set_status("Fallo la busqueda automatica.")
+            return
+
+        urls = [item["url"] for item in listings if item.get("url")]
+        added, skipped = self._merge_specific_listing_links(urls)
+        # Enriquecer las filas con titulo/precio/ubicacion del parser.
+        info_by_url = {item["url"]: item for item in listings}
+        for row in self.direct_links:
+            info = info_by_url.get(row["url"])
+            if info:
+                row.setdefault("title", info.get("title", ""))
+                row.setdefault("price", info.get("price_text") or info.get("price"))
+                row.setdefault("location", info.get("location", ""))
+        self._refresh_direct_links_table()
+        if added or skipped:
+            self._set_status(
+                f"Busqueda automatica de '{query}': {added} productos especificos nuevos. "
+                f"Duplicados omitidos: {skipped}."
+            )
+        else:
+            self._set_status(
+                f"No se encontraron productos para '{query}'. Probá revisar que estes logueado a Facebook."
+            )
 
     def _paste_specific_links_into_search_table(self) -> None:
         try:

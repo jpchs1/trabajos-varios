@@ -133,11 +133,25 @@ python paste_app.py       # app simple "pegar HTML"
 python -m unittest discover -s tests -v
 ```
 
-## Build (Windows)
+## Generar el .exe (reemplaza al programa viejo)
 
-```bash
-build_windows.bat
-```
+La app completa (`app/main.py`, la de pestañas) **ya trae integrada** la
+búsqueda de productos específicos: botón **"Buscar productos automáticamente"**
+en la pestaña *1. Search*. Para empaquetarla en un único `.exe` (igual al que
+tenías, pero mejorado):
+
+1. En una PC **Windows** con Python instalado, doble clic en
+   **`build_windows.bat`** (o ejecutalo desde la consola).
+2. Esperá: instala dependencias, baja el navegador y compila.
+3. El ejecutable queda en `dist\Imporlan Marketplace Search Assistant.exe`.
+4. Reemplazá tu `.exe` viejo por este. Es **un solo programa**.
+
+La primera vez que uses *"Buscar productos automáticamente"*, el programa
+descarga Chromium (una sola vez) y te pide loguearte a Facebook en la ventana
+que se abre. No se guardan credenciales.
+
+> El `.exe` sólo se puede compilar en Windows. Acá en la nube se preparó todo
+> el código y el script; la compilación final la hacés en tu máquina.
 
 ## Nota legal
 

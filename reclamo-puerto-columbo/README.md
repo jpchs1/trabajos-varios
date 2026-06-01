@@ -78,6 +78,22 @@ La diferencia entre la provisión inicial informada de **$620.000** y el monto f
 
 > En conjunto, los ítems **COL-913** y **COL-919** suman **$238.014 antes de IVA**, monto relevante que no se encuentra debidamente explicado y que motiva la sospecha de una posible duplicidad de cobro por un mismo concepto documental.
 
+### 4.5. Desproporción de los cobros y referencias comparativas
+
+De todas formas, se agradecerá aclarar **cómo se conforman estos cobros**, indicando en base a qué unidad de medida, cálculo, volumen, peso, maniobra o criterio se determinó cada ítem facturado (COL-702, COL-720, COL-913 y COL-919). Se entiende que, al tratarse de una carga de mayor volumen, los costos puedan variar, pero los montos siguen pareciendo **desproporcionados sin un desglose claro**.
+
+**Referencia de transporte.** Trasladar físicamente esta carga desde **San Antonio hasta Lo Barnechea** —incluyendo coordinación, transporte y maniobra con pluma— tuvo un costo cercano al **30%** de lo cobrado en estos conceptos portuarios/documentales. La distancia operativa dentro del puerto se estima que no debería superar los **2 km**, mientras que el traslado San Antonio–Lo Barnechea bordea los **120 km**: el movimiento interno portuario representaría solo cerca del **1,7%** de la distancia total (el traslado a Lo Barnechea implica una distancia aproximadamente **60 veces mayor**), y aun así los cobros portuarios/documentales superan varias veces el costo de ese transporte de 120 km.
+
+**Diferencia entre los ítems documentales:**
+
+| Código | Descripción | Monto |
+|---|---|---:|
+| COL-913 | Apoyo documental de internación | $27.738 |
+| COL-919 | Servicio documental de importación | $210.276 |
+| | **Diferencia** | **$182.538** |
+
+Es decir, el **COL-919 es aproximadamente 658% más caro que el COL-913**, siendo ambos conceptos aparentemente documentales y muy similares en su naturaleza. Por lo anterior, se agradecerá el **respaldo tarifario, la fórmula aplicada y una explicación concreta de por qué estos valores superan el millón de pesos**.
+
 ---
 
 ## 5. Falta de canales efectivos de comunicación

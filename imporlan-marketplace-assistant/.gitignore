@@ -22,5 +22,7 @@ venv/
 # HTML capturado / exportaciones locales
 *.html
 *.htm
+# …pero sí versionamos las plantillas de la web (Flask)
+!app/templates/*.html
 productos.csv
 productos.json

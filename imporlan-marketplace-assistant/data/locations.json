@@ -1,0 +1,50 @@
+{
+  "USA": [
+    {
+      "name": "Miami, FL",
+      "slug": "miami"
+    },
+    {
+      "name": "Tampa, FL",
+      "slug": "tampa"
+    },
+    {
+      "name": "Houston, TX",
+      "slug": "houston"
+    },
+    {
+      "name": "Baltimore, MD",
+      "slug": "baltimore"
+    },
+    {
+      "name": "New York, NY",
+      "slug": "nyc"
+    },
+    {
+      "name": "Chicago, IL",
+      "slug": "chicago"
+    },
+    {
+      "name": "Los Angeles, CA",
+      "slug": "la"
+    },
+    {
+      "name": "Seattle, WA",
+      "slug": "seattle"
+    }
+  ],
+  "Canada": [
+    {
+      "name": "Vancouver, BC",
+      "slug": "vancouver"
+    },
+    {
+      "name": "Toronto, ON",
+      "slug": "toronto"
+    },
+    {
+      "name": "Montreal, QC",
+      "slug": "montreal"
+    }
+  ]
+}

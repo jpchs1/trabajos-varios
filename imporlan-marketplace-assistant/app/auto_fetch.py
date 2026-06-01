@@ -259,6 +259,66 @@ def _extract_listings_from_dom(page, query: str) -> list[dict]:
     return listings
 
 
+def _ensure_login(page, status, load_timeout_ms: int) -> bool:
+    """Abre Facebook y se asegura de que haya sesión (espera el login manual).
+
+    Devuelve True si quedó logueado; False si se agotó el tiempo de espera.
+    """
+    status("Verificando tu sesión de Facebook…")
+    try:
+        page.goto("https://www.facebook.com/", timeout=load_timeout_ms, wait_until="domcontentloaded")
+    except Exception:
+        pass
+    time.sleep(2)
+
+    if _is_logged_in(page):
+        return True
+
+    status(
+        "INICIÁ SESIÓN en la ventana del navegador que se abrió. "
+        "Cuando ya estés dentro de Facebook, esperá: el programa sigue solo."
+    )
+    deadline = time.time() + 300
+    while time.time() < deadline:
+        if _is_logged_in(page):
+            return True
+        time.sleep(2)
+    return _is_logged_in(page)
+
+
+def _search_one_url(page, url, query, status, *, scrolls, scroll_pause, load_timeout_ms) -> tuple[str, list[dict]]:
+    """Navega a una URL de búsqueda, hace scroll y extrae los listings reales."""
+    try:
+        page.goto(url, timeout=load_timeout_ms, wait_until="domcontentloaded")
+    except Exception:
+        pass
+    time.sleep(3)
+    try:
+        page.wait_for_selector('a[href*="/marketplace/item/"]', timeout=30000)
+    except Exception:
+        status("No aparecieron resultados todavía; intento cargar igual…")
+
+    status("Cargando resultados (scroll)…")
+    for i in range(max(0, scrolls)):
+        try:
+            page.mouse.wheel(0, 4000)
+        except Exception:
+            pass
+        time.sleep(scroll_pause)
+        status(f"Scroll {i + 1}/{scrolls}…")
+
+    # Subimos al principio para que las fotos de arriba terminen de cargar.
+    try:
+        page.mouse.wheel(0, -40000)
+        time.sleep(1.5)
+    except Exception:
+        pass
+
+    listings = _extract_listings_from_dom(page, query)
+    html = _safe_content(page)
+    return html, listings
+
+
 def fetch_search_html(
     query: str,
     *,
@@ -302,64 +362,18 @@ def fetch_search_html(
         )
         page = context.pages[0] if context.pages else context.new_page()
 
-        # 1) Abrimos Facebook a secas para chequear/forzar el login.
-        status("Verificando tu sesión de Facebook…")
-        try:
-            page.goto("https://www.facebook.com/", timeout=load_timeout_ms, wait_until="domcontentloaded")
-        except Exception:
-            pass
-        time.sleep(2)
-
-        if not _is_logged_in(page):
-            status(
-                "INICIÁ SESIÓN en la ventana del navegador que se abrió. "
-                "Cuando ya estés dentro de Facebook, esperá: el programa sigue solo."
+        if not _ensure_login(page, status, load_timeout_ms):
+            context.close()
+            raise NotLoggedIn(
+                "No se detectó tu sesión de Facebook. Iniciá sesión en la "
+                "ventana del navegador y volvé a apretar el botón."
             )
-            # Esperamos (hasta 5 min) a que el usuario complete el login a mano.
-            deadline = time.time() + 300
-            while time.time() < deadline:
-                if _is_logged_in(page):
-                    break
-                time.sleep(2)
-            if not _is_logged_in(page):
-                context.close()
-                raise NotLoggedIn(
-                    "No se detectó tu sesión de Facebook. Iniciá sesión en la "
-                    "ventana del navegador y volvé a apretar el botón."
-                )
 
         status("Sesión OK. Buscando los productos…")
-
-        # 2) Ya logueados, vamos a la búsqueda y esperamos a que cargue.
-        try:
-            page.goto(url, timeout=load_timeout_ms, wait_until="domcontentloaded")
-        except Exception:
-            pass
-        time.sleep(3)
-        try:
-            page.wait_for_selector('a[href*="/marketplace/item/"]', timeout=30000)
-        except Exception:
-            status("No aparecieron resultados todavía; intento cargar igual…")
-
-        status("Cargando resultados (scroll)…")
-        for i in range(max(0, scrolls)):
-            try:
-                page.mouse.wheel(0, 4000)
-            except Exception:
-                pass
-            time.sleep(scroll_pause)
-            status(f"Scroll {i + 1}/{scrolls}…")
-
-        # Subimos al principio para que las fotos de arriba terminen de cargar.
-        try:
-            page.mouse.wheel(0, -40000)
-            time.sleep(1.5)
-        except Exception:
-            pass
-
-        # Extraemos los datos REALES leyendo las tarjetas renderizadas.
-        listings = _extract_listings_from_dom(page, query)
-        html = _safe_content(page)
+        html, listings = _search_one_url(
+            page, url, query, status,
+            scrolls=scrolls, scroll_pause=scroll_pause, load_timeout_ms=load_timeout_ms,
+        )
         context.close()
 
         # Guardamos el HTML para diagnóstico (por si hay que revisar qué devolvió
@@ -416,4 +430,100 @@ def fetch_listings(
         # Filtro estricto: solo lo que realmente coincide (sin fallback).
         listings = filter_by_query(listings, query, mode=match)
 
+    return sort_by_price(listings)
+
+
+def fetch_listings_multi(
+    query: str,
+    locations: list[dict],
+    *,
+    match: str = "all",
+    radius_km: int | None = None,
+    profile_dir: Path | str = DEFAULT_PROFILE_DIR,
+    headless: bool = False,
+    scrolls: int = 8,
+    scroll_pause: float = 1.5,
+    load_timeout_ms: int = 60000,
+    on_status: Optional[Callable[[str], None]] = None,
+) -> list[dict]:
+    """Busca ``query`` en VARIAS ciudades y combina los resultados.
+
+    ``locations`` es una lista de dicts ``{"name": ..., "slug": ...}`` (las
+    ciudades tildadas en la app). Abre el navegador UNA sola vez (un solo
+    login) y recorre cada ciudad, así los resultados cubren todas las zonas
+    elegidas y no solo la ubicación por defecto de la cuenta de Facebook.
+
+    Filtra de forma estricta y ordena por precio. Quita duplicados por item_id.
+    """
+    from .listing_parser import sort_by_price
+
+    # Sin ciudades, caemos en la búsqueda simple (global).
+    if not locations:
+        return fetch_listings(
+            query, match=match, radius_km=radius_km, profile_dir=profile_dir,
+            headless=headless, scrolls=scrolls, scroll_pause=scroll_pause,
+            on_status=on_status,
+        )
+
+    sync_playwright = _require_playwright()
+
+    def status(msg: str) -> None:
+        if on_status:
+            on_status(msg)
+
+    profile_dir = Path(profile_dir)
+    profile_dir.mkdir(parents=True, exist_ok=True)
+
+    _ensure_chromium(on_status)
+    status(f"Abriendo navegador (perfil: {profile_dir})…")
+
+    combinado: dict[str, dict] = {}
+    last_html = ""
+    with sync_playwright() as p:
+        context = p.chromium.launch_persistent_context(
+            user_data_dir=str(profile_dir),
+            headless=headless,
+            viewport={"width": 1366, "height": 900},
+        )
+        page = context.pages[0] if context.pages else context.new_page()
+
+        if not _ensure_login(page, status, load_timeout_ms):
+            context.close()
+            raise NotLoggedIn(
+                "No se detectó tu sesión de Facebook. Iniciá sesión en la "
+                "ventana del navegador y volvé a apretar el botón."
+            )
+
+        total = len(locations)
+        for idx, loc in enumerate(locations, start=1):
+            name = loc.get("name", loc.get("slug", "?"))
+            slug = loc.get("slug")
+            status(f"Buscando en {name} ({idx}/{total})…")
+            url = build_search_url(query, slug, radius_km)
+            try:
+                html, listings = _search_one_url(
+                    page, url, query, status,
+                    scrolls=scrolls, scroll_pause=scroll_pause, load_timeout_ms=load_timeout_ms,
+                )
+            except Exception:
+                continue
+            last_html = html or last_html
+            for it in listings:
+                iid = it.get("item_id")
+                if iid and iid not in combinado:
+                    combinado[iid] = it
+            status(f"{name}: {len(listings)} tarjetas. Acumulado: {len(combinado)}.")
+
+        context.close()
+
+    # Diagnóstico: guardamos el último HTML capturado.
+    try:
+        diag = Path(profile_dir).parent / "ultima_busqueda.html"
+        diag.write_text(last_html, encoding="utf-8", errors="replace")
+    except Exception:
+        pass
+
+    listings = list(combinado.values())
+    if query and match != "off":
+        listings = filter_by_query(listings, query, mode=match)
     return sort_by_price(listings)

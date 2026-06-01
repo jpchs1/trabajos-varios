@@ -22,7 +22,7 @@ from app.config import (
 )
 from app.export import export_csv, export_excel
 from app.ranking import sort_best_first
-from app.search_builder import generate_searches, normalize_keywords
+from app.search_builder import generate_searches, miles_to_km, normalize_keywords
 from app.storage import OpportunityStorage
 
 
@@ -698,7 +698,7 @@ class MarketplaceAssistantApp(ctk.CTk):
         # Con fotos, las filas son más altas para que entre la miniatura.
         style.configure(
             "Treeview",
-            rowheight=70 if with_images else 30,
+            rowheight=96 if with_images else 30,
             font=("Segoe UI", 10),
             background="#ffffff",
             fieldbackground="#ffffff",
@@ -719,7 +719,7 @@ class MarketplaceAssistantApp(ctk.CTk):
         tree = ttk.Treeview(container, columns=columns, show=show, selectmode="extended")
         if with_images:
             tree.heading("#0", text="Foto")
-            tree.column("#0", width=90, minwidth=90, stretch=False, anchor="center")
+            tree.column("#0", width=130, minwidth=130, stretch=False, anchor="center")
         vertical = ttk.Scrollbar(container, orient="vertical", command=tree.yview)
         horizontal = ttk.Scrollbar(container, orient="horizontal", command=tree.xview)
         tree.configure(yscrollcommand=vertical.set, xscrollcommand=horizontal.set)
@@ -986,21 +986,46 @@ class MarketplaceAssistantApp(ctk.CTk):
             return
         query = keywords[0]
 
+        # Ciudades tildadas (con su slug de Facebook) y radio elegido.
+        locations: list[dict] = []
+        for country_locations in self._selected_locations_by_country().values():
+            locations.extend(country_locations)
+        try:
+            radius_miles = int(self.radius_var.get().split()[0])
+        except Exception:
+            radius_miles = DEFAULT_RADIUS_MILES
+        radius_km = miles_to_km(radius_miles)
+
+        if not locations:
+            messagebox.showinfo(
+                "Sin ciudades",
+                "Tildá al menos una ciudad a la izquierda para buscar en esas zonas.",
+            )
+            return
+
         # Limpiamos los resultados de la busqueda anterior antes de empezar.
         self.direct_links = []
         self._refresh_direct_links_table()
 
         self.auto_fetch_button.configure(state="disabled", text="Buscando... (logueate en el navegador)")
-        self._set_status(f"Abriendo navegador para buscar '{query}'. La 1ra vez, logueate a Facebook en la ventana.")
-        threading.Thread(target=self._auto_fetch_worker, args=(query,), daemon=True).start()
+        nombres = ", ".join(loc["name"] for loc in locations)
+        self._set_status(
+            f"Abriendo navegador para buscar '{query}' en {len(locations)} ciudades ({nombres}). "
+            "La 1ra vez, logueate a Facebook en la ventana."
+        )
+        threading.Thread(
+            target=self._auto_fetch_worker, args=(query, locations, radius_km), daemon=True
+        ).start()
 
-    def _auto_fetch_worker(self, query: str) -> None:
-        from app.auto_fetch import fetch_listings
+    def _auto_fetch_worker(self, query: str, locations: list, radius_km: int) -> None:
+        from app.auto_fetch import fetch_listings_multi
 
         try:
-            listings = fetch_listings(
+            listings = fetch_listings_multi(
                 query,
+                locations,
                 match="all",
+                radius_km=radius_km,
                 on_status=lambda m: self.after(0, self._set_status, f"Buscando '{query}': {m}"),
             )
             self.after(0, self._auto_fetch_done, listings, query, None)
@@ -1287,8 +1312,9 @@ class MarketplaceAssistantApp(ctk.CTk):
                 req = urllib.request.Request(url, headers={"User-Agent": "Mozilla/5.0"})
                 with urllib.request.urlopen(req, timeout=15) as resp:
                     data = resp.read()
-                img = Image.open(io.BytesIO(data))
-                img.thumbnail((80, 60))
+                img = Image.open(io.BytesIO(data)).convert("RGB")
+                # Más grande y manteniendo proporción, para que se vea bien.
+                img.thumbnail((118, 84))
                 # PhotoImage debe crearse en el hilo principal de Tk.
                 self.after(0, self._set_thumbnail, item_id, img)
             except Exception:

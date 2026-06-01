@@ -20,6 +20,22 @@ con JavaScript. Una descarga anónima (sin tu sesión) casi no trae datos, por
 eso antes sólo salía el link de la búsqueda genérica. Hay dos formas de obtener
 los productos específicos, según cuánta comodidad vs. seguridad prefieras.
 
+### ⚡ Instalar / actualizar con un solo comando (PowerShell)
+
+La forma más fácil. Abrí **PowerShell** y pegá este renglón (Enter):
+
+```powershell
+irm https://raw.githubusercontent.com/jpchs1/trabajos-varios/main/imporlan-marketplace-assistant/Instalar.ps1 | iex
+```
+
+Eso descarga la última versión, instala todo (incluido el navegador) y abre el
+programa. Te deja además un acceso directo **"Imporlan Marketplace"** en el
+Escritorio para abrirlo con doble clic.
+
+**¿Querés actualizar más adelante?** Volvé a pegar el mismo comando: siempre
+baja lo más reciente. Tu sesión de Facebook y tus oportunidades guardadas no se
+pierden.
+
 ### Inicio fácil con doble clic (sin tocar la consola) 🖱️
 
 - **Windows:** doble clic en **`Iniciar (Windows).bat`**.

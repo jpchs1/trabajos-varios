@@ -398,7 +398,11 @@ class MarketplaceAssistantApp(ctk.CTk):
             columns=("title", "price", "location", "opened", "saved", "url"),
             headings=("Producto", "Precio", "Ubicacion", "Abierto", "Guardado", "Link de la publicacion"),
             widths=(300, 100, 160, 80, 80, 560),
+            with_images=True,
         )
+        # Cache de miniaturas descargadas (item_id -> PhotoImage), para que no
+        # se las lleve el recolector de basura de Python (Tk solo guarda refs).
+        self._thumb_cache: dict[str, object] = {}
         self.search_tree_frame.grid(row=3, column=0, padx=12, pady=(0, 12), sticky="nsew")
         search_tree = self._get_search_tree()
         search_tree.bind("<Control-c>", lambda _event: self._copy_selected_specific_link())
@@ -683,6 +687,7 @@ class MarketplaceAssistantApp(ctk.CTk):
         columns: tuple[str, ...],
         headings: tuple[str, ...],
         widths: tuple[int, ...],
+        with_images: bool = False,
     ) -> ttk.Frame:
         container = ttk.Frame(parent)
         container.grid_columnconfigure(0, weight=1)
@@ -690,9 +695,10 @@ class MarketplaceAssistantApp(ctk.CTk):
 
         style = ttk.Style()
         style.theme_use("default")
+        # Con fotos, las filas son más altas para que entre la miniatura.
         style.configure(
             "Treeview",
-            rowheight=30,
+            rowheight=70 if with_images else 30,
             font=("Segoe UI", 10),
             background="#ffffff",
             fieldbackground="#ffffff",
@@ -708,7 +714,12 @@ class MarketplaceAssistantApp(ctk.CTk):
         )
         style.map("Treeview", background=[("selected", "#dbeafe")], foreground=[("selected", "#10233f")])
 
-        tree = ttk.Treeview(container, columns=columns, show="headings", selectmode="extended")
+        # show="tree headings" deja visible la columna #0, donde van las fotos.
+        show = "tree headings" if with_images else "headings"
+        tree = ttk.Treeview(container, columns=columns, show=show, selectmode="extended")
+        if with_images:
+            tree.heading("#0", text="Foto")
+            tree.column("#0", width=90, minwidth=90, stretch=False, anchor="center")
         vertical = ttk.Scrollbar(container, orient="vertical", command=tree.yview)
         horizontal = ttk.Scrollbar(container, orient="horizontal", command=tree.xview)
         tree.configure(yscrollcommand=vertical.set, xscrollcommand=horizontal.set)
@@ -1025,6 +1036,7 @@ class MarketplaceAssistantApp(ctk.CTk):
                     "price": price_num,
                     "price_text": price_txt,
                     "location": item.get("location", ""),
+                    "photo": item.get("photo", ""),
                 }
             )
 
@@ -1227,17 +1239,79 @@ class MarketplaceAssistantApp(ctk.CTk):
                 num = item.get("price")
                 price = "" if num is None else str(num)
             location = item.get("location") or ""
+            # Si ya tenemos la miniatura descargada, la mostramos en la fila.
+            thumb = self._thumb_cache.get(item.get("item_id", ""))
+            kwargs = {"image": thumb} if thumb else {}
             tree.insert(
                 "",
                 "end",
                 iid=str(index),
                 values=(title, price, location, item["opened"], item["saved"], item["url"]),
+                **kwargs,
             )
         opened = sum(1 for item in self.direct_links if item["opened"] == "Yes")
         saved = sum(1 for item in self.direct_links if item["saved"] == "Yes")
         self.search_total_card.configure(text=str(len(self.direct_links)))
         self.search_opened_card.configure(text=str(opened))
         self.search_pending_card.configure(text=str(saved))
+        # Disparamos la descarga de las fotos que falten (en segundo plano).
+        self._load_thumbnails_async()
+
+    def _load_thumbnails_async(self) -> None:
+        """Descarga las miniaturas de los productos que aún no tengamos.
+
+        Corre en un hilo para no congelar la ventana. Necesita Pillow; si no
+        está, simplemente no muestra fotos (no rompe nada).
+        """
+        try:
+            from PIL import Image, ImageTk  # noqa: F401
+        except Exception:
+            return  # sin Pillow, no hay miniaturas (el resto funciona igual)
+
+        pendientes = [
+            (it.get("item_id", ""), it.get("photo", ""))
+            for it in self.direct_links
+            if it.get("photo") and it.get("item_id") not in self._thumb_cache
+        ]
+        if not pendientes:
+            return
+        threading.Thread(target=self._thumb_worker, args=(pendientes,), daemon=True).start()
+
+    def _thumb_worker(self, pendientes: list) -> None:
+        import io
+        import urllib.request
+        from PIL import Image, ImageTk
+
+        for item_id, url in pendientes:
+            try:
+                req = urllib.request.Request(url, headers={"User-Agent": "Mozilla/5.0"})
+                with urllib.request.urlopen(req, timeout=15) as resp:
+                    data = resp.read()
+                img = Image.open(io.BytesIO(data))
+                img.thumbnail((80, 60))
+                # PhotoImage debe crearse en el hilo principal de Tk.
+                self.after(0, self._set_thumbnail, item_id, img)
+            except Exception:
+                continue
+
+    def _set_thumbnail(self, item_id: str, pil_image) -> None:
+        from PIL import ImageTk
+
+        try:
+            photo = ImageTk.PhotoImage(pil_image)
+        except Exception:
+            return
+        self._thumb_cache[item_id] = photo
+        # Actualizamos la fila correspondiente si sigue visible.
+        tree = self._get_search_tree()
+        for iid in tree.get_children():
+            idx = int(iid) if str(iid).isdigit() else -1
+            if 0 <= idx < len(self.direct_links) and self.direct_links[idx].get("item_id") == item_id:
+                try:
+                    tree.item(iid, image=photo)
+                except Exception:
+                    pass
+                break
 
     def _selected_search_indices(self) -> list[int]:
         tree = self._get_search_tree()

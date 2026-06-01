@@ -41,18 +41,22 @@ if (-not $python) {
 Escribir "Python encontrado: $(& $python --version)" "Green"
 
 # --- 2) Descargar la ultima version ---
+# Salir de la carpeta de la app antes de tocarla: si PowerShell esta "parado"
+# dentro de ella, Windows no deja modificarla ("porque esta en uso").
+Set-Location $env:USERPROFILE
+
 New-Item -ItemType Directory -Force -Path $Base | Out-Null
 Escribir "Descargando la ultima version..." "Cyan"
 Invoke-WebRequest -Uri $ZipUrl -OutFile $ZipPath
 
-# Borrar copia anterior del codigo (no toca tu sesion ni tu base de datos,
-# que viven en otra carpeta) y descomprimir la nueva.
+# Descomprimir en una carpeta temporal.
 $Extract = Join-Path $Base "_tmp_extract"
 if (Test-Path $Extract) { Remove-Item $Extract -Recurse -Force }
 Expand-Archive -Path $ZipPath -DestinationPath $Extract -Force
 
+# Copiar los archivos nuevos ENCIMA de los viejos (no borramos la carpeta, asi
+# se conserva el entorno .venv ya instalado y tu sesion/base de datos).
 $Origen = Join-Path $Extract "trabajos-varios-main\imporlan-marketplace-assistant"
-if (Test-Path $AppDir) { Remove-Item $AppDir -Recurse -Force }
 New-Item -ItemType Directory -Force -Path $AppDir | Out-Null
 Copy-Item -Path (Join-Path $Origen "*") -Destination $AppDir -Recurse -Force
 Remove-Item $Extract -Recurse -Force
@@ -81,6 +85,9 @@ if (-not (Test-Path $SetupMarker)) {
     Escribir "Verificando dependencias..." "Cyan"
     & $VenvPy -m pip install -r requirements.txt | Out-Null
 }
+
+# Aseguramos que el navegador este descargado (por si la 1ra vez quedo a medias).
+& $VenvPy -m playwright install chromium 2>$null | Out-Null
 
 # --- 4) Crear un acceso directo en el Escritorio para abrir con doble clic ---
 try {

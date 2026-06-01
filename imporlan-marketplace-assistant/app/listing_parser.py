@@ -236,11 +236,74 @@ def parse_listings(html: str, query: str = "") -> list[dict]:
     return listings
 
 
+# Grupos de sinónimos: si el usuario escribe uno, cualquiera del grupo cuenta.
+# Así "motor mercruiser" también acepta avisos en inglés ("engine").
+_SYNONYMS = {
+    "motor": {"motor", "engine", "moteur", "motores"},
+    "engine": {"motor", "engine", "moteur"},
+    "lancha": {"lancha", "boat", "bote"},
+    "boat": {"lancha", "boat", "bote"},
+    "fueraborda": {"fueraborda", "outboard", "fuera"},
+    "outboard": {"outboard", "fueraborda"},
+}
+
+# Palabras tan genéricas que por si solas no aportan a distinguir el producto.
+_STOPWORDS = {"de", "of", "the", "el", "la", "para", "con", "and", "y", "o", "or"}
+
+
 def query_terms(query: str) -> list[str]:
     """Tokeniza la búsqueda en términos significativos para filtrar."""
     raw = re.split(r"\s+", (query or "").strip())
-    terms = [t for t in raw if len(_canon(t)) >= 2]
+    terms = []
+    for t in raw:
+        low = t.lower()
+        if low in _STOPWORDS:
+            continue
+        if len(_canon(t)) >= 1:
+            terms.append(t)
     return terms
+
+
+def _is_displacement(token: str) -> Optional[str]:
+    """Si el token es una cilindrada/numero tipo '4.5L', '4.5', '350', devuelve
+    el numero normalizado (ej. '4.5' o '350'); si no, None.
+    """
+    m = re.fullmatch(r"(\d+(?:[.,]\d+)?)\s*[lL]?", token.strip())
+    if not m:
+        return None
+    return m.group(1).replace(",", ".")
+
+
+def _title_has_number(title: str, number: str) -> bool:
+    """¿El titulo contiene ese numero como valor independiente?
+
+    Acepta punto o coma decimal y exige que no sea parte de un numero mas
+    grande: '4.5' matchea '4.5L' y '4,5 litros', pero NO '14.5' ni '450'.
+    """
+    intpart, _, dec = number.partition(".")
+    if dec:
+        pat = rf"(?<!\d){re.escape(intpart)}[.,]{re.escape(dec)}(?!\d)"
+    else:
+        pat = rf"(?<!\d){re.escape(intpart)}(?!\d)"
+    return re.search(pat, title or "") is not None
+
+
+def _term_matches(term: str, title: str, ctitle: str) -> bool:
+    """¿Un termino de la busqueda esta presente en el titulo?
+
+    - Numeros/cilindradas: se exige el valor exacto con limites (4.5 != 450).
+    - Palabras con sinonimos: alcanza con que aparezca cualquiera del grupo.
+    - Palabras normales: subcadena sobre el texto canonico.
+    """
+    number = _is_displacement(term)
+    if number is not None:
+        return _title_has_number(title, number)
+
+    low = term.lower()
+    if low in _SYNONYMS:
+        return any(_canon(s) in ctitle for s in _SYNONYMS[low])
+
+    return _canon(term) in ctitle
 
 
 def matches_query(title: str, query: str, mode: str = "all") -> bool:
@@ -253,7 +316,7 @@ def matches_query(title: str, query: str, mode: str = "all") -> bool:
     if not terms:
         return True
     ctitle = _canon(title)
-    checks = [_canon(t) in ctitle for t in terms]
+    checks = [_term_matches(t, title, ctitle) for t in terms]
     return all(checks) if mode == "all" else any(checks)
 
 
@@ -265,3 +328,15 @@ def filter_by_query(listings: Iterable[dict], query: str, mode: str = "all") -> 
     que realmente corresponde a lo que el usuario buscó.
     """
     return [it for it in listings if matches_query(it.get("title", ""), query, mode)]
+
+
+def sort_by_price(listings: Iterable[dict]) -> list[dict]:
+    """Ordena los anuncios de menor a mayor precio.
+
+    Los que no tienen precio van al final (no se pueden comparar).
+    """
+    def key(it: dict):
+        price = it.get("price")
+        return (price is None, price if price is not None else 0.0)
+
+    return sorted(listings, key=key)

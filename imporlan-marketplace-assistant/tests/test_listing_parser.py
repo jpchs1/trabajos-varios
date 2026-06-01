@@ -158,9 +158,21 @@ class TestFiltering(unittest.TestCase):
         self.assertTrue(matches_query("Mercruiser 4.5L engine complete", "motor mercruiser 4.5L"))
         self.assertTrue(matches_query("Mercruiser 4.5L motor", "engine mercruiser 4.5L"))
 
+    def test_generic_word_optional_when_specific_present(self):
+        # Buscar "engine mercruiser 4.5L" igual acepta un 4.5L que no diga engine.
+        self.assertTrue(matches_query("MerCruiser 4.5L MPI Bravo", "Engine MerCruiser 4.5L"))
+        # Pero la marca y el cilindraje siguen siendo obligatorios.
+        self.assertFalse(matches_query("Volvo Penta 4.3", "Engine MerCruiser 4.5L"))
+        self.assertFalse(matches_query("Honda 4.5 outboard", "Engine MerCruiser 4.5L"))
+
     def test_motor_query_rejects_wrong_displacement(self):
         # "motor mercruiser 4.5L" no debe aceptar un 5.0L aunque sea motor mercruiser.
         self.assertFalse(matches_query("Mercruiser 5.0L engine", "motor mercruiser 4.5L"))
+
+    def test_only_generic_query_requires_type_word(self):
+        # Si la búsqueda es solo "motor", el título debe ser un motor/engine.
+        self.assertTrue(matches_query("Engine for sale", "motor"))
+        self.assertFalse(matches_query("Lancha 20ft", "motor"))
 
 
 class TestSortByPrice(unittest.TestCase):

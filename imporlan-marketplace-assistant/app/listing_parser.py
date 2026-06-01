@@ -314,18 +314,38 @@ def _term_matches(term: str, title: str, ctitle: str) -> bool:
     return _canon(term) in ctitle
 
 
+def _is_generic(term: str) -> bool:
+    """¿El término es una palabra genérica de tipo (motor/engine, lancha…)?"""
+    return term.lower() in _SYNONYMS
+
+
 def matches_query(title: str, query: str, mode: str = "all") -> bool:
     """¿El título corresponde a lo buscado?
 
-    ``mode="all"`` exige que estén todos los términos (búsqueda específica);
-    ``mode="any"`` con que aparezca uno alcanza. Si no hay términos, pasa todo.
+    ``mode="all"`` (búsqueda específica): exige TODOS los términos *específicos*
+    (marca, modelo y cilindrada exacta). Las palabras genéricas de tipo
+    ("motor"/"engine") son opcionales cuando hay términos específicos, para no
+    descartar avisos válidos que no repiten esa palabra en el título (ej.
+    buscar "motor mercruiser 4.5L" igual acepta "MerCruiser 4.5L MPI").
+
+    ``mode="any"``: con que aparezca un término alcanza.
+    Si no hay términos, pasa todo.
     """
     terms = query_terms(query)
     if not terms:
         return True
     ctitle = _canon(title)
-    checks = [_term_matches(t, title, ctitle) for t in terms]
-    return all(checks) if mode == "all" else any(checks)
+
+    if mode != "all":
+        return any(_term_matches(t, title, ctitle) for t in terms)
+
+    specific = [t for t in terms if not _is_generic(t)]
+    if specific:
+        # Lo que distingue el producto (marca + cilindrada) debe estar todo.
+        return all(_term_matches(t, title, ctitle) for t in specific)
+
+    # La búsqueda es solo palabras genéricas: que aparezca alguna del grupo.
+    return all(_term_matches(t, title, ctitle) for t in terms)
 
 
 def filter_by_query(listings: Iterable[dict], query: str, mode: str = "all") -> list[dict]:

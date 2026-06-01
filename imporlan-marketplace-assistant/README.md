@@ -20,6 +20,15 @@ con JavaScript. Una descarga anónima (sin tu sesión) casi no trae datos, por
 eso antes sólo salía el link de la búsqueda genérica. Hay dos formas de obtener
 los productos específicos, según cuánta comodidad vs. seguridad prefieras.
 
+### Inicio fácil con doble clic (sin tocar la consola) 🖱️
+
+- **Windows:** doble clic en **`Iniciar (Windows).bat`**.
+- **macOS:** doble clic en **`Iniciar (Mac).command`** (si no te deja, clic
+  derecho → *Abrir*, una sola vez).
+
+La **primera vez** instala todo solo (Python debe estar instalado de antes;
+puede tardar unos minutos) y abre la app. Las veces siguientes abre directo.
+
 ### Opción 1 — Modo automático con tu navegador (más cómodo) 🤖
 
 El programa abre un navegador (Playwright) con **tu propio perfil de

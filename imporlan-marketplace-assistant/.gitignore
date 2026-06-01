@@ -1,0 +1,23 @@
+# Artefactos de build / distribución (binarios pesados, no van al repo)
+build/
+dist/
+*.exe
+*.spec
+
+# Datos locales generados
+data/opportunities.sqlite
+*.sqlite
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+.env
+
+# HTML capturado / exportaciones locales
+*.html
+*.htm
+productos.csv
+productos.json

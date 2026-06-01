@@ -3,3 +3,12 @@ pandas>=2.2.0
 openpyxl>=3.1.2
 pyinstaller>=6.0.0
 
+# Opcional: solo para el modo de búsqueda automática (app/auto_fetch.py).
+# Después de instalarlo, ejecutar una vez: playwright install chromium
+# playwright>=1.40.0
+
+# Opcional: mejora la extracción desde HTML renderizado (app/listing_parser.py).
+# beautifulsoup4>=4.12.0
+
+# Opcional: app gráfica simple "pegar HTML" (paste_app.py).
+# PyQt6>=6.6.0

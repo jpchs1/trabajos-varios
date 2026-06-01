@@ -16,6 +16,9 @@ __pycache__/
 venv/
 .env
 
+# Perfil persistente del navegador del modo automático (datos de tu sesión)
+.imporlan_marketplace_profile/
+
 # HTML capturado / exportaciones locales
 *.html
 *.htm

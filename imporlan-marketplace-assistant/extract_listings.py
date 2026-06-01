@@ -5,7 +5,9 @@ Convierte el HTML de una página de resultados (la búsqueda genérica, p. ej.
 "Mercruiser 4.5L") en una lista de **links a productos concretos** como
 ``https://www.facebook.com/marketplace/item/1301127085457538/``.
 
-Cómo se usa (no se guardan credenciales ni se automatiza el login):
+Tiene DOS modos:
+
+A) Modo HTML (100% seguro, no automatiza login):
 
   1. Abrí Facebook Marketplace en tu navegador, YA logueado, y hacé la
      búsqueda (ej.: "Mercruiser 4.5L"). Bajá un poco para que carguen
@@ -19,6 +21,14 @@ Cómo se usa (no se guardan credenciales ni se automatiza el login):
      O pegando por stdin:
 
        pbpaste | python extract_listings.py - --query "Mercruiser 4.5L"
+
+B) Modo automático (--auto): abre un navegador con tu perfil de Facebook,
+   hace la búsqueda y extrae los productos solo (requiere Playwright):
+
+       python extract_listings.py --auto --query "Mercruiser 4.5L"
+
+   La primera vez te logueás a mano en la ventana; después la sesión queda
+   guardada en un perfil local. No se guardan credenciales en el código.
 
 Opciones de salida: imprime los links en pantalla y, opcionalmente, exporta a
 CSV/JSON reutilizando el resto del programa.
@@ -58,7 +68,21 @@ def main(argv: list[str] | None = None) -> int:
     )
     parser.add_argument(
         "html",
-        help="Archivo HTML guardado de la búsqueda, o '-' para leer de stdin.",
+        nargs="?",
+        help="Archivo HTML guardado de la búsqueda, o '-' para leer de stdin. "
+             "No hace falta con --auto.",
+    )
+    parser.add_argument(
+        "--auto", action="store_true",
+        help="Abrir el navegador con tu perfil de Facebook y extraer solo (requiere Playwright).",
+    )
+    parser.add_argument(
+        "--scrolls", type=int, default=8,
+        help="Modo --auto: cuántas veces bajar para cargar más resultados (default 8).",
+    )
+    parser.add_argument(
+        "--headless", action="store_true",
+        help="Modo --auto: navegador sin ventana (usalo solo si ya te logueaste antes).",
     )
     parser.add_argument(
         "--query", "-q", default="",
@@ -76,11 +100,32 @@ def main(argv: list[str] | None = None) -> int:
     )
     args = parser.parse_args(argv)
 
-    html = _read_input(args.html)
-    listings = parse_listings(html, args.query)
-
-    if args.query and args.match != "off":
-        listings = filter_by_query(listings, args.query, mode=args.match)
+    if args.auto:
+        if not args.query:
+            parser.error("--auto requiere --query con lo que querés buscar.")
+        try:
+            from app.auto_fetch import fetch_listings, PlaywrightNotInstalled
+        except Exception as exc:  # pragma: no cover
+            print(f"No se pudo cargar el modo automático: {exc}", file=sys.stderr)
+            return 2
+        try:
+            listings = fetch_listings(
+                args.query,
+                match=args.match,
+                headless=args.headless,
+                scrolls=args.scrolls,
+                on_status=lambda m: print(f"… {m}", file=sys.stderr),
+            )
+        except PlaywrightNotInstalled as exc:
+            print(str(exc), file=sys.stderr)
+            return 2
+    else:
+        if not args.html:
+            parser.error("Indicá un archivo HTML (o '-' para stdin), o usá --auto.")
+        html = _read_input(args.html)
+        listings = parse_listings(html, args.query)
+        if args.query and args.match != "off":
+            listings = filter_by_query(listings, args.query, mode=args.match)
 
     if rank_listings is not None:
         listings = rank_listings(listings)

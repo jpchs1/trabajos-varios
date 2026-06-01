@@ -20,12 +20,13 @@ Ejecutar:  python paste_app.py
 from __future__ import annotations
 
 import sys
+import traceback
 import webbrowser
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 
-from PyQt6.QtCore import Qt
+from PyQt6.QtCore import Qt, QThread, pyqtSignal
 from PyQt6.QtGui import QGuiApplication
 from PyQt6.QtWidgets import (
     QApplication,
@@ -58,6 +59,37 @@ try:
     from app.export import export_csv, export_json
 except Exception:  # pragma: no cover
     export_csv = export_json = None
+
+
+class AutoFetchWorker(QThread):
+    """Corre la búsqueda automática (Playwright) en un hilo aparte.
+
+    Así la ventana no se congela mientras el navegador carga los resultados.
+    """
+
+    status = pyqtSignal(str)
+    finished_ok = pyqtSignal(list)
+    failed = pyqtSignal(str)
+
+    def __init__(self, query: str, match: str, scrolls: int) -> None:
+        super().__init__()
+        self.query = query
+        self.match = match
+        self.scrolls = scrolls
+
+    def run(self) -> None:  # pragma: no cover - requiere navegador real
+        try:
+            from app.auto_fetch import fetch_listings
+
+            listings = fetch_listings(
+                self.query,
+                match=self.match,
+                scrolls=self.scrolls,
+                on_status=lambda m: self.status.emit(m),
+            )
+            self.finished_ok.emit(listings)
+        except Exception as exc:
+            self.failed.emit(f"{exc}\n\n{traceback.format_exc()}")
 
 
 class PasteWindow(QMainWindow):
@@ -100,6 +132,14 @@ class PasteWindow(QMainWindow):
         self.search_btn = QPushButton("🔎 Buscar productos específicos")
         self.search_btn.clicked.connect(self.do_search)
         actions.addWidget(self.search_btn)
+
+        self.auto_btn = QPushButton("🤖 Buscar automático (navegador)")
+        self.auto_btn.setToolTip(
+            "Abre un navegador con tu sesión de Facebook, hace la búsqueda y "
+            "extrae los productos solo. Requiere Playwright."
+        )
+        self.auto_btn.clicked.connect(self.do_auto_search)
+        actions.addWidget(self.auto_btn)
 
         self.open_html_btn = QPushButton("Abrir archivo .html…")
         self.open_html_btn.clicked.connect(self.open_html_file)
@@ -160,6 +200,59 @@ class PasteWindow(QMainWindow):
                 f"{len(listings)} producto(s) específico(s)."
                 + (f" Filtrados por: '{query}'." if query and mode != 'off' else "")
             )
+
+    # ------------------------------------------------------------------
+    def do_auto_search(self) -> None:
+        """Lanza la búsqueda automática con el navegador (en un hilo)."""
+        query = self.query_edit.text().strip()
+        if not query:
+            QMessageBox.warning(
+                self, "Falta la búsqueda",
+                "Escribí qué querés buscar (ej.: Mercruiser 4.5L) antes de buscar automático.",
+            )
+            return
+        try:
+            import app.auto_fetch  # noqa: F401
+        except Exception as exc:
+            QMessageBox.critical(
+                self, "Falta Playwright",
+                "El modo automático necesita Playwright:\n\n"
+                "    pip install playwright\n"
+                "    playwright install chromium\n\n"
+                f"Detalle: {exc}",
+            )
+            return
+
+        mode = self.match_combo.currentData()
+        self.auto_btn.setEnabled(False)
+        self.search_btn.setEnabled(False)
+        self.statusBar().showMessage("Abriendo navegador… (la 1ª vez logueate a Facebook en la ventana)")
+
+        self._worker = AutoFetchWorker(query, mode, scrolls=8)
+        self._worker.status.connect(lambda m: self.statusBar().showMessage(m))
+        self._worker.finished_ok.connect(self._on_auto_done)
+        self._worker.failed.connect(self._on_auto_failed)
+        self._worker.start()
+
+    def _on_auto_done(self, listings: list) -> None:
+        self.auto_btn.setEnabled(True)
+        self.search_btn.setEnabled(True)
+        if rank_listings is not None:
+            listings = rank_listings(listings)
+        self._listings = listings
+        self._fill_table(listings)
+        if listings:
+            self.statusBar().showMessage(f"{len(listings)} producto(s) específico(s) (modo automático).")
+        else:
+            self.statusBar().showMessage(
+                "No se encontraron productos. Probá con más scroll o revisá que estés logueado."
+            )
+
+    def _on_auto_failed(self, message: str) -> None:
+        self.auto_btn.setEnabled(True)
+        self.search_btn.setEnabled(True)
+        self.statusBar().showMessage("Falló la búsqueda automática.")
+        QMessageBox.critical(self, "Error en búsqueda automática", message)
 
     def _fill_table(self, listings: list[dict]) -> None:
         self.table.setRowCount(len(listings))

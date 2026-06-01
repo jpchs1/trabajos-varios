@@ -6,7 +6,37 @@ import unittest
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from app.auto_fetch import build_search_url
+from app.auto_fetch import build_search_url, _parse_card_text
+
+
+class TestParseCardText(unittest.TestCase):
+    def test_price_title_location(self):
+        title, price, loc = _parse_card_text("$5,000\nMerCruiser 4.5L 250HP\nMiami, FL")
+        self.assertEqual(price, "$5,000")
+        self.assertEqual(title, "MerCruiser 4.5L 250HP")
+        self.assertEqual(loc, "Miami, FL")
+
+    def test_no_location(self):
+        title, price, loc = _parse_card_text("$1,200\nMotor fuera de borda")
+        self.assertEqual(price, "$1,200")
+        self.assertEqual(title, "Motor fuera de borda")
+        self.assertEqual(loc, "")
+
+    def test_free_price(self):
+        title, price, loc = _parse_card_text("Free\nRemos viejos\nTampa, FL")
+        self.assertEqual(price, "Free")
+        self.assertEqual(title, "Remos viejos")
+
+    def test_picks_longest_as_title(self):
+        # Entre líneas extra (estado/condición), el título es la más descriptiva.
+        title, price, loc = _parse_card_text(
+            "$8,500\nUsado\nMotor MerCruiser 4.5L MPI completo\nOrlando, FL"
+        )
+        self.assertEqual(title, "Motor MerCruiser 4.5L MPI completo")
+        self.assertEqual(loc, "Orlando, FL")
+
+    def test_empty(self):
+        self.assertEqual(_parse_card_text(""), ("", None, ""))
 
 
 class TestBuildSearchUrl(unittest.TestCase):

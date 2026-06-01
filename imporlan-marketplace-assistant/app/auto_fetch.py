@@ -27,6 +27,7 @@ Requisitos
 
 from __future__ import annotations
 
+import re
 import sys
 import time
 from pathlib import Path
@@ -165,6 +166,99 @@ def _ensure_chromium(on_status: Optional[Callable[[str], None]] = None) -> None:
         status(f"No se pudo verificar/instalar el navegador automáticamente: {exc}")
 
 
+# JavaScript que recorre las tarjetas de resultado YA RENDERIZADAS y saca de
+# cada una: el link, el texto visible (precio/título/ubicación) y la foto. Es
+# mucho más confiable que leer el HTML crudo con expresiones regulares, porque
+# lee lo mismo que ve el usuario en pantalla.
+_JS_EXTRACT_CARDS = r"""
+() => {
+  const out = [];
+  const seen = new Set();
+  const anchors = document.querySelectorAll('a[href*="/marketplace/item/"]');
+  for (const a of anchors) {
+    const m = a.href.match(/\/marketplace\/item\/(\d+)/);
+    if (!m) continue;
+    const id = m[1];
+    if (seen.has(id)) continue;
+    seen.add(id);
+    const text = (a.innerText || "").trim();
+    const img = a.querySelector('img');
+    let photo = "";
+    if (img) { photo = img.getAttribute('src') || img.currentSrc || ""; }
+    out.push({ id, href: a.href.split('?')[0], text, photo });
+  }
+  return out;
+}
+"""
+
+
+def _parse_card_text(text: str) -> tuple[str, str | None, str]:
+    """De el texto visible de una tarjeta saca (título, precio_texto, ubicación).
+
+    En Marketplace el orden típico es: precio, título, ubicación (cada uno en su
+    línea). Detectamos el precio por el símbolo de moneda y la ubicación por el
+    formato "Ciudad, ST"; lo demás es el título.
+    """
+    lines = [ln.strip() for ln in (text or "").split("\n") if ln.strip()]
+    if not lines:
+        return "", None, ""
+
+    price_text = None
+    price_idx = None
+    for i, ln in enumerate(lines):
+        low = ln.lower()
+        if re.search(r"[$€£]\s?\d", ln) or low in ("free", "gratis"):
+            price_text = ln
+            price_idx = i
+            break
+
+    rest = [ln for i, ln in enumerate(lines) if i != price_idx]
+    location = ""
+    title_lines = rest
+    if rest and (re.search(r",\s*[A-Za-z]{2,}\.?$", rest[-1]) or re.search(r",\s*[A-Z]{2}$", rest[-1])):
+        location = rest[-1]
+        title_lines = rest[:-1]
+
+    # El título suele ser la línea más larga de las que quedan (evita textos
+    # cortos tipo "Nuevo", "Usado", distancia en millas, etc.).
+    title = max(title_lines, key=len) if title_lines else ""
+    return title, price_text, location
+
+
+def _extract_listings_from_dom(page, query: str) -> list[dict]:
+    """Lee las tarjetas renderizadas y devuelve listings estructurados reales."""
+    from .listing_parser import _parse_price, ITEM_BASE
+
+    try:
+        cards = page.evaluate(_JS_EXTRACT_CARDS)
+    except Exception:
+        return []
+
+    listings: list[dict] = []
+    for card in cards or []:
+        item_id = str(card.get("id") or "")
+        if not item_id:
+            continue
+        title, price_text, location = _parse_card_text(card.get("text", ""))
+        photo = card.get("photo") or ""
+        # Ignoramos imágenes vacías o placeholders en base64.
+        if photo.startswith("data:"):
+            photo = ""
+        listings.append(
+            {
+                "item_id": item_id,
+                "url": card.get("href") or ITEM_BASE.format(item_id),
+                "title": title,
+                "price_text": price_text,
+                "price": _parse_price(price_text) if price_text else None,
+                "location": location,
+                "photo": photo,
+                "query": query,
+            }
+        )
+    return listings
+
+
 def fetch_search_html(
     query: str,
     *,
@@ -176,8 +270,12 @@ def fetch_search_html(
     scroll_pause: float = 1.5,
     load_timeout_ms: int = 60000,
     on_status: Optional[Callable[[str], None]] = None,
-) -> str:
-    """Abre Marketplace en un navegador real y devuelve el HTML ya cargado.
+) -> tuple[str, list[dict]]:
+    """Abre Marketplace en un navegador real y lee los resultados.
+
+    Devuelve ``(html, listings)``: el HTML crudo (para diagnóstico) y la lista
+    de productos extraídos directamente de las tarjetas renderizadas (título,
+    precio, ubicación y foto reales).
 
     Parámetros clave:
     - ``headless=False`` (default): muestra la ventana. Necesario la primera
@@ -252,10 +350,28 @@ def fetch_search_html(
             time.sleep(scroll_pause)
             status(f"Scroll {i + 1}/{scrolls}…")
 
+        # Subimos al principio para que las fotos de arriba terminen de cargar.
+        try:
+            page.mouse.wheel(0, -40000)
+            time.sleep(1.5)
+        except Exception:
+            pass
+
+        # Extraemos los datos REALES leyendo las tarjetas renderizadas.
+        listings = _extract_listings_from_dom(page, query)
         html = _safe_content(page)
         context.close()
-        status("Resultados capturados.")
-        return html
+
+        # Guardamos el HTML para diagnóstico (por si hay que revisar qué devolvió
+        # Facebook: resultados, login o página vacía).
+        try:
+            diag = Path(profile_dir).parent / "ultima_busqueda.html"
+            diag.write_text(html, encoding="utf-8", errors="replace")
+        except Exception:
+            pass
+
+        status(f"Resultados capturados ({len(listings)} tarjetas leídas).")
+        return html, listings
 
 
 def fetch_listings(
@@ -272,10 +388,16 @@ def fetch_listings(
 ) -> list[dict]:
     """Devuelve la lista de productos específicos para ``query``.
 
-    Combina ``fetch_search_html`` con el parser/filtro. ``match`` controla el
-    filtrado: ``all`` (todos los términos, default), ``any`` o ``off``.
+    Lee las tarjetas reales del navegador y aplica el filtro. ``match`` controla
+    el filtrado: ``all`` (todos los términos, default), ``any`` o ``off``.
+
+    IMPORTANTE: el filtro es ESTRICTO. Si ningún aviso coincide con lo buscado,
+    devuelve lista vacía (mejor no mostrar nada que mostrar productos que no
+    corresponden).
     """
-    html = fetch_search_html(
+    from .listing_parser import sort_by_price
+
+    html, listings = fetch_search_html(
         query,
         location_slug=location_slug,
         radius_km=radius_km,
@@ -285,8 +407,13 @@ def fetch_listings(
         scroll_pause=scroll_pause,
         on_status=on_status,
     )
-    listings = parse_listings(html, query)
+    # Si por algún motivo la lectura de tarjetas no trajo nada, como respaldo
+    # intentamos el viejo parseo del HTML crudo.
+    if not listings:
+        listings = parse_listings(html, query)
+
     if query and match != "off":
-        filtered = filter_by_query(listings, query, mode=match)
-        listings = filtered or listings
-    return listings
+        # Filtro estricto: solo lo que realmente coincide (sin fallback).
+        listings = filter_by_query(listings, query, mode=match)
+
+    return sort_by_price(listings)

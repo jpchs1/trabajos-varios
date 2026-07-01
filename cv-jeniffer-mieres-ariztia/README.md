@@ -1,27 +1,32 @@
-# CV · Jeniffer Mieres Contreras — Ariztía (Equidad e Inclusión)
+# CV · Jeniffer Mieres Contreras
 
-CV en formato profesional para postular al cargo **Coordinador(a) de Equidad e
-Inclusión** de Ariztía (Región Metropolitana · jornada completa · híbrido),
-publicado en el portal de empleos de la empresa (Hiring Room).
+CV en formato profesional y sobrio, redactado con voz natural (que no parezca
+generado por IA) para postular en el área de bienestar / personas / equidad e
+inclusión (p. ej. el cargo de Coordinador(a) de Equidad e Inclusión de Ariztía,
+publicado en su portal de empleos Hiring Room).
 
 ## Archivos
-- `CV_Jeniffer_Mieres_Contreras_Ariztia_Equidad_Inclusion.pdf` — **entregable** (2 páginas A4, texto seleccionable / apto para lectores ATS).
-- `cv.html` — fuente editable del CV.
+- `CV_Jeniffer_Mieres_Contreras.pdf` — **entregable** (2 páginas A4, texto seleccionable / apto para lectores ATS).
+- `cv.html` — fuente editable.
 - `assets/fonts.css` + `assets/fonts/` — tipografías locales (Fraunces + Inter) para render reproducible.
+- `render.js` — genera el PDF desde el HTML.
+
+## Enfoque de redacción
+La versión final evita los rasgos que suelen "delatar" un texto de IA:
+- Sin tríadas ni enumeraciones de tres forzadas; frases de largo variado.
+- Sin buzzwords vacíos ("excelencia", "trazabilidad", "sinergia"...).
+- Sin guiones largos (—) ni middots (·) como separadores; puntuación española normal.
+- Resumen en primera persona, con voz propia y registro chileno.
+- Nombres de sección estándar (Perfil, Experiencia laboral, Formación, etc.), sin módulos marketineros ("En cifras", "Mapa de competencias", citas motivacionales).
+- Ajuste natural al área de inclusión/bienestar, sin incrustar el nombre de la empresa.
+
+Todo el contenido es real: solo se reordenó y reformuló la información del CV
+original. No se agregaron cifras, logros ni datos no verificables.
 
 ## Regenerar el PDF
-Con Node y un Chromium disponible:
-
 ```bash
 npm install puppeteer-core
-node render.js   # ver script de render usado en la sesión
+node render.js
 ```
-
-El HTML define dos páginas A4 (`@page { size:A4; margin:0 }`); se imprime con
-`printBackground: true` y `preferCSSPageSize: true`.
-
-## Contenido
-El CV mantiene la información real del CV original y reordena/enfoca la
-presentación hacia Equidad e Inclusión (diplomado en Diversidad e Inclusión
-USACH, certificación Gatekeepers, evaluación socioeconómica, bienestar
-organizacional y gestión de redes). No se agregó información no verificable.
+El HTML define página A4 con márgenes; se imprime con `printBackground: true` y
+`preferCSSPageSize: true`.

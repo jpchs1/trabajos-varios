@@ -1,10 +1,10 @@
-// Renders cv.html -> PDF (2 páginas A4). Requiere: npm install puppeteer-core
-// y un Chromium instalado (ajusta CHROME abajo si es necesario).
+// Genera el PDF del CV desde cv.html.
+// Requisitos: npm install puppeteer-core  +  un Chromium instalado.
 const puppeteer = require('puppeteer-core');
 const path = require('path');
 
 const HTML = 'file://' + path.join(__dirname, 'cv.html');
-const OUT = path.join(__dirname, 'CV_Jeniffer_Mieres_Contreras_Ariztia_Equidad_Inclusion.pdf');
+const OUT = path.join(__dirname, 'CV_Jeniffer_Mieres_Contreras.pdf');
 const CHROME = process.env.CHROME_PATH || '/opt/pw-browsers/chromium-1194/chrome-linux/chrome';
 
 (async () => {

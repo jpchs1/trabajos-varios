@@ -2,578 +2,252 @@
 <html lang="es">
 <head>
 <meta charset="utf-8">
-<title>CV · Jeniffer Mieres Contreras · Coordinación de Equidad e Inclusión</title>
+<title>CV · Jeniffer Mieres Contreras</title>
 <link rel="stylesheet" href="assets/fonts.css">
 <style>
   :root{
-    --ink:#221F1D;
-    --ink-soft:#463F3B;
-    --muted:#8A817A;
-    --muted-2:#A79E97;
-    --line:#E9E2DA;
-    --line-soft:#F1ECE5;
-    --cream:#FBF7F1;
-    --cream-deep:#F3EBE0;
+    --ink:#22201E;
+    --ink-soft:#463F3A;
+    --muted:#7C736C;
+    --muted-2:#9A9089;
+    --line:#E6DFD6;
+    --line-soft:#EFE9E1;
+    --accent:#8A2B2E;
+    --accent-soft:#A44A44;
     --paper:#FFFFFF;
-    --accent:#B4232F;
-    --accent-deep:#87121C;
-    --accent-tint:#F8ECEA;
-    --accent-tint-2:#FBF3F1;
   }
 
   *{ box-sizing:border-box; margin:0; padding:0; }
-
   html{ -webkit-print-color-adjust:exact; print-color-adjust:exact; }
 
   body{
     font-family:'Inter', system-ui, sans-serif;
-    color:var(--ink);
-    background:#D9D4CE;
-    font-size:9.4pt;
+    color:var(--ink-soft);
+    background:#fff;
+    font-size:10pt;
     line-height:1.5;
-    font-feature-settings:"kern" 1,"liga" 1,"calt" 1;
+    font-feature-settings:"kern" 1,"liga" 1;
     -webkit-font-smoothing:antialiased;
   }
 
-  .page{
-    position:relative;
-    width:210mm;
-    height:297mm;
-    background:var(--paper);
-    margin:0 auto;
-    overflow:hidden;
-    padding:14mm 14mm 12mm 16mm;
-    display:flex;
-    flex-direction:column;
-  }
-  .page + .page{ margin-top:8mm; }
+  .sheet{ padding:0 2mm; }
 
-  /* left spine accent */
-  .page::before{
-    content:"";
-    position:absolute;
-    top:0; left:0;
-    width:6mm; height:100%;
-    background:linear-gradient(180deg,var(--accent) 0%,var(--accent-deep) 100%);
-  }
-  .page::after{
-    content:"";
-    position:absolute;
-    top:0; left:6mm;
-    width:1.1mm; height:100%;
-    background:var(--cream-deep);
-  }
-
-  /* ============ HEADER (page 1) ============ */
-  .masthead{
-    display:flex;
-    justify-content:space-between;
-    align-items:flex-start;
-    gap:10mm;
-    padding-bottom:5.5mm;
-    border-bottom:0.5mm solid var(--line);
-    margin-bottom:6mm;
-  }
-  .kicker{
-    font-size:7.4pt;
-    letter-spacing:.28em;
-    text-transform:uppercase;
-    color:var(--accent);
-    font-weight:600;
-    margin-bottom:2.6mm;
+  /* ---------- HEADER ---------- */
+  header.top{
+    display:flex; justify-content:space-between; align-items:flex-end; gap:12mm;
+    padding-bottom:4mm;
+    border-bottom:0.6mm solid var(--accent);
+    margin-bottom:6.5mm;
   }
   .name{
     font-family:'Fraunces', Georgia, serif;
     font-weight:600;
-    font-size:29pt;
-    line-height:.98;
-    letter-spacing:-.015em;
+    font-size:27pt;
+    line-height:1.02;
+    letter-spacing:-.01em;
     color:var(--ink);
   }
-  .name .sur{ color:var(--accent-deep); }
-  .target{
-    display:inline-flex;
-    align-items:center;
-    gap:2.2mm;
-    margin-top:4.2mm;
-    padding:1.9mm 3.4mm;
-    background:var(--accent-tint);
-    border:0.3mm solid #E8CFCC;
-    border-radius:999px;
-    font-size:7.9pt;
-    font-weight:600;
-    color:var(--accent-deep);
-    letter-spacing:.01em;
+  .headline{
+    font-size:10.5pt;
+    color:var(--accent);
+    font-weight:500;
+    margin-top:2.4mm;
   }
-  .target .dot{ width:1.9mm; height:1.9mm; border-radius:50%; background:var(--accent); }
-
   .contact{
-    text-align:right;
-    padding-top:1mm;
-    min-width:52mm;
+    text-align:right; font-size:9pt; color:var(--muted); line-height:1.65;
+    white-space:nowrap; padding-bottom:1mm;
   }
-  .contact .row{ margin-bottom:2.7mm; }
-  .contact .row:last-child{ margin-bottom:0; }
-  .contact .lab{
-    font-size:6.4pt;
-    letter-spacing:.2em;
-    text-transform:uppercase;
-    color:var(--muted-2);
-    font-weight:600;
-    margin-bottom:.4mm;
-  }
-  .contact .val{
-    font-size:8.9pt;
-    color:var(--ink-soft);
-    font-weight:500;
-  }
-  .contact .val a{ color:inherit; text-decoration:none; }
+  .contact a{ color:inherit; text-decoration:none; }
+  .contact .who{ color:var(--ink); font-weight:600; }
 
-  /* ============ BODY GRID ============ */
-  .grid{
-    display:grid;
-    grid-template-columns:59mm 1fr;
-    gap:9mm;
-    flex:1;
-  }
-
-  /* ============ SIDEBAR ============ */
-  .side{
-    background:var(--cream);
-    border:0.3mm solid var(--line-soft);
-    border-radius:2.6mm;
-    padding:6.5mm 5.5mm;
-    display:flex;
-    flex-direction:column;
-    gap:6.5mm;
-  }
-  .side-block{}
-  .side-h{
-    font-size:7.7pt;
-    letter-spacing:.16em;
+  /* ---------- SECTIONS ---------- */
+  section{ margin-bottom:6mm; }
+  h2{
+    font-size:9.5pt;
     text-transform:uppercase;
+    letter-spacing:.14em;
     font-weight:700;
     color:var(--ink);
-    display:flex;
-    align-items:center;
-    gap:2.4mm;
-    margin-bottom:3.6mm;
-  }
-  .side-h::before{
-    content:"";
-    width:2.4mm; height:2.4mm;
-    background:var(--accent);
-    border-radius:.5mm;
-    transform:rotate(45deg);
-    flex:none;
-  }
-
-  .chips{ display:flex; flex-wrap:wrap; gap:1.8mm; }
-  .chip{
-    font-size:7.7pt;
-    font-weight:500;
-    color:var(--ink-soft);
-    background:var(--paper);
-    border:0.3mm solid var(--line);
-    border-radius:999px;
-    padding:1.3mm 2.8mm;
-    line-height:1.2;
-  }
-
-  .metrics{ display:flex; flex-direction:column; gap:4.4mm; }
-  .metric{ display:flex; align-items:baseline; gap:3mm; }
-  .metric .num{
-    font-family:'Fraunces', Georgia, serif;
-    font-weight:600;
-    font-size:19pt;
-    line-height:.8;
-    color:var(--accent);
-    flex:none;
-    min-width:15mm;
-  }
-  .metric .mtxt{ font-size:8pt; color:var(--ink-soft); line-height:1.32; }
-  .metric .mtxt b{ color:var(--ink); font-weight:600; }
-
-  .strength{ margin-bottom:3.8mm; }
-  .strength:last-child{ margin-bottom:0; }
-  .strength .st-h{
-    font-size:8.7pt;
-    font-weight:600;
-    color:var(--ink);
-    margin-bottom:.7mm;
-    display:flex; align-items:center; gap:2mm;
-  }
-  .strength .st-h::before{
-    content:""; width:3mm; height:0.6mm; background:var(--accent); flex:none;
-  }
-  .strength p{ font-size:7.9pt; color:var(--muted); line-height:1.4; }
-
-  .side-list{ list-style:none; }
-  .side-list li{
-    display:flex; gap:3mm; align-items:baseline;
-    padding:2.3mm 0;
-    border-bottom:0.3mm solid var(--line-soft);
-  }
-  .side-list li:last-child{ border-bottom:0; padding-bottom:0; }
-  .side-list li:first-child{ padding-top:0; }
-  .side-list .yr{
-    font-family:'Fraunces', Georgia, serif;
-    font-weight:600;
-    font-size:9pt;
-    color:var(--accent);
-    flex:none;
-    width:11mm;
-  }
-  .side-list .it b{ display:block; font-size:8.4pt; color:var(--ink); font-weight:600; line-height:1.28; margin-bottom:.4mm; }
-  .side-list .it span{ font-size:7.6pt; color:var(--muted); line-height:1.3; }
-
-  .tools{ font-size:8.2pt; color:var(--ink-soft); line-height:1.5; }
-  .tools b{ color:var(--ink); font-weight:600; }
-
-  /* ============ MAIN COLUMN ============ */
-  .main{ display:flex; flex-direction:column; gap:6.2mm; }
-
-  .sec-h{
-    display:flex; align-items:center; gap:3mm;
-    margin-bottom:3.6mm;
-  }
-  .sec-h .no{
-    font-family:'Fraunces', Georgia, serif;
-    font-weight:600;
-    font-size:11pt;
-    color:var(--accent);
-    line-height:1;
-  }
-  .sec-h .tt{
-    font-size:9pt;
-    letter-spacing:.15em;
-    text-transform:uppercase;
-    font-weight:700;
-    color:var(--ink);
-    white-space:nowrap;
-  }
-  .sec-h .rule{ flex:1; height:0.3mm; background:var(--line); }
-
-  .lead{
-    font-size:9.6pt;
-    line-height:1.6;
-    color:var(--ink-soft);
-  }
-  .lead b{ color:var(--ink); font-weight:600; }
-
-  .exp{ margin-bottom:5mm; }
-  .exp:last-child{ margin-bottom:0; }
-  .exp-top{
-    display:flex; justify-content:space-between; align-items:baseline; gap:5mm;
-    margin-bottom:.5mm;
-  }
-  .exp-org{
-    font-family:'Fraunces', Georgia, serif;
-    font-weight:600;
-    font-size:12pt;
-    color:var(--ink);
-    line-height:1.15;
-  }
-  .exp-date{
-    font-size:7.7pt;
-    font-weight:500;
-    color:var(--muted);
-    white-space:nowrap;
-    flex:none;
-  }
-  .exp-role{
-    font-size:8.7pt;
-    font-weight:600;
-    color:var(--accent-deep);
-    margin-bottom:2.2mm;
-    letter-spacing:.005em;
-  }
-  .exp ul{ list-style:none; display:flex; flex-direction:column; gap:1.6mm; }
-  .exp ul li{
+    margin-bottom:3.4mm;
+    padding-bottom:1.6mm;
     position:relative;
-    padding-left:4.6mm;
-    font-size:8.7pt;
-    line-height:1.42;
-    color:var(--ink-soft);
   }
-  .exp ul li::before{
-    content:"";
-    position:absolute; left:0; top:1.9mm;
-    width:2.2mm; height:0.6mm;
-    background:var(--accent);
+  h2::after{
+    content:""; position:absolute; left:0; bottom:0;
+    width:11mm; height:0.7mm; background:var(--accent);
   }
 
-  /* competency cards */
-  .comp-grid{
-    display:grid;
-    grid-template-columns:1fr 1fr;
-    gap:3.2mm;
-  }
-  .comp{
-    background:var(--cream);
-    border:0.3mm solid var(--line-soft);
-    border-left:0.9mm solid var(--accent);
-    border-radius:1.8mm;
-    padding:3.4mm 3.6mm;
-  }
-  .comp h4{
-    font-size:8.6pt; font-weight:600; color:var(--ink); margin-bottom:1mm; line-height:1.2;
-  }
-  .comp p{ font-size:7.7pt; color:var(--muted); line-height:1.38; }
+  .summary{ font-size:10pt; line-height:1.6; color:var(--ink-soft); }
 
-  /* closing statement */
-  .statement{
-    display:flex; gap:4.5mm; align-items:flex-start;
-    background:linear-gradient(180deg,var(--accent-tint) 0%,var(--accent-tint-2) 100%);
-    border:0.3mm solid #EBD4D1;
-    border-left:1.1mm solid var(--accent);
-    border-radius:2.4mm;
-    padding:4.6mm 5.6mm;
+  /* ---------- EXPERIENCE ---------- */
+  .job{ margin-bottom:4.6mm; }
+  .job:last-child{ margin-bottom:0; }
+  .job-head{
+    display:flex; justify-content:space-between; align-items:baseline; gap:6mm;
   }
-  .statement .q{
+  .job-org{
     font-family:'Fraunces', Georgia, serif;
-    font-weight:700; font-size:30pt; color:var(--accent);
-    line-height:.55; flex:none; opacity:.55;
+    font-weight:600; font-size:12.5pt; color:var(--ink); line-height:1.2;
   }
-  .statement p{ font-size:9.2pt; line-height:1.55; color:var(--ink-soft); }
-  .statement p b{ color:var(--accent-deep); font-weight:600; }
-
-  /* ============ PAGE 2 HEADER ============ */
-  .mini{
-    display:flex; justify-content:space-between; align-items:center;
-    padding-bottom:3.4mm;
-    border-bottom:0.5mm solid var(--line);
-    margin-bottom:6.5mm;
+  .job-date{ font-size:8.8pt; color:var(--muted); white-space:nowrap; flex:none; }
+  .job-role{ font-size:9.8pt; font-weight:600; color:var(--accent); margin:.4mm 0 1.8mm; }
+  .job ul{ list-style:none; }
+  .job li{
+    position:relative; padding-left:4.4mm; margin-bottom:1.3mm;
+    font-size:9.8pt; line-height:1.45; color:var(--ink-soft);
   }
-  .mini .mname{
-    font-family:'Fraunces', Georgia, serif;
-    font-weight:600; font-size:13pt; color:var(--ink); letter-spacing:-.01em;
-  }
-  .mini .mname .sur{ color:var(--accent-deep); }
-  .mini .mrole{
-    font-size:7.2pt; letter-spacing:.2em; text-transform:uppercase; color:var(--muted); font-weight:600;
+  .job li:last-child{ margin-bottom:0; }
+  .job li::before{
+    content:""; position:absolute; left:0; top:2mm;
+    width:1.6mm; height:1.6mm; border-radius:50%;
+    background:var(--accent-soft);
   }
 
-  /* footer */
-  .foot{
-    margin-top:auto;
-    padding-top:4mm;
-    border-top:0.3mm solid var(--line-soft);
-    display:flex; justify-content:space-between; align-items:center;
-    font-size:6.8pt; letter-spacing:.12em; text-transform:uppercase; color:var(--muted-2); font-weight:500;
-  }
-  .foot .fdot{ color:var(--accent); }
+  /* ---------- TWO-COL ROW (formación + cursos) ---------- */
+  .row2{ display:grid; grid-template-columns:1fr 1fr; gap:10mm; }
 
-  @page{ size:A4; margin:0; }
-  @media print{
-    body{ background:#fff; }
-    .page{ margin:0; box-shadow:none; break-after:page; }
-    .page:last-child{ break-after:auto; }
-    .page + .page{ margin-top:0; }
+  .entry{ display:flex; gap:3.2mm; margin-bottom:2.8mm; }
+  .entry:last-child{ margin-bottom:0; }
+  .entry .yr{
+    font-family:'Fraunces', Georgia, serif; font-weight:600; font-size:9.5pt;
+    color:var(--accent); flex:none; width:11mm; padding-top:.2mm;
   }
+  .entry .body b{ display:block; font-size:9.6pt; color:var(--ink); font-weight:600; line-height:1.32; }
+  .entry .body span{ font-size:8.9pt; color:var(--muted); }
+
+  /* ---------- SKILLS ---------- */
+  .skills{
+    columns:2; column-gap:10mm; list-style:none;
+  }
+  .skills li{
+    position:relative; padding-left:4.4mm; margin-bottom:1.7mm;
+    font-size:9.6pt; color:var(--ink-soft); break-inside:avoid;
+  }
+  .skills li::before{
+    content:""; position:absolute; left:0; top:1.9mm;
+    width:1.6mm; height:1.6mm; border-radius:50%; background:var(--accent-soft);
+  }
+
+  .tools{ font-size:9.8pt; color:var(--ink-soft); }
+
+  /* ---------- PRINT ---------- */
+  @page{ size:A4; margin:15mm 16mm; }
+  .job, .entry{ break-inside:avoid; }
+  h2{ break-after:avoid; }
 </style>
 </head>
 <body>
+<div class="sheet">
 
-<!-- ================= PAGE 1 ================= -->
-<section class="page">
-  <header class="masthead">
-    <div class="mast-left">
-      <div class="kicker">Trabajadora Social · Bienestar · Equidad e Inclusión</div>
-      <h1 class="name">Jeniffer Mieres <span class="sur">Contreras</span></h1>
-      <div class="target"><span class="dot"></span>Postulación · Coordinador(a) de Equidad e Inclusión — Ariztía</div>
+  <header class="top">
+    <div>
+      <div class="name">Jeniffer Mieres Contreras</div>
+      <div class="headline">Trabajadora social especializada en bienestar organizacional e inclusión</div>
     </div>
     <div class="contact">
-      <div class="row"><div class="lab">Teléfono</div><div class="val">+56 9 4903 1682</div></div>
-      <div class="row"><div class="lab">Correo</div><div class="val"><a href="mailto:jeniffer.mieres@gmail.com">jeniffer.mieres@gmail.com</a></div></div>
-      <div class="row"><div class="lab">Ubicación</div><div class="val">Región Metropolitana · El Monte</div></div>
-      <div class="row"><div class="lab">Disponibilidad</div><div class="val">Jornada completa · Híbrido</div></div>
+      <div class="who">El Monte, Región Metropolitana</div>
+      <div>+56 9 4903 1682</div>
+      <div><a href="mailto:jeniffer.mieres@gmail.com">jeniffer.mieres@gmail.com</a></div>
     </div>
   </header>
 
-  <div class="grid">
-    <!-- SIDEBAR -->
-    <aside class="side">
-      <div class="side-block">
-        <div class="side-h">Foco profesional</div>
-        <div class="chips">
-          <span class="chip">Equidad e Inclusión</span>
-          <span class="chip">Bienestar Organizacional</span>
-          <span class="chip">RR.HH. y Personas</span>
-          <span class="chip">Calidad de Vida Laboral</span>
-          <span class="chip">Evaluación Socioeconómica</span>
-          <span class="chip">Gestión de Redes</span>
-        </div>
+  <section>
+    <h2>Perfil</h2>
+    <p class="summary">Soy trabajadora social, titulada en AIEP con distinción, y llevo más de siete años trabajando en bienestar y acompañamiento de personas. Pasé por la gestión de personas en una empresa del rubro minero y hoy estoy en la Universidad de Santiago, atendiendo a estudiantes que necesitan apoyo para acceder a sus beneficios. Me acomoda el trabajo que combina lo social con lo administrativo: evaluar cada caso con criterio y dejar la parte de gestión bien ordenada, sin perder de vista a la persona que tengo al frente. Este año terminé un diplomado en bienestar organizacional y diversidad e inclusión, un tema en el que quiero seguir.</p>
+  </section>
+
+  <section>
+    <h2>Experiencia laboral</h2>
+
+    <div class="job">
+      <div class="job-head">
+        <div class="job-org">Universidad de Santiago de Chile</div>
+        <div class="job-date">agosto 2023 a la fecha</div>
       </div>
-
-      <div class="side-block">
-        <div class="side-h">En cifras</div>
-        <div class="metrics">
-          <div class="metric"><span class="num">7+</span><span class="mtxt"><b>Años de experiencia</b> en personas, bienestar y apoyo social.</span></div>
-          <div class="metric"><span class="num">D+I</span><span class="mtxt"><b>Diplomada USACH</b> y certificada Gatekeepers (2026).</span></div>
-          <div class="metric"><span class="num">4</span><span class="mtxt"><b>Sectores</b>: universidad, minería, fundación y retail.</span></div>
-        </div>
-      </div>
-
-      <div class="side-block">
-        <div class="side-h">Fortalezas</div>
-        <div class="strength">
-          <div class="st-h">Mirada de equidad e inclusión</div>
-          <p>Formación en D+I y prevención para promover entornos laborales diversos, seguros e inclusivos.</p>
-        </div>
-        <div class="strength">
-          <div class="st-h">Gestión confiable y trazable</div>
-          <p>Beneficios, acreditaciones y seguimiento con orden, criterio y respaldo documental.</p>
-        </div>
-        <div class="strength">
-          <div class="st-h">Redes y coordinación</div>
-          <p>Articulación de apoyos internos y externos con oportunidad y pertinencia.</p>
-        </div>
-      </div>
-    </aside>
-
-    <!-- MAIN -->
-    <div class="main">
-      <section>
-        <div class="sec-h"><span class="no">01</span><span class="tt">Perfil ejecutivo</span><span class="rule"></span></div>
-        <p class="lead"><b>Trabajadora Social titulada con distinción académica</b> y más de 7 años de experiencia en bienestar organizacional, gestión de personas y acompañamiento social. Diplomada en <b>Bienestar Organizacional y Estrategias de Diversidad e Inclusión</b> (USACH) y certificada como <b>Gatekeeper</b> en prevención del suicidio, integra criterio técnico, sensibilidad humana y orden de procesos para promover entornos laborales <b>equitativos, inclusivos y seguros</b>. Experiencia directa en evaluación socioeconómica, gestión de beneficios y articulación de redes internas y externas orientadas a la calidad de vida y la experiencia de las personas.</p>
-      </section>
-
-      <section>
-        <div class="sec-h"><span class="no">02</span><span class="tt">Experiencia de mayor impacto</span><span class="rule"></span></div>
-
-        <div class="exp">
-          <div class="exp-top">
-            <div class="exp-org">Universidad de Santiago de Chile</div>
-            <div class="exp-date">ago. 2023 — actualidad</div>
-          </div>
-          <div class="exp-role">Trabajadora Social · Departamento de Beneficios Estudiantiles</div>
-          <ul>
-            <li>Atención, orientación y acompañamiento a estudiantes en beneficios y redes disponibles, con enfoque inclusivo y no discriminatorio.</li>
-            <li>Gestión de beneficios ministeriales e internos, resguardando criterios, requisitos y trazabilidad de los procesos.</li>
-            <li>Evaluación socioeconómica, revisión de antecedentes y acreditaciones para la asignación de apoyos.</li>
-            <li>Coordinación con redes de apoyo y áreas internas para respuestas oportunas y pertinentes.</li>
-          </ul>
-        </div>
-
-        <div class="exp">
-          <div class="exp-top">
-            <div class="exp-org">BMNING · Desarrollo e Innovación para la Minería SpA</div>
-            <div class="exp-date">oct. 2018 — abr. 2023</div>
-          </div>
-          <div class="exp-role">Líder en Gestión de Personas</div>
-          <ul>
-            <li>Gestión de programas de bienestar, beneficios y apoyo a colaboradores, con foco en clima laboral y experiencia del colaborador.</li>
-            <li>Apoyo en procesos de RR.HH.: selección, capacitación e inducción, promoviendo una integración ordenada e inclusiva.</li>
-            <li>Levantamiento y canalización de necesidades de colaboradores, articulando soluciones con jefaturas y redes disponibles.</li>
-          </ul>
-        </div>
-      </section>
+      <div class="job-role">Trabajadora social, Departamento de Beneficios Estudiantiles</div>
+      <ul>
+        <li>Atiendo y oriento a estudiantes que buscan postular a beneficios, y los acompaño mientras dura el proceso.</li>
+        <li>Hago la evaluación socioeconómica de cada caso: reviso antecedentes y acreditaciones para definir qué apoyo corresponde.</li>
+        <li>Gestiono beneficios ministeriales e internos, cuidando que se cumplan los requisitos y dejando registro por si después hay que revisar el caso.</li>
+        <li>Cuando un estudiante necesita algo que se sale de lo académico, me coordino con áreas internas de la universidad y con las redes de apoyo.</li>
+      </ul>
     </div>
-  </div>
 
-  <div class="foot">
-    <span>Jeniffer Marcela Mieres Contreras</span>
-    <span>Coordinación de Equidad e Inclusión <span class="fdot">·</span> Ariztía</span>
-    <span>Página 1 / 2</span>
-  </div>
-</section>
-
-<!-- ================= PAGE 2 ================= -->
-<section class="page">
-  <header class="mini">
-    <div class="mname">Jeniffer Mieres <span class="sur">Contreras</span></div>
-    <div class="mrole">Equidad e Inclusión · Bienestar · Personas</div>
-  </header>
-
-  <div class="grid">
-    <!-- SIDEBAR -->
-    <aside class="side">
-      <div class="side-block">
-        <div class="side-h">Formación</div>
-        <ul class="side-list">
-          <li><span class="yr">2026</span><span class="it"><b>Diplomado en Bienestar Organizacional y Estrategias de Diversidad e Inclusión</b><span>Universidad de Santiago de Chile</span></span></li>
-          <li><span class="yr">2016</span><span class="it"><b>Postítulo en Trabajo Social en Niñez, Adolescencia y Familia en el Contexto Judicial</b><span>Universidad Andrés Bello</span></span></li>
-          <li><span class="yr">2012</span><span class="it"><b>Título Profesional de Trabajadora Social</b><span>Instituto Profesional AIEP · Distinción académica</span></span></li>
-        </ul>
+    <div class="job">
+      <div class="job-head">
+        <div class="job-org">BMNING Desarrollo e Innovación para la Minería SpA</div>
+        <div class="job-date">octubre 2018 a abril 2023</div>
       </div>
-
-      <div class="side-block">
-        <div class="side-h">Certificaciones</div>
-        <ul class="side-list">
-          <li><span class="yr">2026</span><span class="it"><b>Gatekeepers · Agentes comunitarios en prevención del suicidio</b></span></li>
-          <li><span class="yr">2022</span><span class="it"><b>Cálculo de Finiquito</b><span>Consultores y Asesores en Capacitación Chile Ltda.</span></span></li>
-          <li><span class="yr">2021</span><span class="it"><b>Ley 21.327 · Modernización de la Dirección del Trabajo</b><span>Bicentenario OTEC</span></span></li>
-          <li><span class="yr">2019</span><span class="it"><b>Interpretación Auditor Interno</b><span>TÜV Rheinland</span></span></li>
-        </ul>
-      </div>
-
-      <div class="side-block">
-        <div class="side-h">Herramientas</div>
-        <p class="tools"><b>Office</b> — Word, Excel y PowerPoint (nivel intermedio).</p>
-      </div>
-    </aside>
-
-    <!-- MAIN -->
-    <div class="main">
-      <section>
-        <div class="sec-h"><span class="no">03</span><span class="tt">Experiencia complementaria</span><span class="rule"></span></div>
-
-        <div class="exp">
-          <div class="exp-top">
-            <div class="exp-org">Fundación Fondo Esperanza</div>
-            <div class="exp-date">oct. 2017 — sep. 2018</div>
-          </div>
-          <div class="exp-role">Monitora · Grupo Emprendedores</div>
-          <ul>
-            <li>Diseño y ejecución de programas de capacitación y formación continua para emprendedores.</li>
-            <li>Facilitación de la vinculación con redes de apoyo, recursos y oportunidades de desarrollo.</li>
-            <li>Asesoría y acompañamiento en gestión de proyectos, organización y fortalecimiento de negocios.</li>
-          </ul>
-        </div>
-
-        <div class="exp">
-          <div class="exp-top">
-            <div class="exp-org">Ferretería San Francisco</div>
-            <div class="exp-date">dic. 2016 — sep. 2017</div>
-          </div>
-          <div class="exp-role">Encargada · Departamento de Bienestar Social</div>
-          <ul>
-            <li>Coordinación de programas de bienestar social para colaboradores.</li>
-            <li>Planificación y ejecución de actividades, beneficios laborales e iniciativas de apoyo interno.</li>
-            <li>Gestión de convenios y alianzas con empresas externas para mejorar la calidad de vida laboral.</li>
-          </ul>
-        </div>
-      </section>
-
-      <section>
-        <div class="sec-h"><span class="no">04</span><span class="tt">Mapa de competencias</span><span class="rule"></span></div>
-        <div class="comp-grid">
-          <div class="comp"><h4>Equidad, diversidad e inclusión</h4><p>Formación en D+I y certificación Gatekeepers para entornos laborales inclusivos y seguros.</p></div>
-          <div class="comp"><h4>Bienestar y beneficios</h4><p>Coordinación y seguimiento de apoyos e iniciativas de calidad de vida laboral.</p></div>
-          <div class="comp"><h4>Evaluación socioeconómica</h4><p>Revisión de antecedentes, acreditaciones y análisis para la asignación de apoyos.</p></div>
-          <div class="comp"><h4>Gestión de redes</h4><p>Articulación con áreas internas, jefaturas, instituciones y redes de apoyo.</p></div>
-          <div class="comp"><h4>Atención y orientación</h4><p>Acompañamiento cercano, criterio social y comunicación clara con las personas.</p></div>
-          <div class="comp"><h4>Gestión de personas y RR.HH.</h4><p>Apoyo en selección, capacitación, inducción y experiencia del colaborador.</p></div>
-        </div>
-      </section>
-
-      <section>
-        <div class="sec-h"><span class="no">05</span><span class="tt">Aporte a Ariztía</span><span class="rule"></span></div>
-        <div class="statement">
-          <span class="q">&ldquo;</span>
-          <p>Aspiro a contribuir a Ariztía desde la <b>excelencia y la integridad</b>, promoviendo procesos de selección y desarrollo con <b>igualdad de condiciones</b> y aportando a una cultura <b>diversa, inclusiva y de bienestar</b> para cada colaborador y su entorno.</p>
-        </div>
-      </section>
+      <div class="job-role">Líder en gestión de personas</div>
+      <ul>
+        <li>Estuve a cargo de los programas de bienestar y beneficios de los colaboradores, atenta al clima laboral y a cómo se vivía el día a día en la empresa.</li>
+        <li>Apoyé a recursos humanos en selección e inducción, y participé en las capacitaciones internas.</li>
+        <li>Cuando alguien planteaba una necesidad, me encargaba de levantarla y buscarle solución con las jefaturas o derivando a la red que correspondía.</li>
+      </ul>
     </div>
+
+    <div class="job">
+      <div class="job-head">
+        <div class="job-org">Fundación Fondo Esperanza</div>
+        <div class="job-date">octubre 2017 a septiembre 2018</div>
+      </div>
+      <div class="job-role">Monitora, Grupo Emprendedores</div>
+      <ul>
+        <li>Diseñé y dicté capacitaciones para emprendedores que estaban partiendo o tratando de hacer crecer su negocio.</li>
+        <li>Los ayudé a conectarse con redes y recursos que muchas veces no sabían que tenían a su alcance.</li>
+        <li>Acompañé a varios en la gestión de sus proyectos, revisando con ellos qué reforzar.</li>
+      </ul>
+    </div>
+
+    <div class="job">
+      <div class="job-head">
+        <div class="job-org">Ferretería San Francisco</div>
+        <div class="job-date">diciembre 2016 a septiembre 2017</div>
+      </div>
+      <div class="job-role">Encargada, Departamento de Bienestar Social</div>
+      <ul>
+        <li>Coordiné el área de bienestar social, planificando actividades y beneficios para los trabajadores.</li>
+        <li>Gestioné convenios con empresas externas para mejorar la calidad de vida en el trabajo.</li>
+      </ul>
+    </div>
+  </section>
+
+  <div class="row2">
+    <section>
+      <h2>Formación</h2>
+      <div class="entry"><span class="yr">2026</span><span class="body"><b>Diplomado en Bienestar Organizacional y Estrategias de Diversidad e Inclusión</b><span>Universidad de Santiago de Chile</span></span></div>
+      <div class="entry"><span class="yr">2016</span><span class="body"><b>Postítulo en Trabajo Social en Niñez, Adolescencia y Familia en el Contexto Judicial</b><span>Universidad Andrés Bello</span></span></div>
+      <div class="entry"><span class="yr">2012</span><span class="body"><b>Trabajadora Social, título profesional (con distinción)</b><span>Instituto Profesional AIEP</span></span></div>
+    </section>
+
+    <section>
+      <h2>Cursos y certificaciones</h2>
+      <div class="entry"><span class="yr">2026</span><span class="body"><b>Certificación Gatekeepers, agentes comunitarios en prevención del suicidio</b></span></div>
+      <div class="entry"><span class="yr">2022</span><span class="body"><b>Cálculo de finiquito</b><span>Consultores y Asesores en Capacitación Chile Ltda.</span></span></div>
+      <div class="entry"><span class="yr">2021</span><span class="body"><b>Ley 21.327, Modernización de la Dirección del Trabajo</b><span>Bicentenario OTEC</span></span></div>
+      <div class="entry"><span class="yr">2019</span><span class="body"><b>Interpretación auditor interno</b><span>TÜV Rheinland</span></span></div>
+    </section>
   </div>
 
-  <div class="foot">
-    <span>Jeniffer Marcela Mieres Contreras</span>
-    <span>Coordinación de Equidad e Inclusión <span class="fdot">·</span> Ariztía</span>
-    <span>Página 2 / 2</span>
-  </div>
-</section>
+  <section>
+    <h2>Competencias</h2>
+    <ul class="skills">
+      <li>Evaluación socioeconómica y revisión de antecedentes</li>
+      <li>Gestión de beneficios y programas de bienestar</li>
+      <li>Orientación y acompañamiento de personas</li>
+      <li>Coordinación con redes de apoyo y áreas internas</li>
+      <li>Diversidad e inclusión en el ámbito organizacional</li>
+      <li>Prevención del suicidio (certificación Gatekeepers)</li>
+      <li>Apoyo en procesos de recursos humanos: selección, inducción y capacitación</li>
+      <li>Registro y seguimiento documental de casos</li>
+    </ul>
+  </section>
 
+  <section>
+    <h2>Herramientas</h2>
+    <p class="tools">Office (Word, Excel y PowerPoint), nivel intermedio.</p>
+  </section>
+
+</div>
 </body>
 </html>

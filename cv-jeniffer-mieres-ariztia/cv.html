@@ -2,16 +2,14 @@
 <html lang="es">
 <head>
 <meta charset="utf-8">
-<title>CV · Jeniffer Mieres Contreras</title>
-<link rel="stylesheet" href="assets/fonts.css">
+<title>CV Jeniffer Mieres Contreras</title>
 <style>
   :root{
     --ink:#22201E;
-    --ink-soft:#463F3A;
-    --muted:#7C736C;
-    --muted-2:#9A9089;
+    --ink-soft:#423D39;
+    --muted:#776E67;
+    --muted-2:#968C85;
     --line:#E6DFD6;
-    --line-soft:#EFE9E1;
     --accent:#8A2B2E;
     --accent-soft:#A44A44;
     --paper:#FFFFFF;
@@ -21,12 +19,11 @@
   html{ -webkit-print-color-adjust:exact; print-color-adjust:exact; }
 
   body{
-    font-family:'Inter', system-ui, sans-serif;
+    font-family:'Lato', system-ui, sans-serif;
     color:var(--ink-soft);
     background:#fff;
-    font-size:10pt;
+    font-size:10.2pt;
     line-height:1.5;
-    font-feature-settings:"kern" 1,"liga" 1;
     -webkit-font-smoothing:antialiased;
   }
 
@@ -40,33 +37,33 @@
     margin-bottom:6.5mm;
   }
   .name{
-    font-family:'Fraunces', Georgia, serif;
-    font-weight:600;
-    font-size:27pt;
-    line-height:1.02;
-    letter-spacing:-.01em;
+    font-family:'Lato', sans-serif;
+    font-weight:900;
+    font-size:25pt;
+    line-height:1.03;
+    letter-spacing:-.005em;
     color:var(--ink);
   }
   .headline{
     font-size:10.5pt;
     color:var(--accent);
-    font-weight:500;
-    margin-top:2.4mm;
+    font-weight:700;
+    margin-top:2.6mm;
   }
   .contact{
-    text-align:right; font-size:9pt; color:var(--muted); line-height:1.65;
+    text-align:right; font-size:9pt; color:var(--muted); line-height:1.6;
     white-space:nowrap; padding-bottom:1mm;
   }
   .contact a{ color:inherit; text-decoration:none; }
-  .contact .who{ color:var(--ink); font-weight:600; }
+  .contact .who{ color:var(--ink); font-weight:700; }
 
   /* ---------- SECTIONS ---------- */
   section{ margin-bottom:6mm; }
   h2{
-    font-size:9.5pt;
+    font-size:10pt;
     text-transform:uppercase;
-    letter-spacing:.14em;
-    font-weight:700;
+    letter-spacing:.04em;
+    font-weight:900;
     color:var(--ink);
     margin-bottom:3.4mm;
     padding-bottom:1.6mm;
@@ -77,7 +74,7 @@
     width:11mm; height:0.7mm; background:var(--accent);
   }
 
-  .summary{ font-size:10pt; line-height:1.6; color:var(--ink-soft); }
+  .summary{ font-size:10.2pt; line-height:1.6; color:var(--ink-soft); }
 
   /* ---------- EXPERIENCE ---------- */
   .job{ margin-bottom:4.6mm; }
@@ -86,11 +83,11 @@
     display:flex; justify-content:space-between; align-items:baseline; gap:6mm;
   }
   .job-org{
-    font-family:'Fraunces', Georgia, serif;
-    font-weight:600; font-size:12.5pt; color:var(--ink); line-height:1.2;
+    font-family:'Lato', sans-serif;
+    font-weight:700; font-size:12pt; color:var(--ink); line-height:1.2;
   }
-  .job-date{ font-size:8.8pt; color:var(--muted); white-space:nowrap; flex:none; }
-  .job-role{ font-size:9.8pt; font-weight:600; color:var(--accent); margin:.4mm 0 1.8mm; }
+  .job-date{ font-size:8.8pt; color:var(--muted); white-space:nowrap; flex:none; font-weight:400; }
+  .job-role{ font-size:9.8pt; font-weight:700; color:var(--accent); margin:.5mm 0 1.8mm; }
   .job ul{ list-style:none; }
   .job li{
     position:relative; padding-left:4.4mm; margin-bottom:1.3mm;
@@ -109,16 +106,14 @@
   .entry{ display:flex; gap:3.2mm; margin-bottom:2.8mm; }
   .entry:last-child{ margin-bottom:0; }
   .entry .yr{
-    font-family:'Fraunces', Georgia, serif; font-weight:600; font-size:9.5pt;
+    font-family:'Lato', sans-serif; font-weight:900; font-size:9.5pt;
     color:var(--accent); flex:none; width:11mm; padding-top:.2mm;
   }
-  .entry .body b{ display:block; font-size:9.6pt; color:var(--ink); font-weight:600; line-height:1.32; }
-  .entry .body span{ font-size:8.9pt; color:var(--muted); }
+  .entry .body b{ display:block; font-size:9.6pt; color:var(--ink); font-weight:700; line-height:1.32; }
+  .entry .body span{ font-size:8.9pt; color:var(--muted); font-weight:400; }
 
   /* ---------- SKILLS ---------- */
-  .skills{
-    columns:2; column-gap:10mm; list-style:none;
-  }
+  .skills{ columns:2; column-gap:10mm; list-style:none; }
   .skills li{
     position:relative; padding-left:4.4mm; margin-bottom:1.7mm;
     font-size:9.6pt; color:var(--ink-soft); break-inside:avoid;
@@ -128,7 +123,7 @@
     width:1.6mm; height:1.6mm; border-radius:50%; background:var(--accent-soft);
   }
 
-  .tools{ font-size:9.8pt; color:var(--ink-soft); }
+  .tools{ font-size:10pt; color:var(--ink-soft); }
 
   /* ---------- PRINT ---------- */
   @page{ size:A4; margin:15mm 16mm; }

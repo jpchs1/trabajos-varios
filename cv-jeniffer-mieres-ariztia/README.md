@@ -6,10 +6,20 @@ inclusión (p. ej. el cargo de Coordinador(a) de Equidad e Inclusión de Ariztí
 publicado en su portal de empleos Hiring Room).
 
 ## Archivos
-- `CV_Jeniffer_Mieres_Contreras.pdf` — **entregable** (2 páginas A4, texto seleccionable / apto para lectores ATS).
+- `CV_Jeniffer_Mieres_Contreras.pdf` — **entregable** (2 páginas A4, con capa de texto real).
 - `cv.html` — fuente editable.
-- `assets/fonts.css` + `assets/fonts/` — tipografías locales (Fraunces + Inter) para render reproducible.
 - `render.js` — genera el PDF desde el HTML.
+
+## Nota técnica (importante para portales tipo Hiring Room / ATS)
+El PDF usa la tipografía **Lato** instalada en el sistema (`.ttf`), referenciada por
+nombre (sin `@font-face`). Esto es clave: al imprimir con Chromium, las fuentes web
+`@font-face` (woff2) y las OpenType `.otf`/variables se incrustan como **Type 3**
+(glifos dibujados), y muchos importadores las rechazan con "Error de Lectura: sube un
+.pdf con texto (no escaneado/foto)". Con una fuente TrueType del sistema, Chromium
+incrusta **CID TrueType** con Unicode y el PDF queda 100% legible como texto.
+
+Verificación rápida: `pdffonts CV_Jeniffer_Mieres_Contreras.pdf` no debe mostrar
+ningún `Type 3`; y `pdftotext` debe extraer todo el contenido.
 
 ## Enfoque de redacción
 La versión final evita los rasgos que suelen "delatar" un texto de IA:

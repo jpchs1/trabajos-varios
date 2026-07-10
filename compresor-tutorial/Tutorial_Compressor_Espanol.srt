@@ -1,0 +1,152 @@
+1
+00:00:00,500 --> 00:00:06,675
+Tutorial del compresor de aire de tornillo: puesta en marcha, panel de control y mantenimiento.
+
+2
+00:00:11,526 --> 00:00:22,136
+Este es un compresor de aire todo en uno: integra el compresor de tornillo, el secador frigorífico, el tanque de aire y los filtros en un solo equipo.
+
+3
+00:00:24,526 --> 00:00:37,655
+Primero, la conexión eléctrica, que se hace en este punto. Según el modelo puede ser monofásica o trifásica, con motor de imanes permanentes y variador de frecuencia, de diez a quince kilovatios.
+
+4
+00:00:45,526 --> 00:00:51,550
+La secuencia de arranque correcta es: primero, encender el secador frigorífico.
+
+5
+00:00:58,526 --> 00:01:09,415
+Se deja funcionar el secador unos tres o cuatro minutos, hasta que su temperatura baje de diez grados. El secador tiene un proceso de pre-enfriamiento que hay que respetar.
+
+6
+00:01:16,526 --> 00:01:23,630
+Después se arranca el compresor. En pantalla ya se ve presión: cero punto sesenta y cinco megapascales.
+
+7
+00:01:32,526 --> 00:01:38,063
+La pantalla también muestra la frecuencia, la potencia y el estado del ventilador.
+
+8
+00:01:41,026 --> 00:01:52,867
+Hay dos formas de arrancar: con la tecla de menú, o directamente en la pantalla táctil: se mantiene pulsado el botón de arranque un segundo y el compresor arranca normalmente.
+
+9
+00:01:58,526 --> 00:02:04,933
+Tras el arranque, el equipo muestra la presión y carga automáticamente según la demanda de aire.
+
+10
+00:02:38,526 --> 00:02:46,582
+La temperatura que aparece es la de operación: lo normal es trabajar entre ochenta y cinco y noventa y cinco grados.
+
+11
+00:02:52,526 --> 00:02:57,180
+Aquí la potencia es de unos diez kilovatios y sube a medida que carga.
+
+12
+00:03:01,026 --> 00:03:05,947
+Pulsando la tecla de menú podemos consultar los parámetros de funcionamiento,
+
+13
+00:03:08,526 --> 00:03:15,200
+por ejemplo, la corriente trifásica del motor principal: unos seis punto tres amperios por fase.
+
+14
+00:03:20,526 --> 00:03:26,353
+La tensión debe ser estable y la corriente máxima no debe pasar de treinta amperios.
+
+15
+00:03:34,526 --> 00:03:45,972
+También hay que comprobar que las tres fases estén equilibradas: una diferencia menor a un amperio indica tensión y corriente estables. Esta es la revisión eléctrica del equipo.
+
+16
+00:03:51,526 --> 00:03:59,733
+Los ajustes de fábrica, como la presión de trabajo, ya vienen configurados, y el equipo se puede usar con normalidad.
+
+17
+00:04:04,526 --> 00:04:11,514
+Si aparece una falla interna, se consulta el código de error en el manual o se contacta al servicio técnico.
+
+18
+00:04:18,526 --> 00:04:26,326
+Con el tanque lleno y el secador por debajo de diez grados, ya se puede conectar la máquina láser a la salida de aire.
+
+19
+00:04:36,526 --> 00:04:50,805
+Ese es el arranque normal. Para apagar: primero se detiene el compresor desde la pantalla. Nunca hay que pulsar el paro de emergencia ni cortar la corriente, porque el compresor tiene su propio proceso de parada.
+
+20
+00:05:00,526 --> 00:05:03,508
+Después se apaga el secador frigorífico.
+
+21
+00:05:07,526 --> 00:05:18,101
+Por último, se abren las válvulas de purga para drenar el agua condensada; hay varias válvulas que purgar. Este drenaje se hace en cada parada del equipo.
+
+22
+00:05:40,273 --> 00:05:50,685
+Veamos el panel táctil. La pantalla principal muestra la temperatura, la presión, el estado del equipo y los botones de arranque, paro y reinicio.
+
+23
+00:05:53,273 --> 00:05:57,555
+Desde el menú se accede a los ajustes, protegidos con contraseña.
+
+24
+00:05:59,773 --> 00:06:09,802
+En la página de mantenimiento se configuran los intervalos: las horas para el cambio de aceite, del filtro de aceite, del filtro de aire y del separador.
+
+25
+00:06:15,773 --> 00:06:20,090
+Con el teclado numérico se escribe el nuevo valor y se confirma.
+
+26
+00:06:24,773 --> 00:06:30,948
+Al terminar, se vuelve a la pantalla principal, que sigue mostrando los datos en tiempo real.
+
+27
+00:06:40,159 --> 00:06:46,137
+Ahora, el mantenimiento del compresor de tornillo. Hay tareas diarias y tareas periódicas.
+
+28
+00:06:49,659 --> 00:07:00,350
+Todos los días hay que purgar el filtro y el tanque de aire: se abre la válvula dos o tres segundos, hasta que salga aire, para drenar el agua acumulada.
+
+29
+00:07:06,659 --> 00:07:14,378
+El radiador se limpia cada semana. Este es el radiador, y este es su filtro: se sopla con aire comprimido.
+
+30
+00:07:23,159 --> 00:07:31,946
+También se sopla el filtro del secador frigorífico, cada una o dos semanas, según lo sucio que sea el ambiente de trabajo.
+
+31
+00:07:35,659 --> 00:07:45,491
+El elemento del filtro de aire se saca y se sopla con no más de cinco kilos de presión, para no dañarlo. Al montarlo, hay que cuidar que no entre suciedad.
+
+32
+00:07:54,659 --> 00:08:00,486
+Cada diez o veinte días conviene soplar el polvo interno de toda la máquina.
+
+33
+00:08:04,659 --> 00:08:19,716
+En la salida de purga del compresor: con la máquina parada más de media hora y el manómetro en cero, se abre la válvula uno o dos segundos para drenar el agua y los residuos. Se hace cada veinte días, aproximadamente.
+
+34
+00:08:31,659 --> 00:08:43,058
+Sobre el mantenimiento programado: el primero es el del rodaje, a las quinientas horas. Se cambia el aceite lubricante, el filtro de aceite y el elemento del filtro de aire.
+
+35
+00:08:57,659 --> 00:09:02,046
+Después, el filtro de aire se reemplaza cada dos mil horas,
+
+36
+00:09:06,659 --> 00:09:14,703
+y el aceite, junto con el separador de aceite y gas, se cambia también por horas de uso, según el plan de mantenimiento.
+
+37
+00:09:17,659 --> 00:09:28,292
+Por último, el variador: soplarlo cada dos semanas según el ambiente y, siempre, después de un corte de energía, soplar el interior del equipo.
+
+38
+00:09:32,503 --> 00:09:41,197
+Fin del tutorial. Recuerda: arrancar siempre primero el secador, apagar desde la pantalla y purgar el agua en cada parada.
+

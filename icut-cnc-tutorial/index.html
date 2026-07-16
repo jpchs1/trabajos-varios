@@ -1,0 +1,1073 @@
+<!DOCTYPE html>
+<html lang="es">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>iCut · Tutorial de Control CNC Router</title>
+</head><body>
+<style>
+  :root{
+    --bg0:#07090d; --bg1:#0c1016; --panel:#131a24; --line:#243040;
+    --txt:#eef2f7; --mut:#94a1b5; --dim:#5d6a7e;
+    --acc:#f68b1f; --acc2:#ffc06a; --go:#38d97e; --stop:#e8493c; --cyan:#3fc9e2;
+    --chrome:#e9eaec; --chrome2:#f4f4f5; --ink:#1c2129;
+  }
+  *{box-sizing:border-box; margin:0; padding:0}
+  html,body{height:100%}
+  body{
+    background:var(--bg0); color:var(--txt); overflow:hidden;
+    font-family:"Segoe UI", system-ui, -apple-system, Roboto, "Helvetica Neue", Arial, sans-serif;
+  }
+  .mono{font-family:ui-monospace,"Cascadia Mono",Consolas,Menlo,monospace; font-variant-numeric:tabular-nums}
+
+  /* ============ PLAYER SHELL ============ */
+  #viewport{position:fixed; inset:0 0 92px 0; display:flex; align-items:center; justify-content:center; background:
+    radial-gradient(1200px 700px at 50% 30%, #0d1420 0%, var(--bg0) 70%);}
+  #fit{position:relative; width:1600px; height:900px; flex:none; transform-origin:center center; overflow:hidden;
+    background:var(--bg0);}
+  #fit::before{ /* ambient engineering grid */
+    content:""; position:absolute; inset:-60px;
+    background-image:radial-gradient(circle, rgba(120,150,190,.13) 1px, transparent 1.4px);
+    background-size:44px 44px; animation:gridDrift 60s linear infinite;
+  }
+  @keyframes gridDrift{from{transform:translate(0,0)}to{transform:translate(44px,44px)}}
+  #fit::after{content:""; position:absolute; inset:0; pointer-events:none;
+    background:radial-gradient(1400px 900px at 50% 40%, transparent 55%, rgba(0,0,0,.55) 100%);}
+
+  .scene{position:absolute; inset:0; opacity:0; visibility:hidden; transition:opacity .7s ease; z-index:1; padding:64px 84px;}
+  .scene.active{opacity:1; visibility:visible; z-index:2}
+
+  /* reveal-on-narration elements */
+  [data-sub]{opacity:0; transform:translateY(16px); transition:opacity .65s cubic-bezier(.2,.7,.2,1), transform .65s cubic-bezier(.2,.7,.2,1)}
+  [data-sub].on{opacity:1; transform:none}
+  .co[data-sub]{transform:scale(.85)}
+  .co[data-sub].on{transform:scale(1)}
+
+  /* ============ TYPOGRAPHY ============ */
+  .eyebrow{font-size:15px; letter-spacing:.32em; text-transform:uppercase; color:var(--acc); font-weight:700}
+  .display{font-size:120px; line-height:.95; font-weight:800; letter-spacing:-.02em; text-wrap:balance}
+  .h1{font-size:52px; font-weight:800; letter-spacing:-.01em; text-wrap:balance}
+  .h2{font-size:30px; font-weight:700}
+  .lead{font-size:23px; color:var(--mut); line-height:1.5; max-width:64ch}
+  .scene-head{display:flex; align-items:baseline; gap:22px; margin-bottom:34px}
+  .scene-head .idx{font-size:17px; color:var(--dim); font-weight:700; letter-spacing:.18em}
+
+  /* ============ CHIPS / CARDS ============ */
+  .chip{display:inline-flex; align-items:center; gap:9px; padding:9px 16px; border:1px solid var(--line);
+    border-radius:999px; background:rgba(19,26,36,.85); font-size:16px; color:var(--mut)}
+  .chip b{color:var(--txt)}
+  .chip .dot{width:9px;height:9px;border-radius:50%;background:var(--acc)}
+  .card{background:linear-gradient(180deg, rgba(24,32,44,.92), rgba(15,20,28,.92)); border:1px solid var(--line);
+    border-radius:14px; padding:26px 28px}
+  .card h3{font-size:22px; margin-bottom:8px}
+  .card p{font-size:16.5px; color:var(--mut); line-height:1.5}
+  .kbd{display:inline-block; padding:2px 9px; border:1px solid #3a4658; border-bottom-width:3px; border-radius:6px;
+    background:#1a2230; font-size:.85em; font-weight:700; color:var(--acc2)}
+  .warn{position:relative; border:1px solid rgba(232,73,60,.5); background:rgba(232,73,60,.12);
+    border-radius:12px; padding:16px 20px 16px 58px; font-size:18px; line-height:1.45}
+  .warn::before{content:"⚠"; font-size:24px; color:var(--stop); position:absolute; left:20px; top:50%; transform:translateY(-50%)}
+  .tip{border-color:rgba(56,217,126,.45); background:rgba(56,217,126,.1)}
+  .tip::before{content:"✓"; color:var(--go)}
+
+  /* ============ CALLOUTS ============ */
+  .co{position:absolute; border:2.5px solid var(--acc); border-radius:10px;
+    box-shadow:0 0 0 4px rgba(246,139,31,.18), 0 0 34px rgba(246,139,31,.35); pointer-events:none}
+  .co-tag{position:absolute; left:-2px; top:-40px; white-space:nowrap; background:var(--acc); color:#1a1005;
+    font-weight:800; font-size:16px; padding:6px 13px; border-radius:8px; letter-spacing:.02em}
+  .co-tag.below{top:auto; bottom:-40px}
+  .co-tag.right{left:auto; right:-2px}
+
+  /* ============ SOFTWARE UI KIT (recreación iCut) ============ */
+  .win{background:var(--chrome); color:var(--ink); border-radius:8px; overflow:hidden;
+    box-shadow:0 30px 80px rgba(0,0,0,.6), 0 0 0 1px #333a44; font-size:13px}
+  .titlebar{display:flex; align-items:center; justify-content:space-between; background:#f7f7f8; padding:5px 12px;
+    font-size:12px; color:#555; border-bottom:1px solid #d8d8dc}
+  .titlebar .wbtns{display:flex; gap:10px; color:#888; letter-spacing:2px}
+  .sbar{display:flex; align-items:stretch; background:#d92b1f; color:#fff; font-weight:700; font-size:12.5px}
+  .sbar .cell{padding:5px 14px; background:#e6e6e8; color:#333; border-right:1px solid #cfcfd4}
+  .sbar .alert{background:#d92b1f; color:#fff; flex:1; padding:5px 14px}
+  .tabs{display:flex; background:#ececee; border-bottom:1px solid #c9c9cf}
+  .tab{flex:1; text-align:center; padding:8px 0; font-weight:600; color:#3a3f47; border-right:1px solid #d6d6da}
+  .tab.on{background:linear-gradient(180deg,#ffc06a,#f07d14); color:#fff}
+  .tab.cyanon{background:linear-gradient(180deg,#8fe9f7,#2fb6d8); color:#063a46}
+  .appbody{display:flex; align-items:stretch}
+  .pal{display:flex; flex-direction:column; gap:4px; padding:8px 6px; background:#ececee; border-right:1px solid #d2d2d6}
+  .pchip{width:20px; height:16px; border-radius:3px; border:1px solid rgba(0,0,0,.25)}
+  .ptool{width:20px; height:16px; border-radius:3px; background:#fff; border:1px solid #b9b9c0; color:#666;
+    font-size:9px; display:flex; align-items:center; justify-content:center; font-weight:700}
+  .mcanvas{position:relative; flex:1; background:#05070c;
+    background-image:radial-gradient(circle, rgba(90,120,160,.28) 1px, transparent 1.3px); background-size:26px 26px;}
+  .mcanvas .ruler{position:absolute; left:0; right:0; top:0; height:16px; background:#10141c; color:#7c8aa0;
+    font-size:9px; display:flex; gap:52px; align-items:center; padding-left:12px}
+  .viewport3d{position:relative; flex:1; background:linear-gradient(160deg,#020308 0%, #050a2e 55%, #0a1668 130%)}
+  .rp{width:300px; flex:none; background:#f1f1f3; color:#333; border-left:1px solid #cfcfd4; padding:8px 10px; display:flex; flex-direction:column; gap:7px}
+  .rp .grp{display:flex; justify-content:space-between; font-weight:700; font-size:12px; color:#333}
+  .rp .grp .g54{background:#ffe867; padding:0 6px; border-radius:3px}
+  .coordrow{display:flex; align-items:center; gap:6px; font-size:12px}
+  .coordrow .ax{width:14px; font-weight:700}
+  .coordrow .val{flex:1; background:#fff; border:1px solid #c7c7cd; border-radius:3px; text-align:right; padding:2px 7px}
+  .fsrow{display:flex; align-items:center; gap:7px; font-size:11.5px; color:#333}
+  .fsrow .seg{background:#111; color:#ff5230; font-family:ui-monospace,Consolas,monospace; padding:1px 5px; border-radius:2px; font-weight:700}
+  .fsrow .slider{flex:1; height:4px; background:#c9c9cf; border-radius:2px; position:relative}
+  .fsrow .slider i{position:absolute; top:-4px; width:11px; height:11px; background:#2f7ff0; border-radius:50%}
+  .jog{display:grid; grid-template-columns:56px repeat(3,1fr); gap:6px; margin-top:4px}
+  .jbtn{background:linear-gradient(180deg,#ffcf8f 0%, #f79425 55%, #ef7d10 100%); color:#fff; font-weight:800;
+    border-radius:7px; text-align:center; padding:13px 0; font-size:15px; box-shadow:inset 0 1px 0 rgba(255,255,255,.6), 0 2px 4px rgba(0,0,0,.25);
+    border:1px solid #d96f08; text-shadow:0 1px 1px rgba(120,60,0,.4); white-space:nowrap; overflow:hidden}
+  .jbtn.sm{padding:8px 0; font-size:10.5px}
+  .jbtn.ghost{background:#e6e6e9; color:#555; border-color:#c9c9cf; text-shadow:none; font-weight:700}
+  .steps{display:flex; flex-direction:column; gap:3px; font-size:11px; color:#333; padding-left:4px}
+  .steps b{color:#0a58d6}
+  .swrow{display:flex; gap:4px}
+  .sw{flex:1; background:linear-gradient(180deg,#6ee89b,#1cae50); border:1px solid #139240; color:#0b3a1d;
+    font-weight:700; font-size:10.5px; text-align:center; padding:7px 2px; border-radius:4px}
+  .transport{display:flex; gap:5px}
+  .tbtn{flex:1; background:linear-gradient(180deg,#ffcf8f,#ef7d10); border:1px solid #d96f08; color:#fff;
+    border-radius:6px; text-align:center; font-weight:800; padding:10px 0; font-size:13.5px; text-shadow:0 1px 1px rgba(120,60,0,.4)}
+  .tbtn.off{background:#e3e3e6; color:#9a9aa2; border-color:#cfcfd4; text-shadow:none}
+  .fbar{display:flex; gap:3px; background:#ececee; padding:4px; border-top:1px solid #cfcfd4}
+  .fk{flex:1; background:linear-gradient(180deg,#ffc06a,#ef7d10); border:1px solid #d96f08; color:#fff; text-align:center;
+    font-weight:700; font-size:12px; padding:7px 2px; border-radius:4px; text-shadow:0 1px 1px rgba(120,60,0,.35)}
+  .fk.plain{background:#f5f5f6; color:#666; border-color:#d5d5da; text-shadow:none}
+  .progressrow{display:flex; align-items:center; gap:8px; background:#ececee; padding:4px 8px; font-size:11px; color:#444}
+  .progressrow .pb{flex:1; height:12px; background:#fff; border:1px solid #c9c9cf; border-radius:3px; overflow:hidden}
+  .progressrow .pb i{display:block; height:100%; width:64%; background:linear-gradient(180deg,#5fe08a,#1fae52)}
+
+  /* dialog mock */
+  .dlg{background:#f4f4f6; color:#222; border-radius:8px; box-shadow:0 26px 70px rgba(0,0,0,.65), 0 0 0 1px #3a4148; overflow:hidden; font-size:14px}
+  .dlg .dtitle{display:flex; justify-content:space-between; align-items:center; padding:8px 14px; background:#fff;
+    border-bottom:1px solid #ddd; font-weight:700; font-size:13.5px}
+  .dlg .dbody{padding:16px 18px}
+  .frow{display:flex; align-items:center; justify-content:space-between; gap:14px; padding:5px 0; font-size:14px}
+  .frow .fval{background:#fff; border:1px solid #c8c8ce; border-radius:4px; padding:3px 10px; min-width:110px; text-align:right}
+  .dbtns{display:flex; justify-content:flex-end; gap:10px; padding:12px 18px 16px}
+  .dbtn{padding:6px 26px; border:1px solid #b9b9c0; border-radius:5px; background:#fff; font-weight:600}
+  .dbtn.pri{border-color:#2f7ff0; color:#2f7ff0}
+
+  /* ============ SUBTITLES + CONTROLS ============ */
+  #subwrap{position:fixed; left:0; right:0; bottom:100px; display:flex; justify-content:center; pointer-events:none; z-index:30}
+  #subtitle{max-width:1050px; text-align:center; font-size:clamp(16px, 2.2vw, 27px); line-height:1.4; font-weight:600;
+    background:rgba(5,7,11,.82); border:1px solid rgba(255,255,255,.09); padding:12px 26px; border-radius:14px;
+    box-shadow:0 8px 30px rgba(0,0,0,.5); backdrop-filter:blur(6px); opacity:0; transition:opacity .3s}
+  #subtitle.show{opacity:1}
+  #subtitle em{color:var(--acc2); font-style:normal}
+
+  #bar{position:fixed; left:0; right:0; bottom:0; height:92px; z-index:40; display:flex; flex-direction:column;
+    background:linear-gradient(180deg, rgba(10,13,19,.92), rgba(7,9,13,.98)); border-top:1px solid var(--line)}
+  #seek{position:relative; height:22px; cursor:pointer; display:flex; align-items:center; padding:0 18px}
+  #seek .track{position:relative; flex:1; height:5px; border-radius:3px; background:#232c3a; overflow:visible}
+  #seek .fill{position:absolute; left:0; top:0; bottom:0; border-radius:3px; width:0%;
+    background:linear-gradient(90deg, #f4780c, #ffb45e)}
+  #seek .tick{position:absolute; top:-3.5px; width:2.5px; height:12px; background:#5d6a7e; border-radius:2px}
+  #seek .tick:hover{background:var(--acc2)}
+  #controls{flex:1; display:flex; align-items:center; gap:14px; padding:0 20px}
+  .cbtn{background:none; border:none; color:var(--txt); font-size:21px; cursor:pointer; width:44px; height:44px;
+    border-radius:10px; display:flex; align-items:center; justify-content:center}
+  .cbtn:hover{background:#1a2230}
+  .cbtn:focus-visible{outline:2px solid var(--acc); outline-offset:2px}
+  .cbtn.toggled{color:var(--acc)}
+  #playbtn{background:var(--acc); color:#180d02; font-size:23px}
+  #playbtn:hover{background:var(--acc2)}
+  #chapname{font-size:16px; font-weight:600; color:var(--txt); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:38vw}
+  #chapnum{font-size:12.5px; color:var(--dim); letter-spacing:.14em; text-transform:uppercase; font-weight:700}
+  #timer{margin-left:auto; color:var(--mut); font-size:14.5px}
+  .spacer{flex:1}
+
+  /* big overlay */
+  #overlay{position:fixed; inset:0 0 92px 0; z-index:35; display:flex; flex-direction:column; gap:26px; align-items:center;
+    justify-content:center; background:rgba(4,6,10,.55); backdrop-filter:blur(3px); cursor:pointer; transition:opacity .4s}
+  #overlay.hide{opacity:0; pointer-events:none}
+  #bigplay{width:120px; height:120px; border-radius:50%; border:none; cursor:pointer; font-size:44px; color:#180d02;
+    background:radial-gradient(circle at 35% 30%, #ffc678, var(--acc) 70%); box-shadow:0 0 0 12px rgba(246,139,31,.18), 0 20px 60px rgba(0,0,0,.6);
+    display:flex; align-items:center; justify-content:center; transition:transform .2s}
+  #bigplay:hover{transform:scale(1.06)}
+  #overlay .ohint{font-size:17px; color:var(--mut); background:rgba(10,13,19,.8); padding:10px 22px; border-radius:999px; border:1px solid var(--line)}
+
+  /* chapters menu */
+  #chapmenu{position:fixed; right:16px; bottom:104px; z-index:45; width:420px; max-height:min(620px, calc(100vh - 140px));
+    overflow:auto; background:rgba(12,16,23,.97); border:1px solid var(--line); border-radius:14px; padding:10px;
+    box-shadow:0 24px 70px rgba(0,0,0,.6); display:none}
+  #chapmenu.open{display:block}
+  #chapmenu h4{font-size:12.5px; letter-spacing:.2em; text-transform:uppercase; color:var(--dim); padding:8px 12px 10px}
+  .chaprow{display:flex; gap:12px; align-items:baseline; width:100%; text-align:left; background:none; border:none;
+    color:var(--txt); padding:10px 12px; border-radius:9px; cursor:pointer; font-size:15.5px}
+  .chaprow:hover{background:#1a2230}
+  .chaprow.now{background:rgba(246,139,31,.14); color:var(--acc2)}
+  .chaprow .n{font-size:12px; color:var(--dim); width:24px; flex:none; font-weight:700}
+  .chaprow .d{margin-left:auto; color:var(--dim); font-size:12.5px}
+
+  .paused #fit::before, .paused .drawpath{animation-play-state:paused}
+
+  @media (prefers-reduced-motion: reduce){
+    #fit::before{animation:none}
+    [data-sub]{transition-duration:.15s}
+  }
+</style>
+<style>
+  /* extras de escena */
+  .drawpath{fill:none; stroke:#ff6b5e; stroke-width:3; stroke-linejoin:round; stroke-linecap:round;
+    stroke-dasharray:2600; stroke-dashoffset:2600; transition:stroke-dashoffset 3.4s ease; filter:drop-shadow(0 0 6px rgba(255,80,60,.5))}
+  [data-sub].on .drawpath{stroke-dashoffset:0}
+  .drawpath.cyan{stroke:#5fd9ef; filter:drop-shadow(0 0 7px rgba(70,200,230,.55))}
+  @keyframes pulseGlow{0%,100%{box-shadow:0 0 0 0 rgba(246,139,31,.55)} 50%{box-shadow:0 0 0 14px rgba(246,139,31,0)}}
+  .pulse{animation:pulseGlow 1.6s ease infinite}
+  .pipe{display:flex; align-items:center; gap:18px; margin:44px 0}
+  .pnode{flex:1; text-align:center; padding:30px 18px; border-radius:16px; border:1px solid var(--line);
+    background:linear-gradient(180deg, rgba(26,34,48,.95), rgba(14,19,27,.95))}
+  .pnode .ico{font-size:42px; margin-bottom:12px}
+  .pnode h3{font-size:21px; margin-bottom:6px}
+  .pnode p{font-size:14.5px; color:var(--mut); line-height:1.45}
+  .pnode.hero{border-color:var(--acc); box-shadow:0 0 44px rgba(246,139,31,.22)}
+  .parrow{font-size:34px; color:var(--acc); flex:none}
+  .axsvg text{font:700 26px "Segoe UI",sans-serif}
+  .g54chips{display:flex; gap:10px; flex-wrap:wrap}
+  .g54chips .chip b{font-size:17px}
+  .steplist{display:flex; flex-direction:column; gap:18px}
+  .step{display:flex; gap:18px; align-items:flex-start}
+  .step .sn{flex:none; width:46px; height:46px; border-radius:12px; background:var(--acc); color:#1a1005;
+    display:flex; align-items:center; justify-content:center; font-weight:800; font-size:21px}
+  .step h3{font-size:22px; margin-bottom:4px}
+  .step p{font-size:16.5px; color:var(--mut); line-height:1.5}
+  .flowgrid{display:grid; grid-template-columns:repeat(3,1fr); gap:20px}
+  .flowgrid .card .n{font-size:13px; color:var(--acc); font-weight:800; letter-spacing:.18em; margin-bottom:8px}
+  .iotable{display:flex; flex-wrap:wrap; gap:6px}
+  .iochip{background:linear-gradient(180deg,#6ee89b,#1cae50); color:#0b3a1d; font-weight:700; font-size:12px;
+    padding:7px 12px; border-radius:5px; border:1px solid #139240}
+  .iochip.red{background:linear-gradient(180deg,#ff9a8e,#d92b1f); color:#fff; border-color:#b02015}
+  .ptable{width:100%; border-collapse:collapse; font-size:15px}
+  .ptable th{font-size:11.5px; text-transform:uppercase; letter-spacing:.14em; color:#777; text-align:left; padding:7px 12px; border-bottom:1px solid #ddd}
+  .ptable td{padding:9px 12px; border-bottom:1px solid #e6e6ea; color:#222}
+  .ptable td:first-child{font-weight:700; color:#0a58d6}
+  .split{display:grid; grid-template-columns:1.15fr 1fr; gap:56px; align-items:start}
+</style>
+
+<div id="viewport"><div id="fit">
+
+  <!-- ══════════ E1 · PORTADA ══════════ -->
+  <section class="scene" id="s1">
+    <div data-sub="0" style="position:absolute; inset:0; display:flex; align-items:center; justify-content:center; opacity:.35">
+      <svg width="1100" height="640" viewBox="0 0 400 300" aria-hidden="true">
+        <path class="drawpath" d="M52,212 C88,150 152,118 212,130 C228,96 272,76 324,88 C302,110 288,122 276,138 C322,142 344,162 354,192 C312,180 282,186 250,196 C222,242 158,254 110,236 C96,252 78,258 58,260 C70,246 74,230 62,214 Z M262,118 a4,4 0 1,0 .1,0"/>
+      </svg>
+    </div>
+    <div style="position:relative; height:100%; display:flex; flex-direction:column; justify-content:center; gap:30px; max-width:980px">
+      <div class="eyebrow" data-sub="0">Tutorial profesional · Control de Router CNC</div>
+      <h1 class="display" data-sub="0">iCut<span style="color:var(--acc)">.</span></h1>
+      <p class="lead" data-sub="1" style="font-size:27px">De la pantalla a la máquina: interfaz, flujo de trabajo completo y funciones avanzadas del software de control, <em style="color:var(--acc2); font-style:normal">paso a paso</em>.</p>
+      <div style="display:flex; gap:12px; flex-wrap:wrap" data-sub="2">
+        <span class="chip"><span class="dot"></span> Basado en los manuales oficiales XING DUO WEI</span>
+        <span class="chip"><span class="dot"></span> Sistema MDR CNC Router · TECHPRO</span>
+        <span class="chip"><span class="dot"></span> 14 capítulos</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════ E2 · QUÉ ES ══════════ -->
+  <section class="scene" id="s2">
+    <div class="scene-head" data-sub="0">
+      <span class="idx">01 / 14</span>
+      <h2 class="h1">¿Qué es iCut y qué hace?</h2>
+    </div>
+    <p class="lead" data-sub="0">Es el puente entre tu diseño y la máquina: convierte archivos en movimiento real de los ejes.</p>
+    <div class="pipe">
+      <div class="pnode" data-sub="1"><div class="ico">📐</div><h3>Diseño</h3><p>DXF · AI · PLT · DWG<br>JPG / PNG · G-code (.nc .tap .u00 .txt)</p></div>
+      <div class="parrow" data-sub="1">⟶</div>
+      <div class="pnode hero" data-sub="2"><div class="ico">🖥️</div><h3>iCut</h3><p>Capas y trayectorias · genera G-code<br>Simulación · control en tiempo real</p></div>
+      <div class="parrow" data-sub="2">⟶</div>
+      <div class="pnode" data-sub="2"><div class="ico">⚡</div><h3>Controlador de movimiento</h3><p>Placa MDR · conexión IP<br>192.168.0.***</p></div>
+      <div class="parrow" data-sub="3">⟶</div>
+      <div class="pnode" data-sub="3"><div class="ico">🛠️</div><h3>Router CNC</h3><p>Ejes X · Y · Z · C<br>Husillo y cuchilla vibratoria</p></div>
+    </div>
+    <div style="display:flex; gap:12px; flex-wrap:wrap" data-sub="3">
+      <span class="chip">Controla el <b>husillo</b></span>
+      <span class="chip">Bomba de <b>vacío</b></span>
+      <span class="chip"><b>Aspiración</b> de polvo</span>
+      <span class="chip"><b>Cuchilla vibratoria</b></span>
+      <span class="chip">Movimiento manual de <b>4 ejes</b></span>
+    </div>
+  </section>
+
+  <!-- ══════════ E3 · LAYOUT ══════════ -->
+  <section class="scene" id="s3" style="padding-top:40px">
+    <div class="scene-head" data-sub="0" style="margin-bottom:18px">
+      <span class="idx">02 / 14</span>
+      <h2 class="h2" style="font-size:34px">La pantalla principal, zona por zona</h2>
+    </div>
+    <div id="s3wrap" style="position:relative; width:1270px; margin:0 auto" data-sub="0">
+      <div class="win" style="width:1270px">
+        <div class="titlebar"><span>CNCRouter — v3.6.4.1 iCut</span><span class="wbtns">— ▢ ✕</span></div>
+        <div class="sbar"><span style="padding:5px 14px">Disconnected</span><span class="cell">Auto</span><span class="cell">Idle</span><span class="alert">No Available IP Address!</span></div>
+        <div class="tabs">
+          <div class="tab on">Graphic</div><div class="tab">CCD</div><div class="tab">Program</div>
+          <div class="tab">Coordinate</div><div class="tab">Parameter</div><div class="tab">Diagnosis</div>
+        </div>
+        <div class="appbody" style="height:520px">
+          <div class="pal">
+            <div class="pchip" style="background:#fff"></div><div class="pchip" style="background:#e2261a"></div>
+            <div class="pchip" style="background:#f7e11e"></div><div class="pchip" style="background:#25d425"></div>
+            <div class="pchip" style="background:#25d3d3"></div><div class="pchip" style="background:#2032e0"></div>
+            <div class="pchip" style="background:#e224e2"></div><div class="pchip" style="background:#f28a1e"></div>
+            <div style="height:8px"></div>
+            <div class="ptool">📍</div><div class="ptool">1↓</div><div class="ptool">✎</div><div class="ptool">⌒</div>
+            <div class="ptool">◭</div><div class="ptool">⟳</div><div class="ptool">↙</div><div class="ptool">▱</div>
+          </div>
+          <div class="mcanvas">
+            <div class="ruler"><span>-200</span><span>-160</span><span>-120</span><span>-80</span><span>-40</span><span>0</span><span>40</span><span>80</span><span>120</span></div>
+            <svg width="100%" height="100%" viewBox="0 0 400 300" preserveAspectRatio="xMidYMid meet" style="position:absolute; inset:0">
+              <path d="M52,212 C88,150 152,118 212,130 C228,96 272,76 324,88 C302,110 288,122 276,138 C322,142 344,162 354,192 C312,180 282,186 250,196 C222,242 158,254 110,236 C96,252 78,258 58,260 C70,246 74,230 62,214 Z" fill="none" stroke="#c2271c" stroke-width="1.6"/>
+              <rect x="30" y="60" width="340" height="220" fill="none" stroke="#1c6e2e" stroke-width="1" stroke-dasharray="4 3"/>
+            </svg>
+          </div>
+          <div class="rp">
+            <div class="grp"><span>Mechanical</span><span>Relative</span><span class="g54">G54 Milling</span></div>
+            <div class="coordrow mono"><span class="ax">X:</span><span class="val">0.000</span><span class="val">0.000</span></div>
+            <div class="coordrow mono"><span class="ax">Y:</span><span class="val">0.000</span><span class="val">0.000</span></div>
+            <div class="coordrow mono"><span class="ax">Z:</span><span class="val">0.000</span><span class="val">0.000</span></div>
+            <div class="coordrow mono"><span class="ax">C:</span><span class="val">0.000</span><span class="val">0.000</span></div>
+            <div class="fsrow"><b>F</b> 3000 <span>F-Rate</span><span class="seg">100</span><span class="slider"><i style="left:70%"></i></span> 1000</div>
+            <div class="fsrow"><b>T</b> 1 <span>G00 Rate</span><span class="seg">100</span><span class="slider"><i style="left:88%"></i></span> 20000</div>
+            <div class="fsrow"><b>S</b> 20000 <span>RPM</span><span class="seg">100</span><span class="slider"><i style="left:84%"></i></span> 24000</div>
+            <div style="display:flex; gap:8px">
+              <div style="flex:1">
+                <div class="jog">
+                  <div></div><div class="jbtn sm">C+</div><div class="jbtn sm">Y+</div><div class="jbtn sm">Z+</div>
+                  <div></div><div class="jbtn sm">X-</div><div class="jbtn sm">L</div><div class="jbtn sm">X+</div>
+                  <div class="jbtn sm ghost">Float TS</div><div class="jbtn sm">Z-</div><div class="jbtn sm">Y-</div><div class="jbtn sm">C-</div>
+                  <div class="jbtn sm ghost">H.W Guide</div><div class="jbtn sm">X-&gt;0</div><div class="jbtn sm">Y-&gt;0</div><div class="jbtn sm">Z-&gt;0</div>
+                  <div></div><div class="jbtn sm">XY-&gt;0</div><div class="jbtn sm ghost">Target Move</div><div class="jbtn sm ghost">Park</div>
+                </div>
+              </div>
+              <div class="steps"><span><b>◉</b> Continuous</span><span>H.W.Move</span><span>0.01</span><span>0.05</span><span>0.1</span><span>0.5</span><span>1</span><span>5</span><span>10</span><span>100</span></div>
+            </div>
+            <div class="swrow"><div class="sw">Spindle</div><div class="sw">Vacuum</div><div class="sw">Dust collect</div><div class="sw">Vibrating Knife</div><div class="sw">Knife Up/Down</div></div>
+            <div class="transport"><div class="tbtn">Start F9</div><div class="tbtn off">Pause F10</div><div class="tbtn">Stop F11</div><div class="tbtn">Home F12</div></div>
+          </div>
+        </div>
+        <div class="fbar">
+          <div class="fk">Layer F1</div><div class="fk">Parameters F2</div><div class="fk">CreateFile F3</div><div class="fk">AutoSort F4</div>
+          <div class="fk">OutputFile F5</div><div class="fk">CAD Start F6</div><div class="fk plain"></div><div class="fk">Origin F8</div>
+        </div>
+        <div class="progressrow"><span>Progress: Processing</span><span class="pb"><i></i></span><span class="mono">100%</span><span>Processing</span><span class="pb" style="max-width:180px"><i style="width:0%"></i></span><span class="mono">0%</span><span>Run Time 00:00:00</span></div>
+      </div>
+      <div class="co" data-sub="1" data-target=".sbar"><span class="co-tag">1 · Barra de estado — conexión · modo · IP</span></div>
+      <div class="co" data-sub="2" data-target=".tabs"><span class="co-tag right">2 · Las 6 páginas del programa</span></div>
+      <div class="co" data-sub="3" data-target=".pal"><span class="co-tag" style="top:-40px">3 · Capas + edición</span></div>
+      <div class="co" data-sub="4" data-target=".mcanvas"><span class="co-tag below" style="left:320px">4 · Área gráfica: tu diseño y las trayectorias</span></div>
+      <div class="co" data-sub="5" data-target=".rp"><span class="co-tag right">5 · Panel de control manual</span></div>
+      <div class="co" data-sub="6" data-target=".fbar" data-target2=".progressrow"><span class="co-tag below">6 · Teclas rápidas F1–F12 + progreso del trabajo</span></div>
+    </div>
+  </section>
+
+  <!-- ══════════ E4 · COORDENADAS ══════════ -->
+  <section class="scene" id="s4">
+    <div class="scene-head" data-sub="0">
+      <span class="idx">03 / 14</span>
+      <h2 class="h1">Dos sistemas de coordenadas</h2>
+    </div>
+    <div class="split">
+      <div class="steplist">
+        <div class="card" data-sub="1" style="border-left:4px solid var(--cyan)">
+          <h3>Coordenadas mecánicas</h3>
+          <p>Origen <b style="color:var(--txt)">fijo en la máquina</b>. Se establecen al hacer <span class="kbd">HOME</span> tras cada encendido o parada de emergencia. Nunca cambian.</p>
+        </div>
+        <div class="card" data-sub="2" style="border-left:4px solid var(--acc)">
+          <h3>Coordenadas de pieza</h3>
+          <p>Origen <b style="color:var(--txt)">definido por ti</b> sobre el material: la esquina donde empieza el trabajo. Es el cero de tu diseño.</p>
+        </div>
+        <div data-sub="3">
+          <p style="color:var(--mut); font-size:17px; margin-bottom:12px">iCut guarda hasta <b style="color:var(--txt)">6 orígenes de pieza</b> — ideal para varias piezas en la misma mesa:</p>
+          <div class="g54chips">
+            <span class="chip" style="border-color:var(--acc)"><b>G54</b>&nbsp;Milling · por defecto</span>
+            <span class="chip"><b>G55</b></span><span class="chip"><b>G56</b></span><span class="chip"><b>G57</b></span>
+            <span class="chip"><b>G58</b>&nbsp;Crease</span><span class="chip"><b>G59</b>&nbsp;Knife</span>
+          </div>
+        </div>
+      </div>
+      <div style="display:flex; flex-direction:column; gap:26px; align-items:center">
+        <svg class="axsvg" data-sub="4" width="440" height="330" viewBox="0 0 440 330">
+          <defs>
+            <marker id="arr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="currentColor"/></marker>
+          </defs>
+          <g stroke-width="5" fill="none">
+            <line x1="120" y1="240" x2="390" y2="240" stroke="#ff6b5e" color="#ff6b5e" marker-end="url(#arr)"/>
+            <line x1="120" y1="240" x2="290" y2="120" stroke="#38d97e" color="#38d97e" marker-end="url(#arr)"/>
+            <line x1="120" y1="240" x2="120" y2="30" stroke="#5fa8ff" color="#5fa8ff" marker-end="url(#arr)"/>
+          </g>
+          <circle cx="120" cy="240" r="8" fill="var(--acc)"/>
+          <text x="398" y="250" fill="#ff6b5e">+X</text>
+          <text x="298" y="115" fill="#38d97e">+Y</text>
+          <text x="96" y="24" fill="#5fa8ff">+Z</text>
+          <text x="88" y="285" fill="#94a1b5" style="font-size:17px; font-weight:600">Origen</text>
+        </svg>
+        <div class="card" data-sub="4" style="max-width:440px">
+          <p><b style="color:var(--txt)">Regla de la mano derecha:</b> X e Y se mueven sobre la mesa; el eje Z sube y baja el cabezal. Alejar la herramienta del material es <b style="color:#5fa8ff">Z positivo</b>.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════ E5 · PANEL DE CONTROL ══════════ -->
+  <section class="scene" id="s5" style="padding-top:44px">
+    <div class="scene-head" data-sub="0" style="margin-bottom:20px">
+      <span class="idx">04 / 14</span>
+      <h2 class="h2" style="font-size:34px">El panel de control manual</h2>
+    </div>
+    <div style="display:grid; grid-template-columns:460px 1fr; gap:60px; align-items:start">
+      <div class="rp" data-sub="0" style="width:460px; border-radius:10px; border:1px solid #cfcfd4; box-shadow:0 26px 70px rgba(0,0,0,.55); font-size:14px; padding:14px 14px; gap:9px">
+        <div class="grp"><span>Mechanical</span><span>Relative</span><span class="g54">G54 Milling</span></div>
+        <div class="coordrow mono"><span class="ax">X:</span><span class="val">213.225</span><span class="val">49.786</span></div>
+        <div class="coordrow mono"><span class="ax">Y:</span><span class="val">31.148</span><span class="val">64.296</span></div>
+        <div class="coordrow mono"><span class="ax">Z:</span><span class="val">-197.706</span><span class="val">-182.272</span></div>
+        <div class="fsrow"><b>F</b> 3000 <span>F-Rate</span><span class="seg">100</span><span class="slider"><i style="left:70%"></i></span> 1000</div>
+        <div class="fsrow"><b>S</b> 20000 <span>RPM</span><span class="seg">100</span><span class="slider"><i style="left:84%"></i></span> 24000</div>
+        <div style="display:flex; gap:10px">
+          <div style="flex:1">
+            <div class="jog">
+              <div></div><div class="jbtn">C+</div><div class="jbtn">Y+</div><div class="jbtn">Z+</div>
+              <div></div><div class="jbtn">X-</div><div class="jbtn">L</div><div class="jbtn">X+</div>
+              <div class="jbtn ghost sm" style="align-self:stretch">Float TS</div><div class="jbtn">Z-</div><div class="jbtn">Y-</div><div class="jbtn">C-</div>
+              <div class="jbtn ghost sm">H.W Guide</div><div class="jbtn sm">X-&gt;0</div><div class="jbtn sm">Y-&gt;0</div><div class="jbtn sm">Z-&gt;0</div>
+              <div></div><div class="jbtn sm">XY-&gt;0</div><div class="jbtn sm ghost">Target Move</div><div class="jbtn sm ghost">Park</div>
+            </div>
+          </div>
+          <div class="steps" style="font-size:12.5px"><span><b>◉</b> Continuous</span><span>H.W.Move</span><span>0.01</span><span>0.05</span><span>0.1</span><span>0.5</span><span>1</span><span>5</span><span>10</span><span>100</span></div>
+        </div>
+        <div class="swrow"><div class="sw">Spindle</div><div class="sw">Vacuum</div><div class="sw">Dust collect</div><div class="sw">Vibrating Knife</div></div>
+        <div class="transport"><div class="tbtn">Start F9</div><div class="tbtn off">Pause F10</div><div class="tbtn">Stop F11</div><div class="tbtn">Home F12</div></div>
+      </div>
+      <div class="steplist" style="gap:15px">
+        <div class="step" data-sub="1"><div class="sn">①</div><div><h3>Coordenadas en vivo</h3><p>Mecánicas y relativas de X, Y, Z y C — y el sistema activo (G54).</p></div></div>
+        <div class="step" data-sub="2"><div class="sn">②</div><div><h3>F y S: avance y husillo</h3><p><b>F</b> = velocidad de avance · <b>S</b> = RPM del husillo. Arrastra los porcentajes para ajustarlas <b>incluso durante el corte</b>.</p></div></div>
+        <div class="step" data-sub="3"><div class="sn">③</div><div><h3>Movimiento de ejes</h3><p>Botones naranjas X/Y/Z/C. <b>Continuous</b> mueve mientras pulsas; los pasos <b>0.01 – 100 mm</b> dan precisión total.</p></div></div>
+        <div class="step" data-sub="4"><div class="sn">④</div><div><h3>Interruptores de periféricos</h3><p>Husillo, bomba de vacío, aspiración y cuchilla vibratoria, en verde.</p></div></div>
+        <div class="step" data-sub="5"><div class="sn">⑤</div><div><h3>Transporte</h3><p><span class="kbd">Start F9</span> <span class="kbd">Pause F10</span> <span class="kbd">Stop F11</span> <span class="kbd">Home F12</span> — tus cuatro teclas de cabecera.</p></div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════ E6 · HOME ══════════ -->
+  <section class="scene" id="s6">
+    <div class="scene-head" data-sub="0">
+      <span class="idx">05 / 14</span>
+      <h2 class="h1">Primer paso, siempre: HOME</h2>
+    </div>
+    <div class="split" style="grid-template-columns:480px 1fr">
+      <div class="dlg" data-sub="1" style="width:440px">
+        <div class="dtitle"><span>Back to home</span><span style="color:#999">? ✕</span></div>
+        <div class="dbody" style="display:flex; flex-direction:column; gap:16px; padding:34px 30px">
+          <div class="dbtn pri pulse" style="text-align:center; padding:13px; font-size:16px">All axis back to home</div>
+          <div class="dbtn" style="text-align:center; padding:13px; font-size:16px">Direct setting</div>
+        </div>
+      </div>
+      <div class="steplist">
+        <div class="step" data-sub="1"><div class="sn">1</div><div><h3>Al encender, aparece esta ventana</h3><p>Pulsa <b>All axis back to home</b>: cada eje busca su final de carrera, retrocede y vuelve a tocarlo despacio para fijar el cero mecánico exacto.</p></div></div>
+        <div class="step" data-sub="2"><div class="sn">2</div><div><h3>¿No apareció?</h3><p>Menú <b>Operation → All Back To Home</b>, o eje por eje: X, Y, Z, C Back To Home. <b>Direct Set</b> solo si la máquina no se movió desde el último apagado.</p></div></div>
+        <div class="step" data-sub="3"><div class="sn">3</div><div><h3>¿Home invertido?</h3><p>Si un eje va en dirección contraria, se corrige en <b>Parámetros de ejes</b> (números 11021–11204), con criterio.</p></div></div>
+        <div class="warn" data-sub="3" style="margin-top:6px">Recién hecho el HOME, no pulses <b>&nbsp;X- · Y- · Z+&nbsp;</b>: la máquina ya está en su límite de recorrido.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════ E7 · AJUSTE DE HERRAMIENTA ══════════ -->
+  <section class="scene" id="s7">
+    <div class="scene-head" data-sub="0">
+      <span class="idx">06 / 14</span>
+      <h2 class="h1">Ajuste de herramienta: 3 modos</h2>
+    </div>
+    <p class="lead" data-sub="0" style="margin-bottom:34px">Le dicen a iCut dónde está la punta de la fresa. Se eligen con el parámetro <span class="kbd">30201</span>.</p>
+    <div class="flowgrid">
+      <div class="card" data-sub="1" style="border-top:4px solid var(--go)">
+        <div class="n">MODO 1 · EL MÁS USADO</div>
+        <h3>Flotante</h3>
+        <svg width="100%" height="120" viewBox="0 0 300 120">
+          <rect x="20" y="96" width="260" height="14" rx="3" fill="#2b76c9"/>
+          <rect x="60" y="80" width="180" height="16" rx="2" fill="#8a5a33"/>
+          <rect x="120" y="62" width="60" height="18" rx="2" fill="#d92b1f"/>
+          <g><rect x="141" y="6" width="18" height="34" rx="3" fill="#9aa3b2"/><path d="M150,40 l-7,-12 h14 z" fill="#dfe5ee"/>
+            <animateTransform attributeName="transform" type="translate" values="0,0; 0,16; 0,16; 0,0" keyTimes="0;.45;.7;1" dur="3.4s" repeatCount="indefinite"/></g>
+          <text x="196" y="74" fill="#94a1b5" style="font-size:11px">sensor</text>
+          <text x="248" y="92" fill="#94a1b5" style="font-size:11px">material</text>
+        </svg>
+        <p>Sensor <b>sobre el material</b> → <b>Float ToolSetting</b>. La fresa baja despacio, toca, e iCut fija solo el cero Z de la pieza. Parámetro 30202 = espesor del sensor.</p>
+      </div>
+      <div class="card" data-sub="2" style="border-top:4px solid var(--cyan)">
+        <div class="n">MODO 2</div>
+        <h3>Fijo</h3>
+        <svg width="100%" height="120" viewBox="0 0 300 120">
+          <rect x="20" y="96" width="260" height="14" rx="3" fill="#2b76c9"/>
+          <rect x="100" y="80" width="180" height="16" rx="2" fill="#8a5a33"/>
+          <rect x="30" y="62" width="46" height="34" rx="2" fill="#d92b1f"/>
+          <rect x="44" y="10" width="18" height="30" rx="3" fill="#9aa3b2"/><path d="M53,44 l-7,-12 h14 z" fill="#dfe5ee"/>
+          <text x="86" y="74" fill="#94a1b5" style="font-size:11px">sensor fijo en la mesa</text>
+        </svg>
+        <p>Sensor en <b>posición fija</b> de la mesa (Coordinate → Tool Setting). Se calibra una vez; tras cada <b>cambio de fresa</b> la nueva longitud se referencia automáticamente.</p>
+      </div>
+      <div class="card" data-sub="3" style="border-top:4px solid var(--acc)">
+        <div class="n">MODO 3 · SIN SENSOR</div>
+        <h3>Manual</h3>
+        <svg width="100%" height="120" viewBox="0 0 300 120">
+          <rect x="20" y="96" width="260" height="14" rx="3" fill="#2b76c9"/>
+          <rect x="60" y="80" width="180" height="16" rx="2" fill="#8a5a33"/>
+          <rect x="141" y="34" width="18" height="30" rx="3" fill="#9aa3b2"/><path d="M150,68 l-7,-12 h14 z" fill="#dfe5ee"/>
+          <text x="196" y="60" fill="#f6c07a" style="font-size:12px; font-weight:700">Z-&gt;0</text>
+        </svg>
+        <p>Baja el eje Z <b>muy despacio</b> (pasos de 0.1 / 0.01) hasta rozar la superficie y pulsa <span class="kbd">Z-&gt;0</span>: esa altura queda como origen Z de la pieza.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════ E8 · ORIGEN DE PIEZA ══════════ -->
+  <section class="scene" id="s8">
+    <div class="scene-head" data-sub="0">
+      <span class="idx">07 / 14</span>
+      <h2 class="h1">Fijar el origen de la pieza</h2>
+    </div>
+    <div class="split">
+      <div class="steplist" style="gap:22px">
+        <div class="step" data-sub="1"><div class="sn">1</div><div><h3>Posiciona el husillo</h3><p>Con los botones de eje, llévalo a la esquina de origen del material — normalmente la <b>inferior izquierda</b> — rozando apenas la superficie.</p></div></div>
+        <div class="step" data-sub="2"><div class="sn">2</div><div><h3>Fija el cero</h3><p><span class="kbd">XY-&gt;0</span> fija el origen horizontal · <span class="kbd">Z-&gt;0</span> fija la altura. El panel pasa a mostrar coordenadas relativas 0.000.</p></div></div>
+        <div class="step" data-sub="3"><div class="sn">3</div><div><h3>¿Cuchilla vibratoria?</h3><p>Bájala con <b>Knife Up/Down</b>, toca el material y fija <b>su propio Z-&gt;0</b> (sistema G59 Knife) por separado.</p></div></div>
+      </div>
+      <div data-sub="1" style="position:relative">
+        <svg width="100%" height="470" viewBox="0 0 560 470">
+          <rect x="30" y="70" width="500" height="330" rx="8" fill="#0d1b2e" stroke="#2b3a52"/>
+          <rect x="80" y="120" width="330" height="230" rx="4" fill="#8a5a33"/>
+          <g stroke="#f68b1f" stroke-width="3" fill="none">
+            <line x1="80" y1="350" x2="230" y2="350" marker-end="url(#arr)" color="#f68b1f"/>
+            <line x1="80" y1="350" x2="80" y2="210" marker-end="url(#arr)" color="#f68b1f"/>
+          </g>
+          <circle cx="80" cy="350" r="11" fill="var(--acc)"><animate attributeName="r" values="11;16;11" dur="2s" repeatCount="indefinite"/></circle>
+          <text x="104" y="382" fill="#ffc06a" style="font:700 18px 'Segoe UI'">Origen de pieza (0,0)</text>
+          <text x="240" y="342" fill="#94a1b5" style="font:600 15px 'Segoe UI'">+X</text>
+          <text x="92" y="222" fill="#94a1b5" style="font:600 15px 'Segoe UI'">+Y</text>
+          <text x="330" y="150" fill="#c9a583" style="font:600 14px 'Segoe UI'">material</text>
+          <text x="440" y="392" fill="#5d6a7e" style="font:600 14px 'Segoe UI'">mesa CNC</text>
+        </svg>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════ E9 · DXF Y CAPAS ══════════ -->
+  <section class="scene" id="s9" style="padding-top:44px">
+    <div class="scene-head" data-sub="0" style="margin-bottom:20px">
+      <span class="idx">08 / 14</span>
+      <h2 class="h2" style="font-size:34px">Importar el diseño y organizar capas</h2>
+    </div>
+    <div style="display:grid; grid-template-columns:600px 1fr; gap:48px; align-items:start">
+      <div>
+        <div class="win" data-sub="1" style="width:600px">
+          <div class="tabs"><div class="tab on">Graphic</div><div class="tab">CCD</div><div class="tab">Program</div><div class="tab">Coordinate</div></div>
+          <div class="appbody" style="height:330px">
+            <div class="pal">
+              <div class="pchip" style="background:#fff"></div><div class="pchip" style="background:#e2261a; outline:2px solid #2f7ff0"></div>
+              <div class="pchip" style="background:#f7e11e"></div><div class="pchip" style="background:#25d425"></div>
+              <div class="pchip" style="background:#25d3d3"></div><div class="pchip" style="background:#2032e0"></div>
+              <div class="pchip" style="background:#e224e2"></div><div class="pchip" style="background:#f28a1e"></div>
+            </div>
+            <div class="mcanvas">
+              <svg width="100%" height="100%" viewBox="0 0 400 300" style="position:absolute; inset:0" data-sub="1">
+                <path class="drawpath" style="stroke-width:2" d="M52,212 C88,150 152,118 212,130 C228,96 272,76 324,88 C302,110 288,122 276,138 C322,142 344,162 354,192 C312,180 282,186 250,196 C222,242 158,254 110,236 C96,252 78,258 58,260 C70,246 74,230 62,214 Z"/>
+                <text x="120" y="40" fill="#3a4a60" style="font:800 26px 'Segoe UI'; letter-spacing:4px">TECHPRO</text>
+              </svg>
+            </div>
+          </div>
+          <div class="fbar"><div class="fk pulse">Layer F1</div><div class="fk">Parameters F2</div><div class="fk">CreateFile F3</div><div class="fk">AutoSort F4</div><div class="fk">OutputFile F5</div></div>
+        </div>
+        <div style="display:flex; gap:10px; margin-top:18px; flex-wrap:wrap">
+          <span class="chip" data-sub="1"><b>Archivo → Open DXF/AI/PLT</b>&nbsp;·&nbsp;<span class="kbd">Ctrl+O</span></span>
+          <span class="chip" data-sub="2">Todo entra en la <b style="color:#ff6b5e">capa roja</b></span>
+          <span class="chip" data-sub="5">La capa <b>blanca no se corta</b></span>
+        </div>
+      </div>
+      <div>
+        <div class="dlg" data-sub="3" style="width:100%">
+          <div class="dtitle"><span>◈ Layer Parameters</span><span style="color:#999">? ✕</span></div>
+          <div class="dbody" style="display:grid; grid-template-columns:1fr 1fr; gap:4px 26px">
+            <div>
+              <table class="ptable"><tr><th>Layer</th><th>Tool</th><th>Speed</th><th>Output</th></tr>
+                <tr><td><span style="display:inline-block;width:26px;height:13px;background:#e2261a"></span></td><td>1</td><td>500</td><td>Yes</td></tr>
+                <tr><td><span style="display:inline-block;width:26px;height:13px;background:#25d425"></span></td><td>2</td><td>1000</td><td>Yes</td></tr>
+              </table>
+            </div>
+            <div>
+              <div class="frow"><span>Output</span><span class="fval">Yes ▾</span></div>
+              <div class="frow"><span>Tool</span><span class="fval">T1-T1CNC ▾</span></div>
+              <div class="frow"><span>Direction</span><span class="fval">CCW ▾</span></div>
+              <div class="frow"><span>Speed</span><span class="fval">500</span></div>
+              <div class="frow" style="background:#dfe9fb; border-radius:4px; justify-content:center; font-weight:700; color:#2456a8">Advanced</div>
+              <div class="frow"><span>Material Thickness</span><span class="fval">6</span></div>
+              <div class="frow"><span>Final Depth</span><span class="fval">3</span></div>
+              <div class="frow"><span>Pass Depth</span><span class="fval">3</span></div>
+            </div>
+          </div>
+          <div class="dbtns"><span class="dbtn pri">Ok</span><span class="dbtn">Cancel</span></div>
+        </div>
+        <div class="steplist" style="gap:10px; margin-top:18px">
+          <div class="chip" data-sub="4" style="align-self:flex-start"><b>T1</b>&nbsp;= husillo&nbsp;·&nbsp;<b>T2</b>&nbsp;= cuchilla vibratoria&nbsp;·&nbsp;velocidad <b>500–1000</b></div>
+          <div class="chip" data-sub="4" style="align-self:flex-start">Avanzado: <b>espesor</b> · <b>profundidad final</b> · <b>profundidad por pasada</b></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════ E10 · CREAR ARCHIVO Y SIMULAR ══════════ -->
+  <section class="scene" id="s10" style="padding-top:44px">
+    <div class="scene-head" data-sub="0" style="margin-bottom:20px">
+      <span class="idx">09 / 14</span>
+      <h2 class="h2" style="font-size:34px">Crear archivo, simular y cortar</h2>
+    </div>
+    <div id="s10wrap" style="position:relative; width:1150px; margin:0 auto" data-sub="0">
+      <div class="win" style="width:1150px">
+        <div class="tabs"><div class="tab">Graphic</div><div class="tab">CCD</div><div class="tab on">Program</div><div class="tab">Coordinate</div><div class="tab">Parameter</div><div class="tab">Diagnosis</div></div>
+        <div class="tabs" style="background:#dfe1e5"><div class="tab cyanon" style="flex:0 0 190px">3D</div><div class="tab" style="flex:0 0 190px">File Management</div><div class="tab" style="flex:0 0 210px">Process Studio Author</div><div style="flex:1"></div></div>
+        <div class="appbody" style="height:352px">
+          <div class="viewport3d">
+            <svg width="100%" height="100%" viewBox="0 0 800 330" style="position:absolute; inset:0" data-sub="1">
+              <g transform="translate(240,30) scale(.86)">
+                <rect x="0" y="0" width="360" height="270" fill="none" stroke="#27407a" stroke-width="1"/>
+                <path class="drawpath cyan" style="stroke-width:1.6" d="M52,212 C88,150 152,118 212,130 C228,96 272,76 324,88 C302,110 288,122 276,138 C322,142 344,162 354,192 C312,180 282,186 250,196 C222,242 158,254 110,236 C96,252 78,258 58,260 C70,246 74,230 62,214 Z"/>
+                <path class="drawpath" style="stroke:#e8e14a; stroke-width:1; stroke-dasharray:2600; filter:none" d="M-30,300 L52,212 M324,88 L-30,300"/>
+              </g>
+              <g stroke-width="2.4" fill="none">
+                <line x1="40" y1="300" x2="120" y2="300" stroke="#ff5b4d"/><line x1="40" y1="300" x2="40" y2="222" stroke="#38d97e"/><line x1="40" y1="300" x2="86" y2="264" stroke="#5fa8ff"/>
+              </g>
+            </svg>
+          </div>
+        </div>
+        <div class="progressrow mono" style="font-size:11.5px"><span>TotalIndex: 68541</span><span>X Max: <b style="color:#1fae52">408.986</b></span><span>Y Max: <b style="color:#1fae52">1245.540</b></span><span>Z Max: <b style="color:#d92b1f">182.475</b></span><span style="margin-left:auto">Estimated Time 00:38:32</span></div>
+        <div class="fbar">
+          <div class="fk">Load F1</div><div class="fk">UnLoad-F2</div><div class="fk fk-sim">Simulation F3</div><div class="fk">Start Selected F4</div>
+          <div class="fk">Edit File F5</div><div class="fk">BkPt Resume F6</div><div class="fk">CycleStart F7</div><div class="fk">Origin F8</div>
+        </div>
+      </div>
+      <div class="co" data-sub="1" data-target=".tab.on"><span class="co-tag">1 · CreateFile F3 genera el G-code y abre Programa</span></div>
+      <div class="co" data-sub="2" data-target=".fk-sim"><span class="co-tag below">2 · Simulation F3: recorrido + tiempo estimado</span></div>
+      <div class="co" data-sub="3" data-target=".progressrow" style="border-color:var(--stop); box-shadow:0 0 0 4px rgba(232,73,60,.15)"><span class="co-tag right" style="background:var(--stop); color:#fff; top:-40px">3 · Revisa límites: sobre-recorrido = reposicionar origen</span></div>
+      <div class="co" data-sub="4" style="left:895px; top:512px; width:auto; height:auto; border:none; box-shadow:none">
+        <div class="tbtn pulse" style="width:230px; padding:14px 0; font-size:19px; border-radius:9px">▶ Start F9</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════ E11 · G-CODE EXTERNO ══════════ -->
+  <section class="scene" id="s11">
+    <div class="scene-head" data-sub="0">
+      <span class="idx">10 / 14</span>
+      <h2 class="h1">¿Vienes de ArtCAM, Aspire o Fusion?</h2>
+    </div>
+    <p class="lead" data-sub="0" style="margin-bottom:36px">iCut ejecuta G-code de cualquier CAM. El circuito completo:</p>
+    <div class="flowgrid" style="grid-template-columns:repeat(3,1fr); gap:18px">
+      <div class="card" data-sub="1"><div class="n">PASO 1 · CAM</div><h3>Modelo con origen abajo-izquierda</h3><p>Al crear el modelo (p. ej. ArtCAM), sitúa el <b>origen en la esquina inferior izquierda</b> y trabaja en milímetros.</p></div>
+      <div class="card" data-sub="2"><div class="n">PASO 2 · CAM</div><h3>Herramienta y velocidades</h3><p>Define fresa, profundidades y avance <b>según el material</b> — sin exagerar: demasiado rápido rompe la herramienta.</p></div>
+      <div class="card" data-sub="3"><div class="n">PASO 3 · CAM</div><h3>Exportar G-code</h3><p>Formato <b>G-Code (mm) *.tap</b>. iCut también carga <span class="kbd">.nc</span> <span class="kbd">.u00</span> <span class="kbd">.txt</span></p></div>
+      <div class="card" data-sub="4"><div class="n">PASO 4 · iCUT</div><h3>Load GCode</h3><p>Menú <b>Archivo → Load GCode</b>, o <b>Load F1</b> en la página Programa. Gestión de carpetas en <b>File Management</b>.</p></div>
+      <div class="card" data-sub="4"><div class="n">PASO 5 · iCUT</div><h3>Simulation F3</h3><p>Verifica trayectorias, límites de los tres ejes y tiempo estimado antes de tocar el material.</p></div>
+      <div class="card" data-sub="4" style="border-color:var(--acc); box-shadow:0 0 34px rgba(246,139,31,.16)"><div class="n">PASO 6 · iCUT</div><h3>Start F9</h3><p>La máquina corta. Ajusta F y S en vivo si hace falta, y <b>Pause F10 / Stop F11</b> siempre a mano.</p></div>
+    </div>
+  </section>
+
+  <!-- ══════════ E12 · AVANZADAS ══════════ -->
+  <section class="scene" id="s12">
+    <div class="scene-head" data-sub="0">
+      <span class="idx">11 / 14</span>
+      <h2 class="h1">Funciones que te salvan el día</h2>
+    </div>
+    <div class="flowgrid" style="margin-top:10px">
+      <div class="card" data-sub="1"><div class="n">PRECISIÓN</div><h3>Compensación de radio</h3><p>Desplaza el corte <b>Expand / Shrink / Auto</b> según el radio de la fresa. Esquinas: <b>Round · Split Angle · Sharp</b>. Distancia = radio de la herramienta (p. ej. 3 mm para fresa de 6).</p></div>
+      <div class="card" data-sub="2"><div class="n">ORDEN</div><h3>Ordenamiento inteligente</h3><p>6 estrategias: <b>distancia más corta</b>, abajo→arriba, izquierda→derecha, cuadrícula… o numera tú el orden con el <b>ordenamiento manual</b> (clic pieza por pieza).</p></div>
+      <div class="card" data-sub="3" style="border-color:rgba(232,73,60,.5)"><div class="n" style="color:var(--stop)">RESCATE</div><h3>¿Se cortó la luz?</h3><p>Haz HOME, abre <b>Select Processing</b>, elige <b>posición de apagado / nº de línea</b> y el corte continúa exactamente donde se detuvo. También <b>BkPt Resume F6</b> tras una parada.</p></div>
+      <div class="card" data-sub="4"><div class="n">PRODUCCIÓN</div><h3>Procesamiento cíclico</h3><p><b>CycleStart F7</b>: repite el mismo trabajo N veces con intervalo definido. Ideal para series.</p></div>
+      <div class="card" data-sub="4"><div class="n">GEOMETRÍA</div><h3>Espejo · Rotación · Matriz</h3><p>Operation → <b>Mirror and Rotate</b> y <b>Array Process</b> para duplicar en filas y columnas sin volver al CAD.</p></div>
+      <div class="card" data-sub="4"><div class="n">MESA</div><h3>Fresado de base</h3><p><b>Process Studio</b>: Cut Rectangle / Circle y Carving para planear la mesa de sacrificio o vaciados rápidos sin archivo externo.</p></div>
+    </div>
+  </section>
+
+  <!-- ══════════ E13 · PARÁMETROS Y DIAGNÓSTICO ══════════ -->
+  <section class="scene" id="s13">
+    <div class="scene-head" data-sub="0">
+      <span class="idx">12 / 14</span>
+      <h2 class="h1">Parámetros y diagnóstico</h2>
+    </div>
+    <div class="split">
+      <div class="dlg" data-sub="1">
+        <div class="dtitle"><span>Parameter → Overview</span><span style="color:#999">Axis · Manual · Processing · File · Tool · Spindle</span></div>
+        <div class="dbody" style="padding:6px 0 0">
+          <table class="ptable">
+            <tr><th>Nº</th><th>Parámetro</th><th>Valor</th><th>Efecto</th></tr>
+            <tr><td>10001</td><td>Dirección del eje X (1 / -1)</td><td class="mono">1</td><td>Restart</td></tr>
+            <tr><td>30201</td><td>Modo de ajuste de herramienta</td><td class="mono">1</td><td>Inmediato</td></tr>
+            <tr><td>30202</td><td>Espesor del sensor de herramienta</td><td class="mono">20</td><td>Inmediato</td></tr>
+            <tr><td>50003</td><td>Velocidad de procesamiento (mm/min)</td><td class="mono">3000</td><td>Inmediato</td></tr>
+            <tr><td>50012</td><td>Velocidad de descenso de cuchilla</td><td class="mono">1500</td><td>Inmediato</td></tr>
+            <tr><td>50017</td><td>Altura segura del eje Z (mm)</td><td class="mono">30</td><td>Inmediato</td></tr>
+            <tr><td>50102</td><td>Husillo automático al iniciar (0/1)</td><td class="mono">1</td><td>Inmediato</td></tr>
+          </table>
+        </div>
+        <div class="fbar" style="margin-top:8px"><div class="fk">Import F1</div><div class="fk">Export F2</div><div class="fk">Manufacturer F3</div><div class="fk">Board Backup F4</div><div class="fk">Board Read F5</div></div>
+      </div>
+      <div class="steplist" style="gap:16px">
+        <div class="chip" data-sub="2" style="align-self:flex-start; font-size:18px">Parámetros de fabricante → contraseña <b class="mono" style="color:var(--acc2)">1992</b></div>
+        <div class="warn" data-sub="2">Un valor incorrecto puede impedir el trabajo <b>o dañar la máquina</b>. Modifica bajo guía de un profesional.</div>
+        <div class="warn tip" data-sub="3">Haz clic en <b>Export F2</b> y guarda una copia de seguridad de tus parámetros. Te salvará más de una vez.</div>
+        <div class="card" data-sub="4">
+          <h3 style="margin-bottom:12px">Página Diagnosis — entradas y salidas en vivo</h3>
+          <div class="iotable">
+            <span class="iochip">XORG</span><span class="iochip">YORG</span><span class="iochip">ZORG</span><span class="iochip">CORG</span>
+            <span class="iochip">CUT</span><span class="iochip red">ESTOP</span><span class="iochip red">CUTALARM</span>
+            <span class="iochip">Spindle</span><span class="iochip">Vacuum pump</span><span class="iochip">Vacuum cleaner</span><span class="iochip">Blowing</span><span class="iochip">Brake</span>
+          </div>
+          <p style="margin-top:12px">Verifica sensores de origen, parada de emergencia y enciende salidas con un clic para probarlas.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════ E14 · CIERRE ══════════ -->
+  <section class="scene" id="s14">
+    <div class="scene-head" data-sub="0">
+      <span class="idx">13–14 / 14</span>
+      <h2 class="h1">El flujo completo, en seis pasos</h2>
+    </div>
+    <div class="flowgrid" data-sub="1" style="margin-bottom:40px">
+      <div class="card"><div class="n">1</div><h3>Enciende y HOME</h3><p>All axis back to home.</p></div>
+      <div class="card"><div class="n">2</div><h3>Ajusta la herramienta</h3><p>Flotante, fijo o manual.</p></div>
+      <div class="card"><div class="n">3</div><h3>Origen de pieza</h3><p>XY-&gt;0 y Z-&gt;0 sobre el material.</p></div>
+      <div class="card"><div class="n">4</div><h3>Importa y organiza</h3><p>DXF → capas → Layer F1.</p></div>
+      <div class="card"><div class="n">5</div><h3>Crea y simula</h3><p>CreateFile F3 → Simulation F3.</p></div>
+      <div class="card" style="border-color:var(--acc)"><div class="n">6</div><h3>Corta</h3><p>Start F9 · F y S en vivo.</p></div>
+    </div>
+    <h2 class="display" data-sub="2" style="font-size:84px">Diseña. Simula. <span style="color:var(--acc)">Corta.</span></h2>
+    <p class="lead" data-sub="3" style="margin-top:22px">Gracias por ver este tutorial. Vuelve a cualquier capítulo desde el menú ☰ — y ahora sí: ¡a producir!</p>
+  </section>
+
+</div></div>
+<div id="subwrap"><div id="subtitle"></div></div>
+
+<div id="overlay">
+  <button id="bigplay" aria-label="Reproducir">▶</button>
+  <div class="ohint">Tutorial en video · 14 capítulos · narración por voz en español — pulsa para comenzar</div>
+</div>
+
+<div id="chapmenu" role="menu" aria-label="Capítulos"><h4>Capítulos</h4></div>
+
+<div id="bar">
+  <div id="seek" title="Ir a un capítulo"><div class="track"><div class="fill" id="seekfill"></div></div></div>
+  <div id="controls">
+    <button class="cbtn" id="playbtn" aria-label="Reproducir / pausar">▶</button>
+    <button class="cbtn" id="prevbtn" aria-label="Capítulo anterior">⏮</button>
+    <button class="cbtn" id="nextbtn" aria-label="Capítulo siguiente">⏭</button>
+    <div>
+      <div id="chapnum">Capítulo 1 · 14</div>
+      <div id="chapname">Bienvenida</div>
+    </div>
+    <span class="spacer"></span>
+    <span id="timer" class="mono">0:00 / 0:00</span>
+    <button class="cbtn toggled" id="voicebtn" title="Narración por voz (N)" aria-label="Narración por voz">🔊</button>
+    <button class="cbtn" id="menubtn" title="Capítulos (C)" aria-label="Capítulos">☰</button>
+    <button class="cbtn" id="fsbtn" title="Pantalla completa (F)" aria-label="Pantalla completa">⛶</button>
+  </div>
+</div>
+
+<script>
+(function(){
+  "use strict";
+  var SC = [
+    {id:"s1", title:"Bienvenida", subs:[
+      "Bienvenido al tutorial completo de iCut, el software de control de tu router CNC.",
+      "En los próximos minutos vas a dominar su interfaz, el flujo de trabajo de corte de principio a fin, y las funciones avanzadas que usan los profesionales.",
+      "Todo está basado en los manuales oficiales del sistema Xing Duo Wei para máquinas TechPro, complementado con práctica real de taller."]},
+    {id:"s2", title:"¿Qué es iCut?", subs:[
+      "¿Qué es exactamente iCut? Es el puente entre tu diseño y la máquina.",
+      "Tú le entregas un archivo: un DXF, un AI, un PLT, una imagen, o directamente código G generado por tu CAM.",
+      "iCut lo convierte en trayectorias, lo simula en pantalla y envía las órdenes al controlador de movimiento por red.",
+      "Y desde el mismo programa controlas husillo, bomba de vacío, aspiración, cuchilla vibratoria y los cuatro ejes de la máquina."]},
+    {id:"s3", title:"La pantalla principal", subs:[
+      "Esta es la pantalla principal de iCut. Vamos a recorrerla zona por zona.",
+      "Arriba, la barra de estado: la conexión con el controlador, el modo de trabajo y la dirección IP de la máquina.",
+      "Debajo, las seis páginas del programa: Gráfico, CCD, Programa, Coordenadas, Parámetros y Diagnóstico.",
+      "A la izquierda, la paleta de capas de colores y las herramientas de edición: ordenar, compensar, espejo, rotación y escala.",
+      "En el centro, el área gráfica: tu diseño y las trayectorias de corte sobre la mesa de trabajo.",
+      "A la derecha, el panel de control manual: coordenadas en vivo, velocidades y movimiento de ejes.",
+      "Y abajo, las teclas rápidas de función, de F1 a F12, junto a la barra de progreso del trabajo."]},
+    {id:"s4", title:"Sistemas de coordenadas", subs:[
+      "Antes de cortar, hay que entender los dos sistemas de coordenadas.",
+      "Las coordenadas mecánicas tienen su origen en un punto fijo de la máquina, y se establecen al hacer home.",
+      "Las coordenadas de pieza las defines tú: eliges un punto del material como cero de tu trabajo.",
+      "iCut trabaja por defecto en G54, y puede guardar hasta seis orígenes distintos, de G54 a G59. Perfecto para varias piezas sobre la misma mesa.",
+      "El sistema sigue la regla de la mano derecha: X e Y se mueven sobre la mesa, y el eje Z sube y baja el cabezal. Alejarse del material es Z positivo."]},
+    {id:"s5", title:"El panel de control", subs:[
+      "El panel derecho es tu mando a distancia de la máquina. Veamos sus cinco bloques.",
+      "Primero, las coordenadas mecánicas y relativas de cada eje, actualizadas en tiempo real.",
+      "Segundo: F es la velocidad de avance y S las revoluciones del husillo. Puedes ajustarlas arrastrando los porcentajes, incluso con el corte en marcha.",
+      "Tercero, los botones naranjas mueven los ejes. El modo continuo mueve mientras mantienes pulsado, y los pasos de cero coma cero uno a cien milímetros dan movimientos exactos.",
+      "Cuarto, los interruptores verdes: husillo, vacío, aspiración de polvo y cuchilla vibratoria.",
+      "Y quinto, las cuatro teclas de cabecera: Iniciar F9, Pausa F10, Parar F11 y Home F12."]},
+    {id:"s6", title:"Volver a HOME", subs:[
+      "Cada vez que enciendes la máquina, lo primero es volver al origen: hacer home.",
+      "Al arrancar, iCut muestra esta ventana. Pulsa 'All axis back to home' y cada eje buscará su final de carrera para fijar el cero mecánico exacto.",
+      "Si la ventana no aparece, ve al menú Operación y elige 'All Back To Home', o haz home eje por eje.",
+      "Y una advertencia importante: recién hecho el home, no pulses X menos, Y menos, ni Z más. La máquina ya está en su límite de recorrido."]},
+    {id:"s7", title:"Ajuste de herramienta", subs:[
+      "El ajuste de herramienta le dice a iCut dónde está exactamente la punta de la fresa. Hay tres modos, y se eligen con el parámetro tres, cero, dos, cero, uno.",
+      "Modo flotante, el más usado: coloca el sensor sobre el material y pulsa 'Float ToolSetting'. La fresa baja despacio, toca el sensor, e iCut calcula solo el cero de la pieza.",
+      "Modo fijo: un sensor en posición fija de la mesa. Se calibra una vez, y en cada cambio de fresa la nueva longitud se referencia automáticamente.",
+      "Y modo manual, sin sensor: baja el eje Z muy despacio hasta rozar la superficie y pulsa Z a cero. Esa altura queda como origen."]},
+    {id:"s8", title:"Origen de la pieza", subs:[
+      "Ahora definamos dónde empieza el trabajo sobre el material.",
+      "Mueve el husillo con los botones de eje hasta la esquina de origen de tu pieza, normalmente la inferior izquierda, rozando apenas la superficie.",
+      "Pulsa XY a cero para fijar el origen horizontal, y Z a cero para fijar la altura. Las coordenadas relativas quedan en cero.",
+      "Si tu máquina tiene cuchilla vibratoria, bájala con su botón, toca el material, y fija su propio Z a cero por separado."]},
+    {id:"s9", title:"Importar DXF y capas", subs:[
+      "Con la máquina lista, importemos el diseño.",
+      "Menú Archivo, 'Open DXF, AI, PLT', o Control O. iCut también abre imágenes JPG y PNG.",
+      "Al importar, todos los vectores entran en la capa roja. Selecciona cada grupo y haz clic en un color de la paleta para organizar el trabajo por capas.",
+      "Cada capa tiene su receta de corte. Pulsa 'Layer F1' y configura herramienta, velocidad, sentido de giro y salida.",
+      "T1 es el husillo y T2 la cuchilla vibratoria. Velocidad recomendada entre quinientos y mil. Y en Avanzado: espesor del material, profundidad final y profundidad por pasada.",
+      "Recuerda: la capa blanca no se corta. Úsala para referencias y elementos auxiliares."]},
+    {id:"s10", title:"Crear archivo, simular, cortar", subs:[
+      "Con las capas configuradas, llega el momento de la verdad.",
+      "Pulsa 'CreateFile F3': iCut genera el código G y lo carga en la página Programa, en la vista 3D.",
+      "Pulsa 'Simulation F3' y verás el recorrido completo de la herramienta, los límites de cada eje y el tiempo estimado de trabajo.",
+      "Si la simulación avisa de sobre-recorrido, el trabajo no cabe desde ese origen: revisa qué eje se pasa, reposiciona la pieza y repite.",
+      "¿Todo correcto? Pulsa 'Start F9' y la máquina comienza a cortar. Puedes ajustar velocidad y husillo en vivo desde el panel derecho."]},
+    {id:"s11", title:"G-code desde tu CAM", subs:[
+      "¿Prefieres programar el mecanizado en un CAM como ArtCAM, Aspire o Fusion? iCut lo ejecuta sin problema.",
+      "Al crear el modelo, sitúa el origen en la esquina inferior izquierda y trabaja en milímetros.",
+      "Define la herramienta y las velocidades según el material, sin exagerar el avance: demasiado rápido rompe fresas.",
+      "Exporta el código en formato G-Code en milímetros, archivo punto tap. iCut también admite punto nc, u cero cero y txt.",
+      "Y en iCut: menú Archivo, 'Load GCode', Simulación F3 para verificar, y Start F9 para cortar."]},
+    {id:"s12", title:"Funciones avanzadas", subs:[
+      "iCut incluye funciones que aceleran la producción y te sacan de más de un apuro.",
+      "Compensación de radio: desplaza el corte hacia afuera o hacia adentro según el radio de la fresa, con esquinas rectas, redondeadas o en ángulo.",
+      "Ordenamiento: seis estrategias automáticas, como distancia más corta o cuadrícula, o el modo manual para numerar el orden pieza por pieza.",
+      "¿Se cortó la luz a mitad del trabajo? Haz home, abre 'Select Processing', selecciona la línea donde se detuvo, y el corte continúa exactamente ahí.",
+      "Además: procesamiento cíclico para series, espejo, rotación y matrices, y fresado de base para planear la mesa sin archivo externo."]},
+    {id:"s13", title:"Parámetros y diagnóstico", subs:[
+      "En la página Parámetros vive la configuración profunda de la máquina: ejes, procesamiento, herramienta y husillo.",
+      "Algunos importantes: diez mil uno, dirección de cada eje. Treinta mil doscientos uno, modo de ajuste de herramienta. Cincuenta mil tres, velocidad de procesamiento. Y cincuenta mil diecisiete, altura segura de Z.",
+      "Los parámetros de fabricante piden contraseña: mil novecientos noventa y dos. Cuidado: un valor incorrecto puede dañar la máquina.",
+      "Consejo de oro: exporta una copia de seguridad de tus parámetros con Export F2.",
+      "Y en la página Diagnóstico compruebas entradas y salidas en vivo: sensores de origen, parada de emergencia, husillo, vacío y más."]},
+    {id:"s14", title:"Resumen y cierre", subs:[
+      "Repasemos el flujo completo.",
+      "Uno: enciende y haz home. Dos: ajusta la herramienta. Tres: fija el origen de la pieza. Cuatro: importa el diseño y configura las capas. Cinco: crea el archivo y simula. Y seis: inicia el corte con F9.",
+      "Domina estos seis pasos y iCut se convierte en rutina: diseña, simula, corta.",
+      "Gracias por ver este tutorial. Usa el menú de capítulos para repasar cualquier sección. ¡A producir!"]}
+  ];
+
+  /* ---- timing ---- */
+  var subDur = function(t){ return Math.min(15, Math.max(3.1, t.length * 0.075)) + 0.45; };
+  var total = 0;
+  SC.forEach(function(sc){
+    sc.el = document.getElementById(sc.id);
+    sc.start = total;
+    sc.times = [];
+    var acc = 0;
+    sc.subs.forEach(function(t){ sc.times.push(acc); acc += subDur(t); });
+    sc.dur = acc + 1.1;
+    total += sc.dur;
+  });
+
+  /* ---- dom ---- */
+  var $ = function(id){ return document.getElementById(id); };
+  var fitEl=$("fit"), overlay=$("overlay"), bigplay=$("bigplay"), playbtn=$("playbtn"),
+      subEl=$("subtitle"), fill=$("seekfill"), seek=$("seek"), timerEl=$("timer"),
+      chapname=$("chapname"), chapnum=$("chapnum"), menu=$("chapmenu"),
+      voicebtn=$("voicebtn"), menubtn=$("menubtn"), fsbtn=$("fsbtn");
+
+  /* scale stage */
+  function rescale(){
+    var vw = window.innerWidth, vh = window.innerHeight - 92;
+    var s = Math.min(vw/1600, vh/900);
+    fitEl.style.transform = "scale(" + s + ")";
+    positionCallouts();
+  }
+
+  /* auto-position callout rings over their target UI element */
+  function positionCallouts(){
+    var s = fitEl.getBoundingClientRect().width / 1600;
+    if(!s) return;
+    document.querySelectorAll(".co[data-target]").forEach(function(co){
+      var scope = co.parentElement;
+      var tgt = scope.querySelector(co.getAttribute("data-target"));
+      if(!tgt) return;
+      var wr = scope.getBoundingClientRect(), r = tgt.getBoundingClientRect();
+      var L=r.left, T=r.top, R=r.right, B=r.bottom;
+      var sel2 = co.getAttribute("data-target2");
+      if(sel2){ var t2 = scope.querySelector(sel2);
+        if(t2){ var r2 = t2.getBoundingClientRect();
+          L=Math.min(L,r2.left); T=Math.min(T,r2.top); R=Math.max(R,r2.right); B=Math.max(B,r2.bottom); } }
+      var pad = 5;
+      co.style.left   = ((L - wr.left)/s - pad) + "px";
+      co.style.top    = ((T - wr.top )/s - pad) + "px";
+      co.style.width  = ((R - L)/s + pad*2) + "px";
+      co.style.height = ((B - T)/s + pad*2) + "px";
+    });
+  }
+  window.addEventListener("resize", rescale); rescale();
+
+  /* seek ticks + menu */
+  SC.forEach(function(sc, i){
+    var tick = document.createElement("div");
+    tick.className = "tick";
+    tick.style.left = "calc(" + (sc.start/total*100) + "% )";
+    seek.querySelector(".track").appendChild(tick);
+    var row = document.createElement("button");
+    row.className = "chaprow"; row.setAttribute("role","menuitem");
+    row.innerHTML = '<span class="n">' + String(i+1).padStart(2,"0") + '</span><span>' + sc.title +
+                    '</span><span class="d mono">' + fmt(sc.start) + '</span>';
+    row.addEventListener("click", function(){ jumpTo(i); menu.classList.remove("open"); play(); });
+    menu.appendChild(row);
+  });
+
+  /* ---- state ---- */
+  var t = 0, playing = false, curScene = -1, curSub = -1, raf = null, last = 0;
+  var voiceOn = true, voice = null, ended = false;
+
+  function pickVoice(){
+    var vs = window.speechSynthesis ? speechSynthesis.getVoices() : [];
+    if(!vs.length) return;
+    var pref = ["es-MX","es-US","es-419","es-ES","es"];
+    for(var p=0;p<pref.length && !voice;p++){
+      voice = vs.find(function(v){ return v.lang && v.lang.toLowerCase().indexOf(pref[p].toLowerCase())===0 && /google|microsoft|natural|online/i.test(v.name); }) ||
+              vs.find(function(v){ return v.lang && v.lang.toLowerCase().indexOf(pref[p].toLowerCase())===0; });
+    }
+  }
+  if(window.speechSynthesis){ pickVoice(); speechSynthesis.onvoiceschanged = pickVoice; }
+
+  function speak(text){
+    if(!voiceOn || !window.speechSynthesis) return;
+    speechSynthesis.cancel();
+    var u = new SpeechSynthesisUtterance(text);
+    if(voice) u.voice = voice;
+    u.lang = (voice && voice.lang) || "es-ES";
+    u.rate = 1.02; u.pitch = 1;
+    speechSynthesis.speak(u);
+  }
+
+  function fmt(s){ s=Math.max(0,Math.round(s)); return Math.floor(s/60)+":"+String(s%60).padStart(2,"0"); }
+
+  function sceneAt(time){
+    for(var i=SC.length-1;i>=0;i--) if(time >= SC[i].start - .001) return i;
+    return 0;
+  }
+
+  function applyReveals(sc, subIdx){
+    var els = sc.el.querySelectorAll("[data-sub]");
+    for(var i=0;i<els.length;i++){
+      var ds = +els[i].getAttribute("data-sub");
+      /* callout rings show one at a time; everything else accumulates */
+      els[i].classList.toggle("on", els[i].classList.contains("co") ? ds === subIdx : ds <= subIdx);
+    }
+  }
+
+  function update(force){
+    var si = sceneAt(t), sc = SC[si];
+    if(si !== curScene || force){
+      SC.forEach(function(x){ if(x.el !== sc.el) x.el.classList.remove("active"); });
+      sc.el.classList.add("active");
+      curScene = si; curSub = -1;
+      chapnum.textContent = "Capítulo " + (si+1) + " · " + SC.length;
+      chapname.textContent = sc.title;
+      var rows = menu.querySelectorAll(".chaprow");
+      rows.forEach(function(r,i){ r.classList.toggle("now", i===si); });
+    }
+    var local = t - sc.start, sub = 0;
+    for(var i=sc.times.length-1;i>=0;i--){ if(local >= sc.times[i]){ sub=i; break; } }
+    if(sub !== curSub || force){
+      curSub = sub;
+      applyReveals(sc, sub);
+      subEl.innerHTML = sc.subs[sub];
+      subEl.classList.add("show");
+      if(playing) speak(sc.subs[sub]);
+    }
+    fill.style.width = (t/total*100) + "%";
+    timerEl.textContent = fmt(t) + " / " + fmt(total);
+  }
+
+  function loop(now){
+    if(!playing) return;
+    var dt = (now - last)/1000; last = now;
+    t += dt;
+    if(t >= total){ t = total; finish(); return; }
+    update(false);
+    raf = requestAnimationFrame(loop);
+  }
+
+  function play(){
+    if(ended){ ended=false; t=0; curScene=-1; }
+    if(playing) return;
+    playing = true; last = performance.now();
+    document.body.classList.remove("paused");
+    overlay.classList.add("hide");
+    playbtn.textContent = "⏸";
+    if(window.speechSynthesis && speechSynthesis.paused){ speechSynthesis.resume(); }
+    else update(true);
+    raf = requestAnimationFrame(loop);
+  }
+  function pause(){
+    if(!playing) return;
+    playing = false;
+    cancelAnimationFrame(raf);
+    document.body.classList.add("paused");
+    playbtn.textContent = "▶";
+    if(window.speechSynthesis) speechSynthesis.pause();
+  }
+  function finish(){
+    playing = false; ended = true;
+    cancelAnimationFrame(raf);
+    playbtn.textContent = "↺";
+    bigplay.textContent = "↺";
+    overlay.classList.remove("hide");
+    overlay.querySelector(".ohint").textContent = "Fin del tutorial — pulsa para verlo de nuevo, o elige un capítulo en ☰";
+    update(true);
+  }
+  function jumpTo(i){
+    if(window.speechSynthesis) speechSynthesis.cancel();
+    ended = false;
+    t = SC[i].start + 0.01;
+    curScene = -1;
+    update(true);
+  }
+
+  /* ---- wiring ---- */
+  bigplay.addEventListener("click", function(e){ e.stopPropagation(); play(); });
+  overlay.addEventListener("click", play);
+  playbtn.addEventListener("click", function(){ playing ? pause() : play(); });
+  $("prevbtn").addEventListener("click", function(){
+    var si = sceneAt(t);
+    jumpTo((t - SC[si].start) > 2.5 ? si : Math.max(0, si-1));
+  });
+  $("nextbtn").addEventListener("click", function(){ jumpTo(Math.min(SC.length-1, sceneAt(t)+1)); });
+  seek.addEventListener("click", function(e){
+    var r = seek.getBoundingClientRect();
+    var ratio = Math.min(1, Math.max(0, (e.clientX - r.left - 18) / (r.width - 36)));
+    jumpTo(sceneAt(ratio * total));
+    if(!playing) play();
+  });
+  voicebtn.addEventListener("click", function(){
+    voiceOn = !voiceOn;
+    voicebtn.textContent = voiceOn ? "🔊" : "🔇";
+    voicebtn.classList.toggle("toggled", voiceOn);
+    if(!voiceOn && window.speechSynthesis) speechSynthesis.cancel();
+    else if(playing && curScene>=0) speak(SC[curScene].subs[curSub]);
+  });
+  menubtn.addEventListener("click", function(){ menu.classList.toggle("open"); });
+  fsbtn.addEventListener("click", function(){
+    if(document.fullscreenElement) document.exitFullscreen();
+    else document.documentElement.requestFullscreen().catch(function(){});
+  });
+  document.addEventListener("keydown", function(e){
+    if(e.key === " "){ e.preventDefault(); playing ? pause() : play(); }
+    else if(e.key === "ArrowRight"){ jumpTo(Math.min(SC.length-1, sceneAt(t)+1)); }
+    else if(e.key === "ArrowLeft"){ var si=sceneAt(t); jumpTo((t-SC[si].start)>2.5 ? si : Math.max(0,si-1)); }
+    else if(e.key === "f" || e.key === "F"){ fsbtn.click(); }
+    else if(e.key === "n" || e.key === "N"){ voicebtn.click(); }
+    else if(e.key === "c" || e.key === "C"){ menu.classList.toggle("open"); }
+  });
+  window.addEventListener("beforeunload", function(){ if(window.speechSynthesis) speechSynthesis.cancel(); });
+
+  /* initial frame */
+  update(true);
+  subEl.classList.remove("show");
+})();
+</script>
+</body></html>

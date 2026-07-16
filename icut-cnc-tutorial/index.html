@@ -205,21 +205,19 @@
   /* extras de escena */
   .drawpath{fill:none; stroke:#ff6b5e; stroke-width:3; stroke-linejoin:round; stroke-linecap:round;
     stroke-dasharray:2600; stroke-dashoffset:2600; transition:stroke-dashoffset 3.4s ease; filter:drop-shadow(0 0 6px rgba(255,80,60,.5))}
-  [data-sub].on .drawpath{stroke-dashoffset:0}
+  [data-sub].on .drawpath, .simwrap.on .drawpath{stroke-dashoffset:0}
   .drawpath.cyan{stroke:#5fd9ef; filter:drop-shadow(0 0 7px rgba(70,200,230,.55))}
   @keyframes pulseGlow{0%,100%{box-shadow:0 0 0 0 rgba(246,139,31,.55)} 50%{box-shadow:0 0 0 14px rgba(246,139,31,0)}}
   .pulse{animation:pulseGlow 1.6s ease infinite}
   .pipe{display:flex; align-items:center; gap:18px; margin:44px 0}
   .pnode{flex:1; text-align:center; padding:30px 18px; border-radius:16px; border:1px solid var(--line);
-    background:linear-gradient(180deg, rgba(26,34,48,.95), rgba(14,19,27,.95))}
+    background:linear-gradient(180deg, rgba(26,34,48,.97), rgba(14,19,27,.97))}
   .pnode .ico{font-size:42px; margin-bottom:12px}
   .pnode h3{font-size:21px; margin-bottom:6px}
   .pnode p{font-size:14.5px; color:var(--mut); line-height:1.45}
   .pnode.hero{border-color:var(--acc); box-shadow:0 0 44px rgba(246,139,31,.22)}
   .parrow{font-size:34px; color:var(--acc); flex:none}
-  .axsvg text{font:700 26px "Segoe UI",sans-serif}
-  .g54chips{display:flex; gap:10px; flex-wrap:wrap}
-  .g54chips .chip b{font-size:17px}
+  .axsvg text{font:700 22px "Segoe UI",sans-serif}
   .steplist{display:flex; flex-direction:column; gap:18px}
   .step{display:flex; gap:18px; align-items:flex-start}
   .step .sn{flex:none; width:46px; height:46px; border-radius:12px; background:var(--acc); color:#1a1005;
@@ -228,6 +226,7 @@
   .step p{font-size:16.5px; color:var(--mut); line-height:1.5}
   .flowgrid{display:grid; grid-template-columns:repeat(3,1fr); gap:20px}
   .flowgrid .card .n{font-size:13px; color:var(--acc); font-weight:800; letter-spacing:.18em; margin-bottom:8px}
+  .flowgrid .card{background:linear-gradient(180deg, rgba(24,32,44,.97), rgba(15,20,28,.97))}
   .iotable{display:flex; flex-wrap:wrap; gap:6px}
   .iochip{background:linear-gradient(180deg,#6ee89b,#1cae50); color:#0b3a1d; font-weight:700; font-size:12px;
     padding:7px 12px; border-radius:5px; border:1px solid #139240}
@@ -237,21 +236,334 @@
   .ptable td{padding:9px 12px; border-bottom:1px solid #e6e6ea; color:#222}
   .ptable td:first-child{font-weight:700; color:#0a58d6}
   .split{display:grid; grid-template-columns:1.15fr 1fr; gap:56px; align-items:start}
+
+  /* ====== ESCENARIO DE SOFTWARE (fondo vivo del layout) ====== */
+  .appstage{position:relative; width:1450px; height:660px; margin:0 auto; overflow:hidden; border-radius:14px;
+    border:1px solid #2b3648; box-shadow:0 30px 90px rgba(0,0,0,.65); background:#0a0d13; pointer-events:none}
+  .appcam{position:absolute; left:0; top:0; transform-origin:0 0; will-change:transform;
+    transition:transform 1.15s cubic-bezier(.3,.75,.25,1)}
+  .appstage.back{position:absolute; inset:0; width:auto; height:auto; margin:0; border:none; border-radius:0;
+    box-shadow:none; background:transparent}
+  .appstage.back .appcam{left:50%; top:50%; transform:translate(-50%,-47%) scale(1.05);
+    filter:brightness(.34) saturate(.7) blur(1.6px)}
+  .appwin{width:1450px; position:relative}
+  .scene > *{position:relative; z-index:2}
+  .scene .appstage.back{z-index:0}
+
+  .zonechip{position:absolute; right:82px; top:106px; z-index:9; background:var(--acc); color:#1a1005;
+    font-weight:800; font-size:17.5px; padding:10px 18px; border-radius:10px; letter-spacing:.01em;
+    box-shadow:0 10px 34px rgba(0,0,0,.55); opacity:0; transform:translateY(-10px); transition:.45s; max-width:600px}
+  .zonechip.show{opacity:1; transform:none}
+
+  .spot{box-shadow:0 0 0 3px var(--acc), 0 0 0 7px rgba(246,139,31,.35), 0 0 30px 8px rgba(246,139,31,.5) !important;
+    position:relative; z-index:5; border-radius:5px}
+  .spot-bad{box-shadow:0 0 0 3px var(--stop), 0 0 0 7px rgba(232,73,60,.35), 0 0 30px 8px rgba(232,73,60,.5) !important;
+    position:relative; z-index:5; border-radius:5px}
+
+  .popup{display:none}
+  .popup.show{display:block}
+  .pm{position:absolute; background:#fff; color:#222; border:1px solid #c4c4cb; min-width:230px; font-size:13.5px;
+    box-shadow:0 16px 44px rgba(0,0,0,.4); z-index:7; padding:4px 0}
+  .pm-item{padding:7px 18px; display:flex; justify-content:space-between; gap:26px}
+  .pm-item .sc{color:#999}
+  .pm-item.hot{background:#2f7ff0; color:#fff}
+  .pm-item.hot .sc{color:#dce9ff}
+  .pm-sep{height:1px; background:#e4e4e8; margin:4px 0}
+  .appwin .dlg{position:absolute; z-index:7}
+
+  .ovl{position:absolute; z-index:9}
 </style>
+
+<!-- ══════════ PLANTILLAS DEL SOFTWARE (se clonan en cada escena) ══════════ -->
+<div id="templates" style="display:none">
+
+  <!-- Página GRAPHIC completa -->
+  <div id="tpl-app"><div class="appwin">
+    <div class="win" style="width:1450px">
+      <div class="titlebar"><span>CNCRouter — v3.6.4.1 iCut</span><span class="wbtns">— ▢ ✕</span></div>
+      <div class="sbar"><span style="padding:5px 14px">Disconnected</span><span class="cell">Auto</span><span class="cell">Idle</span><span class="alert">No Available IP Address!</span></div>
+      <div class="tabs">
+        <div class="tab on">Graphic</div><div class="tab">CCD</div><div class="tab tab-prog">Program</div>
+        <div class="tab">Coordinate</div><div class="tab">Parameter</div><div class="tab">Diagnosis</div>
+      </div>
+      <div class="appbody" style="height:520px">
+        <div class="pal">
+          <div class="pchip pc-white" style="background:#fff"></div><div class="pchip pc-red" style="background:#e2261a"></div>
+          <div class="pchip" style="background:#f7e11e"></div><div class="pchip" style="background:#25d425"></div>
+          <div class="pchip" style="background:#25d3d3"></div><div class="pchip" style="background:#2032e0"></div>
+          <div class="pchip" style="background:#e224e2"></div><div class="pchip" style="background:#f28a1e"></div>
+          <div style="height:8px"></div>
+          <div class="ptool">📍</div><div class="ptool">1↓</div><div class="ptool">✎</div><div class="ptool">⌒</div>
+          <div class="ptool">◭</div><div class="ptool">⟳</div><div class="ptool">↙</div><div class="ptool">▱</div>
+        </div>
+        <div class="mcanvas">
+          <div class="ruler"><span>-200</span><span>-160</span><span>-120</span><span>-80</span><span>-40</span><span>0</span><span>40</span><span>80</span><span>120</span><span>160</span></div>
+          <svg width="100%" height="100%" viewBox="0 0 400 300" preserveAspectRatio="xMidYMid meet" style="position:absolute; inset:0">
+            <rect x="30" y="52" width="345" height="228" fill="none" stroke="#1c6e2e" stroke-width="1" stroke-dasharray="4 3"/>
+            <path d="M52,212 C88,150 152,118 212,130 C228,96 272,76 324,88 C302,110 288,122 276,138 C322,142 344,162 354,192 C312,180 282,186 250,196 C222,242 158,254 110,236 C96,252 78,258 58,260 C70,246 74,230 62,214 Z" fill="none" stroke="#d43325" stroke-width="1.7"/>
+            <text x="150" y="42" fill="#3a4a60" style="font:800 20px 'Segoe UI'; letter-spacing:3px">TECHPRO</text>
+          </svg>
+        </div>
+        <div class="rp">
+          <div class="grp"><span>Mechanical</span><span>Relative</span><span class="g54">G54 Milling</span></div>
+          <div class="rp-coords">
+            <div class="coordrow mono"><span class="ax">X:</span><span class="val">213.225</span><span class="val">49.786</span></div>
+            <div class="coordrow mono"><span class="ax">Y:</span><span class="val">31.148</span><span class="val">64.296</span></div>
+            <div class="coordrow mono"><span class="ax">Z:</span><span class="val">-197.706</span><span class="val">-182.272</span></div>
+            <div class="coordrow mono"><span class="ax">C:</span><span class="val">0.000</span><span class="val">0.000</span></div>
+          </div>
+          <div class="rp-fs">
+            <div class="fsrow"><b>F</b> 3000 <span>F-Rate</span><span class="seg">100</span><span class="slider"><i style="left:70%"></i></span> 1000</div>
+            <div class="fsrow"><b>T</b> 1 <span>G00 Rate</span><span class="seg">100</span><span class="slider"><i style="left:88%"></i></span> 20000</div>
+            <div class="fsrow"><b>S</b> 20000 <span>RPM</span><span class="seg">100</span><span class="slider"><i style="left:84%"></i></span> 24000</div>
+          </div>
+          <div class="rp-jogrow" style="display:flex; gap:8px">
+            <div class="rp-jog" style="flex:1">
+              <div class="jog">
+                <div></div><div class="jbtn sm">C+</div><div class="jbtn sm">Y+</div><div class="jbtn sm jb-zp">Z+</div>
+                <div></div><div class="jbtn sm jb-xm">X-</div><div class="jbtn sm">L</div><div class="jbtn sm">X+</div>
+                <div class="jbtn sm ghost">Float TS</div><div class="jbtn sm">Z-</div><div class="jbtn sm jb-ym">Y-</div><div class="jbtn sm">C-</div>
+                <div class="jbtn sm ghost">H.W Guide</div><div class="jbtn sm jb-x0">X-&gt;0</div><div class="jbtn sm jb-y0">Y-&gt;0</div><div class="jbtn sm jb-z0">Z-&gt;0</div>
+                <div></div><div class="jbtn sm jb-xy0">XY-&gt;0</div><div class="jbtn sm ghost">Target Move</div><div class="jbtn sm ghost">Park</div>
+              </div>
+            </div>
+            <div class="steps rp-steps"><span><b>◉</b> Continuous</span><span>H.W.Move</span><span>0.01</span><span>0.05</span><span>0.1</span><span>0.5</span><span>1</span><span>5</span><span>10</span><span>100</span></div>
+          </div>
+          <div class="rp-sw"><div class="swrow"><div class="sw">Spindle</div><div class="sw">Vacuum</div><div class="sw">Dust collect</div><div class="sw sw-knife">Vibrating Knife</div><div class="sw sw-knife2">Knife Up/Down</div></div></div>
+          <div class="rp-transport"><div class="transport"><div class="tbtn tb-start">Start F9</div><div class="tbtn off">Pause F10</div><div class="tbtn">Stop F11</div><div class="tbtn">Home F12</div></div></div>
+        </div>
+      </div>
+      <div class="fbot">
+        <div class="fbar">
+          <div class="fk fk-layer">Layer F1</div><div class="fk">Parameters F2</div><div class="fk fk-create">CreateFile F3</div><div class="fk">AutoSort F4</div>
+          <div class="fk">OutputFile F5</div><div class="fk">CAD Start F6</div><div class="fk plain"></div><div class="fk">Origin F8</div>
+        </div>
+        <div class="progressrow"><span>Progress: Processing</span><span class="pb"><i></i></span><span class="mono">100%</span><span>Processing</span><span class="pb" style="max-width:180px"><i style="width:0%"></i></span><span class="mono">0%</span><span>Run Time 00:00:00</span></div>
+      </div>
+    </div>
+    <!-- popups -->
+    <div class="popup pm pm-file" style="left:10px; top:30px">
+      <div class="pm-item"><span>New</span><span class="sc">Ctrl+N</span></div>
+      <div class="pm-item"><span>Load GCode</span></div>
+      <div class="pm-item"><span>Unload GCode</span></div>
+      <div class="pm-item"><span>Open Image</span></div>
+      <div class="pm-item hot"><span>Open DXF/AI/PLT</span><span class="sc">Ctrl+O</span></div>
+      <div class="pm-sep"></div>
+      <div class="pm-item"><span>Restart</span></div>
+      <div class="pm-item"><span>Exit</span><span class="sc">Ctrl+Q</span></div>
+    </div>
+    <div class="popup pm pm-op" style="right:320px; top:30px; min-width:250px">
+      <div class="pm-item"><span>X Back To Home</span></div>
+      <div class="pm-item"><span>Y Back To Home</span></div>
+      <div class="pm-item"><span>Z Back To Home</span></div>
+      <div class="pm-item"><span>C Back To Home</span></div>
+      <div class="pm-item hot hot-home"><span>All Back To Home</span></div>
+      <div class="pm-item"><span>Direct Set</span></div>
+      <div class="pm-sep"></div>
+      <div class="pm-item"><span>Start</span></div>
+      <div class="pm-item"><span>BreakPoint Resume</span></div>
+      <div class="pm-item"><span>Stop</span></div>
+      <div class="pm-sep"></div>
+      <div class="pm-item hot-float"><span>Float ToolSetting</span></div>
+      <div class="pm-item"><span>Fixed ToolSetting</span></div>
+      <div class="pm-sep"></div>
+      <div class="pm-item"><span>Select Processing</span></div>
+      <div class="pm-item"><span>Mirror and Rotate ▸</span></div>
+      <div class="pm-item"><span>Array Process</span></div>
+      <div class="pm-item"><span>Diagonal compensation</span></div>
+    </div>
+    <div class="popup dlg dlg-home" style="left:420px; top:150px; width:380px">
+      <div class="dtitle"><span>Back to home</span><span style="color:#999">? ✕</span></div>
+      <div class="dbody" style="display:flex; flex-direction:column; gap:14px; padding:28px 26px">
+        <div class="dbtn pri pulsebtn" style="text-align:center; padding:12px; font-size:15.5px">All axis back to home</div>
+        <div class="dbtn" style="text-align:center; padding:12px; font-size:15.5px">Direct setting</div>
+      </div>
+    </div>
+    <div class="popup dlg dlg-layer" style="left:270px; top:70px; width:640px">
+      <div class="dtitle"><span>◈ Layer Parameters</span><span style="color:#999">? ✕</span></div>
+      <div class="dbody" style="display:grid; grid-template-columns:1fr 1fr; gap:4px 24px">
+        <div>
+          <table class="ptable"><tr><th>Layer</th><th>Tool</th><th>Speed</th><th>Output</th></tr>
+            <tr><td><span style="display:inline-block;width:26px;height:13px;background:#e2261a"></span></td><td>1</td><td>500</td><td>Yes</td></tr>
+            <tr><td><span style="display:inline-block;width:26px;height:13px;background:#25d425"></span></td><td>2</td><td>1000</td><td>Yes</td></tr>
+          </table>
+          <div style="display:flex; gap:10px; margin-top:14px"><span class="dbtn" style="flex:1; text-align:center">Move up</span><span class="dbtn" style="flex:1; text-align:center">Move Down</span></div>
+        </div>
+        <div>
+          <div class="frow"><span>Output</span><span class="fval">Yes ▾</span></div>
+          <div class="frow"><span>Tool</span><span class="fval">T1-T1CNC ▾</span></div>
+          <div class="frow"><span>Direction</span><span class="fval">CCW ▾</span></div>
+          <div class="frow"><span>Speed</span><span class="fval">500</span></div>
+          <div class="dlg-adv">
+            <div class="frow" style="background:#dfe9fb; border-radius:4px; justify-content:center; font-weight:700; color:#2456a8">Advanced</div>
+            <div class="frow"><span>Material Thickness</span><span class="fval">6</span></div>
+            <div class="frow"><span>Final Depth</span><span class="fval">3</span></div>
+            <div class="frow"><span>Pass Depth</span><span class="fval">3</span></div>
+          </div>
+        </div>
+      </div>
+      <div class="dbtns"><span class="dbtn pri">Ok</span><span class="dbtn">Cancel</span></div>
+    </div>
+  </div></div>
+
+  <!-- Página PROGRAM (3D) -->
+  <div id="tpl-program"><div class="appwin">
+    <div class="win" style="width:1450px">
+      <div class="titlebar"><span>CNCRouter — v3.6.4.1 iCut</span><span class="wbtns">— ▢ ✕</span></div>
+      <div class="sbar"><span style="padding:5px 14px">Connected</span><span class="cell">Auto</span><span class="cell">Idle</span><span class="alert" style="background:#1cae50">192.168.0.20 — OK</span></div>
+      <div class="tabs">
+        <div class="tab">Graphic</div><div class="tab">CCD</div><div class="tab on tab-prog">Program</div>
+        <div class="tab">Coordinate</div><div class="tab">Parameter</div><div class="tab">Diagnosis</div>
+      </div>
+      <div class="tabs" style="background:#dfe1e5"><div class="tab cyanon" style="flex:0 0 170px">3D</div><div class="tab" style="flex:0 0 170px">File Management</div><div class="tab" style="flex:0 0 200px">Process Studio Author</div><div style="flex:1"></div></div>
+      <div class="appbody" style="height:452px">
+        <div class="viewport3d">
+          <svg class="simwrap" width="100%" height="100%" viewBox="0 0 800 330" style="position:absolute; inset:0">
+            <g transform="translate(230,26) scale(.9)">
+              <rect x="0" y="0" width="360" height="270" fill="none" stroke="#27407a" stroke-width="1"/>
+              <path class="drawpath cyan" style="stroke-width:1.6" d="M52,212 C88,150 152,118 212,130 C228,96 272,76 324,88 C302,110 288,122 276,138 C322,142 344,162 354,192 C312,180 282,186 250,196 C222,242 158,254 110,236 C96,252 78,258 58,260 C70,246 74,230 62,214 Z"/>
+              <path class="drawpath" style="stroke:#e8e14a; stroke-width:1; stroke-dasharray:2600; filter:none" d="M-30,300 L52,212 M324,88 L-30,300"/>
+            </g>
+            <g stroke-width="2.4" fill="none">
+              <line x1="40" y1="300" x2="120" y2="300" stroke="#ff5b4d"/><line x1="40" y1="300" x2="40" y2="222" stroke="#38d97e"/><line x1="40" y1="300" x2="86" y2="264" stroke="#5fa8ff"/>
+            </g>
+          </svg>
+        </div>
+        <div class="rp rp-slot"></div>
+      </div>
+      <div class="progressrow statsrow mono" style="font-size:11.5px"><span>TotalIndex: 68541</span><span>X Max: <b style="color:#1fae52">408.986</b></span><span>X Min: <b style="color:#1fae52">-50.007</b></span><span>Y Max: <b style="color:#1fae52">1245.540</b></span><span>Z Max: <b style="color:#d92b1f">182.475</b></span><span style="margin-left:auto">Estimated Time 00:38:32</span></div>
+      <div class="fbar">
+        <div class="fk">Load F1</div><div class="fk">UnLoad-F2</div><div class="fk fk-sim">Simulation F3</div><div class="fk">Start Selected F4</div>
+        <div class="fk">Edit File F5</div><div class="fk">BkPt Resume F6</div><div class="fk">CycleStart F7</div><div class="fk">Origin F8</div>
+      </div>
+    </div>
+  </div></div>
+
+  <!-- Página COORDINATE -->
+  <div id="tpl-coord"><div class="appwin">
+    <div class="win" style="width:1450px">
+      <div class="titlebar"><span>CNCRouter — v3.6.4.1 iCut</span><span class="wbtns">— ▢ ✕</span></div>
+      <div class="sbar"><span style="padding:5px 14px">Connected</span><span class="cell">Auto</span><span class="cell">Idle</span><span class="alert" style="background:#1cae50">192.168.0.20 — OK</span></div>
+      <div class="tabs">
+        <div class="tab">Graphic</div><div class="tab">CCD</div><div class="tab">Program</div>
+        <div class="tab on">Coordinate</div><div class="tab">Parameter</div><div class="tab">Diagnosis</div>
+      </div>
+      <div class="tabs" style="background:#dfe1e5"><div class="tab cyanon" style="flex:0 0 170px">Workpiece</div><div class="tab" style="flex:0 0 170px">Access</div><div class="tab" style="flex:0 0 170px">Tool Setting</div><div style="flex:1"></div></div>
+      <div style="height:452px; background:#f4f4f6; color:#222; padding:16px 22px; font-size:14px">
+        <div class="cw-cur" style="max-width:1020px">
+          <div style="display:flex; justify-content:space-between; font-weight:700; margin-bottom:10px">
+            <span>Current Workpiece Settings:&nbsp; <span style="background:#ffe867; padding:0 8px; border-radius:3px">G54</span></span><span>Public Offset Settings</span>
+          </div>
+          <div style="display:grid; grid-template-columns:170px 150px 170px 1fr 170px 90px; gap:8px 14px; align-items:center">
+            <span>X Coordinates:</span><span class="fval mono" style="text-align:right">49.786</span><span class="dbtn cw-load" style="text-align:center">Load Current X</span><span></span><span>Public Offset X:</span><span class="fval mono" style="text-align:right">0</span>
+            <span>Y Coordinates:</span><span class="fval mono" style="text-align:right">64.296</span><span class="dbtn cw-load" style="text-align:center">Load Current Y</span><span></span><span>Public Offset Y:</span><span class="fval mono" style="text-align:right">0</span>
+            <span>Z Coordinates:</span><span class="fval mono" style="text-align:right">-182.272</span><span class="dbtn cw-load" style="text-align:center">Load Current Z</span><span></span><span>Public Offset Z:</span><span class="fval mono" style="text-align:right">0</span>
+            <span>C Coordinates:</span><span class="fval mono" style="text-align:right">0.000</span><span class="dbtn cw-load" style="text-align:center">Load Current C</span><span></span><span>Public Offset C:</span><span class="fval mono" style="text-align:right">0</span>
+          </div>
+        </div>
+        <div class="cw-g" style="display:grid; grid-template-columns:repeat(6,1fr); gap:10px; margin-top:22px; max-width:1240px">
+          <div style="border:1px solid #f68b1f; background:#fff7ea; border-radius:6px; padding:8px 10px">
+            <div style="font-weight:700; margin-bottom:6px">◉ G54 Milling</div>
+            <div class="mono" style="font-size:12.5px; line-height:1.7">X: 213.225<br>Y: 31.148<br>Z: -197.706<br>C: 0</div>
+          </div>
+          <div style="border:1px solid #d8d8dc; background:#fff; border-radius:6px; padding:8px 10px">
+            <div style="font-weight:700; margin-bottom:6px">○ G55</div>
+            <div class="mono" style="font-size:12.5px; line-height:1.7">X: 0<br>Y: 0<br>Z: 0<br>C: 0</div>
+          </div>
+          <div style="border:1px solid #d8d8dc; background:#fff; border-radius:6px; padding:8px 10px">
+            <div style="font-weight:700; margin-bottom:6px">○ G56</div>
+            <div class="mono" style="font-size:12.5px; line-height:1.7">X: 0<br>Y: 0<br>Z: 0<br>C: 0</div>
+          </div>
+          <div style="border:1px solid #d8d8dc; background:#fff; border-radius:6px; padding:8px 10px">
+            <div style="font-weight:700; margin-bottom:6px">○ G57</div>
+            <div class="mono" style="font-size:12.5px; line-height:1.7">X: 213.225<br>Y: 31.148<br>Z: -182.272<br>C: 0</div>
+          </div>
+          <div style="border:1px solid #d8d8dc; background:#fff; border-radius:6px; padding:8px 10px">
+            <div style="font-weight:700; margin-bottom:6px">○ G58 Crease</div>
+            <div class="mono" style="font-size:12.5px; line-height:1.7">X: 213.225<br>Y: 31.148<br>Z: 0<br>C: 0</div>
+          </div>
+          <div style="border:1px solid #d8d8dc; background:#fff; border-radius:6px; padding:8px 10px">
+            <div style="font-weight:700; margin-bottom:6px">○ G59 Knife</div>
+            <div class="mono" style="font-size:12.5px; line-height:1.7">X: 49.786<br>Y: 64.296<br>Z: -182.272<br>C: 0</div>
+          </div>
+        </div>
+        <div style="margin-top:20px"><span class="dbtn">Set Tool Length</span></div>
+      </div>
+      <div class="fbar">
+        <div class="fk">X Clear F1</div><div class="fk">Y Clear F2</div><div class="fk">Z Clear F3</div><div class="fk plain"></div>
+        <div class="fk">MobMeasure F5</div><div class="fk plain"></div><div class="fk plain"></div><div class="fk">Origin F8</div>
+      </div>
+    </div>
+  </div></div>
+
+  <!-- Página PARAMETER -->
+  <div id="tpl-param"><div class="appwin">
+    <div class="win" style="width:1450px">
+      <div class="titlebar"><span>CNCRouter — v3.6.4.1 iCut</span><span class="wbtns">— ▢ ✕</span></div>
+      <div class="sbar"><span style="padding:5px 14px">Connected</span><span class="cell">Auto</span><span class="cell">Idle</span><span class="alert" style="background:#1cae50">192.168.0.20 — OK</span></div>
+      <div class="tabs">
+        <div class="tab">Graphic</div><div class="tab">CCD</div><div class="tab">Program</div>
+        <div class="tab">Coordinate</div><div class="tab on">Parameter</div><div class="tab tab-diag">Diagnosis</div>
+      </div>
+      <div class="tabs" style="background:#dfe1e5"><div class="tab cyanon" style="flex:0 0 160px">Overview</div><div class="tab" style="flex:0 0 160px">IO Parameter</div><div class="tab" style="flex:0 0 160px">BackUp</div><div class="tab" style="flex:0 0 160px">Configuration</div><div style="flex:1"></div></div>
+      <div style="height:452px; background:#f4f4f6; color:#222; display:flex">
+        <div style="width:130px; border-right:1px solid #ddd; display:flex; flex-direction:column; font-size:13px; background:#ececee">
+          <span style="padding:11px 14px; background:#fff; font-weight:700; border-left:3px solid #2f7ff0">Axis</span>
+          <span style="padding:11px 14px">Manual</span><span style="padding:11px 14px">Processing</span>
+          <span style="padding:11px 14px">File</span><span style="padding:11px 14px">Tool</span>
+          <span style="padding:11px 14px">Spindle</span><span style="padding:11px 14px">CCD Parameter</span>
+        </div>
+        <div style="flex:1; overflow:hidden">
+          <table class="ptable pt-rows">
+            <tr><th>Nº</th><th>Parámetro</th><th>Valor</th><th>Unidad</th><th>Efecto</th></tr>
+            <tr><td>10001</td><td>Dirección del eje X (1 / -1)</td><td class="mono">1</td><td></td><td>Restart</td></tr>
+            <tr><td>10101</td><td>Equivalente de pulso del eje X</td><td class="mono">0.011965</td><td>mm/p</td><td>Restart</td></tr>
+            <tr><td>10201</td><td>Límite inferior de recorrido X</td><td class="mono">0</td><td>mm</td><td>Restart</td></tr>
+            <tr><td>11002</td><td>Volver a cero antes de procesar (0/1)</td><td class="mono">1</td><td></td><td>Inmediato</td></tr>
+            <tr class="pt-30201"><td>30201</td><td>Modo de ajuste de herramienta (1 flotante · 2 fijo)</td><td class="mono">1</td><td></td><td>Inmediato</td></tr>
+            <tr><td>30202</td><td>Espesor del sensor de herramienta</td><td class="mono">20</td><td>mm</td><td>Inmediato</td></tr>
+            <tr><td>50003</td><td>Velocidad de procesamiento</td><td class="mono">3000</td><td>mm/min</td><td>Inmediato</td></tr>
+            <tr><td>50012</td><td>Velocidad de descenso de la cuchilla</td><td class="mono">1500</td><td>mm/min</td><td>Inmediato</td></tr>
+            <tr><td>50017</td><td>Altura segura del eje Z</td><td class="mono">30</td><td>mm</td><td>Inmediato</td></tr>
+            <tr><td>50102</td><td>Husillo automático al iniciar (0/1)</td><td class="mono">1</td><td></td><td>Inmediato</td></tr>
+          </table>
+        </div>
+      </div>
+      <div class="fbar">
+        <div class="fk">Import F1</div><div class="fk fk-exp">Export F2</div><div class="fk">Manufacturer F3</div>
+        <div class="fk">Board Backup F4</div><div class="fk">Board Read F5</div><div class="fk plain"></div><div class="fk plain"></div><div class="fk">Origin F8</div>
+      </div>
+    </div>
+    <div class="popup dlg dlg-diag" style="left:330px; top:90px; width:780px">
+      <div class="dtitle"><span>Diagnosis — Inputs / Outputs</span><span style="color:#999">✕</span></div>
+      <div class="dbody">
+        <div style="font-weight:700; margin-bottom:8px">Inputs:</div>
+        <div class="iotable" style="margin-bottom:16px">
+          <span class="iochip">XORG</span><span class="iochip">YORG</span><span class="iochip">ZORG</span><span class="iochip">CORG</span>
+          <span class="iochip">CUT</span><span class="iochip red">ESTOP</span><span class="iochip red">CUTALARM</span>
+          <span class="iochip">Station 1 start</span><span class="iochip">STOP</span>
+        </div>
+        <div style="font-weight:700; margin-bottom:8px">Outputs:</div>
+        <div class="iotable">
+          <span class="iochip">Spindle</span><span class="iochip">Vacuum pump</span><span class="iochip">Vibrating knife lift</span>
+          <span class="iochip">Vacuum cleaner</span><span class="iochip">Blowing</span><span class="iochip">Camera lift</span>
+          <span class="iochip">Light Source</span><span class="iochip">Brake</span>
+        </div>
+        <p style="margin-top:14px; color:#555; font-size:13.5px">Activa una entrada con una señal externa o enciende una salida con un clic para verificar el cableado.</p>
+      </div>
+    </div>
+  </div></div>
+</div>
 
 <div id="viewport"><div id="fit">
 
   <!-- ══════════ E1 · PORTADA ══════════ -->
   <section class="scene" id="s1">
-    <div data-sub="0" style="position:absolute; inset:0; display:flex; align-items:center; justify-content:center; opacity:.35">
-      <svg width="1100" height="640" viewBox="0 0 400 300" aria-hidden="true">
-        <path class="drawpath" d="M52,212 C88,150 152,118 212,130 C228,96 272,76 324,88 C302,110 288,122 276,138 C322,142 344,162 354,192 C312,180 282,186 250,196 C222,242 158,254 110,236 C96,252 78,258 58,260 C70,246 74,230 62,214 Z M262,118 a4,4 0 1,0 .1,0"/>
-      </svg>
-    </div>
-    <div style="position:relative; height:100%; display:flex; flex-direction:column; justify-content:center; gap:30px; max-width:980px">
+    <div class="appstage back" data-tpl="app"></div>
+    <div style="position:relative; height:100%; display:flex; flex-direction:column; justify-content:center; gap:30px; max-width:1050px">
       <div class="eyebrow" data-sub="0">Tutorial profesional · Control de Router CNC</div>
       <h1 class="display" data-sub="0">iCut<span style="color:var(--acc)">.</span></h1>
-      <p class="lead" data-sub="1" style="font-size:27px">De la pantalla a la máquina: interfaz, flujo de trabajo completo y funciones avanzadas del software de control, <em style="color:var(--acc2); font-style:normal">paso a paso</em>.</p>
+      <p class="lead" data-sub="1" style="font-size:27px">De la pantalla a la máquina: interfaz, flujo de trabajo completo y funciones avanzadas del software de control, <em style="color:var(--acc2); font-style:normal">paso a paso y sobre el propio programa</em>.</p>
       <div style="display:flex; gap:12px; flex-wrap:wrap" data-sub="2">
         <span class="chip"><span class="dot"></span> Basado en los manuales oficiales XING DUO WEI</span>
         <span class="chip"><span class="dot"></span> Sistema MDR CNC Router · TECHPRO</span>
@@ -262,6 +574,7 @@
 
   <!-- ══════════ E2 · QUÉ ES ══════════ -->
   <section class="scene" id="s2">
+    <div class="appstage back" data-tpl="app"></div>
     <div class="scene-head" data-sub="0">
       <span class="idx">01 / 14</span>
       <h2 class="h1">¿Qué es iCut y qué hace?</h2>
@@ -286,193 +599,71 @@
   </section>
 
   <!-- ══════════ E3 · LAYOUT ══════════ -->
-  <section class="scene" id="s3" style="padding-top:40px">
-    <div class="scene-head" data-sub="0" style="margin-bottom:18px">
+  <section class="scene" id="s3" style="padding:34px 75px">
+    <div class="scene-head" data-sub="0" style="margin-bottom:16px">
       <span class="idx">02 / 14</span>
-      <h2 class="h2" style="font-size:34px">La pantalla principal, zona por zona</h2>
+      <h2 class="h2" style="font-size:33px">La pantalla principal, zona por zona</h2>
     </div>
-    <div id="s3wrap" style="position:relative; width:1270px; margin:0 auto" data-sub="0">
-      <div class="win" style="width:1270px">
-        <div class="titlebar"><span>CNCRouter — v3.6.4.1 iCut</span><span class="wbtns">— ▢ ✕</span></div>
-        <div class="sbar"><span style="padding:5px 14px">Disconnected</span><span class="cell">Auto</span><span class="cell">Idle</span><span class="alert">No Available IP Address!</span></div>
-        <div class="tabs">
-          <div class="tab on">Graphic</div><div class="tab">CCD</div><div class="tab">Program</div>
-          <div class="tab">Coordinate</div><div class="tab">Parameter</div><div class="tab">Diagnosis</div>
-        </div>
-        <div class="appbody" style="height:520px">
-          <div class="pal">
-            <div class="pchip" style="background:#fff"></div><div class="pchip" style="background:#e2261a"></div>
-            <div class="pchip" style="background:#f7e11e"></div><div class="pchip" style="background:#25d425"></div>
-            <div class="pchip" style="background:#25d3d3"></div><div class="pchip" style="background:#2032e0"></div>
-            <div class="pchip" style="background:#e224e2"></div><div class="pchip" style="background:#f28a1e"></div>
-            <div style="height:8px"></div>
-            <div class="ptool">📍</div><div class="ptool">1↓</div><div class="ptool">✎</div><div class="ptool">⌒</div>
-            <div class="ptool">◭</div><div class="ptool">⟳</div><div class="ptool">↙</div><div class="ptool">▱</div>
-          </div>
-          <div class="mcanvas">
-            <div class="ruler"><span>-200</span><span>-160</span><span>-120</span><span>-80</span><span>-40</span><span>0</span><span>40</span><span>80</span><span>120</span></div>
-            <svg width="100%" height="100%" viewBox="0 0 400 300" preserveAspectRatio="xMidYMid meet" style="position:absolute; inset:0">
-              <path d="M52,212 C88,150 152,118 212,130 C228,96 272,76 324,88 C302,110 288,122 276,138 C322,142 344,162 354,192 C312,180 282,186 250,196 C222,242 158,254 110,236 C96,252 78,258 58,260 C70,246 74,230 62,214 Z" fill="none" stroke="#c2271c" stroke-width="1.6"/>
-              <rect x="30" y="60" width="340" height="220" fill="none" stroke="#1c6e2e" stroke-width="1" stroke-dasharray="4 3"/>
-            </svg>
-          </div>
-          <div class="rp">
-            <div class="grp"><span>Mechanical</span><span>Relative</span><span class="g54">G54 Milling</span></div>
-            <div class="coordrow mono"><span class="ax">X:</span><span class="val">0.000</span><span class="val">0.000</span></div>
-            <div class="coordrow mono"><span class="ax">Y:</span><span class="val">0.000</span><span class="val">0.000</span></div>
-            <div class="coordrow mono"><span class="ax">Z:</span><span class="val">0.000</span><span class="val">0.000</span></div>
-            <div class="coordrow mono"><span class="ax">C:</span><span class="val">0.000</span><span class="val">0.000</span></div>
-            <div class="fsrow"><b>F</b> 3000 <span>F-Rate</span><span class="seg">100</span><span class="slider"><i style="left:70%"></i></span> 1000</div>
-            <div class="fsrow"><b>T</b> 1 <span>G00 Rate</span><span class="seg">100</span><span class="slider"><i style="left:88%"></i></span> 20000</div>
-            <div class="fsrow"><b>S</b> 20000 <span>RPM</span><span class="seg">100</span><span class="slider"><i style="left:84%"></i></span> 24000</div>
-            <div style="display:flex; gap:8px">
-              <div style="flex:1">
-                <div class="jog">
-                  <div></div><div class="jbtn sm">C+</div><div class="jbtn sm">Y+</div><div class="jbtn sm">Z+</div>
-                  <div></div><div class="jbtn sm">X-</div><div class="jbtn sm">L</div><div class="jbtn sm">X+</div>
-                  <div class="jbtn sm ghost">Float TS</div><div class="jbtn sm">Z-</div><div class="jbtn sm">Y-</div><div class="jbtn sm">C-</div>
-                  <div class="jbtn sm ghost">H.W Guide</div><div class="jbtn sm">X-&gt;0</div><div class="jbtn sm">Y-&gt;0</div><div class="jbtn sm">Z-&gt;0</div>
-                  <div></div><div class="jbtn sm">XY-&gt;0</div><div class="jbtn sm ghost">Target Move</div><div class="jbtn sm ghost">Park</div>
-                </div>
-              </div>
-              <div class="steps"><span><b>◉</b> Continuous</span><span>H.W.Move</span><span>0.01</span><span>0.05</span><span>0.1</span><span>0.5</span><span>1</span><span>5</span><span>10</span><span>100</span></div>
-            </div>
-            <div class="swrow"><div class="sw">Spindle</div><div class="sw">Vacuum</div><div class="sw">Dust collect</div><div class="sw">Vibrating Knife</div><div class="sw">Knife Up/Down</div></div>
-            <div class="transport"><div class="tbtn">Start F9</div><div class="tbtn off">Pause F10</div><div class="tbtn">Stop F11</div><div class="tbtn">Home F12</div></div>
-          </div>
-        </div>
-        <div class="fbar">
-          <div class="fk">Layer F1</div><div class="fk">Parameters F2</div><div class="fk">CreateFile F3</div><div class="fk">AutoSort F4</div>
-          <div class="fk">OutputFile F5</div><div class="fk">CAD Start F6</div><div class="fk plain"></div><div class="fk">Origin F8</div>
-        </div>
-        <div class="progressrow"><span>Progress: Processing</span><span class="pb"><i></i></span><span class="mono">100%</span><span>Processing</span><span class="pb" style="max-width:180px"><i style="width:0%"></i></span><span class="mono">0%</span><span>Run Time 00:00:00</span></div>
-      </div>
-      <div class="co" data-sub="1" data-target=".sbar"><span class="co-tag">1 · Barra de estado — conexión · modo · IP</span></div>
-      <div class="co" data-sub="2" data-target=".tabs"><span class="co-tag right">2 · Las 6 páginas del programa</span></div>
-      <div class="co" data-sub="3" data-target=".pal"><span class="co-tag" style="top:-40px">3 · Capas + edición</span></div>
-      <div class="co" data-sub="4" data-target=".mcanvas"><span class="co-tag below" style="left:320px">4 · Área gráfica: tu diseño y las trayectorias</span></div>
-      <div class="co" data-sub="5" data-target=".rp"><span class="co-tag right">5 · Panel de control manual</span></div>
-      <div class="co" data-sub="6" data-target=".fbar" data-target2=".progressrow"><span class="co-tag below">6 · Teclas rápidas F1–F12 + progreso del trabajo</span></div>
-    </div>
+    <div class="appstage" data-tpl="app" data-sub="0"></div>
+    <div class="zonechip"></div>
   </section>
 
   <!-- ══════════ E4 · COORDENADAS ══════════ -->
-  <section class="scene" id="s4">
-    <div class="scene-head" data-sub="0">
+  <section class="scene" id="s4" style="padding:34px 75px">
+    <div class="scene-head" data-sub="0" style="margin-bottom:16px">
       <span class="idx">03 / 14</span>
-      <h2 class="h1">Dos sistemas de coordenadas</h2>
+      <h2 class="h2" style="font-size:33px">Dos sistemas de coordenadas — página Coordinate</h2>
     </div>
-    <div class="split">
-      <div class="steplist">
-        <div class="card" data-sub="1" style="border-left:4px solid var(--cyan)">
-          <h3>Coordenadas mecánicas</h3>
-          <p>Origen <b style="color:var(--txt)">fijo en la máquina</b>. Se establecen al hacer <span class="kbd">HOME</span> tras cada encendido o parada de emergencia. Nunca cambian.</p>
-        </div>
-        <div class="card" data-sub="2" style="border-left:4px solid var(--acc)">
-          <h3>Coordenadas de pieza</h3>
-          <p>Origen <b style="color:var(--txt)">definido por ti</b> sobre el material: la esquina donde empieza el trabajo. Es el cero de tu diseño.</p>
-        </div>
-        <div data-sub="3">
-          <p style="color:var(--mut); font-size:17px; margin-bottom:12px">iCut guarda hasta <b style="color:var(--txt)">6 orígenes de pieza</b> — ideal para varias piezas en la misma mesa:</p>
-          <div class="g54chips">
-            <span class="chip" style="border-color:var(--acc)"><b>G54</b>&nbsp;Milling · por defecto</span>
-            <span class="chip"><b>G55</b></span><span class="chip"><b>G56</b></span><span class="chip"><b>G57</b></span>
-            <span class="chip"><b>G58</b>&nbsp;Crease</span><span class="chip"><b>G59</b>&nbsp;Knife</span>
-          </div>
-        </div>
-      </div>
-      <div style="display:flex; flex-direction:column; gap:26px; align-items:center">
-        <svg class="axsvg" data-sub="4" width="440" height="330" viewBox="0 0 440 330">
-          <defs>
-            <marker id="arr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="currentColor"/></marker>
-          </defs>
+    <div class="appstage" data-tpl="coord" data-sub="0" style="height:608px"></div>
+    <div class="zonechip"></div>
+    <div class="ovl" style="right:110px; top:196px; width:400px">
+      <div class="card" data-sub="4" style="background:rgba(15,20,28,.97)">
+        <svg class="axsvg" width="100%" height="200" viewBox="0 0 440 260">
+          <defs><marker id="arr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="currentColor"/></marker></defs>
           <g stroke-width="5" fill="none">
-            <line x1="120" y1="240" x2="390" y2="240" stroke="#ff6b5e" color="#ff6b5e" marker-end="url(#arr)"/>
-            <line x1="120" y1="240" x2="290" y2="120" stroke="#38d97e" color="#38d97e" marker-end="url(#arr)"/>
-            <line x1="120" y1="240" x2="120" y2="30" stroke="#5fa8ff" color="#5fa8ff" marker-end="url(#arr)"/>
+            <line x1="110" y1="200" x2="380" y2="200" stroke="#ff6b5e" color="#ff6b5e" marker-end="url(#arr)"/>
+            <line x1="110" y1="200" x2="280" y2="90" stroke="#38d97e" color="#38d97e" marker-end="url(#arr)"/>
+            <line x1="110" y1="200" x2="110" y2="20" stroke="#5fa8ff" color="#5fa8ff" marker-end="url(#arr)"/>
           </g>
-          <circle cx="120" cy="240" r="8" fill="var(--acc)"/>
-          <text x="398" y="250" fill="#ff6b5e">+X</text>
-          <text x="298" y="115" fill="#38d97e">+Y</text>
-          <text x="96" y="24" fill="#5fa8ff">+Z</text>
-          <text x="88" y="285" fill="#94a1b5" style="font-size:17px; font-weight:600">Origen</text>
+          <circle cx="110" cy="200" r="8" fill="var(--acc)"/>
+          <text x="388" y="210" fill="#ff6b5e">+X</text><text x="288" y="86" fill="#38d97e">+Y</text><text x="86" y="16" fill="#5fa8ff">+Z</text>
         </svg>
-        <div class="card" data-sub="4" style="max-width:440px">
-          <p><b style="color:var(--txt)">Regla de la mano derecha:</b> X e Y se mueven sobre la mesa; el eje Z sube y baja el cabezal. Alejar la herramienta del material es <b style="color:#5fa8ff">Z positivo</b>.</p>
-        </div>
+        <p style="margin-top:8px"><b style="color:var(--txt)">Regla de la mano derecha:</b> X e Y sobre la mesa; <b style="color:#5fa8ff">Z positivo</b> aleja la herramienta del material.</p>
       </div>
     </div>
   </section>
 
   <!-- ══════════ E5 · PANEL DE CONTROL ══════════ -->
-  <section class="scene" id="s5" style="padding-top:44px">
-    <div class="scene-head" data-sub="0" style="margin-bottom:20px">
+  <section class="scene" id="s5" style="padding:34px 75px">
+    <div class="scene-head" data-sub="0" style="margin-bottom:16px">
       <span class="idx">04 / 14</span>
-      <h2 class="h2" style="font-size:34px">El panel de control manual</h2>
+      <h2 class="h2" style="font-size:33px">El panel de control manual</h2>
     </div>
-    <div style="display:grid; grid-template-columns:460px 1fr; gap:60px; align-items:start">
-      <div class="rp" data-sub="0" style="width:460px; border-radius:10px; border:1px solid #cfcfd4; box-shadow:0 26px 70px rgba(0,0,0,.55); font-size:14px; padding:14px 14px; gap:9px">
-        <div class="grp"><span>Mechanical</span><span>Relative</span><span class="g54">G54 Milling</span></div>
-        <div class="coordrow mono"><span class="ax">X:</span><span class="val">213.225</span><span class="val">49.786</span></div>
-        <div class="coordrow mono"><span class="ax">Y:</span><span class="val">31.148</span><span class="val">64.296</span></div>
-        <div class="coordrow mono"><span class="ax">Z:</span><span class="val">-197.706</span><span class="val">-182.272</span></div>
-        <div class="fsrow"><b>F</b> 3000 <span>F-Rate</span><span class="seg">100</span><span class="slider"><i style="left:70%"></i></span> 1000</div>
-        <div class="fsrow"><b>S</b> 20000 <span>RPM</span><span class="seg">100</span><span class="slider"><i style="left:84%"></i></span> 24000</div>
-        <div style="display:flex; gap:10px">
-          <div style="flex:1">
-            <div class="jog">
-              <div></div><div class="jbtn">C+</div><div class="jbtn">Y+</div><div class="jbtn">Z+</div>
-              <div></div><div class="jbtn">X-</div><div class="jbtn">L</div><div class="jbtn">X+</div>
-              <div class="jbtn ghost sm" style="align-self:stretch">Float TS</div><div class="jbtn">Z-</div><div class="jbtn">Y-</div><div class="jbtn">C-</div>
-              <div class="jbtn ghost sm">H.W Guide</div><div class="jbtn sm">X-&gt;0</div><div class="jbtn sm">Y-&gt;0</div><div class="jbtn sm">Z-&gt;0</div>
-              <div></div><div class="jbtn sm">XY-&gt;0</div><div class="jbtn sm ghost">Target Move</div><div class="jbtn sm ghost">Park</div>
-            </div>
-          </div>
-          <div class="steps" style="font-size:12.5px"><span><b>◉</b> Continuous</span><span>H.W.Move</span><span>0.01</span><span>0.05</span><span>0.1</span><span>0.5</span><span>1</span><span>5</span><span>10</span><span>100</span></div>
-        </div>
-        <div class="swrow"><div class="sw">Spindle</div><div class="sw">Vacuum</div><div class="sw">Dust collect</div><div class="sw">Vibrating Knife</div></div>
-        <div class="transport"><div class="tbtn">Start F9</div><div class="tbtn off">Pause F10</div><div class="tbtn">Stop F11</div><div class="tbtn">Home F12</div></div>
-      </div>
-      <div class="steplist" style="gap:15px">
-        <div class="step" data-sub="1"><div class="sn">①</div><div><h3>Coordenadas en vivo</h3><p>Mecánicas y relativas de X, Y, Z y C — y el sistema activo (G54).</p></div></div>
-        <div class="step" data-sub="2"><div class="sn">②</div><div><h3>F y S: avance y husillo</h3><p><b>F</b> = velocidad de avance · <b>S</b> = RPM del husillo. Arrastra los porcentajes para ajustarlas <b>incluso durante el corte</b>.</p></div></div>
-        <div class="step" data-sub="3"><div class="sn">③</div><div><h3>Movimiento de ejes</h3><p>Botones naranjas X/Y/Z/C. <b>Continuous</b> mueve mientras pulsas; los pasos <b>0.01 – 100 mm</b> dan precisión total.</p></div></div>
-        <div class="step" data-sub="4"><div class="sn">④</div><div><h3>Interruptores de periféricos</h3><p>Husillo, bomba de vacío, aspiración y cuchilla vibratoria, en verde.</p></div></div>
-        <div class="step" data-sub="5"><div class="sn">⑤</div><div><h3>Transporte</h3><p><span class="kbd">Start F9</span> <span class="kbd">Pause F10</span> <span class="kbd">Stop F11</span> <span class="kbd">Home F12</span> — tus cuatro teclas de cabecera.</p></div></div>
-      </div>
-    </div>
+    <div class="appstage" data-tpl="app" data-sub="0"></div>
+    <div class="zonechip"></div>
   </section>
 
   <!-- ══════════ E6 · HOME ══════════ -->
-  <section class="scene" id="s6">
-    <div class="scene-head" data-sub="0">
+  <section class="scene" id="s6" style="padding:34px 75px">
+    <div class="scene-head" data-sub="0" style="margin-bottom:16px">
       <span class="idx">05 / 14</span>
-      <h2 class="h1">Primer paso, siempre: HOME</h2>
+      <h2 class="h2" style="font-size:33px">Primer paso, siempre: HOME</h2>
     </div>
-    <div class="split" style="grid-template-columns:480px 1fr">
-      <div class="dlg" data-sub="1" style="width:440px">
-        <div class="dtitle"><span>Back to home</span><span style="color:#999">? ✕</span></div>
-        <div class="dbody" style="display:flex; flex-direction:column; gap:16px; padding:34px 30px">
-          <div class="dbtn pri pulse" style="text-align:center; padding:13px; font-size:16px">All axis back to home</div>
-          <div class="dbtn" style="text-align:center; padding:13px; font-size:16px">Direct setting</div>
-        </div>
-      </div>
-      <div class="steplist">
-        <div class="step" data-sub="1"><div class="sn">1</div><div><h3>Al encender, aparece esta ventana</h3><p>Pulsa <b>All axis back to home</b>: cada eje busca su final de carrera, retrocede y vuelve a tocarlo despacio para fijar el cero mecánico exacto.</p></div></div>
-        <div class="step" data-sub="2"><div class="sn">2</div><div><h3>¿No apareció?</h3><p>Menú <b>Operation → All Back To Home</b>, o eje por eje: X, Y, Z, C Back To Home. <b>Direct Set</b> solo si la máquina no se movió desde el último apagado.</p></div></div>
-        <div class="step" data-sub="3"><div class="sn">3</div><div><h3>¿Home invertido?</h3><p>Si un eje va en dirección contraria, se corrige en <b>Parámetros de ejes</b> (números 11021–11204), con criterio.</p></div></div>
-        <div class="warn" data-sub="3" style="margin-top:6px">Recién hecho el HOME, no pulses <b>&nbsp;X- · Y- · Z+&nbsp;</b>: la máquina ya está en su límite de recorrido.</div>
-      </div>
+    <div class="appstage" data-tpl="app" data-sub="0"></div>
+    <div class="zonechip"></div>
+    <div class="ovl" style="left:50%; bottom:44px; width:860px; margin-left:-430px">
+      <div class="warn" data-sub="3" style="background:rgba(60,16,12,.95)">Recién hecho el HOME, no pulses <b>&nbsp;X- · Y- · Z+&nbsp;</b>: la máquina ya está en su límite de recorrido.</div>
     </div>
   </section>
 
   <!-- ══════════ E7 · AJUSTE DE HERRAMIENTA ══════════ -->
   <section class="scene" id="s7">
+    <div class="appstage back" data-tpl="app"></div>
     <div class="scene-head" data-sub="0">
       <span class="idx">06 / 14</span>
       <h2 class="h1">Ajuste de herramienta: 3 modos</h2>
     </div>
-    <p class="lead" data-sub="0" style="margin-bottom:34px">Le dicen a iCut dónde está la punta de la fresa. Se eligen con el parámetro <span class="kbd">30201</span>.</p>
+    <p class="lead" data-sub="0" style="margin-bottom:34px">Operation → <b style="color:var(--txt)">Float / Fixed ToolSetting</b>. El modo se elige con el parámetro <span class="kbd">30201</span>.</p>
     <div class="flowgrid">
       <div class="card" data-sub="1" style="border-top:4px solid var(--go)">
         <div class="n">MODO 1 · EL MÁS USADO</div>
@@ -515,140 +706,59 @@
   </section>
 
   <!-- ══════════ E8 · ORIGEN DE PIEZA ══════════ -->
-  <section class="scene" id="s8">
-    <div class="scene-head" data-sub="0">
+  <section class="scene" id="s8" style="padding:34px 75px">
+    <div class="scene-head" data-sub="0" style="margin-bottom:16px">
       <span class="idx">07 / 14</span>
-      <h2 class="h1">Fijar el origen de la pieza</h2>
+      <h2 class="h2" style="font-size:33px">Fijar el origen de la pieza</h2>
     </div>
-    <div class="split">
-      <div class="steplist" style="gap:22px">
-        <div class="step" data-sub="1"><div class="sn">1</div><div><h3>Posiciona el husillo</h3><p>Con los botones de eje, llévalo a la esquina de origen del material — normalmente la <b>inferior izquierda</b> — rozando apenas la superficie.</p></div></div>
-        <div class="step" data-sub="2"><div class="sn">2</div><div><h3>Fija el cero</h3><p><span class="kbd">XY-&gt;0</span> fija el origen horizontal · <span class="kbd">Z-&gt;0</span> fija la altura. El panel pasa a mostrar coordenadas relativas 0.000.</p></div></div>
-        <div class="step" data-sub="3"><div class="sn">3</div><div><h3>¿Cuchilla vibratoria?</h3><p>Bájala con <b>Knife Up/Down</b>, toca el material y fija <b>su propio Z-&gt;0</b> (sistema G59 Knife) por separado.</p></div></div>
-      </div>
-      <div data-sub="1" style="position:relative">
-        <svg width="100%" height="470" viewBox="0 0 560 470">
-          <rect x="30" y="70" width="500" height="330" rx="8" fill="#0d1b2e" stroke="#2b3a52"/>
-          <rect x="80" y="120" width="330" height="230" rx="4" fill="#8a5a33"/>
+    <div class="appstage" data-tpl="app" data-sub="0"></div>
+    <div class="zonechip"></div>
+    <div class="ovl" style="left:110px; top:210px; width:430px">
+      <div class="card" data-sub="1" style="background:rgba(13,18,26,.96)">
+        <svg width="100%" height="290" viewBox="0 0 560 400">
+          <defs><marker id="arr8" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="currentColor"/></marker></defs>
+          <rect x="30" y="30" width="500" height="330" rx="8" fill="#0d1b2e" stroke="#2b3a52"/>
+          <rect x="80" y="80" width="330" height="230" rx="4" fill="#8a5a33"/>
           <g stroke="#f68b1f" stroke-width="3" fill="none">
-            <line x1="80" y1="350" x2="230" y2="350" marker-end="url(#arr)" color="#f68b1f"/>
-            <line x1="80" y1="350" x2="80" y2="210" marker-end="url(#arr)" color="#f68b1f"/>
+            <line x1="80" y1="310" x2="230" y2="310" marker-end="url(#arr8)" color="#f68b1f"/>
+            <line x1="80" y1="310" x2="80" y2="170" marker-end="url(#arr8)" color="#f68b1f"/>
           </g>
-          <circle cx="80" cy="350" r="11" fill="var(--acc)"><animate attributeName="r" values="11;16;11" dur="2s" repeatCount="indefinite"/></circle>
-          <text x="104" y="382" fill="#ffc06a" style="font:700 18px 'Segoe UI'">Origen de pieza (0,0)</text>
-          <text x="240" y="342" fill="#94a1b5" style="font:600 15px 'Segoe UI'">+X</text>
-          <text x="92" y="222" fill="#94a1b5" style="font:600 15px 'Segoe UI'">+Y</text>
-          <text x="330" y="150" fill="#c9a583" style="font:600 14px 'Segoe UI'">material</text>
-          <text x="440" y="392" fill="#5d6a7e" style="font:600 14px 'Segoe UI'">mesa CNC</text>
+          <circle cx="80" cy="310" r="11" fill="var(--acc)"><animate attributeName="r" values="11;16;11" dur="2s" repeatCount="indefinite"/></circle>
+          <text x="104" y="345" fill="#ffc06a" style="font:700 19px 'Segoe UI'">Origen de pieza (0,0)</text>
+          <text x="240" y="302" fill="#94a1b5" style="font:600 15px 'Segoe UI'">+X</text>
+          <text x="92" y="182" fill="#94a1b5" style="font:600 15px 'Segoe UI'">+Y</text>
+          <text x="330" y="110" fill="#c9a583" style="font:600 14px 'Segoe UI'">material</text>
         </svg>
       </div>
     </div>
   </section>
 
   <!-- ══════════ E9 · DXF Y CAPAS ══════════ -->
-  <section class="scene" id="s9" style="padding-top:44px">
-    <div class="scene-head" data-sub="0" style="margin-bottom:20px">
+  <section class="scene" id="s9" style="padding:34px 75px">
+    <div class="scene-head" data-sub="0" style="margin-bottom:16px">
       <span class="idx">08 / 14</span>
-      <h2 class="h2" style="font-size:34px">Importar el diseño y organizar capas</h2>
+      <h2 class="h2" style="font-size:33px">Importar el diseño y organizar capas</h2>
     </div>
-    <div style="display:grid; grid-template-columns:600px 1fr; gap:48px; align-items:start">
-      <div>
-        <div class="win" data-sub="1" style="width:600px">
-          <div class="tabs"><div class="tab on">Graphic</div><div class="tab">CCD</div><div class="tab">Program</div><div class="tab">Coordinate</div></div>
-          <div class="appbody" style="height:330px">
-            <div class="pal">
-              <div class="pchip" style="background:#fff"></div><div class="pchip" style="background:#e2261a; outline:2px solid #2f7ff0"></div>
-              <div class="pchip" style="background:#f7e11e"></div><div class="pchip" style="background:#25d425"></div>
-              <div class="pchip" style="background:#25d3d3"></div><div class="pchip" style="background:#2032e0"></div>
-              <div class="pchip" style="background:#e224e2"></div><div class="pchip" style="background:#f28a1e"></div>
-            </div>
-            <div class="mcanvas">
-              <svg width="100%" height="100%" viewBox="0 0 400 300" style="position:absolute; inset:0" data-sub="1">
-                <path class="drawpath" style="stroke-width:2" d="M52,212 C88,150 152,118 212,130 C228,96 272,76 324,88 C302,110 288,122 276,138 C322,142 344,162 354,192 C312,180 282,186 250,196 C222,242 158,254 110,236 C96,252 78,258 58,260 C70,246 74,230 62,214 Z"/>
-                <text x="120" y="40" fill="#3a4a60" style="font:800 26px 'Segoe UI'; letter-spacing:4px">TECHPRO</text>
-              </svg>
-            </div>
-          </div>
-          <div class="fbar"><div class="fk pulse">Layer F1</div><div class="fk">Parameters F2</div><div class="fk">CreateFile F3</div><div class="fk">AutoSort F4</div><div class="fk">OutputFile F5</div></div>
-        </div>
-        <div style="display:flex; gap:10px; margin-top:18px; flex-wrap:wrap">
-          <span class="chip" data-sub="1"><b>Archivo → Open DXF/AI/PLT</b>&nbsp;·&nbsp;<span class="kbd">Ctrl+O</span></span>
-          <span class="chip" data-sub="2">Todo entra en la <b style="color:#ff6b5e">capa roja</b></span>
-          <span class="chip" data-sub="5">La capa <b>blanca no se corta</b></span>
-        </div>
-      </div>
-      <div>
-        <div class="dlg" data-sub="3" style="width:100%">
-          <div class="dtitle"><span>◈ Layer Parameters</span><span style="color:#999">? ✕</span></div>
-          <div class="dbody" style="display:grid; grid-template-columns:1fr 1fr; gap:4px 26px">
-            <div>
-              <table class="ptable"><tr><th>Layer</th><th>Tool</th><th>Speed</th><th>Output</th></tr>
-                <tr><td><span style="display:inline-block;width:26px;height:13px;background:#e2261a"></span></td><td>1</td><td>500</td><td>Yes</td></tr>
-                <tr><td><span style="display:inline-block;width:26px;height:13px;background:#25d425"></span></td><td>2</td><td>1000</td><td>Yes</td></tr>
-              </table>
-            </div>
-            <div>
-              <div class="frow"><span>Output</span><span class="fval">Yes ▾</span></div>
-              <div class="frow"><span>Tool</span><span class="fval">T1-T1CNC ▾</span></div>
-              <div class="frow"><span>Direction</span><span class="fval">CCW ▾</span></div>
-              <div class="frow"><span>Speed</span><span class="fval">500</span></div>
-              <div class="frow" style="background:#dfe9fb; border-radius:4px; justify-content:center; font-weight:700; color:#2456a8">Advanced</div>
-              <div class="frow"><span>Material Thickness</span><span class="fval">6</span></div>
-              <div class="frow"><span>Final Depth</span><span class="fval">3</span></div>
-              <div class="frow"><span>Pass Depth</span><span class="fval">3</span></div>
-            </div>
-          </div>
-          <div class="dbtns"><span class="dbtn pri">Ok</span><span class="dbtn">Cancel</span></div>
-        </div>
-        <div class="steplist" style="gap:10px; margin-top:18px">
-          <div class="chip" data-sub="4" style="align-self:flex-start"><b>T1</b>&nbsp;= husillo&nbsp;·&nbsp;<b>T2</b>&nbsp;= cuchilla vibratoria&nbsp;·&nbsp;velocidad <b>500–1000</b></div>
-          <div class="chip" data-sub="4" style="align-self:flex-start">Avanzado: <b>espesor</b> · <b>profundidad final</b> · <b>profundidad por pasada</b></div>
-        </div>
-      </div>
+    <div class="appstage" data-tpl="app" data-sub="0"></div>
+    <div class="zonechip"></div>
+    <div class="ovl" style="left:96px; bottom:48px">
+      <span class="chip" data-sub="4" style="font-size:17px"><b>T1</b>&nbsp;= husillo · <b>T2</b>&nbsp;= cuchilla vibratoria · velocidad <b>500–1000</b></span>
     </div>
   </section>
 
   <!-- ══════════ E10 · CREAR ARCHIVO Y SIMULAR ══════════ -->
-  <section class="scene" id="s10" style="padding-top:44px">
-    <div class="scene-head" data-sub="0" style="margin-bottom:20px">
+  <section class="scene" id="s10" style="padding:34px 75px">
+    <div class="scene-head" data-sub="0" style="margin-bottom:16px">
       <span class="idx">09 / 14</span>
-      <h2 class="h2" style="font-size:34px">Crear archivo, simular y cortar</h2>
+      <h2 class="h2" style="font-size:33px">Crear archivo, simular y cortar</h2>
     </div>
-    <div id="s10wrap" style="position:relative; width:1150px; margin:0 auto" data-sub="0">
-      <div class="win" style="width:1150px">
-        <div class="tabs"><div class="tab">Graphic</div><div class="tab">CCD</div><div class="tab on">Program</div><div class="tab">Coordinate</div><div class="tab">Parameter</div><div class="tab">Diagnosis</div></div>
-        <div class="tabs" style="background:#dfe1e5"><div class="tab cyanon" style="flex:0 0 190px">3D</div><div class="tab" style="flex:0 0 190px">File Management</div><div class="tab" style="flex:0 0 210px">Process Studio Author</div><div style="flex:1"></div></div>
-        <div class="appbody" style="height:352px">
-          <div class="viewport3d">
-            <svg width="100%" height="100%" viewBox="0 0 800 330" style="position:absolute; inset:0" data-sub="1">
-              <g transform="translate(240,30) scale(.86)">
-                <rect x="0" y="0" width="360" height="270" fill="none" stroke="#27407a" stroke-width="1"/>
-                <path class="drawpath cyan" style="stroke-width:1.6" d="M52,212 C88,150 152,118 212,130 C228,96 272,76 324,88 C302,110 288,122 276,138 C322,142 344,162 354,192 C312,180 282,186 250,196 C222,242 158,254 110,236 C96,252 78,258 58,260 C70,246 74,230 62,214 Z"/>
-                <path class="drawpath" style="stroke:#e8e14a; stroke-width:1; stroke-dasharray:2600; filter:none" d="M-30,300 L52,212 M324,88 L-30,300"/>
-              </g>
-              <g stroke-width="2.4" fill="none">
-                <line x1="40" y1="300" x2="120" y2="300" stroke="#ff5b4d"/><line x1="40" y1="300" x2="40" y2="222" stroke="#38d97e"/><line x1="40" y1="300" x2="86" y2="264" stroke="#5fa8ff"/>
-              </g>
-            </svg>
-          </div>
-        </div>
-        <div class="progressrow mono" style="font-size:11.5px"><span>TotalIndex: 68541</span><span>X Max: <b style="color:#1fae52">408.986</b></span><span>Y Max: <b style="color:#1fae52">1245.540</b></span><span>Z Max: <b style="color:#d92b1f">182.475</b></span><span style="margin-left:auto">Estimated Time 00:38:32</span></div>
-        <div class="fbar">
-          <div class="fk">Load F1</div><div class="fk">UnLoad-F2</div><div class="fk fk-sim">Simulation F3</div><div class="fk">Start Selected F4</div>
-          <div class="fk">Edit File F5</div><div class="fk">BkPt Resume F6</div><div class="fk">CycleStart F7</div><div class="fk">Origin F8</div>
-        </div>
-      </div>
-      <div class="co" data-sub="1" data-target=".tab.on"><span class="co-tag">1 · CreateFile F3 genera el G-code y abre Programa</span></div>
-      <div class="co" data-sub="2" data-target=".fk-sim"><span class="co-tag below">2 · Simulation F3: recorrido + tiempo estimado</span></div>
-      <div class="co" data-sub="3" data-target=".progressrow" style="border-color:var(--stop); box-shadow:0 0 0 4px rgba(232,73,60,.15)"><span class="co-tag right" style="background:var(--stop); color:#fff; top:-40px">3 · Revisa límites: sobre-recorrido = reposicionar origen</span></div>
-      <div class="co" data-sub="4" style="left:895px; top:512px; width:auto; height:auto; border:none; box-shadow:none">
-        <div class="tbtn pulse" style="width:230px; padding:14px 0; font-size:19px; border-radius:9px">▶ Start F9</div>
-      </div>
-    </div>
+    <div class="appstage" data-tpl="program" data-sub="0" style="height:632px"></div>
+    <div class="zonechip"></div>
   </section>
 
   <!-- ══════════ E11 · G-CODE EXTERNO ══════════ -->
   <section class="scene" id="s11">
+    <div class="appstage back" data-tpl="program"></div>
     <div class="scene-head" data-sub="0">
       <span class="idx">10 / 14</span>
       <h2 class="h1">¿Vienes de ArtCAM, Aspire o Fusion?</h2>
@@ -666,6 +776,7 @@
 
   <!-- ══════════ E12 · AVANZADAS ══════════ -->
   <section class="scene" id="s12">
+    <div class="appstage back" data-tpl="app"></div>
     <div class="scene-head" data-sub="0">
       <span class="idx">11 / 14</span>
       <h2 class="h1">Funciones que te salvan el día</h2>
@@ -681,47 +792,22 @@
   </section>
 
   <!-- ══════════ E13 · PARÁMETROS Y DIAGNÓSTICO ══════════ -->
-  <section class="scene" id="s13">
-    <div class="scene-head" data-sub="0">
+  <section class="scene" id="s13" style="padding:34px 75px">
+    <div class="scene-head" data-sub="0" style="margin-bottom:16px">
       <span class="idx">12 / 14</span>
-      <h2 class="h1">Parámetros y diagnóstico</h2>
+      <h2 class="h2" style="font-size:33px">Parámetros y diagnóstico</h2>
     </div>
-    <div class="split">
-      <div class="dlg" data-sub="1">
-        <div class="dtitle"><span>Parameter → Overview</span><span style="color:#999">Axis · Manual · Processing · File · Tool · Spindle</span></div>
-        <div class="dbody" style="padding:6px 0 0">
-          <table class="ptable">
-            <tr><th>Nº</th><th>Parámetro</th><th>Valor</th><th>Efecto</th></tr>
-            <tr><td>10001</td><td>Dirección del eje X (1 / -1)</td><td class="mono">1</td><td>Restart</td></tr>
-            <tr><td>30201</td><td>Modo de ajuste de herramienta</td><td class="mono">1</td><td>Inmediato</td></tr>
-            <tr><td>30202</td><td>Espesor del sensor de herramienta</td><td class="mono">20</td><td>Inmediato</td></tr>
-            <tr><td>50003</td><td>Velocidad de procesamiento (mm/min)</td><td class="mono">3000</td><td>Inmediato</td></tr>
-            <tr><td>50012</td><td>Velocidad de descenso de cuchilla</td><td class="mono">1500</td><td>Inmediato</td></tr>
-            <tr><td>50017</td><td>Altura segura del eje Z (mm)</td><td class="mono">30</td><td>Inmediato</td></tr>
-            <tr><td>50102</td><td>Husillo automático al iniciar (0/1)</td><td class="mono">1</td><td>Inmediato</td></tr>
-          </table>
-        </div>
-        <div class="fbar" style="margin-top:8px"><div class="fk">Import F1</div><div class="fk">Export F2</div><div class="fk">Manufacturer F3</div><div class="fk">Board Backup F4</div><div class="fk">Board Read F5</div></div>
-      </div>
-      <div class="steplist" style="gap:16px">
-        <div class="chip" data-sub="2" style="align-self:flex-start; font-size:18px">Parámetros de fabricante → contraseña <b class="mono" style="color:var(--acc2)">1992</b></div>
-        <div class="warn" data-sub="2">Un valor incorrecto puede impedir el trabajo <b>o dañar la máquina</b>. Modifica bajo guía de un profesional.</div>
-        <div class="warn tip" data-sub="3">Haz clic en <b>Export F2</b> y guarda una copia de seguridad de tus parámetros. Te salvará más de una vez.</div>
-        <div class="card" data-sub="4">
-          <h3 style="margin-bottom:12px">Página Diagnosis — entradas y salidas en vivo</h3>
-          <div class="iotable">
-            <span class="iochip">XORG</span><span class="iochip">YORG</span><span class="iochip">ZORG</span><span class="iochip">CORG</span>
-            <span class="iochip">CUT</span><span class="iochip red">ESTOP</span><span class="iochip red">CUTALARM</span>
-            <span class="iochip">Spindle</span><span class="iochip">Vacuum pump</span><span class="iochip">Vacuum cleaner</span><span class="iochip">Blowing</span><span class="iochip">Brake</span>
-          </div>
-          <p style="margin-top:12px">Verifica sensores de origen, parada de emergencia y enciende salidas con un clic para probarlas.</p>
-        </div>
-      </div>
+    <div class="appstage" data-tpl="param" data-sub="0" style="height:608px"></div>
+    <div class="zonechip"></div>
+    <div class="ovl" style="left:96px; bottom:46px; display:flex; gap:12px">
+      <span class="chip" data-sub="2" style="font-size:17px">Fabricante → contraseña <b class="mono" style="color:var(--acc2)">1992</b> · con criterio</span>
+      <span class="chip" data-sub="3" style="font-size:17px; border-color:rgba(56,217,126,.5)">✓ <b>Export F2</b> = copia de seguridad</span>
     </div>
   </section>
 
   <!-- ══════════ E14 · CIERRE ══════════ -->
   <section class="scene" id="s14">
+    <div class="appstage back" data-tpl="app"></div>
     <div class="scene-head" data-sub="0">
       <span class="idx">13–14 / 14</span>
       <h2 class="h1">El flujo completo, en seis pasos</h2>
@@ -904,6 +990,140 @@
   }
   window.addEventListener("resize", rescale); rescale();
 
+  /* ---- escenario de software: clones, cámara, spots ---- */
+  var FOCUS = {
+    s3:[ {},
+      {z:".sbar",  label:"① Barra de estado — conexión · modo · IP", k:2.2, ax:"left"},
+      {z:".tabs",  label:"② Las 6 páginas: Graphic · CCD · Program · Coordinate · Parameter · Diagnosis", k:2.2},
+      {z:".pal",   spot:[".pal"], label:"③ Capas de colores + herramientas de edición", k:2.2},
+      {z:".mcanvas", label:"④ Área gráfica — diseño y trayectorias"},
+      {z:".rp",    spot:[".rp"], label:"⑤ Panel de control manual"},
+      {z:".fbot",  label:"⑥ Teclas F1–F12 + progreso del trabajo", k:1.6, ax:"left"}],
+    s4:[ {label:"Página Coordinate — Workpiece"},
+      {z:".cw-cur", label:"Coordenadas mecánicas → posición actual", k:1.4},
+      {z:".cw-cur", spot:[".cw-load"], label:"Load Current = capturar la posición como origen", k:1.4},
+      {z:".cw-g",  label:"G54 – G59 · hasta seis orígenes guardados", k:1.15},
+      {label:"Regla de la mano derecha"}],
+    s5:[ {z:".rp", k:1.9},
+      {z:".rp-coords", label:"① Coordenadas mecánicas y relativas", k:2.6},
+      {z:".rp-fs", label:"② F = avance · S = RPM del husillo · ajustables en vivo", k:2.6},
+      {z:".rp-jogrow", label:"③ Jog de ejes + pasos 0.01 – 100 mm", k:2.2},
+      {z:".rp-sw", label:"④ Husillo · vacío · aspiración · cuchilla", k:2.6},
+      {z:".rp-transport", label:"⑤ Start F9 · Pause F10 · Stop F11 · Home F12", k:2.6}],
+    s6:[ {},
+      {show:[".dlg-home"], z:".dlg-home", spot:[".pulsebtn"], label:"Al encender: All axis back to home", k:1.9},
+      {show:[".pm-op"], z:".pm-op", spot:[".hot-home"], label:"Menú Operation → All Back To Home", k:1.9},
+      {z:".rp-jog", spotBad:[".jb-xm",".jb-ym",".jb-zp"], label:"⚠ En HOME no pulses X- · Y- · Z+", k:2.3}],
+    s8:[ {},
+      {z:".rp-jogrow", spot:[".rp-jog"], label:"Mueve el husillo a la esquina del material", k:2},
+      {z:".rp-jog", spot:[".jb-xy0",".jb-z0"], label:"XY->0 fija el plano · Z->0 fija la altura", k:2.4},
+      {z:".rp-sw", spot:[".sw-knife2"], label:"Cuchilla vibratoria: baja y fija su propio Z->0 (G59)", k:2.5}],
+    s9:[ {},
+      {show:[".pm-file"], z:".pm-file", spot:[".pm-file .hot"], label:"Archivo → Open DXF/AI/PLT (Ctrl+O)", k:2},
+      {z:".pal", spot:[".pc-red"], label:"Todo entra en la capa roja → repártelo en colores", k:2.3},
+      {show:[".dlg-layer"], z:".dlg-layer", label:"Layer F1 → receta de corte por capa", k:1.5},
+      {show:[".dlg-layer"], z:".dlg-adv", spot:[".dlg-adv"], label:"Advanced: espesor · profundidad final · por pasada", k:2.1},
+      {z:".pal", spot:[".pc-white"], label:"La capa blanca NO se corta", k:2.4}],
+    s10:[ {},
+      {z:".tab-prog", spot:[".tab-prog"], label:"CreateFile F3 genera el G-code → página Program", k:2.4},
+      {z:".fk-sim", spot:[".fk-sim"], label:"Simulation F3 — dibuja el recorrido completo", k:2.4, draw:".simwrap"},
+      {z:".statsrow", spotBad:[".statsrow"], label:"Límites por eje + tiempo estimado — vigila el sobre-recorrido", k:1.9, draw:".simwrap"},
+      {z:".rp-transport", spot:[".tb-start"], label:"Start F9 — comienza el corte", k:2.5, draw:".simwrap"}],
+    s13:[ {},
+      {z:".pt-rows", label:"10001 dirección de eje · 30201 ajuste de herramienta · 50003 velocidad · 50017 altura segura Z", k:1.3},
+      {z:".pt-rows", spot:[".pt-30201"], label:"Fabricante → contraseña 1992 · un valor incorrecto puede dañar la máquina", k:1.3},
+      {z:".fk-exp", spot:[".fk-exp"], label:"Export F2 — respalda tus parámetros", k:2.4},
+      {show:[".dlg-diag"], z:".dlg-diag", label:"Página Diagnosis — entradas y salidas en vivo", k:1.5}]
+  };
+
+  function initStages(){
+    /* el panel derecho del template program se copia del template app */
+    var rpMaster = document.querySelector("#tpl-app .rp");
+    document.querySelectorAll("#tpl-program .rp-slot").forEach(function(slot){
+      slot.parentNode.replaceChild(rpMaster.cloneNode(true), slot);
+    });
+    document.querySelectorAll(".appstage").forEach(function(st){
+      var tpl = document.getElementById("tpl-" + st.getAttribute("data-tpl"));
+      if(!tpl) return;
+      var cam = document.createElement("div");
+      cam.className = "appcam";
+      cam.appendChild(tpl.firstElementChild.cloneNode(true));
+      st.appendChild(cam);
+    });
+  }
+
+  function measureStages(){
+    var fs = fitEl.getBoundingClientRect().width / 1600;
+    if(!fs) return;
+    SC.forEach(function(sc){
+      var cfgs = FOCUS[sc.id]; if(!cfgs) return;
+      var st = sc.el.querySelector(".appstage");
+      if(!st || st.classList.contains("back")) return;
+      var cam = st.querySelector(".appcam");
+      var popups = cam.querySelectorAll(".popup");
+      popups.forEach(function(p){ p.classList.add("show"); });
+      var base = cam.getBoundingClientRect(), str = st.getBoundingClientRect();
+      st.__dims = { w: str.width/fs, h: str.height/fs };
+      var aw = cam.querySelector(".appwin").getBoundingClientRect();
+      st.__app = { w: aw.width/fs, h: aw.height/fs };
+      cfgs.forEach(function(cfg){
+        if(!cfg.z) return;
+        var el = cam.querySelector(cfg.z);
+        if(!el) return;
+        var r = el.getBoundingClientRect();
+        cfg.__r = { x:(r.left-base.left)/fs, y:(r.top-base.top)/fs, w:r.width/fs, h:r.height/fs };
+      });
+      popups.forEach(function(p){ p.classList.remove("show"); });
+    });
+  }
+
+  function resetStage(sc){
+    var st = sc.el.querySelector(".appstage");
+    if(!st || st.classList.contains("back")) return;
+    var cam = st.querySelector(".appcam");
+    if(!cam) return;
+    cam.querySelectorAll(".popup.show").forEach(function(p){ p.classList.remove("show"); });
+    cam.querySelectorAll(".spot").forEach(function(e){ e.classList.remove("spot"); });
+    cam.querySelectorAll(".spot-bad").forEach(function(e){ e.classList.remove("spot-bad"); });
+    cam.querySelectorAll(".simwrap.on").forEach(function(e){ e.classList.remove("on"); });
+  }
+
+  function applySoft(sc, subIdx){
+    var st = sc.el.querySelector(".appstage");
+    var zc = sc.el.querySelector(".zonechip");
+    var cfgs = FOCUS[sc.id] || [];
+    var cfg = cfgs[subIdx] || {};
+    if(st && !st.classList.contains("back")){
+      var cam = st.querySelector(".appcam");
+      cam.querySelectorAll(".popup.show").forEach(function(p){ p.classList.remove("show"); });
+      (cfg.show||[]).forEach(function(sel){ var p = cam.querySelector(sel); if(p) p.classList.add("show"); });
+      cam.querySelectorAll(".spot").forEach(function(e){ e.classList.remove("spot"); });
+      cam.querySelectorAll(".spot-bad").forEach(function(e){ e.classList.remove("spot-bad"); });
+      (cfg.spot||[]).forEach(function(sel){ var e = cam.querySelector(sel); if(e) e.classList.add("spot"); });
+      (cfg.spotBad||[]).forEach(function(sel){ var e = cam.querySelector(sel); if(e) e.classList.add("spot-bad"); });
+      if(cfg.draw){ var d = cam.querySelector(cfg.draw); if(d) d.classList.add("on"); }
+      var tr = "translate(0px,0px) scale(1)";
+      if(cfg.__r && st.__dims){
+        var S = st.__dims, R = cfg.__r, A = st.__app, pad = 90;
+        /* limita solo por altura: las franjas anchas se recortan a los lados (más cine) */
+        var k = Math.max(1, Math.min(cfg.k || 2.4, S.h/(R.h+pad)));
+        var tx = (cfg.ax === "left") ? (40 - k*R.x) : (S.w/2 - k*(R.x + R.w/2));
+        var ty = S.h/2 - k*(R.y + R.h/2);
+        if(k*A.w >= S.w) tx = Math.min(0, Math.max(S.w - k*A.w, tx));
+        if(k*A.h >= S.h) ty = Math.min(0, Math.max(S.h - k*A.h, ty));
+        tr = "translate(" + tx + "px," + ty + "px) scale(" + k + ")";
+      }
+      cam.style.transform = tr;
+    }
+    if(zc){
+      if(cfg.label){ zc.textContent = cfg.label; zc.classList.add("show"); }
+      else zc.classList.remove("show");
+    }
+  }
+
+  initStages();
+  measureStages();
+
   /* seek ticks + menu */
   SC.forEach(function(sc, i){
     var tick = document.createElement("div");
@@ -964,6 +1184,7 @@
     if(si !== curScene || force){
       SC.forEach(function(x){ if(x.el !== sc.el) x.el.classList.remove("active"); });
       sc.el.classList.add("active");
+      resetStage(sc);
       curScene = si; curSub = -1;
       chapnum.textContent = "Capítulo " + (si+1) + " · " + SC.length;
       chapname.textContent = sc.title;
@@ -975,6 +1196,7 @@
     if(sub !== curSub || force){
       curSub = sub;
       applyReveals(sc, sub);
+      applySoft(sc, sub);
       subEl.innerHTML = sc.subs[sub];
       subEl.classList.add("show");
       if(playing) speak(sc.subs[sub]);
@@ -1068,6 +1290,13 @@
   /* initial frame */
   update(true);
   subEl.classList.remove("show");
+
+  /* hook interno para pruebas (no interfiere con el uso normal) */
+  window.__icut = { go: function(si, k){
+    jumpTo(si);
+    t = SC[si].start + (SC[si].times[k||0] || 0) + 0.05;
+    update(true);
+  }};
 })();
 </script>
 </body></html>

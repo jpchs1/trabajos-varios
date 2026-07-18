@@ -1261,6 +1261,13 @@
   function play(){
     if(ended){ ended=false; t=0; curScene=-1; }
     if(playing) return;
+    if(location.search.indexOf("render")>=0 && !window.__flashed){
+      window.__flashed = true;
+      var _f = document.createElement("div");
+      _f.style.cssText = "position:fixed;left:0;top:0;width:130px;height:130px;background:#00ff00;z-index:9999";
+      document.body.appendChild(_f);
+      setTimeout(function(){ _f.remove(); }, 180);
+    }
     playing = true; last = performance.now();
     document.body.classList.remove("paused");
     overlay.classList.add("hide");

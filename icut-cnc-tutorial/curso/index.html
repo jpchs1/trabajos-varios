@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="es">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Curso completo de iCut — CNC Router</title>
+</head>
+<body>
+<style>
+  :root{--bg:#07090d; --panel:#131a24; --line:#243040; --txt:#eef2f7; --mut:#94a1b5; --acc:#f68b1f; --acc2:#ffc06a}
+  *{box-sizing:border-box; margin:0; padding:0}
+  body{background:var(--bg); color:var(--txt); font-family:"Segoe UI",system-ui,Roboto,Arial,sans-serif; min-height:100vh;
+    background-image:radial-gradient(circle, rgba(120,150,190,.10) 1px, transparent 1.4px); background-size:44px 44px}
+  .wrap{max-width:1080px; margin:0 auto; padding:64px 28px 90px}
+  .eyebrow{font-size:14px; letter-spacing:.3em; text-transform:uppercase; color:var(--acc); font-weight:700}
+  h1{font-size:clamp(42px,7vw,86px); line-height:.98; font-weight:800; letter-spacing:-.02em; margin:18px 0 20px}
+  h1 span{color:var(--acc)}
+  .lead{font-size:19px; color:var(--mut); line-height:1.55; max-width:64ch}
+  .stats{display:flex; gap:12px; flex-wrap:wrap; margin:26px 0 10px}
+  .chip{display:inline-flex; align-items:center; gap:9px; padding:9px 16px; border:1px solid var(--line); border-radius:999px;
+    background:rgba(19,26,36,.85); font-size:15px; color:var(--mut)}
+  .chip b{color:var(--txt)}
+  .dot{width:8px;height:8px;border-radius:50%;background:var(--acc)}
+  .resumen{display:flex; gap:20px; align-items:center; margin:40px 0 14px; padding:22px 26px; border-radius:16px;
+    border:1px solid rgba(246,139,31,.5); background:linear-gradient(120deg, rgba(246,139,31,.14), rgba(19,26,36,.9));
+    text-decoration:none; color:var(--txt)}
+  .resumen:hover{border-color:var(--acc)}
+  .resumen .play{flex:none; width:64px; height:64px; border-radius:50%; background:radial-gradient(circle at 35% 30%, #ffc678, var(--acc) 70%);
+    display:flex; align-items:center; justify-content:center; font-size:26px; color:#180d02}
+  .resumen h3{font-size:21px; margin-bottom:4px}
+  .resumen p{color:var(--mut); font-size:15px}
+  .grid{display:flex; flex-direction:column; gap:14px; margin-top:26px}
+  .mod{display:flex; gap:22px; padding:22px 26px; border-radius:16px; border:1px solid var(--line);
+    background:linear-gradient(180deg, rgba(24,32,44,.92), rgba(15,20,28,.92)); text-decoration:none; color:var(--txt); transition:.2s}
+  .mod:hover{border-color:var(--acc); transform:translateY(-2px)}
+  .mn{flex:none; font-size:34px; font-weight:800; color:var(--acc); width:58px; font-variant-numeric:tabular-nums}
+  .mi h3{font-size:21px; margin-bottom:6px}
+  .mi p{color:var(--mut); font-size:15.5px; line-height:1.5}
+  .meta{display:flex; gap:10px; margin-top:12px; font-size:13.5px; color:var(--mut); align-items:center; flex-wrap:wrap}
+  .meta .go{margin-left:auto; color:var(--acc2); font-weight:700}
+  .foot{margin-top:44px; color:#5d6a7e; font-size:14px; line-height:1.6}
+  @media (max-width:640px){ .mod{flex-direction:column; gap:10px} .meta .go{margin-left:0} }
+</style>
+<div class="wrap">
+  <div class="eyebrow">Curso completo en video · TechPro / Xing Duo Wei · MDR CNC Router</div>
+  <h1>Domina <span>iCut</span>.<br>De cero a experto.</h1>
+  <p class="lead">Ocho módulos en video con narración en español, construidos sobre la interfaz real del software: cada explicación hace zoom sobre el botón, menú o diálogo exacto de iCut. Basado íntegramente en los manuales oficiales.</p>
+  <div class="stats">
+    <span class="chip"><span class="dot"></span> <b>8 módulos</b> + resumen express</span>
+    <span class="chip"><span class="dot"></span> <b>~42 minutos</b> de video</span>
+    <span class="chip"><span class="dot"></span> <b>53 capítulos</b> navegables</span>
+    <span class="chip"><span class="dot"></span> Narración por voz + subtítulos</span>
+  </div>
+  <a class="resumen" href="../index.html">
+    <div class="play">▶</div>
+    <div><h3>Resumen express — todo iCut en 10 minutos</h3>
+    <p>¿Poco tiempo? El tutorial original condensa el flujo completo. Ideal como repaso rápido antes de operar.</p></div>
+  </a>
+  <div class="grid">
+
+      <a class="mod" href="01-fundamentos.html">
+        <div class="mn">01</div>
+        <div class="mi">
+          <h3>Fundamentos e interfaz</h3>
+          <p>Qué es iCut, la pantalla zona por zona, menús Archivo/Operación/Ayuda, panel de control y sistemas de coordenadas G54–G59.</p>
+          <div class="meta"><span>7 capítulos</span><span>·</span><span>4:58 min</span><span class="go">Ver módulo ▶</span></div>
+        </div>
+      </a>
+
+      <a class="mod" href="02-puesta-en-marcha.html">
+        <div class="mn">02</div>
+        <div class="mi">
+          <h3>Puesta en marcha y orígenes</h3>
+          <p>HOME y el homing por dentro (11xxx), ajuste de herramienta flotante/fijo/manual, página Tool Setting y origen de pieza.</p>
+          <div class="meta"><span>7 capítulos</span><span>·</span><span>4:18 min</span><span class="go">Ver módulo ▶</span></div>
+        </div>
+      </a>
+
+      <a class="mod" href="03-del-diseno-al-corte.html">
+        <div class="mn">03</div>
+        <div class="mi">
+          <h3>Del diseño al corte: DXF y capas</h3>
+          <p>Importar DXF/AI/PLT/imágenes, el diálogo File Parameter completo, capas con Layer F1, orden de corte, simular y cortar.</p>
+          <div class="meta"><span>7 capítulos</span><span>·</span><span>3:53 min</span><span class="go">Ver módulo ▶</span></div>
+        </div>
+      </a>
+
+      <a class="mod" href="04-gcode-y-produccion.html">
+        <div class="mn">04</div>
+        <div class="mi">
+          <h3>G-code, archivos y producción</h3>
+          <p>CAM externo (.tap/.nc), File Management, editar y procesar por líneas, reanudar tras apagón, ciclos, fresado de base y MDI.</p>
+          <div class="meta"><span>7 capítulos</span><span>·</span><span>3:41 min</span><span class="go">Ver módulo ▶</span></div>
+        </div>
+      </a>
+
+      <a class="mod" href="05-edicion-trayectorias.html">
+        <div class="mn">05</div>
+        <div class="mi">
+          <h3>Edición y optimización</h3>
+          <p>Compensación de radio con modos y esquinas, 6 estrategias de ordenamiento + manual, espejo, rotación, matrices, mover y escalar.</p>
+          <div class="meta"><span>6 capítulos</span><span>·</span><span>3:04 min</span><span class="go">Ver módulo ▶</span></div>
+        </div>
+      </a>
+
+      <a class="mod" href="06-vision-ccd.html">
+        <div class="mn">06</div>
+        <div class="mi">
+          <h3>Visión CCD y corte de contorno</h3>
+          <p>La cámara CCD, marcas de registro, edge patrol sobre material impreso, y conversión de imagen/DXF/PLT sin cámara (FAQ 3.1).</p>
+          <div class="meta"><span>6 capítulos</span><span>·</span><span>3:08 min</span><span class="go">Ver módulo ▶</span></div>
+        </div>
+      </a>
+
+      <a class="mod" href="07-parametros-a-fondo.html">
+        <div class="mn">07</div>
+        <div class="mi">
+          <h3>Parámetros del sistema a fondo</h3>
+          <p>Series 10xxx, 11xxx y 50xxx explicadas, alturas y aproximación, automatismos y parada final, IO, respaldos e idioma.</p>
+          <div class="meta"><span>7 capítulos</span><span>·</span><span>4:49 min</span><span class="go">Ver módulo ▶</span></div>
+        </div>
+      </a>
+
+      <a class="mod" href="08-diagnostico-mantenimiento.html">
+        <div class="mn">08</div>
+        <div class="mi">
+          <h3>Diagnóstico, red y mantenimiento</h3>
+          <p>Página Diagnosis, conexión IP con el controlador, firmware .XDW y recetario de problemas comunes.</p>
+          <div class="meta"><span>6 capítulos</span><span>·</span><span>3:36 min</span><span class="go">Ver módulo ▶</span></div>
+        </div>
+      </a>
+  </div>
+  <p class="foot">Controles en cada video: <b>espacio</b> reproducir/pausar · <b>←/→</b> capítulos · <b>C</b> menú de capítulos · <b>N</b> narración · <b>F</b> pantalla completa.<br>
+  Fuentes: Manual de usuario del sistema CNC Xing Duo Wei (54 págs.) y Manual de operación para principiantes TechPro. Recomendado: Chrome o Edge.</p>
+</div>
+</body>
+</html>

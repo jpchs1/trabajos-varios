@@ -33,3 +33,25 @@ Abrir `index.html` en cualquier navegador moderno (Chrome/Edge recomendado) y pu
 Fuentes: *Manual de usuario del sistema CNC Xing Duo Wei* y *Manual de operación
 para principiantes Xing Duo Wei (TechPro)*, complementado con documentación pública
 del software MDR CNC Router.
+
+
+## 🎓 Curso completo (carpeta `curso/`)
+
+Además del video resumen, la carpeta `curso/` contiene el **curso completo en 8 módulos**
+(~42 min en total, 53 capítulos), cada uno con narración por voz, subtítulos y cámara
+dinámica sobre la interfaz recreada de iCut. Abrir `curso/index.html` para ver la portada
+con el índice completo:
+
+| Módulo | Tema | Duración |
+|---|---|---|
+| 1 | Fundamentos e interfaz (pantalla, menús, coordenadas) | 5:0 |
+| 2 | Puesta en marcha y orígenes (HOME, homing 11xxx, ajuste de herramienta, Tool Setting) | 4:18 |
+| 3 | Del diseño al corte (DXF, File Parameter, capas, simulación) | 3:53 |
+| 4 | G-code y producción (CAM externo, File Management, reanudación, ciclos, MDI) | 3:41 |
+| 5 | Edición de trayectorias (compensación, ordenamiento, espejo/matrices) | 3:04 |
+| 6 | Visión CCD y corte de contorno (marcas, edge patrol, FAQ 3.1) | 3:08 |
+| 7 | Parámetros a fondo (series 10xxx/11xxx/50xxx, respaldos, idioma) | 4:49 |
+| 8 | Diagnóstico y mantenimiento (Diagnosis, IP, firmware .XDW, problemas comunes) | 3:36 |
+
+Los módulos se construyen desde componentes compartidos (motor de reproducción + plantillas
+de la interfaz del software), por lo que todos mantienen el mismo estilo y controles.

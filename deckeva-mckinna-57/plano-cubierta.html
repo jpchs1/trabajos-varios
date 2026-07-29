@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Deckeva — McKinna 57 Pilothouse — Plano de cubierta</title>
+<style>
+  html,body{margin:0;padding:0;background:#F2EFE9;}
+  svg{display:block;}
+  text{font-family:"Helvetica Neue",Helvetica,Arial,"DejaVu Sans",sans-serif;}
+</style>
+</head>
+<body>
+<svg width="1600" height="1000" viewBox="0 0 1600 1000" xmlns="http://www.w3.org/2000/svg">
+<defs>
+  <!-- ===== patrón teca escala plano ===== -->
+  <pattern id="teak" width="26" height="220" patternUnits="userSpaceOnUse">
+    <rect width="26" height="220" fill="#17140F"/>
+    <rect x="2"  y="2"   width="10" height="107" fill="#C1945F"/>
+    <rect x="2"  y="113" width="10" height="107" fill="#CA9F6C"/>
+    <rect x="15" y="0"   width="9"  height="52"  fill="#C89C68"/>
+    <rect x="15" y="56"  width="9"  height="108" fill="#BD8F5B"/>
+    <rect x="15" y="168" width="9"  height="52"  fill="#CBA170"/>
+  </pattern>
+  <!-- ===== patrón teca escala muestra grande ===== -->
+  <linearGradient id="pk1" x1="0" y1="0" x2="1" y2="0">
+    <stop offset="0" stop-color="#C79A64"/><stop offset=".5" stop-color="#CDA271"/><stop offset="1" stop-color="#BE9059"/>
+  </linearGradient>
+  <linearGradient id="pk2" x1="0" y1="0" x2="1" y2="0">
+    <stop offset="0" stop-color="#BC8E58"/><stop offset=".5" stop-color="#C69963"/><stop offset="1" stop-color="#B78853"/>
+  </linearGradient>
+  <linearGradient id="pk3" x1="0" y1="0" x2="1" y2="0">
+    <stop offset="0" stop-color="#CDA26F"/><stop offset=".5" stop-color="#D3A978"/><stop offset="1" stop-color="#C3945F"/>
+  </linearGradient>
+  <pattern id="teakBig" width="200" height="880" patternUnits="userSpaceOnUse">
+    <rect width="200" height="880" fill="#15120D"/>
+    <rect x="6"   y="6"   width="86" height="428" fill="url(#pk1)"/>
+    <rect x="6"   y="446" width="86" height="428" fill="url(#pk3)"/>
+    <rect x="104" y="0"   width="86" height="210" fill="url(#pk2)"/>
+    <rect x="104" y="222" width="86" height="428" fill="url(#pk1)"/>
+    <rect x="104" y="662" width="86" height="218" fill="url(#pk3)"/>
+    <!-- veta sutil -->
+    <g stroke="#8A6538" stroke-width="1.4" opacity="0.28" fill="none">
+      <path d="M22,6 C 30,150 14,300 26,434"/>
+      <path d="M52,6 C 44,160 62,290 50,434"/>
+      <path d="M76,6 C 82,140 70,320 80,434"/>
+      <path d="M120,0 C 128,80 114,150 124,210"/>
+      <path d="M156,0 C 148,70 162,150 152,210"/>
+      <path d="M124,222 C 116,360 132,520 120,650"/>
+      <path d="M158,222 C 166,370 150,510 162,650"/>
+      <path d="M24,446 C 16,590 34,740 22,874"/>
+      <path d="M60,446 C 68,600 52,730 62,874"/>
+      <path d="M126,662 C 134,730 118,810 128,880"/>
+    </g>
+    <g stroke="#E8C494" stroke-width="1" opacity="0.32" fill="none">
+      <path d="M36,6 C 42,160 28,300 38,434"/>
+      <path d="M64,6 C 58,150 72,310 62,434"/>
+      <path d="M136,0 C 142,80 130,160 140,210"/>
+      <path d="M40,446 C 46,600 30,740 42,874"/>
+      <path d="M140,222 C 148,380 132,540 142,650"/>
+      <path d="M148,662 C 154,740 140,820 150,880"/>
+    </g>
+    <!-- bisel claro en juntas -->
+    <rect x="6" y="434" width="86" height="3" fill="#E3BE8E" opacity="0.5"/>
+    <rect x="104" y="210" width="86" height="3" fill="#E3BE8E" opacity="0.5"/>
+    <rect x="104" y="650" width="86" height="3" fill="#E3BE8E" opacity="0.5"/>
+  </pattern>
+  <filter id="soft" x="-30%" y="-30%" width="160%" height="160%">
+    <feDropShadow dx="0" dy="6" stdDeviation="10" flood-color="#1B2B36" flood-opacity="0.25"/>
+  </filter>
+  <filter id="soft2" x="-30%" y="-30%" width="160%" height="160%">
+    <feDropShadow dx="0" dy="3" stdDeviation="5" flood-color="#1B2B36" flood-opacity="0.18"/>
+  </filter>
+  <linearGradient id="water" x1="0" y1="0" x2="0" y2="1">
+    <stop offset="0" stop-color="#DCE7EC"/>
+    <stop offset="1" stop-color="#C9D8DF"/>
+  </linearGradient>
+  <linearGradient id="hdr" x1="0" y1="0" x2="1" y2="0">
+    <stop offset="0" stop-color="#0F2C3C"/>
+    <stop offset="1" stop-color="#164256"/>
+  </linearGradient>
+</defs>
+
+<!-- fondo -->
+<rect width="1600" height="1000" fill="#F2EFE9"/>
+<rect x="0" y="96" width="860" height="854" fill="url(#water)"/>
+
+<!-- ===== cabecera ===== -->
+<rect width="1600" height="96" fill="url(#hdr)"/>
+<text x="48" y="52" font-size="34" font-weight="700" letter-spacing="6" fill="#FFFFFF">DECK<tspan fill="#D9A96A">EVA</tspan></text>
+<text x="48" y="76" font-size="14" letter-spacing="2" fill="#9FB9C6">PISOS DE GOMA EVA ANTIDESLIZANTES · DECKEVA.CL</text>
+<text x="1552" y="46" font-size="20" font-weight="600" fill="#FFFFFF" text-anchor="end">Propuesta de referencia — McKinna 57 Pilothouse (1998)</text>
+<text x="1552" y="72" font-size="15" fill="#C9DAE3" text-anchor="end">Diseño teca · color café claro · línea negra</text>
+
+<!-- ============ CUBIERTA PRINCIPAL ============ -->
+<g transform="translate(76,0)">
+<g filter="url(#soft)">
+  <!-- plataforma de baño -->
+  <path d="M252,860 L408,860 L408,900 C408,912 398,918 386,918 L274,918 C262,918 252,912 252,900 Z"
+        fill="#F4F4F0" stroke="#96A2A8" stroke-width="1.5"/>
+  <!-- casco -->
+  <path d="M330,140 C 268,180 236,300 232,420 C 229,560 238,720 246,860 L414,860 C 422,720 431,560 428,420 C 424,300 392,180 330,140 Z"
+        fill="#F4F4F0" stroke="#96A2A8" stroke-width="1.5"/>
+</g>
+
+<!-- pad proa -->
+<path d="M330,164 C 286,196 260,286 252,326 L408,326 C 400,286 374,196 330,164 Z"
+      fill="url(#teak)" stroke="#141210" stroke-width="3" stroke-linejoin="round"/>
+<!-- molinete y escotilla (recortes) -->
+<circle cx="330" cy="196" r="11" fill="#F4F4F0" stroke="#141210" stroke-width="2"/>
+<rect x="308" y="242" width="44" height="30" rx="6" fill="#F4F4F0" stroke="#141210" stroke-width="2"/>
+
+<!-- pads pasillos laterales -->
+<path d="M247,340 L268,340 L268,742 L260,742 C 250,610 244,470 247,340 Z"
+      fill="url(#teak)" stroke="#141210" stroke-width="2.5" stroke-linejoin="round"/>
+<path d="M392,340 L413,340 C 416,470 410,610 400,742 L392,742 Z"
+      fill="url(#teak)" stroke="#141210" stroke-width="2.5" stroke-linejoin="round"/>
+
+<!-- superestructura -->
+<g filter="url(#soft2)">
+  <path d="M282,332 L378,332 C 392,332 398,340 398,354 L392,730 C 392,742 384,748 372,748 L288,748 C 276,748 268,742 268,730 L262,354 C 262,340 268,332 282,332 Z"
+        fill="#FBFBF8" stroke="#A9B2B6" stroke-width="1.5"/>
+</g>
+<!-- parabrisas piloto -->
+<path d="M284,340 L376,340 L370,364 L290,364 Z" fill="#B9C9D2" stroke="#8FA0AA" stroke-width="1"/>
+<line x1="316" y1="340" x2="318" y2="364" stroke="#8FA0AA" stroke-width="1"/>
+<line x1="344" y1="340" x2="342" y2="364" stroke="#8FA0AA" stroke-width="1"/>
+<!-- techo salón -->
+<rect x="276" y="380" width="108" height="340" rx="14" fill="#F6F6F2" stroke="#C4CBCE" stroke-width="1"/>
+<line x1="276" y1="470" x2="384" y2="470" stroke="#C4CBCE" stroke-width="1"/>
+
+<!-- pad cockpit -->
+<rect x="258" y="756" width="144" height="94" rx="10"
+      fill="url(#teak)" stroke="#141210" stroke-width="3"/>
+<rect x="272" y="768" width="116" height="70" rx="6" fill="none" stroke="#141210" stroke-width="1.5" opacity="0.65"/>
+
+<!-- pads plataforma (3 piezas) -->
+<g stroke="#141210" stroke-width="2.5">
+  <rect x="262" y="866" width="42" height="46" rx="7" fill="url(#teak)"/>
+  <rect x="309" y="866" width="42" height="46" rx="7" fill="url(#teak)"/>
+  <rect x="356" y="866" width="42" height="46" rx="7" fill="url(#teak)"/>
+</g>
+
+<!-- etiquetas cubierta principal -->
+<g font-size="14" fill="#33454F" font-weight="600" letter-spacing="1">
+  <g stroke="#71838D" stroke-width="1.2">
+    <line x1="150" y1="238" x2="286" y2="238"/>
+    <line x1="150" y1="520" x2="246" y2="520"/>
+    <line x1="150" y1="800" x2="254" y2="800"/>
+    <line x1="150" y1="890" x2="258" y2="890"/>
+  </g>
+  <g fill="#71838D">
+    <circle cx="286" cy="238" r="2.5"/><circle cx="246" cy="520" r="2.5"/>
+    <circle cx="254" cy="800" r="2.5"/><circle cx="258" cy="890" r="2.5"/>
+  </g>
+  <text x="144" y="232" text-anchor="end">CUBIERTA DE PROA</text>
+  <text x="144" y="514" text-anchor="end">PASILLOS LATERALES</text>
+  <text x="144" y="794" text-anchor="end">COCKPIT DE POPA</text>
+  <text x="144" y="884" text-anchor="end">PLATAFORMA DE BAÑO</text>
+</g>
+<text x="-30" y="936" font-size="13" fill="#5A6B75">Eslora 57 ft (17,4 m) · Manga 16,3 ft (5,0 m)</text>
+</g>
+
+<!-- ============ FLYBRIDGE ============ -->
+<text x="700" y="212" font-size="15" font-weight="700" letter-spacing="3" fill="#3E5866" text-anchor="middle">FLYBRIDGE</text>
+<g filter="url(#soft)">
+  <path d="M700,240 C 636,244 614,270 610,322 L606,478 C 606,516 636,538 700,538 C 764,538 794,516 794,478 L790,322 C 786,270 764,244 700,240 Z"
+        fill="#F4F4F0" stroke="#96A2A8" stroke-width="1.5"/>
+</g>
+<!-- pad piso flybridge -->
+<path d="M700,254 C 650,258 628,280 624,324 L620,474 C 620,504 648,522 700,522 C 752,522 780,504 780,474 L776,324 C 772,280 750,258 700,254 Z"
+      fill="url(#teak)" stroke="#141210" stroke-width="3" stroke-linejoin="round"/>
+<!-- consola timón -->
+<rect x="654" y="286" width="92" height="52" rx="10" fill="#EDEDE8" stroke="#A9B2B6" stroke-width="1.5"/>
+<circle cx="700" cy="312" r="9" fill="none" stroke="#8FA0AA" stroke-width="2"/>
+<!-- asiento piloto -->
+<rect x="672" y="352" width="56" height="30" rx="8" fill="#EDEDE8" stroke="#A9B2B6" stroke-width="1.5"/>
+<!-- settee en L -->
+<path d="M632,398 L664,398 L664,470 L740,470 L740,500 L632,500 Z" fill="#EDEDE8" stroke="#A9B2B6" stroke-width="1.5"/>
+<!-- mueble/wet bar -->
+<rect x="742" y="404" width="34" height="60" rx="6" fill="#EDEDE8" stroke="#A9B2B6" stroke-width="1.5"/>
+<text x="700" y="572" font-size="12.5" fill="#5A6B75" text-anchor="middle">(vista superior — piso Deckeva en zona de pisada)</text>
+
+<!-- ============ COLUMNA DERECHA ============ -->
+<!-- muestra material -->
+<text x="920" y="146" font-size="17" font-weight="700" letter-spacing="2.5" fill="#33454F">MATERIAL DE REFERENCIA</text>
+<g filter="url(#soft)">
+  <rect x="920" y="164" width="612" height="260" rx="16" fill="url(#teakBig)" stroke="#15120D" stroke-width="4"/>
+</g>
+<g font-size="13.5" fill="#4A5C66">
+  <text x="920" y="450">Plancha EVA diseño teca, color café claro · juntas negras tipo calafateo · terminación cepillada antideslizante</text>
+</g>
+
+<!-- colores -->
+<g>
+  <rect x="920" y="486" width="46" height="46" rx="9" fill="#C69A66" stroke="#8A6538" stroke-width="1.5"/>
+  <text x="978" y="505" font-size="14.5" font-weight="600" fill="#33454F">Teca café claro</text>
+  <text x="978" y="524" font-size="12.5" fill="#71838D">Superficie principal</text>
+  <rect x="1150" y="486" width="46" height="46" rx="9" fill="#17140F"/>
+  <text x="1208" y="505" font-size="14.5" font-weight="600" fill="#33454F">Línea negra</text>
+  <text x="1208" y="524" font-size="12.5" fill="#71838D">Juntas y borde perimetral</text>
+</g>
+
+<!-- especificaciones -->
+<text x="920" y="588" font-size="15" font-weight="700" letter-spacing="2.5" fill="#33454F">ESPECIFICACIONES</text>
+<g font-size="14" fill="#42555F">
+  <g fill="#C69A66">
+    <circle cx="928" cy="613" r="4"/><circle cx="928" cy="641" r="4"/><circle cx="928" cy="669" r="4"/>
+    <circle cx="928" cy="697" r="4"/><circle cx="928" cy="725" r="4"/><circle cx="928" cy="753" r="4"/>
+  </g>
+  <text x="944" y="618">Goma EVA premium de 6 mm, celda cerrada</text>
+  <text x="944" y="646">Antideslizante en seco y mojado</text>
+  <text x="944" y="674">Adhesivo 3M de alta resistencia (PSA)</text>
+  <text x="944" y="702">Protección UV-50+ · apto agua salada</text>
+  <text x="944" y="730">Reduce vibraciones y ruido (−40%)</text>
+  <text x="944" y="758">Fabricado a medida con plantillas de la embarcación</text>
+</g>
+
+<!-- superficies propuestas -->
+<text x="1280" y="588" font-size="15" font-weight="700" letter-spacing="2.5" fill="#33454F">SUPERFICIES PROPUESTAS</text>
+<g font-size="14" fill="#42555F">
+  <g font-weight="700" fill="#7A9E4E">
+    <text x="1284" y="618">✓</text><text x="1284" y="646">✓</text><text x="1284" y="674">✓</text>
+    <text x="1284" y="702">✓</text><text x="1284" y="730">✓</text><text x="1284" y="758">✓</text>
+  </g>
+  <text x="1306" y="618">Cockpit de popa</text>
+  <text x="1306" y="646">Plataforma de baño</text>
+  <text x="1306" y="674">Pasillos laterales (babor y estribor)</text>
+  <text x="1306" y="702">Cubierta de proa</text>
+  <text x="1306" y="730">Piso de flybridge</text>
+  <text x="1306" y="758">Escalones y peldaños (opcional)</text>
+</g>
+
+<!-- nota -->
+<rect x="920" y="800" width="612" height="104" rx="12" fill="#FFFFFF" stroke="#D8D2C6" stroke-width="1.5"/>
+<text x="944" y="832" font-size="14" font-weight="700" fill="#33454F">Nota para el cliente</text>
+<text x="944" y="856" font-size="13" fill="#5A6B75">Esta lámina es una referencia ilustrativa del diseño y color propuestos.</text>
+<text x="944" y="876" font-size="13" fill="#5A6B75">Las piezas definitivas se plantillan en la embarcación para un calce exacto</text>
+<text x="944" y="896" font-size="13" fill="#5A6B75">alrededor de herrajes, escotillas, cornamusas y tapas de registro.</text>
+
+<!-- pie -->
+<rect x="0" y="950" width="1600" height="50" fill="#E7E2D8"/>
+<text x="48" y="981" font-size="13" fill="#6B675E">Imagen referencial — el plano no representa la geometría exacta de la embarcación · McKinna 57 Pilothouse, 1998 · 57 ft</text>
+<text x="1552" y="981" font-size="14" font-weight="700" letter-spacing="1.5" fill="#33454F" text-anchor="end">DECKEVA.CL</text>
+</svg>
+</body>
+</html>

@@ -1,0 +1,490 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Cotización CDSKI · Clases privadas de ski en Valle Nevado — Gonzalo</title>
+<meta name="description" content="Cotización formal Tourevo / CDSKI: 2 clases privadas de medio día (3 h) con instructor dedicado para cada pasajero, Valle Nevado, 8 y 9 de agosto de 2026. Total USD 1.016.">
+<style>
+  :root{
+    --bg:#f6f9fc; --card:#ffffff; --ink:#1f2937; --muted:#64748b;
+    --line:#e2e8f0; --brand:#0b2545; --accent:#0369a1; --ice:#0891b2;
+    --good:#047857; --goodbg:#ecfdf5; --goodline:#a7f3d0;
+    --warn:#b45309; --warnbg:#fffbeb; --warnline:#fde68a; --okbg:#f0f9ff;
+  }
+  *{box-sizing:border-box}
+  body{
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    line-height:1.6; color:var(--ink); background:var(--bg); margin:0;
+  }
+  .wrap{max-width:920px;margin:0 auto;padding:0 20px}
+  header.hero{
+    background:linear-gradient(135deg,#0b2545 0%,#134e6f 55%,#0891b2 100%);
+    color:#e2e8f0;padding:44px 0 38px;
+  }
+  header.hero .wrap{padding-top:0}
+  .brandline{display:flex;flex-wrap:wrap;align-items:center;gap:4px 10px;font-weight:700;
+    letter-spacing:.02em;color:#fff;font-size:1.02rem;margin-bottom:16px}
+  .brandline .dot{opacity:.5;font-weight:400}
+  .tag{display:inline-block;font-size:.78rem;letter-spacing:.08em;text-transform:uppercase;
+    background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.20);
+    color:#e0f2fe;padding:5px 12px;border-radius:999px;margin-bottom:16px}
+  header.hero h1{margin:0 0 10px;font-size:1.9rem;line-height:1.25;color:#fff}
+  header.hero p.sub{margin:0;color:#cbd5e1;font-size:1.05rem}
+  .meta{display:flex;flex-wrap:wrap;gap:10px 28px;margin-top:22px;font-size:.95rem;color:#cbd5e1}
+  .meta b{color:#fff;font-weight:600}
+  main{padding:34px 0 60px}
+  h2{color:var(--brand);margin-top:40px;font-size:1.42rem;border-bottom:2px solid var(--line);padding-bottom:8px}
+  h3{color:#334155;margin-top:26px;font-size:1.1rem}
+  a{color:var(--accent);text-decoration:none}
+  a:hover{text-decoration:underline}
+  .cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:14px;margin:22px 0}
+  .stat{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px 18px}
+  .stat .k{font-size:.8rem;color:var(--muted);text-transform:uppercase;letter-spacing:.04em}
+  .stat .v{font-size:1.45rem;font-weight:700;color:var(--brand);margin-top:4px}
+  .stat .v.big{color:var(--accent)}
+  .stat .s{font-size:.85rem;color:var(--muted);margin-top:2px}
+  .callout{background:var(--goodbg);border:1px solid var(--goodline);border-left:5px solid var(--good);
+    border-radius:10px;padding:16px 18px;margin:22px 0;color:#064e3b}
+  .callout strong{color:#064e3b}
+  .note{background:var(--okbg);border:1px solid #bae6fd;border-left:5px solid var(--accent);
+    border-radius:10px;padding:14px 18px;margin:20px 0;font-size:.95rem;color:#0c4a6e}
+  .pend{background:var(--warnbg);border:1px solid var(--warnline);border-left:5px solid var(--warn);
+    border-radius:10px;padding:14px 18px;margin:20px 0;font-size:.95rem;color:#7c2d12}
+  .tw{overflow-x:auto;-webkit-overflow-scrolling:touch;margin:18px 0;background:var(--card);
+    border:1px solid var(--line);border-radius:10px}
+  table{border-collapse:collapse;width:100%;margin:0;background:var(--card);font-size:.97rem}
+  th,td{border-bottom:1px solid var(--line);padding:11px 13px;vertical-align:top;text-align:left}
+  th{background:#f1f5f9;color:#334155;font-weight:600}
+  td.num,th.num{text-align:right;white-space:nowrap;font-variant-numeric:tabular-nums}
+  td.num.wrap{white-space:normal}
+  tr:last-child td{border-bottom:none}
+  .tot td{font-weight:700;background:#f8fafc}
+  .tot.grand td{background:#eff6ff;color:var(--brand);font-size:1.05rem}
+  .pick{background:#ecfdf5}
+  ol,ul{padding-left:22px}
+  li{margin:6px 0}
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin:20px 0}
+  .panel{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:18px 20px}
+  .panel h3{margin-top:0}
+  .panel ul{margin:10px 0 0}
+  .yes li::marker{content:"✓  ";color:var(--good);font-weight:700}
+  .no li::marker{content:"✗  ";color:#b91c1c;font-weight:700}
+  .small{font-size:.9rem;color:var(--muted)}
+  .pill{display:inline-block;background:#e0f2fe;color:#075985;border:1px solid #bae6fd;
+    border-radius:999px;padding:2px 10px;font-size:.8rem;font-weight:600;margin-left:6px;vertical-align:middle}
+  .pill.g{background:#ecfdf5;color:#065f46;border-color:#a7f3d0}
+  .toc{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:18px 22px;margin:26px 0}
+  .toc ol{columns:2;column-gap:30px;margin:8px 0 0}
+  footer{border-top:1px solid var(--line);padding:28px 0 50px;color:var(--muted);font-size:.9rem}
+  .sign{margin-top:34px;padding-top:18px;border-top:1px solid var(--line)}
+  .sign b{color:var(--brand);font-size:1.05rem}
+  .btns{display:flex;flex-wrap:wrap;gap:10px;margin-top:18px}
+  .btn{display:inline-block;background:#fff;border:1px solid var(--line);border-radius:8px;
+    padding:8px 14px;font-size:.92rem;color:var(--accent);font-weight:600}
+  .btn:hover{background:#f1f5f9;text-decoration:none}
+  .btn.cta{background:var(--accent);color:#fff;border-color:var(--accent)}
+  .btn.cta:hover{background:#075985}
+  @media (max-width:640px){
+    th,td{padding:9px 10px;font-size:.93rem}
+    .tw table{min-width:0}
+    .grid2{grid-template-columns:1fr}
+    .toc ol{columns:1}
+    header.hero h1{font-size:1.5rem}
+  }
+  @media (max-width:480px){
+    th,td{padding:8px 7px;font-size:.88rem}
+  }
+  @media print{
+    body{background:#fff}
+    header.hero{background:#fff;color:#000;padding:0 0 10px;border-bottom:2px solid #000}
+    header.hero h1,header.hero p.sub,.meta,.meta b,.brandline{color:#000}
+    .tag{display:none}
+    .btns{display:none}
+    a{color:#000}
+    h2{page-break-after:avoid}
+    table,.panel,.callout{page-break-inside:avoid}
+    .tw{overflow:visible}
+  }
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="wrap">
+    <div class="brandline">TOUREVO <span class="dot">·</span> CDSKI <span class="dot">|</span> Clases de Ski &amp; Snowboard</div>
+    <span class="tag">Cotización formal · Clases privadas de ski</span>
+    <h1>Clases privadas de ski en Valle&nbsp;Nevado — un instructor dedicado para cada pasajero</h1>
+    <p class="sub">2 pasajeros · 2 días de medio día (3 h por día) · niveles distintos, avance independiente.</p>
+    <div class="meta">
+      <span><b>Cliente:</b> Gonzalo</span>
+      <span><b>Cotización Nº:</b> COT-CDSKI-2026-0730-01</span>
+      <span><b>Fecha de emisión:</b> 30 de julio de 2026</span>
+      <span><b>Validez:</b> 5 días corridos, sujeta a disponibilidad</span>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <div class="btns">
+    <a class="btn cta" href="#pasos">✔ Cómo confirmar</a>
+    <a class="btn" href="#inversion">💰 Ver inversión</a>
+    <a class="btn" href="#programa">📅 Ver programa</a>
+    <a class="btn" href="javascript:window.print()">🖨 Imprimir / Guardar PDF</a>
+  </div>
+
+  <section id="resumen">
+    <h2>1. Resumen de la propuesta</h2>
+
+    <p>Gracias por tu interés en <strong>CDSKI</strong>, Gonzalo. Según lo conversado por WhatsApp, esta
+    cotización reemplaza la estimación automática inicial del sitio y refleja <strong>el programa real que
+    necesitan ustedes dos</strong>: dos días de clases privadas de medio día en Valle Nevado, con
+    <strong>un instructor dedicado para cada uno</strong>, porque tus niveles son muy distintos.</p>
+
+    <div class="cards">
+      <div class="stat"><div class="k">Pasajeros</div><div class="v">2 adultos</div><div class="s">Gonzalo + señora</div></div>
+      <div class="stat"><div class="k">Días de clase</div><div class="v">2 días</div><div class="s">Sáb 08 y dom 09 ago 2026</div></div>
+      <div class="stat"><div class="k">Modalidad</div><div class="v">1 a 1</div><div class="s">2 instructores · 3 h por día</div></div>
+      <div class="stat"><div class="k">Total del programa</div><div class="v big">USD 1.016</div><div class="s">≈ CLP 965.200 (referencia)</div></div>
+    </div>
+
+    <div class="callout">
+      <strong>Lo esencial:</strong> USD <strong>254 por persona por día</strong> → USD <strong>508 por
+      persona</strong> por los 2 días → <strong>USD 1.016 en total</strong> por los dos pasajeros, con
+      <strong>instructor exclusivo para cada uno</strong> y clases en la mañana, como pediste. El ticket de
+      andarivel se compra directamente en Valle Nevado y no está incluido.
+    </div>
+  </section>
+
+  <div class="toc">
+    <strong>Contenido</strong>
+    <ol>
+      <li><a href="#resumen">Resumen de la propuesta</a></li>
+      <li><a href="#datos">Datos de la reserva</a></li>
+      <li><a href="#niveles">Por qué un instructor para cada uno</a></li>
+      <li><a href="#programa">Programa y horarios propuestos</a></li>
+      <li><a href="#inversion">Inversión</a></li>
+      <li><a href="#alternativas">Alternativas comparadas</a></li>
+      <li><a href="#incluye">Qué incluye y qué no</a></li>
+      <li><a href="#logistica">Logística y punto de encuentro</a></li>
+      <li><a href="#condiciones">Condiciones y puntos por confirmar</a></li>
+      <li><a href="#pasos">Próximos pasos</a></li>
+    </ol>
+  </div>
+
+  <section id="datos">
+    <h2>2. Datos de la reserva</h2>
+    <div class="tw"><table>
+      <tbody>
+        <tr><th>Titular</th><td>Gonzalo <span class="pill">nombre completo por confirmar</span></td></tr>
+        <tr><th>Correo</th><td>gonroca@gmail.com</td></tr>
+        <tr><th>Teléfono / WhatsApp</th><td>+595 981 897039 (Paraguay)</td></tr>
+        <tr><th>Pasajeros</th><td>2 adultos, 0 niños</td></tr>
+        <tr><th>Actividad</th><td>Clases de <strong>ski</strong>, modalidad <strong>privada</strong>, <strong>medio día</strong> (3 h de clase por día)</td></tr>
+        <tr><th>Cantidad de días</th><td>2 días</td></tr>
+        <tr><th>Fechas</th><td>Sábado 08 y domingo 09 de agosto de 2026 <span class="pill">confirmar 2º día</span></td></tr>
+        <tr><th>Centro de ski</th><td>Valle Nevado</td></tr>
+        <tr><th>Preferencia de horario</th><td>Mañana</td></tr>
+        <tr><th>Niveles</th><td>Gonzalo: <strong>intermedio/avanzado</strong> (pistas rojas y negras) · Señora: <strong>principiante</strong> (aún no baja azules)</td></tr>
+        <tr><th>Alojamiento</th><td>Hotel Puertas del Sol, dentro de Valle Nevado</td></tr>
+        <tr><th>Arriendo de equipo</th><td>No requiere (ambos con equipo propio)</td></tr>
+        <tr><th>Idiomas del instructor</th><td>Español · Portugués · Inglés</td></tr>
+      </tbody>
+    </table></div>
+
+    <div class="note">
+      <strong>Ajuste respecto de la consulta inicial.</strong> La estimación automática del sitio se hizo para
+      <strong>1 adulto y 3 días</strong> (CLP 825.000 ≈ USD 868). Luego nos indicaste que son
+      <strong>2 adultos y 2 días</strong>, y que necesitan <strong>un instructor por persona</strong>. Esta
+      cotización recoge ese alcance corregido: cambia el número de pasajeros, de días y de instructores, y por
+      eso cambia el total.
+    </div>
+  </section>
+
+  <section id="niveles">
+    <h2>3. Por qué un instructor para cada uno</h2>
+
+    <p>Cuando dos pasajeros comparten instructor, la clase <strong>se ajusta necesariamente al nivel del más
+    principiante</strong>: el grupo avanza junto, en las mismas pistas y con los mismos ejercicios. Es la
+    fórmula ideal cuando los niveles son parecidos, y por eso fue la primera opción que te enviamos
+    (USD 512 por los 2 días, para ambos).</p>
+
+    <p>En tu caso la brecha es demasiado grande y tú mismo lo notaste: tú ya bajas
+    <strong>rojas y negras</strong>, mientras que tu señora <strong>todavía no baja azules</strong>. Compartir
+    instructor significaría que uno de los dos pierda el día:</p>
+
+    <div class="grid2">
+      <div class="panel">
+        <h3>Con instructor compartido</h3>
+        <ul>
+          <li>La clase se ajusta al nivel principiante.</li>
+          <li>Gonzalo repite terreno que ya domina y no progresa en rojas/negras.</li>
+          <li>La señora puede sentirse presionada por el ritmo del acompañante.</li>
+          <li>Un solo objetivo pedagógico para dos necesidades distintas.</li>
+        </ul>
+      </div>
+      <div class="panel">
+        <h3>Con un instructor para cada uno <span class="pill g">recomendado</span></h3>
+        <ul>
+          <li>Cada uno en su terreno: pistas azules/rojas y negras para ti; sector de aprendizaje y primeras azules para ella.</li>
+          <li>Objetivos independientes y avance real en los 2 días.</li>
+          <li>Horarios de inicio distintos según condición de pista y nivel.</li>
+          <li>Se juntan a esquiar cuando quieran, fuera del horario de clase.</li>
+        </ul>
+      </div>
+    </div>
+
+    <p class="small">La metodología CDSKI trabaja con objetivos concretos por sesión, así que separar los
+    niveles no es un detalle de comodidad: es la única forma de que ambos cumplan su objetivo en dos días.</p>
+  </section>
+
+  <section id="programa">
+    <h2>4. Programa y horarios propuestos</h2>
+
+    <p>Pediste clases <strong>por la mañana</strong>. En Valle Nevado el inicio más temprano posible es
+    <strong>10:30 h</strong>, principalmente por condición de pistas, y <strong>para principiantes desde las
+    11:00 h</strong> en adelante, cuando la nieve ya está más trabajable y menos dura. Con eso, la propuesta es:</p>
+
+    <div class="tw"><table>
+      <thead>
+        <tr><th>Día</th><th>Pasajero</th><th>Horario propuesto</th><th>Foco de la clase</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td rowspan="2"><strong>Día 1</strong><br><span class="small">Sáb 08 ago</span></td>
+          <td>Gonzalo <span class="small">(intermedio/avanzado)</span></td>
+          <td>10:30 – 13:30</td>
+          <td>Diagnóstico técnico, carving en rojas y lectura de pista para negras</td>
+        </tr>
+        <tr>
+          <td>Señora <span class="small">(principiante)</span></td>
+          <td>11:00 – 14:00</td>
+          <td>Base de cuñas y giros, control de velocidad y frenada, primeras verdes/azules suaves</td>
+        </tr>
+        <tr>
+          <td rowspan="2"><strong>Día 2</strong><br><span class="small">Dom 09 ago</span></td>
+          <td>Gonzalo</td>
+          <td>10:30 – 13:30</td>
+          <td>Consolidación en rojas, terreno variable y aproximación a negras</td>
+        </tr>
+        <tr>
+          <td>Señora</td>
+          <td>11:00 – 14:00</td>
+          <td>Giros paralelos básicos y primera pista azul completa</td>
+        </tr>
+      </tbody>
+    </table></div>
+
+    <div class="note">
+      <strong>Horarios flexibles.</strong> Los bloques son una propuesta: se pueden alinear ambos a las 11:00 h
+      si prefieren empezar juntos, o correrlos según cómo amanezca la montaña. Lo confirmamos al momento de
+      reservar y lo reconfirmamos el día anterior por WhatsApp.
+    </div>
+  </section>
+
+  <section id="inversion">
+    <h2>5. Inversión</h2>
+
+    <p>Valores cotizados en <strong>dólares (USD)</strong>, tal como se conversó. El equivalente en pesos
+    chilenos es <strong>solo de referencia</strong>, calculado a CLP 950 por USD.</p>
+
+    <div class="tw"><table>
+      <thead>
+        <tr><th>Detalle</th><th class="num">USD/día</th><th class="num">Subtotal</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Clase privada de ski, medio día (3 h) — <strong>instructor dedicado para Gonzalo</strong><br>
+            <span class="small">2 días × USD 254</span></td>
+          <td class="num">USD 254</td><td class="num">USD 508</td>
+        </tr>
+        <tr>
+          <td>Clase privada de ski, medio día (3 h) — <strong>instructor(a) dedicado para la señora</strong><br>
+            <span class="small">2 días × USD 254</span></td>
+          <td class="num">USD 254</td><td class="num">USD 508</td>
+        </tr>
+        <tr>
+          <td>Arriendo de equipo (ski + bastones + casco, botas no incluidas)</td>
+          <td class="num wrap">no requerido</td><td class="num">USD 0</td>
+        </tr>
+        <tr>
+          <td>Traslado desde Santiago</td>
+          <td class="num wrap">no requerido</td><td class="num">USD 0</td>
+        </tr>
+      </tbody>
+      <tbody>
+        <tr class="tot"><td colspan="2" class="num wrap">Total por persona (2 días)</td><td class="num">USD 508</td></tr>
+        <tr class="tot grand"><td colspan="2" class="num wrap">Total del programa (2 pasajeros)</td><td class="num">USD 1.016</td></tr>
+        <tr class="tot"><td colspan="2" class="num wrap">Equivalente de referencia en CLP (a 950)</td><td class="num">≈ CLP 965.200</td></tr>
+      </tbody>
+    </table></div>
+
+    <div class="cards">
+      <div class="stat"><div class="k">Por persona / por día</div><div class="v">USD 254</div><div class="s">≈ CLP 241.300</div></div>
+      <div class="stat"><div class="k">Por persona / 2 días</div><div class="v">USD 508</div><div class="s">≈ CLP 482.600</div></div>
+      <div class="stat"><div class="k">Total 2 pasajeros</div><div class="v big">USD 1.016</div><div class="s">≈ CLP 965.200</div></div>
+    </div>
+
+    <p class="small">Si finalmente necesitaran arrendar equipo en el centro de ski, el arriendo CDSKI es de
+    <strong>CLP 45.000 por persona</strong> (ski/snowboard + bastones + casco; botas no incluidas). Ropa de
+    nieve y guantes se arriendan directamente en Valle Nevado.</p>
+  </section>
+
+  <section id="alternativas">
+    <h2>6. Alternativas comparadas</h2>
+
+    <p>Para que quede transparente de dónde viene cada número que te pasamos por WhatsApp:</p>
+
+    <div class="tw"><table>
+      <thead>
+        <tr><th>Alternativa</th><th>Alcance</th><th class="num">Total USD</th><th>Observación</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Estimación automática del sitio</td>
+          <td>1 adulto · 3 días · medio día</td>
+          <td class="num">USD 868</td>
+          <td>Alcance distinto al real (CLP 825.000). Queda sin efecto.</td>
+        </tr>
+        <tr>
+          <td>Instructor compartido</td>
+          <td>2 adultos · 2 días · 1 instructor para ambos</td>
+          <td class="num">USD 512</td>
+          <td>Más económica, pero la clase se ajusta al nivel principiante. <strong>No recomendada</strong> por la diferencia de niveles.</td>
+        </tr>
+        <tr class="pick">
+          <td><strong>Instructor 1 a 1</strong> <span class="pill g">esta cotización</span></td>
+          <td>2 adultos · 2 días · 1 instructor por persona</td>
+          <td class="num"><strong>USD 1.016</strong></td>
+          <td>Cada uno avanza en su nivel, con objetivos propios. Es la que se ajusta a lo que necesitan.</td>
+        </tr>
+      </tbody>
+    </table></div>
+
+    <p class="small">La diferencia entre compartir y no compartir instructor es de <strong>USD 504</strong>, que
+    corresponde exactamente al segundo instructor dedicado durante los dos días.</p>
+  </section>
+
+  <section id="incluye">
+    <h2>7. Qué incluye y qué no</h2>
+
+    <div class="grid2">
+      <div class="panel">
+        <h3>Incluye</h3>
+        <ul class="yes">
+          <li><strong>2 instructores certificados CDSKI</strong>, uno dedicado a cada pasajero.</li>
+          <li><strong>3 horas de clase por día, por persona</strong> (medio día), los 2 días.</li>
+          <li>Clase 100% privada, con plan y objetivos por sesión según nivel.</li>
+          <li>Instrucción en español (también portugués e inglés si se necesita).</li>
+          <li>Coordinación previa por WhatsApp y reconfirmación el día anterior.</li>
+          <li>Punto de encuentro en el centro de ski, sin traslados intermedios.</li>
+        </ul>
+      </div>
+      <div class="panel">
+        <h3>No incluye</h3>
+        <ul class="no">
+          <li><strong>Ticket de andarivel</strong>: se compra y paga directamente en Valle Nevado.</li>
+          <li><strong>Arriendo de equipo</strong>: no requerido en este caso (equipo propio).</li>
+          <li>Ropa de nieve, guantes y antiparras (se arriendan en el centro de ski).</li>
+          <li>Alojamiento: ya lo tienen en el Hotel Puertas del Sol.</li>
+          <li>Alimentación, bebidas y propinas.</li>
+          <li>Traslado Santiago–Valle Nevado (no aplica: se alojan en el centro de ski).</li>
+          <li>Seguros de accidente o de montaña.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="pend">
+      <strong>Sobre el ticket de andarivel.</strong> Es obligatorio para usar los medios de elevación, incluso
+      durante la clase, y su valor lo fija Valle Nevado según temporada y día. Si quieren, les cotizamos el
+      ticket aparte para que lleguen con todo resuelto.
+    </div>
+  </section>
+
+  <section id="logistica">
+    <h2>8. Logística y punto de encuentro</h2>
+
+    <p>Como se alojan en el <strong>Hotel Puertas del Sol, dentro de Valle Nevado</strong>, la logística es
+    simple: no hay traslado desde Santiago ni tiempos de subida por la cuesta.</p>
+
+    <ul>
+      <li><strong>Punto de encuentro:</strong> lobby del Hotel Puertas del Sol o base de pistas de Valle Nevado, a coordinar 10 minutos antes del inicio de cada clase.</li>
+      <li><strong>Llegada sugerida:</strong> 15 minutos antes, con botas puestas y equipo listo, para aprovechar la hora completa de clase.</li>
+      <li><strong>Duración efectiva:</strong> 3 horas de clase por persona, por día.</li>
+      <li><strong>Reconfirmación:</strong> el día anterior por WhatsApp, con el nombre del instructor de cada uno y el horario definitivo.</li>
+      <li><strong>Clima y condiciones:</strong> si Valle Nevado cierra pistas o accesos por condiciones de montaña, se reprograma la clase sin costo o se ajusta el bloque horario.</li>
+    </ul>
+  </section>
+
+  <section id="condiciones">
+    <h2>9. Condiciones y puntos por confirmar</h2>
+
+    <h3>9.1. Condiciones de esta cotización</h3>
+    <ul>
+      <li>Valores expresados en <strong>USD</strong>; los montos en CLP son de referencia (CLP 950 por USD) y pueden variar según el tipo de cambio del día de pago.</li>
+      <li><strong>Validez:</strong> 5 días corridos desde la emisión (30 de julio de 2026).</li>
+      <li><strong>Sujeta a disponibilidad</strong> de dos instructores para las fechas y horarios indicados. En temporada alta la disponibilidad se asegura solo con la reserva confirmada.</li>
+      <li>Los horarios de inicio (10:30 h y 11:00 h) responden a condición de pistas y nivel, y pueden ajustarse de común acuerdo.</li>
+      <li>El programa considera <strong>medio día por pasajero por día</strong>: no es transferible entre pasajeros ni acumulable entre días.</li>
+    </ul>
+
+    <h3>9.2. Por confirmar antes de emitir la reserva</h3>
+    <div class="pend">
+      Para dejar la reserva en firme necesitamos cerrar estos puntos contigo:
+      <ol>
+        <li><strong>Nombre completo del titular</strong> (tenemos tu correo, gonroca@gmail.com, y el teléfono).</li>
+        <li><strong>Nombre completo de la segunda pasajera.</strong></li>
+        <li><strong>Confirmación de las fechas exactas</strong>: 08 y 09 de agosto de 2026, u otro segundo día.</li>
+        <li><strong>Horario definitivo</strong> de cada clase (bloques propuestos o ambos a las 11:00 h).</li>
+        <li><strong>Forma de pago y anticipo</strong>: te confirmamos por WhatsApp los medios disponibles y el porcentaje de reserva. Para pagos desde el exterior trabajamos con link de pago seguro en <a href="https://tourevo.cl/pago/">tourevo.cl/pago/</a>.</li>
+        <li><strong>Política de cancelación y reprogramación</strong> aplicable a la fecha, que te enviamos por escrito junto con la confirmación.</li>
+      </ol>
+      <span class="small">Estos puntos no están fijados en esta cotización justamente para no comprometer
+      condiciones sin tu acuerdo: se confirman por escrito antes de cualquier cobro.</span>
+    </div>
+  </section>
+
+  <section id="pasos">
+    <h2>10. Próximos pasos</h2>
+    <ol>
+      <li>Nos respondes por WhatsApp si <strong>apruebas la modalidad 1 a 1 por USD 1.016</strong> en total.</li>
+      <li>Nos envías los <strong>dos nombres completos</strong> y confirmas las fechas.</li>
+      <li>Verificamos la <strong>disponibilidad de los dos instructores</strong> para el 08 y 09 de agosto.</li>
+      <li>Te enviamos la <strong>confirmación formal a gonroca@gmail.com</strong>, con medios de pago, anticipo y política de cancelación.</li>
+      <li>Con el anticipo recibido queda la <strong>reserva en firme</strong>; el día anterior te escribimos con instructores y horarios definitivos.</li>
+    </ol>
+
+    <div class="callout">
+      <strong>Cualquier duda, más que bienvenida.</strong> Si prefieren evaluar la alternativa compartida, sumar
+      un tercer día, cotizar el ticket de andarivel o cambiar los horarios, lo ajustamos y te reenviamos la
+      cotización actualizada el mismo día.
+    </div>
+
+    <div class="btns">
+      <a class="btn cta" href="https://wa.me/56940211459">💬 Escribir por WhatsApp</a>
+      <a class="btn" href="mailto:info@clasesdeski.cl">✉ info@clasesdeski.cl</a>
+      <a class="btn" href="https://clasesdeski.cl/">🎿 clasesdeski.cl</a>
+      <a class="btn" href="https://tourevo.cl/">🌐 tourevo.cl</a>
+    </div>
+
+    <div class="sign">
+      <p><b>Tourevo Private Tours · CDSKI — Clases de Ski &amp; Snowboard</b><br>
+      Valle Nevado · El Colorado · La Parva<br>
+      WhatsApp +56 9 4021 1459 · info@clasesdeski.cl · Lunes a domingo, 08:00–22:00</p>
+    </div>
+  </section>
+
+</main>
+
+<footer class="wrap">
+  <p><strong>Cotización Nº COT-CDSKI-2026-0730-01</strong> · Emitida el 30 de julio de 2026 para Gonzalo
+  (gonroca@gmail.com) · Válida por 5 días corridos y sujeta a disponibilidad de instructores.</p>
+  <p>Documento de carácter comercial e informativo. Los valores en pesos chilenos son referenciales
+  (CLP 950 por USD) y no constituyen precio en moneda local. El ticket de andarivel de Valle Nevado no está
+  incluido y se adquiere directamente en el centro de ski. Las condiciones de pago, anticipo y cancelación se
+  confirman por escrito antes de cualquier cobro.</p>
+</footer>
+
+</body>
+</html>

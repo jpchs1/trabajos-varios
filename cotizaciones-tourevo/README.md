@@ -1,7 +1,7 @@
 # Cotizaciones Tourevo / CDSKI — formato 3.0
 
-Cotizaciones formales para **Tourevo Private Tours** y su línea de clases de ski
-**CDSKI** ([clasesdeski.cl](https://clasesdeski.cl/)), en el estilo de documento web
+Cotizaciones formales para **Tourevo Private Tours** —traslados privados de montaña y su
+línea de clases de ski **CDSKI** ([clasesdeski.cl](https://clasesdeski.cl/))—, en el estilo de documento web
 autocontenido que se usa en este repositorio: una sola página HTML, sin dependencias
 externas, legible en el teléfono y lista para imprimir o guardar como PDF.
 
@@ -10,6 +10,7 @@ externas, legible en el teléfono y lista para imprimir o guardar como PDF.
 | Nº | Cliente | Programa | Total | Documento |
 |---|---|---|---:|---|
 | COT-CDSKI-2026-0730-01 | Gonzalo (gonroca@gmail.com) | 2 adultos · 2 días · clase privada medio día · **1 instructor por persona** · Valle Nevado, 08–09 ago 2026 | **USD 1.016** | [`gonzalo-cdski/index.html`](gonzalo-cdski/index.html) · [mensajes listos para enviar](gonzalo-cdski/mensaje-whatsapp.md) |
+| COT-TRVO-2026-0730-02 | Erick Gerson Tiburcio de la Cruz (Ericktibu@gmail.com) | 2 pasajeros · traslado privado **ida y vuelta Santiago ⇄ Farellones**, con pick-up en aeropuerto y parada en el rental · 03 y 06 ago 2026 | **USD 555** | [`erick-traslado-farellones/index.html`](erick-traslado-farellones/index.html) · [mensajes listos para enviar](erick-traslado-farellones/mensaje-whatsapp.md) |
 
 ## Caso Gonzalo — de qué se trata
 
@@ -49,6 +50,47 @@ documento **no los inventa**: los lista en la sección 9.2 como puntos a confirm
 antes de cualquier cobro, junto con los nombres completos de los dos pasajeros y el horario
 definitivo.
 
+## Caso Erick — de qué se trata
+
+Erick pidió un traslado privado de Santiago a **El Alemán de Farellones** (Los Cóndores 1451) para 2
+pasajeros, y después amplió el alcance: llegan en avión el 03 de agosto a las 14:00, quieren parar
+en el rental de ropa de nieve antes de subir, y necesitan también el **retorno el 06 de agosto** con
+otra parada en el rental para devolver la ropa.
+
+**Hallazgo que ordenó el itinerario:** la dirección de recogida que Erick dio en su primer mensaje
+—*Av. Providencia 1208, a las 16:30*— es exactamente la dirección de **Valle Showroom**
+(Av. Providencia 1208, Oficina 213, Providencia), el rental donde tienen reserva. Su plan original y
+el itinerario con parada en el rental son el mismo recorrido, así que la cotización los presenta
+como un solo trayecto continuo.
+
+### Cómo se arma el valor
+
+| Concepto | Valor |
+|---|---:|
+| Traslado privado Santiago ⇄ Farellones, ida y vuelta (hasta 2 pasajeros) | USD 515 |
+| Recargo por pick-up en aeropuerto (una sola vez) | USD 40 |
+| **Total** | **USD 555** |
+
+El recargo de aeropuerto se cobra una vez porque el retorno del 06 termina en el hotel de Santiago,
+no en el aeropuerto. Las paradas en el rental van incluidas: al ser servicio privado, el vehículo
+acompaña todo el trayecto.
+
+### Punto de atención en el itinerario
+
+Con el aterrizaje a las 14:00 y el **pick-up a las 15:15**, la llegada al showroom queda cerca de las
+**15:55**, unos 25 minutos después de la reserva que tienen a las 15:30. La cotización lo señala de
+frente y propone dos salidas: mover la reserva a las 16:00, o correr la salida a Farellones a las
+17:00 si quieren ver la ropa con calma.
+
+### Lo que quedó abierto
+
+Número de vuelo, hora de pick-up en Farellones el 06, dirección del hotel en Santiago para el
+retorno, y la copia de la reserva del Hotel El Alemán — esta última hace falta para gestionar la
+autorización de subida, porque **los horarios de acceso al camino dependen de las disposiciones de
+la autoridad** y los huéspedes con reserva confirmada en hoteles de montaña pueden acceder a
+autorizaciones especiales sujetas a validación previa. Forma de pago, anticipo y cancelación tampoco
+se conversaron, así que van como puntos a confirmar por escrito.
+
 ## Estructura del documento
 
 Cada cotización es una carpeta con un `index.html` autocontenido (CSS embebido, sin JS externo,
@@ -57,25 +99,34 @@ sin imágenes remotas) y, cuando aplica, un archivo con los mensajes listos para
 ```
 cotizaciones-tourevo/
 ├── README.md
-└── gonzalo-cdski/
-    ├── index.html              ← la cotización
-    └── mensaje-whatsapp.md     ← textos para WhatsApp y correo
+├── gonzalo-cdski/
+│   ├── index.html              ← la cotización
+│   └── mensaje-whatsapp.md     ← textos para WhatsApp y correo
+└── erick-traslado-farellones/
+    ├── index.html
+    └── mensaje-whatsapp.md
 ```
 
-Secciones del formato 3.0: resumen con cifras destacadas → datos de la reserva → justificación
-técnica de la modalidad → programa día por día con horarios → inversión desglosada → alternativas
-comparadas (para que se vea de dónde viene cada número enviado por WhatsApp) → incluye / no
-incluye → logística → condiciones y puntos por confirmar → próximos pasos.
+Secciones del formato 3.0: resumen con cifras destacadas → datos del servicio → el punto que
+define la propuesta (la modalidad elegida, el itinerario) → desarrollo día por día con horarios →
+inversión desglosada → referencia de tarifas o alternativas comparadas, para que se vea de dónde
+sale cada número enviado por WhatsApp → incluye / no incluye → nota operativa → condiciones y
+puntos por confirmar → próximos pasos.
+
+Dos criterios que se repiten en todas: **nunca se inventan condiciones comerciales** que el cliente
+no acordó (pago, anticipo, cancelación van siempre como puntos a confirmar por escrito), y **se
+muestra de dónde viene cada cifra**, incluidas las que se enviaron antes por WhatsApp y quedaron
+sin efecto.
 
 ## Cómo verla
 
-- **Local:** abrir `gonzalo-cdski/index.html` en el navegador.
+- **Local:** abrir el `index.html` de cada carpeta en el navegador.
 - **Imprimir / PDF:** el botón «Imprimir / Guardar PDF» del documento, o `Ctrl/Cmd + P`. Los
   estilos de impresión ocultan los botones y pasan el encabezado a blanco y negro.
-- **Publicada con GitHub Pages:** `https://jpchs1.github.io/trabajos-varios/cotizaciones-tourevo/gonzalo-cdski/`
+- **Publicadas con GitHub Pages:** `https://jpchs1.github.io/trabajos-varios/cotizaciones-tourevo/<carpeta>/`
   (requiere Pages habilitado en Settings → Pages → Deploy from a branch → `main` → `/ (root)`).
 
-> **Nota de privacidad:** el documento contiene el correo y el teléfono del cliente. Si se va a
+> **Nota de privacidad:** los documentos contienen el correo y el teléfono de cada cliente. Si se va a
 > publicar en un sitio público, conviene enviarlo como PDF por correo en lugar de dejarlo
 > indexable, o quitar los datos de contacto de la sección 2 antes de publicar.
 
@@ -89,3 +140,12 @@ incluye → logística → condiciones y puntos por confirmar → próximos paso
   atención de lunes a domingo 08:00–22:00.
 - [tourevo.cl](https://tourevo.cl/) — operación de tours privados y link de pago
   [tourevo.cl/pago/](https://tourevo.cl/pago/) para pagos desde el exterior.
+- **Tarifario `Tourevo_Traslados_Privados_Montana_2026_ES.pdf`** (el PDF compartido al cliente por
+  WhatsApp) — Farellones USD 396 solo ida / USD 515 ida y vuelta; Valle Nevado USD 475 / USD 618;
+  todas para servicio privado de hasta 2 pasajeros, expresadas en dólares. También de ahí salen el
+  estándar del servicio (100% privado, conductor profesional, concierge, equipaje incluido,
+  asistencia por WhatsApp) y la nota sobre horarios de subida a la montaña.
+- Conversación de WhatsApp del 30-07-2026 con Erick (recargo de aeropuerto USD 40, paradas
+  permitidas, itinerario y direcciones).
+- [valleshowroomcl.com](https://valleshowroomcl.com/) — Valle Showroom: Av. Providencia 1208,
+  Oficina 213, Providencia; atención todos los días de 12:00 a 22:00, solo con hora reservada.

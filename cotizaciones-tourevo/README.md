@@ -10,7 +10,7 @@ externas, legible en el teléfono y lista para imprimir o guardar como PDF.
 | Nº | Cliente | Programa | Total | Documento |
 |---|---|---|---:|---|
 | COT-CDSKI-2026-0730-01 | Gonzalo (gonroca@gmail.com) | 2 adultos · 2 días · clase privada medio día · **1 instructor por persona** · Valle Nevado, 08–09 ago 2026 | **USD 1.016** | [`gonzalo-cdski/index.html`](gonzalo-cdski/index.html) · [mensajes listos para enviar](gonzalo-cdski/mensaje-whatsapp.md) |
-| COT-TRVO-2026-0730-02 | Erick Gerson Tiburcio de la Cruz (Ericktibu@gmail.com) | 2 pasajeros · traslado privado **ida y vuelta Santiago ⇄ Farellones**, con pick-up en aeropuerto y parada en el rental · 03 y 06 ago 2026 | **USD 555** | [`erick-traslado-farellones/index.html`](erick-traslado-farellones/index.html) · [mensajes listos para enviar](erick-traslado-farellones/mensaje-whatsapp.md) |
+| COT-TRVO-2026-0730-02 | Erick Gerson Tiburcio de la Cruz (Ericktibu@gmail.com) | 2 pasajeros · traslado privado **solo ida Santiago → Farellones**, con pick-up en aeropuerto (vuelo LA2697) y parada en el rental · 03 ago 2026 | **USD 436** | [`erick-traslado-farellones/index.html`](erick-traslado-farellones/index.html) · [mensajes listos para enviar](erick-traslado-farellones/mensaje-whatsapp.md) |
 
 ## Caso Gonzalo — de qué se trata
 
@@ -53,9 +53,10 @@ definitivo.
 ## Caso Erick — de qué se trata
 
 Erick pidió un traslado privado de Santiago a **El Alemán de Farellones** (Los Cóndores 1451) para 2
-pasajeros, y después amplió el alcance: llegan en avión el 03 de agosto a las 14:00, quieren parar
-en el rental de ropa de nieve antes de subir, y necesitan también el **retorno el 06 de agosto** con
-otra parada en el rental para devolver la ropa.
+pasajeros, y después amplió el alcance: llegan en avión el 03 de agosto a las 14:05 (vuelo **LA2697**,
+Lima 09:35 → Santiago 14:05), quieren parar en el rental de ropa de nieve antes de subir, y también
+mencionaron un **retorno el 06 de agosto** con otra parada en el rental para devolver la ropa.
+Finalmente se cotiza **solo la ida**, dejando el regreso costeado como opcional.
 
 **Hallazgo que ordenó el itinerario:** la dirección de recogida que Erick dio en su primer mensaje
 —*Av. Providencia 1208, a las 16:30*— es exactamente la dirección de **Valle Showroom**
@@ -65,31 +66,54 @@ como un solo trayecto continuo.
 
 ### Cómo se arma el valor
 
+Se cotiza **solo la subida** del 3 de agosto:
+
 | Concepto | Valor |
 |---|---:|
-| Traslado privado Santiago ⇄ Farellones, ida y vuelta (hasta 2 pasajeros) | USD 515 |
-| Recargo por pick-up en aeropuerto (una sola vez) | USD 40 |
-| **Total** | **USD 555** |
+| Traslado privado Santiago → Farellones, solo ida (hasta 2 pasajeros) | USD 396 |
+| Recargo por pick-up en aeropuerto | USD 40 |
+| **Total** | **USD 436** |
 
-El recargo de aeropuerto se cobra una vez porque el retorno del 06 termina en el hotel de Santiago,
-no en el aeropuerto. Las paradas en el rental van incluidas: al ser servicio privado, el vehículo
-acompaña todo el trayecto.
+El regreso del 6 de agosto —que el cliente sí mencionó por WhatsApp— queda como **opcional**, con
+las dos vías costeadas: sumarlo ahora como ida y vuelta son **+USD 119** (USD 555 en total),
+contratarlo después como tramo suelto son **USD 396**. La parada en el rental va incluida: al ser
+servicio privado, el vehículo acompaña todo el trayecto.
 
 ### Punto de atención en el itinerario
 
-Con el aterrizaje a las 14:00 y el **pick-up a las 15:15**, la llegada al showroom queda cerca de las
+Con el vuelo **LA2697** aterrizando a las 14:05 y el **pick-up a las 15:15**, la llegada al showroom queda cerca de las
 **15:55**, unos 25 minutos después de la reserva que tienen a las 15:30. La cotización lo señala de
 frente y propone dos salidas: mover la reserva a las 16:00, o correr la salida a Farellones a las
 17:00 si quieren ver la ropa con calma.
 
 ### Lo que quedó abierto
 
-Número de vuelo, hora de pick-up en Farellones el 06, dirección del hotel en Santiago para el
-retorno, y la copia de la reserva del Hotel El Alemán — esta última hace falta para gestionar la
+Confirmación del ajuste de la reserva del showroom, teléfono de contacto en Chile, la decisión
+sobre el regreso del 6 (con su hora de bajada y el hotel en Santiago si lo suman), y la copia de la
+reserva del Hotel El Alemán — esta última hace falta para gestionar la
 autorización de subida, porque **los horarios de acceso al camino dependen de las disposiciones de
 la autoridad** y los huéspedes con reserva confirmada en hoteles de montaña pueden acceder a
 autorizaciones especiales sujetas a validación previa. Forma de pago, anticipo y cancelación tampoco
 se conversaron, así que van como puntos a confirmar por escrito.
+
+## Relación con el sistema Tourevo
+
+Estos documentos son la versión de trabajo. La cotización que se envía al cliente **vive en el
+panel de Tourevo** (repo `jpchs1/tourevo-cl`), donde cada caso tiene su documento en
+`cotizaciones/<slug>/index.html` y un **seed idempotente** que la carga en el panel:
+
+| Aquí | En el sistema Tourevo |
+|---|---|
+| `erick-traslado-farellones/` | `Q-ETIBU26` · `cotizaciones/erick-tiburcio-farellones/` + `admin/scripts/seed_erick_tiburcio.php` |
+
+El seed se corre en la terminal SSH de cPanel, una vez que el cambio está mergeado en la rama de
+producción `setup/initial-structure`:
+
+```bash
+cd ~/tourevo-cl && git pull && php admin/scripts/seed_erick_tiburcio.php
+```
+
+Después se revisa y se envía desde <https://www.tourevo.cl/admin/cotizaciones/Q-ETIBU26>.
 
 ## Estructura del documento
 

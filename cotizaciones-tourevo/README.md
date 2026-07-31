@@ -10,7 +10,7 @@ externas, legible en el teléfono y lista para imprimir o guardar como PDF.
 | Nº | Cliente | Programa | Total | Documento |
 |---|---|---|---:|---|
 | COT-CDSKI-2026-0730-01 | Gonzalo (gonroca@gmail.com) | 2 adultos · 2 días · clase privada medio día · **1 instructor por persona** · Valle Nevado, 08–09 ago 2026 | **USD 1.016** | [`gonzalo-cdski/index.html`](gonzalo-cdski/index.html) · [mensajes listos para enviar](gonzalo-cdski/mensaje-whatsapp.md) |
-| COT-TRVO-2026-0730-02 | Erick Gerson Tiburcio de la Cruz (Ericktibu@gmail.com) | 2 pasajeros · traslado privado **solo ida Santiago → Farellones**, con pick-up en aeropuerto (vuelo LA2697) y parada en el rental · 03 ago 2026 | **USD 436** | [`erick-traslado-farellones/index.html`](erick-traslado-farellones/index.html) · [mensajes listos para enviar](erick-traslado-farellones/mensaje-whatsapp.md) |
+| COT-TRVO-2026-0730-02 | Erick Gerson Tiburcio de la Cruz (Ericktibu@gmail.com) | 2 pasajeros · traslado **solo ida Santiago → Farellones** (vuelo LA2697) + **City Tour por Santiago** · parada en el rental · ascenso 21:00 · 03 ago 2026 | **USD 756** | [`erick-traslado-farellones/index.html`](erick-traslado-farellones/index.html) · [mensajes listos para enviar](erick-traslado-farellones/mensaje-whatsapp.md) |
 
 ## Caso Gonzalo — de qué se trata
 
@@ -66,25 +66,40 @@ como un solo trayecto continuo.
 
 ### Cómo se arma el valor
 
-Se cotiza **solo la subida** del 3 de agosto:
+Se cotiza el **día 3 de agosto** completo, con el traslado de subida solo ida:
 
 | Concepto | Valor |
 |---|---:|
 | Traslado privado Santiago → Farellones, solo ida (hasta 2 pasajeros) | USD 396 |
 | Recargo por pick-up en aeropuerto | USD 40 |
-| **Total** | **USD 436** |
+| City Tour privado por Santiago (tarifa privada 1–2 pax, los dos incluidos) | USD 320 |
+| **Total** | **USD 756** |
 
 El regreso del 6 de agosto —que el cliente sí mencionó por WhatsApp— queda como **opcional**, con
-las dos vías costeadas: sumarlo ahora como ida y vuelta son **+USD 119** (USD 555 en total),
-contratarlo después como tramo suelto son **USD 396**. La parada en el rental va incluida: al ser
-servicio privado, el vehículo acompaña todo el trayecto.
+las dos vías costeadas: sumarlo ahora sube el traslado de USD 396 a USD 515, es decir **+USD 119**
+(USD 875 en total); contratarlo después como tramo suelto son **USD 396**. La parada en el rental va
+incluida: al ser servicio privado, el vehículo acompaña todo el día.
+
+### El dato que ordena el día: el ascenso es a las 21:00
+
+El horario habilitado de subida por el camino deja el ascenso a las **21:00**, con llegada a
+Farellones alrededor de las **22:30**. Eso abre unas cuatro horas libres en Santiago entre el rental
+y la subida, y es exactamente lo que cubre el **City Tour**: en vez de esperar, el pasajero conoce la
+ciudad y sube directo desde ahí. Dos consecuencias operativas quedan anotadas en el documento:
+
+- Hay que **avisar al Hotel El Alemán del check-in tardío** (~22:30).
+- Conviene coordinar con el conductor una **parada para comer** antes del ascenso.
+
+El City Tour se presenta **sin itinerario cerrado**: se proponen lugares típicos y se decide con el
+pasajero según las preferencias del momento. Entradas, miradores (Sky Costanera ~USD 25 pp),
+funicular y comidas van por fuera, con pago directo.
 
 ### Punto de atención en el itinerario
 
-Con el vuelo **LA2697** aterrizando a las 14:05 y el **pick-up a las 15:15**, la llegada al showroom queda cerca de las
-**15:55**, unos 25 minutos después de la reserva que tienen a las 15:30. La cotización lo señala de
-frente y propone dos salidas: mover la reserva a las 16:00, o correr la salida a Farellones a las
-17:00 si quieren ver la ropa con calma.
+Con el vuelo **LA2697** aterrizando a las 14:05 y el **pick-up a las 15:15**, la llegada al showroom
+queda cerca de las **15:55**, unos 25 minutos después de la reserva que tienen a las 15:30. La
+cotización lo señala de frente y sugiere moverla a las 16:00 — con el ascenso recién a las 21:00, el
+desfase ya no aprieta el resto del día.
 
 ### Lo que quedó abierto
 
@@ -105,6 +120,9 @@ panel de Tourevo** (repo `jpchs1/tourevo-cl`), donde cada caso tiene su document
 | Aquí | En el sistema Tourevo |
 |---|---|
 | `erick-traslado-farellones/` | `Q-ETIBU26` · `cotizaciones/erick-tiburcio-farellones/` + `admin/scripts/seed_erick_tiburcio.php` |
+
+El seed de Erick es **create-or-replace**: se puede volver a correr para actualizar la cotización
+existente sin perder `createdAt`, `status` ni historial.
 
 El seed se corre en la terminal SSH de cPanel, una vez que el cambio está mergeado en la rama de
 producción `setup/initial-structure`:

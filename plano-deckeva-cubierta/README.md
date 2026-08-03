@@ -1,17 +1,43 @@
-# Plano de despiece — Paneles de cubierta (Deckeva)
+# Cubierta Deckeva — Plano de despiece y cotización
 
-Plano digital a escala generado a partir del levantamiento de medidas en obra
-(6 fotos con cotas anotadas a mano).
+Plano digital a escala y cotización formal, generados a partir del levantamiento
+de medidas en obra (6 fotos con cotas anotadas a mano).
 
 | Archivo | Uso |
 |---|---|
-| `plano-cubierta-deckeva.pdf` | **Entregable principal.** 1 página A1 (841 × 594 mm), escala 1:10. Imprimir *al 100 %, sin ajustar a página* para que la escala sea real. |
+| `plano-cubierta-deckeva.pdf` | **Plano.** 1 página A1 (841 × 594 mm), escala 1:10. Imprimir *al 100 %, sin ajustar a página* para que la escala sea real. |
 | `plano-cubierta-deckeva.svg` | Vectorial editable (Illustrator, Inkscape, navegador). |
 | `plano-cubierta-deckeva.png` | Vista rápida / envío por WhatsApp. |
-| `generar_plano.py` | Script que genera los tres archivos. |
+| `cotizacion-DK-COT-2026-001.pdf` | **Cotización.** 2 páginas A4. |
+| `cotizacion-DK-COT-2026-001-p1.png`, `-p2.png` | Vista rápida de la cotización. |
+| `generar_plano.py`, `generar_cotizacion.py` | Scripts generadores. |
 | `fotos/` | Fotos originales del levantamiento (foto-1 … foto-6). |
 
-Regenerar: `python3 generar_plano.py` (requiere `cairosvg` y `pillow`).
+Regenerar: `python3 generar_plano.py` y `python3 generar_cotizacion.py`
+(requieren `cairosvg`, `pillow` y `pypdf`).
+
+## Cotización DK-COT-2026-001
+
+| Concepto | Monto |
+|---|---:|
+| Neto | $1.761.000 |
+| IVA 19 % | $334.590 |
+| **Total** | **$2.095.590** |
+
+Valor referencial: **$186.547/m²** sobre 9,440 m² netos.
+
+Criterios usados al redactar la cotización (ajustables en `generar_cotizacion.py`):
+
+- **Moneda e impuesto:** CLP e IVA 19 % (Chile), deducidos del contexto del repo.
+- **Alcance:** suministro **e instalación**, presentado como **suma alzada única**
+  con la tabla de las 9 piezas como detalle informativo, sin precio por pieza —
+  se entregó un solo monto global, así que no se inventó un desglose comercial.
+- **Condiciones por defecto:** validez 30 días corridos, pago 50 % a la
+  aceptación y 50 % contra entrega, garantía 12 meses, plazo de ejecución a
+  convenir.
+- **Datos en blanco a propósito:** RUT, dirección y contacto del emisor, y todos
+  los datos del cliente.
+- El retiro del revestimiento existente está listado como **excluido**.
 
 ## Relación de piezas
 

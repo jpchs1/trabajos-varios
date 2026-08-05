@@ -1,12 +1,15 @@
 /* Service worker mínimo: deja la app disponible sin conexión.
    Estrategia: se sirve lo cacheado y en paralelo se actualiza desde la red. */
-const CACHE = 'vittorio-v1';
+const CACHE = 'vittorio-v2';
 const ASSETS = [
   './',
   'index.html',
   'assets/styles.css',
   'assets/datos.js',
   'assets/app.js',
+  'assets/vistas.js',
+  'assets/editor.js',
+  'assets/documento.js',
   'assets/icono.svg',
   'manifest.webmanifest'
 ];

@@ -3,7 +3,7 @@ Varios Trabajos generales, de todo un poco.
 
 ## Proyectos
 
-- **[Taller Automotriz Vittorio](taller-vittorio/)** — Sistema de cotización y órdenes de trabajo que reemplaza la planilla Excel: catálogo de precios, totales en vivo, documento imprimible en PDF y enlace de sólo lectura para el cliente. En línea en [`jpchs1.github.io/trabajos-varios/taller-vittorio/`](https://jpchs1.github.io/trabajos-varios/taller-vittorio/).
+- **[Taller Automotriz Vittorio](taller-vittorio/)** — Gestión del taller en reemplazo de la planilla Excel: cotizaciones con catálogo de precios y totales en vivo, ficha por cliente y por patente con historial mecánico, avisos de seguimiento y mantención, fotos y firma del cliente, documento imprimible en PDF y enlace de sólo lectura para compartir. En línea en [`jpchs1.github.io/trabajos-varios/taller-vittorio/`](https://jpchs1.github.io/trabajos-varios/taller-vittorio/).
 - **[Reclamo público — Puerto Columbo S.A.](reclamo-puerto-columbo/)** — Reclamo público y solicitud formal de revisión por cobros no aclarados (Factura Electrónica Nº 551879). Versión web en [`reclamo-puerto-columbo/index.html`](reclamo-puerto-columbo/index.html); publicable en `https://jpchs1.github.io/trabajos-varios/reclamo-puerto-columbo/`.
 - **[Propuestas Tourevo](propuestas/)** — Cotizaciones de viaje en HTML, una carpeta por cliente. Actual: [Crystal Low — Torres del Paine](propuestas/crystal-low-torres-del-paine/) (COT-2026-0158).
 

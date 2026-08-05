@@ -1,0 +1,16 @@
+{
+  "name": "Taller Automotriz Vittorio · Cotizaciones",
+  "short_name": "Vittorio",
+  "description": "Cotizaciones y órdenes de trabajo del Taller Automotriz Vittorio.",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#0B0E13",
+  "theme_color": "#FF6A13",
+  "lang": "es-CL",
+  "icons": [
+    { "src": "assets/icono.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" },
+    { "src": "assets/icono-maskable.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "maskable" }
+  ]
+}

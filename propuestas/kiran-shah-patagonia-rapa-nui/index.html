@@ -273,6 +273,91 @@
     .rec-row { grid-template-columns: 1fr; gap: 3px; }
     .qband .qdates { margin-left: 0; }
   }
+
+  .print-only { display: none; }
+
+  /* ---- Print / PDF ---- */
+  @page { size: A4; margin: 13mm 11mm 15mm; }
+  @media print {
+    /* The PDF is a document, not a screen: pin the light palette whatever the
+       reader's OS is set to, and keep the printer from dropping our fills. */
+    :root {
+      --ground: #FFFFFF; --paper: #FFFFFF; --glacier: #E7F0F0; --glacier-2: #F5F9F9;
+      --ink: #16232B; --ink-soft: #4E626B; --ink-faint: #788B94; --line: #D3E0E0;
+      --line-soft: #E8F0F0; --accent: #0F766E; --accent-deep: #0B5B54; --summit: #2F6E8F;
+      --warn: #A0561F; --warn-wash: #FBF1E8; --warn-line: #E9CFB6;
+      --shadow: none;
+    }
+    * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+
+    body { background: #fff; padding: 0; font-size: 9.6pt; line-height: 1.42; orphans: 3; widows: 3; }
+    .wrap { max-width: none; }
+    .paper { border: 0; border-radius: 0; box-shadow: none; }
+    .head { padding: 0 0 14px; background: none; border-bottom: 1px solid var(--line); }
+    .ridge { display: none; }
+    .body { padding: 16px 0 0; }
+    .foot { padding: 12px 0 0; background: none; }
+    .legend { margin-top: 8px; }
+    section + section { margin-top: 18px; }
+
+    /* Chromium will not fragment a grid container across pages, so the tall
+       single-column stacks drop out of grid for print and paginate as blocks. */
+    .recs, .days { display: block; }
+    .rec, .day { margin-bottom: 9px; }
+    .rec:last-child, .day:last-child { margin-bottom: 0; }
+    .facts { grid-template-columns: repeat(3, 1fr); }
+
+    /* A recommendation card and an itinerary day are each about half a page.
+       Forbidding a break inside them puts one per page and wastes the rest, so
+       they are allowed to split — but only at a row boundary, and never
+       immediately after their own heading. */
+    .rec, .day, .sello, .tbl-wrap, table { break-inside: auto; }
+    .rec-top, .day-head, .label, .qband, thead { break-after: avoid; }
+    .rec-row, .stops li, tbody tr, .opt, .card, .value, .welcome,
+    .notice, .total, .facts, .terms, .cta, .qband { break-inside: avoid; }
+    thead { display: table-header-group; }
+
+    /* Each quotation opens its own page. */
+    .qsec { break-before: page; }
+
+    /* Tighter rhythm on paper than on screen — a page is a fixed budget. */
+    .rec-top, .day-head { padding: 9px 14px; }
+    .rec-body { padding: 2px 14px 6px; }
+    .rec-row { padding: 7px 0; }
+    .drivers { padding: 0 14px 11px; }
+    .stops { padding: 4px 14px 10px; }
+    .stops li { padding: 7px 0; }
+    .opt { padding: 13px; }
+    .card { padding: 14px; }
+    .card ul { gap: 7px; }
+    .value { padding: 13px 14px; }
+    .welcome { padding: 15px 17px; }
+    .notice-body { padding: 14px 16px 15px; }
+    tbody td { padding: 9px 13px; }
+    thead th { padding: 8px 13px; }
+    .total { padding: 15px 18px; margin-top: 11px; }
+    .qband { padding: 13px 17px; }
+    .lede { margin-bottom: 12px; }
+
+    /* The closing block has to land whole on the last page — a page carrying
+       nothing but the footer reads like the PDF was truncated. */
+    .cta { margin-top: 12px; padding: 15px; }
+    .cta .lead { margin-bottom: 8px; }
+    .value { padding: 11px 13px; }
+    .pays { margin-top: 9px; gap: 6px; }
+    .pay { padding: 5px 11px; }
+    .fine { margin-top: 8px; }
+    .foot { break-before: avoid; }
+    .legend { break-before: avoid; }
+
+    /* A button with nowhere to go is worse than no button. */
+    .cta .btn, .cta .after { display: none; }
+    .cta { border-style: solid; }
+    .print-only { display: block; }
+    .cta .print-only { margin: 14px 0 0; font-size: 11pt; font-weight: 600; color: var(--ink); }
+    .cta .print-only span { color: var(--accent); font-weight: 700; }
+    .foot .links a { color: var(--ink-soft); text-decoration: none; }
+  }
 </style>
 
 <div class="wrap">
@@ -430,7 +515,7 @@
       </section>
 
       <!-- ============ QUOTATION 1 ============ -->
-      <section>
+      <section class="qsec">
         <div class="qband">
           <div>
             <div class="qn">Quotation 1</div>
@@ -642,7 +727,7 @@
       </section>
 
       <!-- ============ QUOTATION 2 ============ -->
-      <section>
+      <section class="qsec">
         <div class="qband">
           <div>
             <div class="qn">Quotation 2</div>
@@ -967,6 +1052,7 @@
           <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
         </a>
         <p class="after">One click from your <span class="magic">Magic Link</span> — no account, no password.</p>
+        <p class="print-only">Reply to this quotation at <span>hello@tourevo.cl</span>, or on WhatsApp — quote reference <span>COT-2026-0159</span>.</p>
       </div>
 
     </div>

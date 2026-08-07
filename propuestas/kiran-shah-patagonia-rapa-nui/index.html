@@ -1,0 +1,988 @@
+<title>Tourevo · Argentine Patagonia &amp; Rapa Nui — Kiran P. Shah</title>
+<style>
+  :root {
+    --ground: #EEF3F3;
+    --paper: #FFFFFF;
+    --glacier: #E7F0F0;
+    --glacier-2: #F3F8F8;
+    --ink: #16232B;
+    --ink-soft: #566A72;
+    --ink-faint: #8497A0;
+    --line: #DBE6E6;
+    --line-soft: #EAF1F1;
+    --accent: #0F766E;
+    --accent-deep: #0B5B54;
+    --summit: #2F6E8F;
+    --warn: #B4632A;
+    --warn-wash: #FBF1E8;
+    --warn-line: #E9CFB6;
+    --shadow: 24px 40px 80px -40px rgba(16, 45, 50, .35);
+    --font-serif: "Iowan Old Style", "Palatino Linotype", "Palatino", "Georgia", serif;
+    --font-sans: system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --ground: #0A0F13; --paper: #121a20; --glacier: #172129; --glacier-2: #141d24;
+      --ink: #E7EDEE; --ink-soft: #9EACB2; --ink-faint: #6C7B82; --line: #26313A;
+      --line-soft: #1E2831; --accent: #2DD4BF; --accent-deep: #5EEAD4; --summit: #8FBAD3;
+      --warn: #E0955C; --warn-wash: #241A12; --warn-line: #4A3524;
+      --shadow: 24px 40px 90px -40px rgba(0, 0, 0, .7);
+    }
+  }
+  :root[data-theme="dark"] {
+    --ground: #0A0F13; --paper: #121a20; --glacier: #172129; --glacier-2: #141d24;
+    --ink: #E7EDEE; --ink-soft: #9EACB2; --ink-faint: #6C7B82; --line: #26313A;
+    --line-soft: #1E2831; --accent: #2DD4BF; --accent-deep: #5EEAD4; --summit: #8FBAD3;
+    --warn: #E0955C; --warn-wash: #241A12; --warn-line: #4A3524;
+    --shadow: 24px 40px 90px -40px rgba(0, 0, 0, .7);
+  }
+
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background:
+      radial-gradient(120% 60% at 50% -10%, var(--glacier) 0%, transparent 60%),
+      var(--ground);
+    color: var(--ink);
+    font-family: var(--font-sans);
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+    padding: clamp(16px, 4vw, 56px) 16px;
+  }
+  .wrap { max-width: 820px; margin: 0 auto; }
+
+  .paper {
+    background: var(--paper);
+    border: 1px solid var(--line);
+    border-radius: 16px;
+    box-shadow: var(--shadow);
+    overflow: hidden;
+  }
+
+  /* ---- Header ---- */
+  .head {
+    position: relative;
+    padding: clamp(26px, 5vw, 44px) clamp(22px, 5vw, 48px) 26px;
+    border-bottom: 1px solid var(--line);
+    background: linear-gradient(180deg, var(--glacier-2), var(--paper));
+    overflow: hidden;
+  }
+  .ridge { position: absolute; left: 0; right: 0; bottom: -1px; height: 46px; width: 100%; display: block; color: var(--accent); opacity: .10; }
+  .brandrow { display: flex; justify-content: space-between; align-items: flex-start; gap: 20px; flex-wrap: wrap; position: relative; z-index: 1; }
+  .brand { display: flex; align-items: center; gap: 12px; }
+  .mark {
+    width: 42px; height: 42px; border-radius: 12px; flex: none;
+    background: linear-gradient(140deg, var(--accent), var(--summit));
+    display: grid; place-items: center; color: #fff;
+    box-shadow: 0 6px 16px -6px color-mix(in srgb, var(--accent) 70%, transparent);
+  }
+  .wordmark { font-weight: 700; font-size: 20px; letter-spacing: -.01em; }
+  .wordmark small { display: block; font-size: 10.5px; font-weight: 600; letter-spacing: .18em; text-transform: uppercase; color: var(--ink-faint); margin-top: 2px; }
+  .eyebrow { font-size: 11px; font-weight: 700; letter-spacing: .2em; text-transform: uppercase; color: var(--accent); }
+  .doc-title { font-family: var(--font-serif); font-weight: 600; font-size: clamp(25px, 5vw, 35px); line-height: 1.06; margin: 14px 0 0; letter-spacing: -.01em; text-wrap: balance; }
+  .doc-sub { margin: 10px 0 0; font-size: 15px; color: var(--ink-soft); max-width: 56ch; position: relative; z-index: 1; }
+
+  .meta { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 18px; position: relative; z-index: 1; }
+  .chip {
+    font-size: 12px; font-weight: 600; color: var(--ink-soft);
+    background: var(--glacier); border: 1px solid var(--line);
+    padding: 5px 11px; border-radius: 999px;
+    font-variant-numeric: tabular-nums;
+  }
+  .chip b { color: var(--ink); font-weight: 700; }
+
+  /* ---- Sections ---- */
+  .body { padding: clamp(22px, 4.5vw, 40px) clamp(22px, 5vw, 48px) clamp(28px, 5vw, 44px); }
+  section + section { margin-top: clamp(26px, 4vw, 36px); }
+  .label {
+    font-size: 11px; font-weight: 700; letter-spacing: .16em; text-transform: uppercase;
+    color: var(--ink-faint); margin: 0 0 12px; display: flex; align-items: center; gap: 10px;
+  }
+  .label::after { content: ""; flex: 1; height: 1px; background: var(--line); }
+  .lede { margin: 0 0 16px; font-size: 14.5px; color: var(--ink-soft); line-height: 1.55; max-width: 68ch; }
+  .lede b { color: var(--ink); font-weight: 700; }
+
+  .client { display: flex; align-items: baseline; gap: 10px 18px; flex-wrap: wrap; }
+  .client .name { font-size: 19px; font-weight: 700; }
+  .client .mail { font-size: 14px; color: var(--summit); font-weight: 600; }
+
+  .facts { display: grid; grid-template-columns: repeat(auto-fit, minmax(132px, 1fr)); gap: 1px; background: var(--line); border: 1px solid var(--line); border-radius: 12px; overflow: hidden; }
+  .fact { background: var(--paper); padding: 14px 16px; }
+  .fact dt { font-size: 11px; font-weight: 700; letter-spacing: .09em; text-transform: uppercase; color: var(--ink-faint); margin: 0 0 4px; }
+  .fact dd { margin: 0; font-size: 15px; font-weight: 650; }
+
+  /* ---- Personal welcome note ---- */
+  .welcome {
+    display: flex; gap: 16px; align-items: flex-start;
+    padding: 20px 22px;
+    background: linear-gradient(135deg, var(--glacier), var(--glacier-2));
+    border: 1px solid var(--line); border-left: 3px solid var(--accent);
+    border-radius: 4px 14px 14px 4px;
+  }
+  .welcome .monogram {
+    width: 40px; height: 40px; border-radius: 50%; flex: none;
+    background: linear-gradient(140deg, var(--accent), var(--summit));
+    color: #fff; display: grid; place-items: center; font-weight: 700; font-size: 15px;
+    letter-spacing: .02em; margin-top: 2px;
+  }
+  .welcome .msg { font-family: var(--font-serif); font-size: 15.5px; line-height: 1.6; color: var(--ink); font-style: italic; margin: 0; }
+  .welcome .msg b { font-style: normal; font-weight: 600; }
+  .welcome .sig { display: block; margin-top: 10px; font-family: var(--font-sans); font-style: normal; font-size: 12.5px; font-weight: 600; color: var(--ink-soft); }
+  .welcome .sig b { color: var(--accent-deep); font-weight: 700; }
+
+  /* ---- Recommendation cards ---- */
+  .recs { display: grid; gap: 14px; }
+  .rec { border: 1px solid var(--line); border-radius: 13px; overflow: hidden; background: var(--paper); }
+  .rec.keep { border-color: color-mix(in srgb, var(--accent) 38%, var(--line)); }
+  .rec-top { display: flex; align-items: center; gap: 12px; padding: 12px 18px; background: var(--glacier-2); border-bottom: 1px solid var(--line); flex-wrap: wrap; }
+  .rec-n { width: 25px; height: 25px; border-radius: 8px; flex: none; background: var(--accent); color: #fff; display: grid; place-items: center; font-size: 12px; font-weight: 700; font-variant-numeric: tabular-nums; }
+  @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .rec-n { color: #06201d; } }
+  :root[data-theme="dark"] .rec-n { color: #06201d; }
+  .rec-t { font-family: var(--font-serif); font-size: 17px; font-weight: 600; line-height: 1.2; flex: 1; min-width: 170px; }
+  .rec-body { padding: 4px 18px 8px; }
+  .rec-row { display: grid; grid-template-columns: 132px 1fr; gap: 14px; padding: 11px 0; border-bottom: 1px solid var(--line-soft); font-size: 14.5px; line-height: 1.52; }
+  .rec-row:last-child { border-bottom: 0; }
+  .rec-k { font-size: 10.5px; font-weight: 700; letter-spacing: .11em; text-transform: uppercase; color: var(--ink-faint); padding-top: 3px; }
+  .rec-row.why .rec-k { color: var(--summit); }
+  .rec-row.ben .rec-k { color: var(--accent); }
+  .rec-row.trade .rec-k { color: var(--warn); }
+  .rec-v b { font-weight: 700; }
+  .drivers { display: flex; flex-wrap: wrap; gap: 6px; padding: 0 18px 16px; }
+  .driver { font-size: 11px; font-weight: 650; color: var(--ink-soft); background: var(--glacier); border: 1px solid var(--line); padding: 4px 10px; border-radius: 999px; }
+
+  /* ---- Quotation band ---- */
+  .qband { display: flex; align-items: center; gap: 14px; padding: 16px 20px; border-radius: 14px; background: linear-gradient(135deg, var(--accent-deep), var(--summit)); color: #fff; flex-wrap: wrap; }
+  @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .qband { color: #06201d; } }
+  :root[data-theme="dark"] .qband { color: #06201d; }
+  .qband .qn { font-size: 11px; font-weight: 700; letter-spacing: .18em; text-transform: uppercase; opacity: .85; }
+  .qband h2 { margin: 2px 0 0; font-family: var(--font-serif); font-size: clamp(20px, 3.6vw, 25px); font-weight: 600; line-height: 1.15; }
+  .qband .qdates { margin-left: auto; font-size: 13px; font-weight: 700; font-variant-numeric: tabular-nums; opacity: .95; }
+
+  /* ---- Itinerary ---- */
+  .days { display: grid; gap: 14px; }
+  .day { border: 1px solid var(--line); border-radius: 13px; overflow: hidden; background: var(--paper); }
+  .day-head { display: flex; align-items: center; gap: 13px; padding: 13px 18px; background: var(--glacier-2); border-bottom: 1px solid var(--line); flex-wrap: wrap; }
+  .day-date { font-size: 11px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: var(--accent); font-variant-numeric: tabular-nums; }
+  .day-name { font-family: var(--font-serif); font-size: 17px; font-weight: 600; letter-spacing: -.01em; flex: 1; min-width: 170px; }
+  .day-sleep { font-size: 12px; font-weight: 650; color: var(--ink-soft); background: var(--paper); border: 1px solid var(--line); padding: 4px 10px; border-radius: 999px; }
+  .stops { list-style: none; margin: 0; padding: 6px 18px 14px; display: grid; }
+  .stops li { display: grid; grid-template-columns: 68px 1fr; gap: 14px; padding: 10px 0; border-bottom: 1px solid var(--line-soft); font-size: 14.5px; line-height: 1.5; }
+  .stops li:last-child { border-bottom: 0; }
+  .stops .t { font-size: 12.5px; font-weight: 700; color: var(--summit); font-variant-numeric: tabular-nums; padding-top: 2px; }
+  .stops .d b { font-weight: 700; }
+  .stops .d em { display: block; font-style: normal; font-size: 13px; color: var(--ink-soft); margin-top: 2px; line-height: 1.45; }
+  .effort { display: inline-block; margin-top: 6px; font-size: 11px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--accent); background: color-mix(in srgb, var(--accent) 12%, var(--paper)); border: 1px solid color-mix(in srgb, var(--accent) 30%, var(--line)); padding: 3px 9px; border-radius: 999px; }
+  .effort.mid { color: var(--warn); background: var(--warn-wash); border-color: var(--warn-line); }
+
+  /* ---- Hotels ---- */
+  .opts { display: grid; grid-template-columns: repeat(auto-fit, minmax(215px, 1fr)); gap: clamp(12px, 2.4vw, 16px); }
+  .opt { border: 1px solid var(--line); border-radius: 13px; padding: 17px; background: var(--glacier-2); display: flex; flex-direction: column; gap: 8px; }
+  .opt-tag { font-size: 10.5px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: var(--accent); }
+  .opt h4 { margin: 0; font-family: var(--font-serif); font-size: 17px; font-weight: 600; line-height: 1.2; }
+  .opt .where { margin: 0; font-size: 12.5px; color: var(--summit); font-weight: 650; }
+  .opt p.why { margin: 0; font-size: 13.5px; color: var(--ink-soft); line-height: 1.48; }
+  .opt .nights { margin-top: auto; padding-top: 9px; border-top: 1px solid var(--line); font-size: 12.5px; font-weight: 700; color: var(--ink); font-variant-numeric: tabular-nums; }
+
+  /* ---- Price table ---- */
+  .tbl-wrap { overflow-x: auto; border: 1px solid var(--line); border-radius: 12px; }
+  table { border-collapse: collapse; width: 100%; min-width: 480px; font-size: 14px; }
+  thead th { font-size: 10.5px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: var(--ink-faint); background: var(--glacier-2); text-align: left; padding: 11px 16px; border-bottom: 1px solid var(--line); }
+  thead th.r, tbody td.r { text-align: right; }
+  tbody td { padding: 12px 16px; border-bottom: 1px solid var(--line-soft); vertical-align: top; line-height: 1.45; }
+  tbody tr:last-child td { border-bottom: 0; }
+  tbody td.r { font-variant-numeric: tabular-nums; font-weight: 700; white-space: nowrap; }
+  tbody td b { font-weight: 700; }
+  tbody td em { font-style: normal; display: block; font-size: 12.5px; color: var(--ink-soft); margin-top: 2px; }
+
+  /* ---- Total ---- */
+  .total { display: grid; grid-template-columns: 1fr auto; gap: 8px 24px; align-items: end;
+    background: linear-gradient(135deg, var(--accent-deep), var(--summit));
+    color: #fff; border-radius: 14px; padding: 20px 24px; margin-top: 14px; }
+  @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .total { color: #06201d; } }
+  :root[data-theme="dark"] .total { color: #06201d; }
+  .total .tlabel { font-size: 11px; font-weight: 700; letter-spacing: .16em; text-transform: uppercase; opacity: .82; }
+  .total .calc { font-size: 13.5px; font-weight: 600; opacity: .92; font-variant-numeric: tabular-nums; }
+  .total .amount { font-family: var(--font-serif); font-size: clamp(28px, 5.4vw, 38px); font-weight: 600; line-height: 1; font-variant-numeric: tabular-nums; }
+  .grand { border: 2px solid color-mix(in srgb, var(--accent) 45%, var(--line)); background: color-mix(in srgb, var(--accent) 7%, var(--paper)); color: var(--ink); }
+  :root[data-theme="dark"] .grand, :root[data-theme="light"] .grand { color: var(--ink); }
+  @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .grand { color: var(--ink); } }
+
+  /* ---- Two-column info ---- */
+  .cols { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(14px, 3vw, 24px); }
+  .card { border: 1px solid var(--line); border-radius: 12px; padding: 18px 18px 16px; background: var(--glacier-2); }
+  .card h4 { margin: 0 0 10px; font-size: 13px; font-weight: 750; letter-spacing: .02em; }
+  .card ul { margin: 0; padding: 0; list-style: none; display: grid; gap: 9px; }
+  .card li { font-size: 13.5px; color: var(--ink-soft); padding-left: 16px; position: relative; line-height: 1.45; }
+  .card li::before { content: ""; position: absolute; left: 2px; top: 8px; width: 5px; height: 5px; border-radius: 50%; background: var(--accent); }
+  .card.warn li::before { background: var(--warn); }
+  .card b { color: var(--ink); font-weight: 700; }
+
+  /* ---- Notice ---- */
+  .notice { border: 1px solid var(--warn-line); background: var(--warn-wash); border-radius: 14px; overflow: hidden; }
+  .notice-top { display: flex; align-items: center; gap: 9px; padding: 13px 20px; border-bottom: 1px solid var(--warn-line); font-size: 11px; font-weight: 700; letter-spacing: .16em; text-transform: uppercase; color: var(--warn); }
+  .notice-body { padding: 18px 20px 20px; }
+  .notice-body > p { margin: 0 0 12px; font-size: 14.5px; line-height: 1.55; color: var(--ink-soft); }
+  .notice-body > p:last-child { margin-bottom: 0; }
+  .notice-body b { color: var(--ink); font-weight: 700; }
+
+  /* ---- Hallmark ---- */
+  .sello { border: 1px solid var(--line); border-radius: 14px; overflow: hidden; }
+  .sello-top { padding: 13px 20px; background: var(--accent); color: #fff; font-size: 12px; font-weight: 700; letter-spacing: .16em; text-transform: uppercase; display: flex; align-items: center; gap: 9px; }
+  @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .sello-top { color: #06201d; } }
+  :root[data-theme="dark"] .sello-top { color: #06201d; }
+  .sello-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(215px, 1fr)); gap: 1px; background: var(--line); }
+  .value { background: var(--paper); padding: 17px 18px; display: flex; gap: 13px; align-items: flex-start; }
+  .value .vic { width: 30px; height: 30px; border-radius: 9px; flex: none; display: grid; place-items: center; background: color-mix(in srgb, var(--accent) 15%, var(--paper)); color: var(--accent); margin-top: 1px; }
+  .value h5 { margin: 0 0 3px; font-size: 14px; font-weight: 750; }
+  .value p { margin: 0; font-size: 13px; line-height: 1.45; color: var(--ink-soft); }
+
+  /* ---- Conditions ---- */
+  .terms { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 1px; background: var(--line); border: 1px solid var(--line); border-radius: 12px; overflow: hidden; }
+  .term { background: var(--paper); padding: 15px 16px; }
+  .term .k { font-size: 11px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--ink-faint); margin-bottom: 5px; }
+  .term .v { font-size: 13.5px; font-weight: 600; line-height: 1.4; }
+  .pays { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
+  .pay { font-size: 12.5px; font-weight: 650; padding: 6px 13px; border-radius: 8px; border: 1px solid var(--line); background: var(--glacier-2); }
+  .fine { margin: 11px 0 0; font-size: 12px; color: var(--ink-faint); }
+
+  /* ---- CTA ---- */
+  .cta { margin-top: clamp(26px, 4vw, 36px); text-align: center; padding: clamp(22px, 4vw, 30px); border: 1px dashed color-mix(in srgb, var(--accent) 45%, var(--line)); border-radius: 14px; background: var(--glacier-2); }
+  .cta .lead { margin: 0 0 16px; font-family: var(--font-serif); font-size: 16px; font-style: italic; color: var(--ink); }
+  .cta .btn { display: inline-flex; align-items: center; gap: 10px; background: var(--accent); color: #fff; font-weight: 700; font-size: 15px; padding: 14px 28px; border-radius: 10px; text-decoration: none; box-shadow: 0 10px 24px -12px color-mix(in srgb, var(--accent) 80%, transparent); }
+  @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .cta .btn { color: #06201d; } }
+  :root[data-theme="dark"] .cta .btn { color: #06201d; }
+  .cta .btn:focus-visible { outline: 3px solid var(--summit); outline-offset: 3px; }
+  .cta .after { margin: 12px 0 0; font-size: 12.5px; color: var(--ink-soft); }
+  .cta .magic { color: var(--accent); font-weight: 700; }
+
+  /* ---- Footer ---- */
+  .foot { border-top: 1px solid var(--line); padding: 20px clamp(22px, 5vw, 48px); display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; background: var(--glacier-2); }
+  .foot .who { font-size: 13px; }
+  .foot .who b { font-weight: 700; }
+  .foot .who span { color: var(--ink-soft); }
+  .foot .links { font-size: 12.5px; color: var(--ink-soft); display: flex; gap: 14px; flex-wrap: wrap; }
+  .foot .links a { color: var(--summit); text-decoration: none; font-weight: 600; }
+  .foot .links a:focus-visible { outline: 2px solid var(--summit); outline-offset: 2px; }
+
+  .legend { max-width: 820px; margin: clamp(16px, 3vw, 22px) auto 0; font-size: 12px; color: var(--ink-faint); text-align: center; }
+
+  @media (max-width: 620px) {
+    .cols { grid-template-columns: 1fr; }
+    .total { grid-template-columns: 1fr; }
+    .stops li { grid-template-columns: 58px 1fr; gap: 10px; }
+    .rec-row { grid-template-columns: 1fr; gap: 3px; }
+    .qband .qdates { margin-left: 0; }
+  }
+</style>
+
+<div class="wrap">
+  <article class="paper">
+
+    <header class="head">
+      <svg class="ridge" viewBox="0 0 800 46" preserveAspectRatio="none" aria-hidden="true">
+        <path d="M0 46 L120 14 L210 34 L330 4 L430 30 L540 10 L650 32 L740 16 L800 30 L800 46 Z" fill="currentColor"/>
+      </svg>
+      <div class="brandrow">
+        <div class="brand">
+          <div class="mark" aria-hidden="true">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 20 L9 8 L13 15 L16 10 L21 20 Z"/></svg>
+          </div>
+          <div class="wordmark">Tourevo<small>South America by design</small></div>
+        </div>
+        <div style="text-align:right">
+          <div class="eyebrow">Two quotations</div>
+        </div>
+      </div>
+
+      <h1 class="doc-title">Argentine Patagonia &amp; Rapa Nui</h1>
+      <p class="doc-sub">The two segments you asked for — El Calafate, El Chaltén and Ushuaia in November, Easter Island in December — costed separately, and paced for two travellers who would rather see one thing properly than three things in a hurry.</p>
+
+      <div class="meta">
+        <span class="chip">No. <b>COT-2026-0159</b></span>
+        <span class="chip">Issued <b>07 Aug 2026</b></span>
+        <span class="chip">Valid until <b>21 Aug 2026</b></span>
+        <span class="chip">Currency <b>USD</b></span>
+      </div>
+    </header>
+
+    <div class="body">
+
+      <section>
+        <div class="welcome">
+          <div class="monogram" aria-hidden="true">JP</div>
+          <p class="msg">
+            Mr Shah — <b>your email of 5 August is received</b>, and thank you for the detail in it; it made this an easy brief to work with. You asked us to advise on the start date, so I have: <b>begin on 14 November, not the 15th</b>, and let us put you into Santiago on the evening of the 21st rather than on the 22nd itself. The rest of what follows is your itinerary, with the reasoning for every change set out before the day-by-day so you can accept or reject each one on its own merits.
+            <span class="sig">Warmly, <b>Juan Pablo</b> · Travel Manager, Tourevo</span>
+          </p>
+        </div>
+      </section>
+
+      <section>
+        <p class="label">Prepared for</p>
+        <div class="client">
+          <span class="name">Kiran P. Shah &amp; travelling companion</span>
+          <span class="mail">kpshah3105@gmail.com</span>
+        </div>
+      </section>
+
+      <section>
+        <p class="label">At a glance</p>
+        <dl class="facts">
+          <div class="fact"><dt>Travellers</dt><dd>2 adults, 65+</dd></div>
+          <div class="fact"><dt>Diet</dt><dd>Vegetarian</dd></div>
+          <div class="fact"><dt>Segment 1</dt><dd>14–21 Nov 2026</dd></div>
+          <div class="fact"><dt>Segment 2</dt><dd>3–7 Dec 2026</dd></div>
+          <div class="fact"><dt>Excursions</dt><dd>Shared, English</dd></div>
+          <div class="fact"><dt>Hotels</dt><dd>4-star, B&amp;B</dd></div>
+        </dl>
+      </section>
+
+      <!-- ============ RECOMMENDATIONS ============ -->
+      <section>
+        <p class="label">Our recommendations &amp; itinerary adjustments</p>
+        <p class="lede">Based on your original request, we have made a small number of adjustments — to the start date, to where you sleep, and to which boat you take — in order to give you a calmer travel pace and safer flight connections. <b>Nothing below is a decision we have taken for you.</b> Each one is set out with what you asked for, what we propose instead, and why; tell us which you want and we will re-issue.</p>
+
+        <div class="recs">
+
+          <article class="rec">
+            <div class="rec-top"><span class="rec-n">1</span><span class="rec-t">Start on 14 November — and arrive in Santiago on the 21st, not the 22nd</span></div>
+            <div class="rec-body">
+              <div class="rec-row"><span class="rec-k">You asked</span><span class="rec-v">The tour can start on 14 or 15 November — please advise. And: <b>“I need to be in Santiago on the 22nd Nov.”</b></span></div>
+              <div class="rec-row"><span class="rec-k">We propose</span><span class="rec-v">Start on <b>14 November</b>. The programme ends with your arrival in Santiago on the <b>evening of Saturday 21 November</b>, leaving Sunday the 22nd entirely clear.</span></div>
+              <div class="rec-row why"><span class="rec-k">Why</span><span class="rec-v">Ushuaia and El Calafate are two of the most weather-exposed airports in Argentina, and November is the windiest month of the Patagonian spring. Same-day cancellations and re-timings happen. If you start on the 15th, the only way the numbers work is to fly Ushuaia → Buenos Aires → Santiago on the 22nd itself — so a single delayed leg on your last morning would break the one date you cannot move.</span></div>
+              <div class="rec-row ben"><span class="rec-k">Benefit</span><span class="rec-v">A full spare day protecting your fixed date; a night's rest in Santiago before it; and, because the extra day sits inside the trip rather than at the end of it, <b>a third night in Ushuaia</b> instead of two.</span></div>
+              <div class="rec-row trade"><span class="rec-k">Trade-off</span><span class="rec-v">One additional night's accommodation. In our view it is the best-value night in the whole programme.</span></div>
+            </div>
+            <div class="drivers"><span class="driver">Safer air connections</span><span class="driver">Lower operational risk</span><span class="driver">More time per destination</span></div>
+          </article>
+
+          <article class="rec">
+            <div class="rec-top"><span class="rec-n">2</span><span class="rec-t">Sleep two nights in El Chaltén rather than day-tripping from El Calafate</span></div>
+            <div class="rec-body">
+              <div class="rec-row"><span class="rec-k">You asked</span><span class="rec-v">El Calafate, El Chaltén and Ushuaia, with the most scenic areas around El Chaltén and Mt. Fitz Roy — easy walks of 1 to 2 hours.</span></div>
+              <div class="rec-row"><span class="rec-k">We propose</span><span class="rec-v"><b>2 nights El Calafate · 2 nights El Chaltén · 3 nights Ushuaia.</b> El Chaltén becomes a stay, not an excursion.</span></div>
+              <div class="rec-row why"><span class="rec-k">Why</span><span class="rec-v">El Chaltén is three hours each way from El Calafate. The standard day trip leaves at 06:30 and returns after 21:00 — thirteen to fourteen hours, six of them seated in a vehicle, with the walking squeezed into the middle of the day when the light is at its flattest. Staying in the village turns one punishing day into two unhurried half-days.</span></div>
+              <div class="rec-row ben"><span class="rec-k">Benefit</span><span class="rec-v">No pre-dawn start. Fitz Roy from your window at first light and again at dusk — the two hours photographers actually travel for. And the walks are done at your speed, with the option to turn back at any point without losing the day.</span></div>
+              <div class="rec-row trade"><span class="rec-k">Trade-off</span><span class="rec-v">Two hotel changes instead of one. We have kept every other base fixed to compensate — you unpack four times in eight days, which is as few as this route allows.</span></div>
+            </div>
+            <div class="drivers"><span class="driver">Comfort for 65+</span><span class="driver">Lower physical demand</span><span class="driver">Avoids over-loaded days</span><span class="driver">Better light for photography</span></div>
+          </article>
+
+          <article class="rec">
+            <div class="rec-top"><span class="rec-n">3</span><span class="rec-t">The one-hour glacier boat, not the nine-hour one</span></div>
+            <div class="rec-body">
+              <div class="rec-row"><span class="rec-k">You asked</span><span class="rec-v">“The Perito Moreno Glacier, the boat trip.”</span></div>
+              <div class="rec-row"><span class="rec-k">We propose</span><span class="rec-v">The Perito Moreno full day <b>combined with the one-hour Safari Náutico</b>, which sails from Bajo de las Sombras to within a few hundred metres of the glacier's south face — rather than the all-day <em>Todo Glaciares</em> sailing to Upsala and Spegazzini.</span></div>
+              <div class="rec-row why"><span class="rec-k">Why</span><span class="rec-v">Two different boats are sold under the same phrase and they are not interchangeable. <em>Todo Glaciares</em> is a fine excursion, but it is roughly nine hours out of Puerto Bandera and it <b>cannot be combined with Perito Moreno on the same day</b>. On a two-night stay, choosing it means giving up the glacier you actually came to see.</span></div>
+              <div class="rec-row ben"><span class="rec-k">Benefit</span><span class="rec-v">You get both halves of the experience in one comfortable day: the balcony walkways facing the ice wall, and an hour on the water at its foot with the calving audible. Back at the hotel by 18:00.</span></div>
+              <div class="rec-row trade"><span class="rec-k">Trade-off</span><span class="rec-v">You will not see the Upsala and Spegazzini glaciers. If you want them, we add a third night in El Calafate — priced in the options table below.</span></div>
+            </div>
+            <div class="drivers"><span class="driver">Better price-to-experience</span><span class="driver">Avoids over-loaded days</span><span class="driver">Lower physical demand</span></div>
+          </article>
+
+          <article class="rec">
+            <div class="rec-top"><span class="rec-n">4</span><span class="rec-t">Fly the exit day on one airline, through one Buenos Aires airport</span></div>
+            <div class="rec-body">
+              <div class="rec-row"><span class="rec-k">You asked</span><span class="rec-v">Domestic flights included, and to be in Santiago for the 22nd.</span></div>
+              <div class="rec-row"><span class="rec-k">We propose</span><span class="rec-v">Ushuaia → Buenos Aires <b>Aeroparque (AEP)</b> → Santiago, <b>both legs on Aerolíneas Argentinas, on one ticket</b>.</span></div>
+              <div class="rec-row why"><span class="rec-k">Why</span><span class="rec-v">The obvious alternatives are worse in ways that are not obvious until the day. Most routings land you at Aeroparque and depart from Ezeiza — a 45-to-70-minute road transfer across the city with your luggage, plus a full re-check. Others split the day between two airlines, which means that if the Ushuaia leg is late, the second carrier owes you nothing.</span></div>
+              <div class="rec-row ben"><span class="rec-k">Benefit</span><span class="rec-v">No airport change, no taxi across Buenos Aires, no re-checking bags — and if the southbound leg runs late, the airline is obliged to re-book you onto the next Santiago service.</span></div>
+              <div class="rec-row trade"><span class="rec-k">Trade-off</span><span class="rec-v">It is still a long travel day, roughly nine hours door to door. If you would rather break it, we can insert a night in Buenos Aires on the 20th — see option below. Ushuaia would then drop back to two nights.</span></div>
+            </div>
+            <div class="drivers"><span class="driver">Safer air connections</span><span class="driver">Fewer transfers</span><span class="driver">Comfort for 65+</span></div>
+          </article>
+
+          <article class="rec">
+            <div class="rec-top"><span class="rec-n">5</span><span class="rec-t">Isla Martillo: yes — and it has to be held early</span></div>
+            <div class="rec-body">
+              <div class="rec-row"><span class="rec-k">You asked</span><span class="rec-v">“Visiting Martillo Island for the penguins (if possible).”</span></div>
+              <div class="rec-row"><span class="rec-k">We propose</span><span class="rec-v">Yes — and specifically the <b>landing</b> version, via Estancia Harberton, held the moment you confirm rather than nearer the date.</span></div>
+              <div class="rec-row why"><span class="rec-k">Why</span><span class="rec-v">Two products share the name. Most Beagle Channel boats only sail <em>past</em> Isla Martillo; a single licensed operator is permitted to land, and the number of visitors allowed ashore each day is capped by the provincial authority. In the November–December colony season those places are typically gone months ahead. Given that you have already done the Beagle Channel, the sail-past version would add nothing.</span></div>
+              <div class="rec-row ben"><span class="rec-k">Benefit</span><span class="rec-v">You walk a marked path along the beach with Magellanic penguins either side of you — the colony is at its noisiest in late November — rather than photographing them from fifty metres of water.</span></div>
+              <div class="rec-row trade"><span class="rec-k">Trade-off</span><span class="rec-v">Ninety minutes each way, the last stretch on gravel road. The walking itself is flat, slow and about an hour. If the landing permit cannot be secured we will tell you before you pay a peso, and refund that line in full.</span></div>
+            </div>
+            <div class="drivers"><span class="driver">Seasonal availability</span><span class="driver">Not a repeat of what you have done</span><span class="driver">Low physical demand</span></div>
+          </article>
+
+          <article class="rec keep">
+            <div class="rec-top"><span class="rec-n">6</span><span class="rec-t">Easter Island: your structure is right, and we have not touched it</span></div>
+            <div class="rec-body">
+              <div class="rec-row"><span class="rec-k">You asked</span><span class="rec-v">4 nights on Easter Island from 3 December, back in Santiago on the 7th, flying home on the 8th.</span></div>
+              <div class="rec-row"><span class="rec-k">We propose</span><span class="rec-v">Exactly that. No change.</span></div>
+              <div class="rec-row why"><span class="rec-k">Why</span><span class="rec-v">Four nights is the correct length, not a compromise: the Santiago service lands early afternoon and departs mid-afternoon, so you get <b>three complete days plus two useful half-days</b> — which is precisely one full day per archaeological circuit, with none of them doubled up. And your night in Santiago on the 7th is the buffer we would have insisted on anyway. The return leg is nearly five hours over open ocean with no alternate airport; it is the one flight in Chile we never connect on the same day.</span></div>
+              <div class="rec-row ben"><span class="rec-k">Benefit</span><span class="rec-v">Nothing to fix, nothing to pay for twice. Where a five-night stay would buy you free time, a three-night stay would force two circuits into one day — you have asked for the length that works.</span></div>
+            </div>
+            <div class="drivers"><span class="driver">Structure confirmed as requested</span><span class="driver">Conservative flight connection</span></div>
+          </article>
+
+          <article class="rec">
+            <div class="rec-top"><span class="rec-n">7</span><span class="rec-t">How we sequence Rapa Nui — because two of its sites admit you only once</span></div>
+            <div class="rec-body">
+              <div class="rec-row"><span class="rec-k">You asked</span><span class="rec-v">Shared guided excursions covering the main archaeological and cultural highlights of Rapa Nui.</span></div>
+              <div class="rec-row"><span class="rec-k">We propose</span><span class="rec-v">Three circuits, <b>one per day, never two</b>: the eastern full day (Rano Raraku and Tongariki), the southern morning (Rano Kau and Orongo), the western morning (Puna Pau, Ahu Akivi and the caves) — with both afternoons after the half-days left free.</span></div>
+              <div class="rec-row why"><span class="rec-k">Why</span><span class="rec-v">Your national park ticket admits you <b>once to Rano Raraku and once to Orongo</b>, and the ranger scans it at the gate. Itineraries that “pass by” either site on more than one day quietly burn an entry you cannot buy back. Sequencing them into single, unhurried visits is not a stylistic choice — it is the only way to get the full value of the ticket.</span></div>
+              <div class="rec-row ben"><span class="rec-k">Benefit</span><span class="rec-v">No wasted entries, and real time at Rano Raraku — the quarry where four hundred moai still lie half-carved in the hillside, and the one place everyone wishes they had been given another hour. Two free afternoons in Hanga Roa for the museum, the market and a slow lunch.</span></div>
+            </div>
+            <div class="drivers"><span class="driver">Better price-to-experience</span><span class="driver">Avoids over-loaded days</span><span class="driver">Free time built in</span></div>
+          </article>
+
+        </div>
+      </section>
+
+      <!-- ============ QUOTATION 1 ============ -->
+      <section>
+        <div class="qband">
+          <div>
+            <div class="qn">Quotation 1</div>
+            <h2>Argentine Patagonia</h2>
+          </div>
+          <div class="qdates">Sat 14 → Sat 21 Nov 2026 · 7 nights</div>
+        </div>
+      </section>
+
+      <section>
+        <p class="label">Day by day</p>
+        <div class="days">
+
+          <article class="day">
+            <div class="day-head">
+              <span class="day-date">Sat 14 Nov</span>
+              <span class="day-name">Arrival in El Calafate</span>
+              <span class="day-sleep">Night 1 · El Calafate</span>
+            </div>
+            <ul class="stops">
+              <li><span class="t">on arrival</span><span class="d"><b>Met at El Calafate airport (FTE)</b><em>Private transfer, about 25 minutes to town. Your driver waits inside arrivals with a name board.</em></span></li>
+              <li><span class="t">afternoon</span><span class="d"><b>Nothing scheduled</b><em>Deliberately. You will have flown a long way to get here and the glacier is tomorrow.</em></span></li>
+              <li><span class="t">optional</span><span class="d"><b>Laguna Nimez boardwalk</b><em>Ten minutes on foot from the hotel: a flat lakeside boardwalk with flamingos, black-necked swans and, at this hour, the light coming off Lago Argentino. An hour, entirely at your own pace.<span class="effort">Very easy · flat</span></em></span></li>
+            </ul>
+          </article>
+
+          <article class="day">
+            <div class="day-head">
+              <span class="day-date">Sun 15 Nov</span>
+              <span class="day-name">Perito Moreno Glacier, from the balconies and from the water</span>
+              <span class="day-sleep">Night 2 · El Calafate</span>
+            </div>
+            <ul class="stops">
+              <li><span class="t">08:30</span><span class="d"><b>Pick-up at the hotel · shared excursion, English-speaking guide</b><em>Eighty kilometres west into Los Glaciares National Park, about an hour and a half with a stop at the Curva de los Suspiros — the bend where the glacier appears whole for the first time.</em></span></li>
+              <li><span class="t">10:30</span><span class="d"><b>Safari Náutico · one hour on Lago Rico</b><em>From the Bajo de las Sombras pier, out to within a few hundred metres of the glacier's south face. You are close enough to hear it work. Boarding is level, seating is covered, and there is an open deck when you want it.<span class="effort">Very easy</span></em></span></li>
+              <li><span class="t">12:00</span><span class="d"><b>The balcony walkways</b><em>Several kilometres of steel walkway on four levels facing the sixty-metre ice front. The <b>upper circuit is flat and step-free</b>; the lower levels are reached by staircases and are entirely optional — the best view is from the top, which is the one that costs you nothing.<span class="effort">Easy · steps optional</span></em></span></li>
+              <li><span class="t">18:00</span><span class="d"><b>Back in El Calafate</b><em>Evening free. We will have booked and briefed a restaurant that does vegetarian properly — see the note at the end.</em></span></li>
+            </ul>
+          </article>
+
+          <article class="day">
+            <div class="day-head">
+              <span class="day-date">Mon 16 Nov</span>
+              <span class="day-name">North to El Chaltén, and the first walk</span>
+              <span class="day-sleep">Night 3 · El Chaltén</span>
+            </div>
+            <ul class="stops">
+              <li><span class="t">09:00</span><span class="d"><b>El Calafate → El Chaltén</b><em>About three hours along the shore of Lago Argentino and the Río La Leona. Not a transfer to endure — this is one of the great drives in Patagonia.</em></span></li>
+              <li><span class="t">10:45</span><span class="d"><b>Hotel La Leona</b><em>The 1894 roadhouse where Butch Cassidy and the Sundance Kid sat out a month. Coffee, a stretch of the legs, and the best cake between the two towns.</em></span></li>
+              <li><span class="t">12:30</span><span class="d"><b>First sight of the Fitz Roy massif</b><em>At the viewpoint before the village. If the summit is clear, this is where you stop for it.</em></span></li>
+              <li><span class="t">13:15</span><span class="d"><b>Arrival, lunch, check-in</b><em>The afternoon is yours until the light softens.</em></span></li>
+              <li><span class="t">17:00</span><span class="d"><b>Mirador de los Cóndores &amp; Mirador de las Águilas</b><em>An hour there and back on a gentle graded path from the edge of the village — the whole Río de las Vueltas valley below you, Fitz Roy and Cerro Torre in front, condors usually overhead. The single best return on effort in El Chaltén.<span class="effort">Easy · 1 h · gentle rise</span></em></span></li>
+            </ul>
+          </article>
+
+          <article class="day">
+            <div class="day-head">
+              <span class="day-date">Tue 17 Nov</span>
+              <span class="day-name">Lago del Desierto and the Río de las Vueltas valley</span>
+              <span class="day-sleep">Night 4 · El Chaltén</span>
+            </div>
+            <ul class="stops">
+              <li><span class="t">08:30</span><span class="d"><b>Shared excursion north on Ruta 41 · English-speaking guide</b><em>Thirty-seven kilometres up the valley, most of it gravel, along the river and past the Chorrillo del Salto waterfall. Almost all of this day is spent seated and looking out of a window, which is exactly the point.</em></span></li>
+              <li><span class="t">10:30</span><span class="d"><b>Lago del Desierto</b><em>A long green lake pressed between forested walls, with the Vespignani Glacier at its head. Optional forty-minute crossing by launch, and a short signed trail through lenga forest to the Huemul Glacier viewpoint.<span class="effort">Easy · 40 min walk · optional</span></em></span></li>
+              <li><span class="t">13:00</span><span class="d"><b>Lunch by the water</b><em>Vegetarian arranged in advance — this is a small operation with a fixed menu, so we notify them at the time of booking.</em></span></li>
+              <li><span class="t">17:00</span><span class="d"><b>Back in El Chaltén</b><em>Evening free. Sunset on Fitz Roy is around 21:00 in mid-November and turns the granite orange for about ten minutes. Worth staying up for; you can watch it from the street.</em></span></li>
+              <li><span class="t">instead</span><span class="d"><b>If you would rather do less</b><em>We swap this day for a flat one-hour guided walk to the Chorrillo del Salto waterfall and leave the rest of the day free in the village. Same cost, half the movement. Tell us at booking or on the morning.</em></span></li>
+            </ul>
+          </article>
+
+          <article class="day">
+            <div class="day-head">
+              <span class="day-date">Wed 18 Nov</span>
+              <span class="day-name">South to Tierra del Fuego</span>
+              <span class="day-sleep">Night 5 · Ushuaia</span>
+            </div>
+            <ul class="stops">
+              <li><span class="t">08:30</span><span class="d"><b>El Chaltén → El Calafate airport</b><em>Three hours and a quarter, direct to the terminal. We build in a full two hours before departure rather than the ninety minutes the airline asks for.</em></span></li>
+              <li><span class="t">midday</span><span class="d"><b>El Calafate → Ushuaia</b><em>Direct, about an hour and twenty minutes, operating seasonally over your dates. Exact timing confirmed when we hold the seats — see the note on 2026 schedules below.</em></span></li>
+              <li><span class="t">on arrival</span><span class="d"><b>Met at Ushuaia airport, transfer to the hotel</b><em>Ten minutes. The airport sits on the peninsula in front of the town.</em></span></li>
+              <li><span class="t">evening</span><span class="d"><b>Nothing scheduled</b><em>A travel day is a travel day. Your hotel is on the port side, three streets from San Martín — dinner is a walk, not a taxi.</em></span></li>
+            </ul>
+          </article>
+
+          <article class="day">
+            <div class="day-head">
+              <span class="day-date">Thu 19 Nov</span>
+              <span class="day-name">Tierra del Fuego National Park &amp; the End of the World Train</span>
+              <span class="day-sleep">Night 6 · Ushuaia</span>
+            </div>
+            <ul class="stops">
+              <li><span class="t">09:00</span><span class="d"><b>Pick-up · shared excursion, English-speaking guide</b><em>West along Ruta 3 to the End of the World station.</em></span></li>
+              <li><span class="t">10:00</span><span class="d"><b>Tren del Fin del Mundo</b><em>An hour on the narrow-gauge line the prisoners built to bring timber down from the forest — through the Pipo river canyon and the Cemetery of Trees. Seated throughout, heated, with a stop at La Macarena falls.<span class="effort">Very easy · seated</span></em></span></li>
+              <li><span class="t">11:30</span><span class="d"><b>The park: Bahía Ensenada, Lago Roca, Laguna Negra</b><em>Short flat boardwalks and viewpoints, each ten to twenty minutes, with the vehicle waiting at every one. Beavers, upland geese, austral parakeets.<span class="effort">Easy · flat boardwalks</span></em></span></li>
+              <li><span class="t">13:30</span><span class="d"><b>Bahía Lapataia — where Ruta 3 ends</b><em>The end of the Pan-American Highway, 3,079 km from Buenos Aires and as far south as a road goes on this continent. The sign is the photograph; the bay behind it is the reason to stay twenty minutes.</em></span></li>
+              <li><span class="t">16:30</span><span class="d"><b>Back in Ushuaia</b><em>Afternoon free.</em></span></li>
+            </ul>
+          </article>
+
+          <article class="day">
+            <div class="day-head">
+              <span class="day-date">Fri 20 Nov</span>
+              <span class="day-name">Isla Martillo — ashore with the penguins</span>
+              <span class="day-sleep">Night 7 · Ushuaia</span>
+            </div>
+            <ul class="stops">
+              <li><span class="t">morning</span><span class="d"><b>Pick-up · shared excursion, English-speaking guide</b><em>Ninety minutes east along Ruta 3 and then the gravel Ruta J, through peat bog and stunted forest, to Estancia Harberton — the oldest farm in Tierra del Fuego, founded 1886 and still worked by the same family.</em></span></li>
+              <li><span class="t">midday</span><span class="d"><b>Crossing to Isla Martillo, and the landing</b><em>Ten minutes by launch, then about an hour on a marked path along the beach. Around three thousand pairs of Magellanic penguins nest here, with a small resident group of gentoos; by late November the chicks are out. Flat, slow, and the guide sets the pace.<span class="effort">Easy · 1 h · flat</span></em></span></li>
+              <li><span class="t">—</span><span class="d"><b>Held from the day you confirm</b><em>Daily landing places are capped by permit. This is the one line in the quotation that we book first and everything else around.</em></span></li>
+              <li><span class="t">late aft.</span><span class="d"><b>Back in Ushuaia · evening free</b><em>If you want more, the Martial Glacier chairlift and the Presidio maritime museum are both a short taxi away and neither needs booking.</em></span></li>
+            </ul>
+          </article>
+
+          <article class="day">
+            <div class="day-head">
+              <span class="day-date">Sat 21 Nov</span>
+              <span class="day-name">Ushuaia → Buenos Aires → Santiago</span>
+              <span class="day-sleep">Arrive Santiago, evening</span>
+            </div>
+            <ul class="stops">
+              <li><span class="t">morning</span><span class="d"><b>Transfer to Ushuaia airport</b><em>Ten minutes. Bags checked through to Santiago.</em></span></li>
+              <li><span class="t">—</span><span class="d"><b>Ushuaia → Buenos Aires Aeroparque</b><em>About three and a half hours, Aerolíneas Argentinas.</em></span></li>
+              <li><span class="t">—</span><span class="d"><b>Connection at Aeroparque</b><em>Same airport, same airline, same ticket. No transfer across the city, no re-check.</em></span></li>
+              <li><span class="t">—</span><span class="d"><b>Aeroparque → Santiago</b><em>About two and a quarter hours across the Andes. Sit on the left going west if the sky is clear — Aconcagua is on that side.</em></span></li>
+              <li><span class="t">evening</span><span class="d"><b>Arrival in Santiago</b><em>A full day in hand before the 22nd. Hotel and airport transfer quoted as an option below.</em></span></li>
+            </ul>
+          </article>
+
+        </div>
+      </section>
+
+      <section>
+        <p class="label">Where you sleep · Patagonia</p>
+        <p class="lede">Four-star, double room, breakfast included. All three are chosen as much for <b>where they stand</b> as for what they are: in every town you can walk to dinner rather than order a taxi, which matters more on this trip than a larger room would.</p>
+        <div class="opts">
+          <div class="opt">
+            <p class="opt-tag">Nights 1–2</p>
+            <h4>Xelena Hotel &amp; Suites</h4>
+            <p class="where">El Calafate · Lago Argentino shore</p>
+            <p class="why">Lake-facing, lift to every floor, a generous buffet breakfast with real vegetarian choice, and a fifteen-minute flat walk into town along the waterfront.</p>
+            <p class="nights">2 nights · double · B&amp;B</p>
+          </div>
+          <div class="opt">
+            <p class="opt-tag">Nights 3–4</p>
+            <h4>Hotel Destino Sur</h4>
+            <p class="where">El Chaltén · village centre</p>
+            <p class="why">The most comfortable address in a village of hostels, with mountain-facing rooms, a spa and a heated pool for tired legs. Three minutes' walk to the restaurants.</p>
+            <p class="nights">2 nights · double · B&amp;B</p>
+          </div>
+          <div class="opt">
+            <p class="opt-tag">Nights 5–7</p>
+            <h4>Hotel Albatros</h4>
+            <p class="where">Ushuaia · facing the port</p>
+            <p class="why">On the waterfront at the foot of the main street — the shortest walk to dinner of any hotel in Ushuaia, with the Beagle Channel out of the window.</p>
+            <p class="nights">3 nights · double · B&amp;B</p>
+          </div>
+        </div>
+        <p class="fine">Or similar in the same category and location. We name the hotel we intend to book rather than a star rating, and we tell you if we have to change it.</p>
+      </section>
+
+      <section>
+        <p class="label">Quotation 1 · what it costs</p>
+        <div class="tbl-wrap">
+          <table>
+            <thead>
+              <tr><th>Service · 2 travellers</th><th class="r">USD</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><b>Accommodation</b> — 7 nights, 4-star, double, breakfast included<em>El Calafate 2 · El Chaltén 2 · Ushuaia 3</em></td>
+                <td class="r">1,610</td>
+              </tr>
+              <tr>
+                <td><b>Flights</b> — El Calafate → Ushuaia · Ushuaia → Buenos Aires (AEP) · Buenos Aires (AEP) → Santiago<em>Economy, one checked bag each · 2 × USD 620</em></td>
+                <td class="r">1,240</td>
+              </tr>
+              <tr>
+                <td><b>Transfers</b> — private, all of them<em>FTE airport in · El Calafate ↔ El Chaltén with sightseeing stops · El Chaltén → FTE airport · Ushuaia airport in and out</em></td>
+                <td class="r">450</td>
+              </tr>
+              <tr>
+                <td><b>Perito Moreno Glacier full day + Safari Náutico</b><em>Shared, English-speaking guide · 2 × USD 150</em></td>
+                <td class="r">300</td>
+              </tr>
+              <tr>
+                <td><b>Lago del Desierto full day</b><em>Shared, English-speaking guide · 2 × USD 130</em></td>
+                <td class="r">260</td>
+              </tr>
+              <tr>
+                <td><b>Tierra del Fuego National Park + End of the World Train</b><em>Shared, English-speaking guide, train ticket included · 2 × USD 150</em></td>
+                <td class="r">300</td>
+              </tr>
+              <tr>
+                <td><b>Isla Martillo penguin landing + Estancia Harberton</b><em>Shared, English-speaking guide, landing permit included · 2 × USD 170</em></td>
+                <td class="r">340</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="total">
+          <div class="left">
+            <div class="tlabel">Quotation 1 · Argentine Patagonia</div>
+            <div class="calc">2 travellers · 7 nights · USD 2,250 per person</div>
+          </div>
+          <div class="right">
+            <div class="amount">USD 4,500</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============ QUOTATION 2 ============ -->
+      <section>
+        <div class="qband">
+          <div>
+            <div class="qn">Quotation 2</div>
+            <h2>Easter Island · Rapa Nui</h2>
+          </div>
+          <div class="qdates">Thu 3 → Mon 7 Dec 2026 · 4 nights</div>
+        </div>
+      </section>
+
+      <section>
+        <p class="label">Day by day</p>
+        <div class="days">
+
+          <article class="day">
+            <div class="day-head">
+              <span class="day-date">Thu 3 Dec</span>
+              <span class="day-name">Santiago to the middle of the Pacific</span>
+              <span class="day-sleep">Night 1 · Hanga Roa</span>
+            </div>
+            <ul class="stops">
+              <li><span class="t">morning</span><span class="d"><b>Santiago → Mataveri (IPC)</b><em>About five and a half hours west, LATAM. The island is two hours behind Santiago in December, so you land in the early afternoon with the day still ahead of you.</em></span></li>
+              <li><span class="t">on arrival</span><span class="d"><b>Welcome and transfer</b><em>Met with the traditional shell necklace and driven to the hotel — nowhere in Hanga Roa is more than eight minutes from the runway.</em></span></li>
+              <li><span class="t">afternoon</span><span class="d"><b>Nothing scheduled</b><em>Five and a half hours in the air is enough for one day.</em></span></li>
+              <li><span class="t">19:30</span><span class="d"><b>Ahu Tahai at sunset · with your guide</b><em>Ten minutes on foot from town, on flat grass by the sea: five moai in a row, one with its white coral eyes restored, silhouetted as the sun goes into the Pacific behind them. The gentlest possible introduction, and the one photograph everyone keeps.<span class="effort">Very easy · flat</span></em></span></li>
+            </ul>
+          </article>
+
+          <article class="day">
+            <div class="day-head">
+              <span class="day-date">Fri 4 Dec</span>
+              <span class="day-name">The east — the quarry, the fifteen, and the white beach</span>
+              <span class="day-sleep">Night 2 · Hanga Roa</span>
+            </div>
+            <ul class="stops">
+              <li><span class="t">09:00</span><span class="d"><b>Pick-up · shared full day, English-speaking guide</b><em>The one full day of the three. Everything else is a half.</em></span></li>
+              <li><span class="t">09:45</span><span class="d"><b>Rano Raraku · the quarry</b><em>The volcano where every moai on the island was cut, and where nearly four hundred remain — standing in the grass, half-emerged from the rock, one still lying twenty-one metres long and unfinished. We take the lower circuit, which is the gentle one; the crater rim is optional and your guide will tell you honestly whether it is worth it that day.<span class="effort mid">Moderate · gravel paths · optional climb</span></em></span></li>
+              <li><span class="t">12:00</span><span class="d"><b>Ahu Tongariki</b><em>Fifteen moai restored on the largest platform ever built on the island, backed by the ocean and the quarry they came from. A flat five-minute walk from the vehicle.<span class="effort">Very easy · flat</span></em></span></li>
+              <li><span class="t">13:30</span><span class="d"><b>Te Pito Kura and the Papa Vaka petroglyphs</b><em>The largest moai ever moved from the quarry, now fallen, and the magnetic stone beside it. Then the carved canoes and tuna hooks cut into flat rock by the road.</em></span></li>
+              <li><span class="t">15:00</span><span class="d"><b>Anakena · lunch and the afternoon</b><em>White coral sand and imported palms, with Ahu Nau Nau — the best-preserved moai on the island, buried in sand for centuries and therefore barely weathered — standing behind the beach. Swim if you want to; the water is 23°C in December.</em></span></li>
+              <li><span class="t">17:30</span><span class="d"><b>Back in Hanga Roa</b></span></li>
+            </ul>
+          </article>
+
+          <article class="day">
+            <div class="day-head">
+              <span class="day-date">Sat 5 Dec</span>
+              <span class="day-name">The south — the crater and the birdman village</span>
+              <span class="day-sleep">Night 3 · Hanga Roa</span>
+            </div>
+            <ul class="stops">
+              <li><span class="t">09:00</span><span class="d"><b>Pick-up · shared half day, English-speaking guide</b></span></li>
+              <li><span class="t">09:30</span><span class="d"><b>Rano Kau</b><em>A kilometre-wide crater filled with a reed lake, with the rim broken open on the ocean side. One of the great views in the Pacific and you reach it from the car park in five level minutes.<span class="effort">Very easy</span></em></span></li>
+              <li><span class="t">10:30</span><span class="d"><b>Orongo ceremonial village</b><em>Fifty-three stone houses on the knife-edge between the crater and a 300-metre cliff, where the birdman competition was decided each spring. The petroglyph panel above the sea is the densest on the island. Level gravel path, handrails at the exposed points.<span class="effort">Easy · flat gravel</span></em></span></li>
+              <li><span class="t">12:15</span><span class="d"><b>Ana Kai Tangata</b><em>The sea cave under the cliff with birdman paintings still on the ceiling.</em></span></li>
+              <li><span class="t">13:30</span><span class="d"><b>Back in Hanga Roa · afternoon free</b><em>The Padre Sebastián Englert museum is ten minutes' walk and genuinely good — it is where the rongorongo tablets and the one female moai are explained. Otherwise: the craft market, the harbour, and lunch that takes as long as you want.</em></span></li>
+            </ul>
+          </article>
+
+          <article class="day">
+            <div class="day-head">
+              <span class="day-date">Sun 6 Dec</span>
+              <span class="day-name">The west — topknots, the seven, and the lava tubes</span>
+              <span class="day-sleep">Night 4 · Hanga Roa</span>
+            </div>
+            <ul class="stops">
+              <li><span class="t">09:00</span><span class="d"><b>Pick-up · shared half day, English-speaking guide</b></span></li>
+              <li><span class="t">09:30</span><span class="d"><b>Puna Pau</b><em>The small red scoria crater where the <em>pukao</em> — the topknots that sit on the moai heads — were quarried. A dozen of them still lie on the slope where they were abandoned.<span class="effort">Easy · short rise</span></em></span></li>
+              <li><span class="t">10:45</span><span class="d"><b>Ahu Akivi</b><em>Seven moai inland, and the only ones on the island that face the sea. They are aligned to the equinox sunset, which is either navigation or astronomy or memory depending on which archaeologist you ask. Your guide will give you all three.<span class="effort">Very easy · flat</span></em></span></li>
+              <li><span class="t">11:45</span><span class="d"><b>Ana Te Pahu</b><em>A collapsed lava tube used as a shelter and still planted with banana and taro in its floor. We go as far as the light does; no scrambling.<span class="effort">Easy · uneven ground</span></em></span></li>
+              <li><span class="t">12:45</span><span class="d"><b>Ahu Vinapu</b><em>The wall of fitted basalt blocks that looks so much like Cusco that it started a century of argument about who reached this island first. A good place to end, because it leaves you with the question.</em></span></li>
+              <li><span class="t">13:30</span><span class="d"><b>Back in Hanga Roa · afternoon free</b></span></li>
+              <li><span class="t">optional</span><span class="d"><b>Rapa Nui dinner and dance</b><em>A cultural evening with an <em>umu</em> — the earth oven — and Polynesian music and dance. A full vegetarian menu is prepared on request, but only if we ask when we book. Priced as an option below.</em></span></li>
+            </ul>
+          </article>
+
+          <article class="day">
+            <div class="day-head">
+              <span class="day-date">Mon 7 Dec</span>
+              <span class="day-name">Rapa Nui → Santiago</span>
+              <span class="day-sleep">Arrive Santiago, late evening</span>
+            </div>
+            <ul class="stops">
+              <li><span class="t">morning</span><span class="d"><b>Free until check-out</b><em>Enough time for the harbour, the market, or a last hour at Tahai.</em></span></li>
+              <li><span class="t">midday</span><span class="d"><b>Transfer to Mataveri airport</b><em>Eight minutes. The airport asks for two hours; on this island that is genuinely necessary, because there is only one flight.</em></span></li>
+              <li><span class="t">afternoon</span><span class="d"><b>Mataveri → Santiago</b><em>Around four and three-quarter hours eastbound — faster than the outbound, with the wind behind. Arrival in Santiago late evening.</em></span></li>
+              <li><span class="t">night</span><span class="d"><b>Santiago</b><em>Hotel and airport transfer quoted as an option below, for your international flight home on the 8th.</em></span></li>
+            </ul>
+          </article>
+
+        </div>
+      </section>
+
+      <section>
+        <p class="label">Where you sleep · Rapa Nui</p>
+        <div class="opts">
+          <div class="opt">
+            <p class="opt-tag">Our recommendation · quoted below</p>
+            <h4>Hotel Puku Vai</h4>
+            <p class="where">Hanga Roa · 4-star</p>
+            <p class="why">The most consistently well-run four-star on the island: ground-floor rooms available on request, garden and pool, air conditioning that works in December, and a breakfast where being vegetarian is not a negotiation. Ten minutes' flat walk to the harbour.</p>
+            <p class="nights">4 nights · double · B&amp;B</p>
+          </div>
+          <div class="opt">
+            <p class="opt-tag">If you would rather step up</p>
+            <h4>Nayara Hangaroa</h4>
+            <p class="where">Hanga Roa · 5-star</p>
+            <p class="why">Built in the form of the Orongo village, low stone volumes into the hillside above the sea, with a spa and the best restaurant on the island. Different in kind rather than degree. We can re-quote on request.</p>
+            <p class="nights">Supplement on application</p>
+          </div>
+        </div>
+        <p class="fine">Or similar in the same category and location. Note that “four-star” on Rapa Nui is not the same product as four-star in Santiago; we choose on what the hotel actually delivers, not on the plaque.</p>
+      </section>
+
+      <section>
+        <p class="label">Quotation 2 · what it costs</p>
+        <div class="tbl-wrap">
+          <table>
+            <thead>
+              <tr><th>Service · 2 travellers</th><th class="r">USD</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><b>Return flights Santiago ⇄ Easter Island</b><em>LATAM, economy, one checked bag each · 2 × USD 850</em></td>
+                <td class="r">1,700</td>
+              </tr>
+              <tr>
+                <td><b>Accommodation</b> — 4 nights, 4-star, double, breakfast included<em>Hanga Roa</em></td>
+                <td class="r">1,200</td>
+              </tr>
+              <tr>
+                <td><b>Airport transfers</b> — arrival and departure, with the traditional welcome</td>
+                <td class="r">60</td>
+              </tr>
+              <tr>
+                <td><b>Ahu Tahai at sunset</b> — orientation walk with your guide, day of arrival<em>Shared, English-speaking guide</em></td>
+                <td class="r">included</td>
+              </tr>
+              <tr>
+                <td><b>Full day East</b> — Rano Raraku, Ahu Tongariki, Te Pito Kura, Papa Vaka, Anakena<em>Shared, English-speaking guide · 2 × USD 120</em></td>
+                <td class="r">240</td>
+              </tr>
+              <tr>
+                <td><b>Half day South</b> — Rano Kau, Orongo, Ana Kai Tangata<em>Shared, English-speaking guide · 2 × USD 70</em></td>
+                <td class="r">140</td>
+              </tr>
+              <tr>
+                <td><b>Half day West</b> — Puna Pau, Ahu Akivi, Ana Te Pahu, Ahu Vinapu<em>Shared, English-speaking guide · 2 × USD 70</em></td>
+                <td class="r">140</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="total">
+          <div class="left">
+            <div class="tlabel">Quotation 2 · Easter Island</div>
+            <div class="calc">2 travellers · 4 nights · USD 1,740 per person</div>
+          </div>
+          <div class="right">
+            <div class="amount">USD 3,480</div>
+          </div>
+        </div>
+
+        <div class="total grand">
+          <div class="left">
+            <div class="tlabel">Both quotations together</div>
+            <div class="calc">2 travellers · USD 3,990 per person · plus park fees below</div>
+          </div>
+          <div class="right">
+            <div class="amount">USD 7,980</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============ OPTIONS ============ -->
+      <section>
+        <p class="label">Options, if you want them</p>
+        <div class="tbl-wrap">
+          <table>
+            <thead>
+              <tr><th>Optional</th><th class="r">USD</th></tr>
+            </thead>
+            <tbody>
+              <tr><td><b>Santiago · night of 21–22 November</b>, 4-star, B&amp;B, with airport transfer<em>Our recommendation, and the reason for starting on the 14th.</em></td><td class="r">from 240</td></tr>
+              <tr><td><b>Santiago · night of 7–8 December</b>, 4-star, B&amp;B, with both airport transfers<em>Between the Rapa Nui flight and your flight home.</em></td><td class="r">from 240</td></tr>
+              <tr><td><b>A third night in El Calafate + the <em>Todo Glaciares</em> sailing</b><em>Upsala and Spegazzini by catamaran from Puerto Bandera, about nine hours. Would move the start to 13 November.</em></td><td class="r">from 640</td></tr>
+              <tr><td><b>A night in Buenos Aires on 20 November instead of the third Ushuaia night</b><em>Breaks the long exit day in two. Airport-side 4-star, B&amp;B, transfers included.</em></td><td class="r">from 190</td></tr>
+              <tr><td><b>Rapa Nui cultural dinner and dance</b>, with a full vegetarian <em>umu</em> menu<em>Per couple, transfers included.</em></td><td class="r">from 190</td></tr>
+              <tr><td><b>Private instead of shared</b>, any excursion in either segment<em>Same itinerary, your own guide and vehicle, your own start time. Roughly doubles the excursion line.</em></td><td class="r">on request</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- ============ THE GAP ============ -->
+      <section>
+        <p class="label">One thing we noticed</p>
+        <div class="notice">
+          <div class="notice-top">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 8v5M12 17h.01"/><circle cx="12" cy="12" r="9"/></svg>
+            22 November – 3 December
+          </div>
+          <div class="notice-body">
+            <p>Your two segments leave <b>eleven days between them</b>, from your arrival in Santiago on the 22nd to your departure for Rapa Nui on the 3rd. You have not told us what fills that window, and we have not assumed — the quotations above cover only what you asked for.</p>
+            <p>If those days are already committed, ignore this. <b>If they are not</b>, they are the best-placed eleven days in your whole trip, and we would be glad to quote any of the following as a third segment at the same shared-excursion, four-star standard: <b>the Atacama Desert</b> (geysers, salt flats, flamingo lagoons — but note the altitude, which we would want to discuss first); <b>the Chilean Lake District</b> around Puerto Varas and Chiloé; <b>Valparaíso and the Casablanca wine valley</b>, two easy nights from Santiago; or <b>Chilean Patagonia and Torres del Paine</b>, which is the natural companion to what you are already doing on the Argentine side.</p>
+            <p>Tell us which, if any, interests you and we will send it as a separate quotation.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============ DETAIL ============ -->
+      <section>
+        <p class="label">The detail</p>
+        <div class="cols">
+          <div class="card">
+            <h4>Included in both quotations</h4>
+            <ul>
+              <li><b>All accommodation</b> as listed, four-star, double room, <b>breakfast every day</b>.</li>
+              <li><b>All flights listed</b> — the three Patagonia legs and the Rapa Nui return, economy, with one checked bag each.</li>
+              <li><b>All airport and intercity transfers</b>, private, with a meet-and-greet at every arrival.</li>
+              <li><b>Every excursion named</b>, shared basis, <b>with an English-speaking guide</b> throughout.</li>
+              <li>The End of the World Train ticket, the Safari Náutico boat, and the Isla Martillo landing permit.</li>
+              <li><b>One point of contact</b> — the same person, from this email to your flight home.</li>
+            </ul>
+          </div>
+          <div class="card warn">
+            <h4>Not included</h4>
+            <ul>
+              <li><b>International flights</b> to and from South America, and your flight into El Calafate on 14 November. We are happy to quote these separately.</li>
+              <li><b>Rapa Nui National Park ticket</b> — approximately <b>USD 80 per person</b>, bought on arrival, valid ten days. Admits you <b>once</b> to Rano Raraku and <b>once</b> to Orongo.</li>
+              <li><b>Argentine park entrances</b> — Los Glaciares and Tierra del Fuego, roughly USD 30 per person per park, paid at the gate.</li>
+              <li>Lunches, dinners and drinks, except where stated.</li>
+              <li>Travel insurance, which we would ask you to arrange, and anything personal.</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <section>
+        <div class="cols">
+          <div class="card">
+            <h4>Vegetarian, in two countries that are not</h4>
+            <ul>
+              <li><b>We tell every hotel and every excursion at the time of booking</b>, not on the day. On the Lago del Desierto excursion and at the Rapa Nui dinner, the menu is fixed and set in advance — those are the two that must be flagged early, and we do.</li>
+              <li><b>El Calafate and Ushuaia are straightforward.</b> Both have long-established vegetarian and vegan kitchens, and we will give you a short list per town rather than a generic one.</li>
+              <li><b>El Chaltén is the easiest of the three</b> — it is a climbers' village, and climbers eat like this.</li>
+              <li><b>Hanga Roa needs a little more care.</b> The island's food is fish-led; the hotel breakfast is well stocked, and we will name the three restaurants that do this properly.</li>
+              <li>Tell us about <b>eggs, dairy and onion/garlic</b> and we will pass that on precisely. It is a different brief in each case and we would rather ask than guess.</li>
+            </ul>
+          </div>
+          <div class="card warn">
+            <h4>Things to know</h4>
+            <ul>
+              <li><b>2026 flight schedules are not fully published yet.</b> The times above reflect the seasons these routes have operated. We confirm exact schedules the moment we hold your seats, and if a timing changes the shape of a day, we will redesign the day and tell you why.</li>
+              <li><b>Patagonian spring is windy.</b> Mid-November brings roughly sixteen hours of daylight and genuinely changeable weather. Layers, a windproof shell, and a hat that stays on.</li>
+              <li><b>Isla Martillo landings are capped by permit</b> and sell out months ahead. This is the line we book first.</li>
+              <li><b>Rapa Nui entry formalities:</b> an online entry form, proof of accommodation and a return ticket are all checked before you board in Santiago. We prepare and send you the whole pack.</li>
+              <li><b>Elevation:</b> nothing in either quotation goes above 700 m. Should you take up the Atacama suggestion above, that changes, and we would want to talk it through first.</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <section>
+        <div class="sello">
+          <div class="sello-top">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2l2.4 4.9 5.4.8-3.9 3.8.9 5.4L12 15.9 7.2 17.7l.9-5.4L4.2 8.5l5.4-.8z"/></svg>
+            The Tourevo hallmark
+          </div>
+          <div class="sello-grid">
+            <div class="value">
+              <span class="vic" aria-hidden="true"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 6v6l4 2"/><circle cx="12" cy="12" r="9"/></svg></span>
+              <div><h5>Pace before quantity</h5><p>Every day here has one main thing in it, not three. That is a design decision, and it is the one we would defend hardest.</p></div>
+            </div>
+            <div class="value">
+              <span class="vic" aria-hidden="true"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3.2"/><circle cx="17" cy="9" r="2.6"/><path d="M3 20c0-3.3 2.7-5 6-5s6 1.7 6 5M15.5 20c0-2.3 1.4-3.6 3.4-3.6 1.3 0 2.1.4 2.1.4"/></svg></span>
+              <div><h5>Shared where shared is better</h5><p>You asked for group excursions and we have quoted them — they cost less and, on these particular routes, they are run by the best operators. We say so where private would genuinely be worth the difference.</p></div>
+            </div>
+            <div class="value">
+              <span class="vic" aria-hidden="true"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12h16M4 6h16M4 18h10"/></svg></span>
+              <div><h5>Every change explained</h5><p>Nothing has been altered from your email without being written down, argued for, and left for you to refuse.</p></div>
+            </div>
+            <div class="value">
+              <span class="vic" aria-hidden="true"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.4 8.4 0 0 1-9 8.4L3 21l1.1-3.3A8.4 8.4 0 1 1 21 11.5z"/></svg></span>
+              <div><h5>We stay close</h5><p>WhatsApp open before and throughout — the same person, from this message to the airport.</p></div>
+            </div>
+            <div class="value">
+              <span class="vic" aria-hidden="true"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-6-5.7-6-10a6 6 0 0 1 12 0c0 4.3-6 10-6 10z"/><circle cx="12" cy="11" r="2"/></svg></span>
+              <div><h5>Local knowledge</h5><p>We are a Chilean DMC operating our own services. We know which boat is which, and which permit runs out first.</p></div>
+            </div>
+            <div class="value">
+              <span class="vic" aria-hidden="true"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></span>
+              <div><h5>No surprises at the gate</h5><p>Park fees, entry forms, single-entry tickets and permit caps are all set out above, before you pay, not discovered on the day.</p></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section>
+        <p class="label">Commercial conditions</p>
+        <div class="terms">
+          <div class="term"><div class="k">Currency</div><div class="v">US dollars (USD)</div></div>
+          <div class="term"><div class="k">Deposit</div><div class="v">30% to hold the dates</div></div>
+          <div class="term"><div class="k">Balance</div><div class="v">70% no later than 30 days before departure</div></div>
+          <div class="term"><div class="k">Cancellation</div><div class="v">Free to 45 days; deposit non-refundable thereafter</div></div>
+        </div>
+        <div class="pays">
+          <span class="pay">PayPal</span>
+          <span class="pay">WebPay · Transbank</span>
+          <span class="pay">MercadoPago</span>
+          <span class="pay">Aloha Pay</span>
+          <span class="pay">Google Pay</span>
+          <span class="pay">Transfer · Global66</span>
+        </div>
+        <p class="fine">Visa, Mastercard, Amex, Discover and Diners · instalments depend on your bank or gateway · CLP and USD.</p>
+        <p class="fine"><b>On these prices:</b> rates are quoted on current tariffs and are indicative until confirmed. Air fares and hotel availability for November and December 2026 move with demand and are held only on deposit. Once you accept, the figures above are fixed for the services listed.</p>
+      </section>
+
+      <div class="cta">
+        <p class="lead">Tell us which recommendations you accept and which you would rather we drop — we will re-issue the same day, and then hold Isla Martillo first.</p>
+        <a class="btn" href="#" aria-label="Accept and confirm the programme">
+          Accept &amp; confirm
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        </a>
+        <p class="after">One click from your <span class="magic">Magic Link</span> — no account, no password.</p>
+      </div>
+
+    </div>
+
+    <footer class="foot">
+      <div class="who">
+        <b>Juan Pablo</b> <span>· Travel Manager, Tourevo</span>
+      </div>
+      <div class="links">
+        <a href="#">bot.tourevo.cl</a>
+        <a href="#">WhatsApp</a>
+        <a href="#">tourevo.cl</a>
+      </div>
+    </footer>
+
+  </article>
+
+  <p class="legend">Tourevo · Chilean DMC · Quotation COT-2026-0159 · Kiran P. Shah · Argentine Patagonia &amp; Rapa Nui</p>
+</div>

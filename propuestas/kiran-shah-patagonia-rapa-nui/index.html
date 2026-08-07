@@ -274,6 +274,40 @@
     .qband .qdates { margin-left: 0; }
   }
 
+  /* ---- Service plans ---- */
+  .plans { display: grid; grid-template-columns: repeat(3, 1fr); gap: clamp(12px, 2.2vw, 18px); align-items: stretch; margin-top: 22px; }
+  .plan { position: relative; border: 1px solid var(--line); border-radius: 14px; background: var(--glacier-2); padding: 20px 17px 17px; display: flex; flex-direction: column; gap: 11px; }
+  .plan.pick { border-color: color-mix(in srgb, var(--accent) 50%, var(--line)); background: color-mix(in srgb, var(--accent) 6%, var(--paper)); }
+  .plan-badge { position: absolute; top: -10px; left: 16px; background: var(--accent); color: #fff; font-size: 9.5px; font-weight: 700; letter-spacing: .13em; text-transform: uppercase; padding: 4px 11px; border-radius: 999px; white-space: nowrap; }
+  @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .plan-badge { color: #06201d; } }
+  :root[data-theme="dark"] .plan-badge { color: #06201d; }
+  .plan-n { font-size: 10.5px; font-weight: 700; letter-spacing: .16em; text-transform: uppercase; color: var(--ink-faint); }
+  .plan.pick .plan-n { color: var(--accent); }
+  .plan h4 { margin: -4px 0 0; font-family: var(--font-serif); font-size: 19px; font-weight: 600; line-height: 1.15; }
+  .plan .pitch { margin: 0; font-size: 13px; color: var(--ink-soft); line-height: 1.45; }
+  .plan-price { display: flex; align-items: baseline; gap: 11px; padding: 12px 0; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); flex-wrap: wrap; }
+  .plan-price .amt { font-family: var(--font-serif); font-size: clamp(26px, 3.4vw, 31px); font-weight: 600; line-height: 1; font-variant-numeric: tabular-nums; white-space: nowrap; }
+  .plan-price .per { font-size: 11.5px; color: var(--ink-faint); font-weight: 600; line-height: 1.35; max-width: 16ch; }
+  .plan ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 9px; }
+  /* Marker via absolute ::before, not a grid column: a bare <b> child of a grid
+     container becomes its own grid item, which shreds the line. */
+  .plan li { font-size: 12.8px; line-height: 1.45; color: var(--ink-soft); position: relative; padding-left: 17px; }
+  .plan li::before { content: ""; position: absolute; left: 1px; top: 6px; width: 7px; height: 7px; border-radius: 50%; background: var(--accent); }
+  .plan li.no { color: var(--ink-faint); }
+  .plan li.no::before { background: transparent; border: 1.5px solid var(--ink-faint); width: 6px; height: 6px; left: 1px; }
+  .plan li b { color: var(--ink); font-weight: 700; }
+  .plan .close { margin: auto 0 0; padding-top: 13px; font-size: 12.5px; color: var(--ink-soft); font-style: italic; line-height: 1.45; }
+  .plan-pay { display: block; text-align: center; background: var(--accent); color: #fff; font-weight: 700; font-size: 14px; padding: 11px 14px; border-radius: 9px; text-decoration: none; margin-top: 12px; }
+  @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .plan-pay { color: #06201d; } }
+  :root[data-theme="dark"] .plan-pay { color: #06201d; }
+  .plan-pay:focus-visible { outline: 3px solid var(--summit); outline-offset: 3px; }
+  .plan .fine2 { margin: 8px 0 0; font-size: 11px; color: var(--ink-faint); text-align: center; line-height: 1.4; }
+  .plan .fine2 b { color: var(--ink-soft); font-weight: 700; }
+
+  @media (max-width: 720px) {
+    .plans { grid-template-columns: 1fr; row-gap: 24px; }
+  }
+
   .print-only { display: none; }
 
   /* ---- Print / PDF ---- */
@@ -350,8 +384,31 @@
     .foot { break-before: avoid; }
     .legend { break-before: avoid; }
 
-    /* A button with nowhere to go is worse than no button. */
-    .cta .btn, .cta .after { display: none; }
+    /* The three plans are a comparison — they only work read side by side, so
+       they keep their columns on paper and open their own page. */
+    .plansec { break-before: page; }
+    .plansec .lede { margin-bottom: 10px; }
+    .plansec .label { margin-bottom: 12px; }
+    /* The badge hangs off the card top on screen; at the head of a printed page
+       that puts it in the paper margin, so on paper it sits inside the card. */
+    .plan-badge { position: static; align-self: flex-start; }
+    .plans { grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 14px; break-inside: avoid; }
+    .plan { padding: 13px 12px; gap: 8px; break-inside: avoid; }
+    .plan h4 { font-size: 14pt; }
+    .plan .pitch { font-size: 8.6pt; line-height: 1.4; }
+    .plan li { font-size: 8.4pt; line-height: 1.4; padding-left: 14px; }
+    .plan ul { gap: 6px; }
+    .plan li::before { width: 6px; height: 6px; top: 5px; }
+    .plan li.no::before { width: 5px; height: 5px; border-width: 1.2px; top: 5px; }
+    .plan-price { padding: 10px 0; gap: 9px; }
+    .plan-price .amt { font-size: 18pt; }
+    .plan-price .per { font-size: 8pt; }
+    .plan .close { padding-top: 9px; font-size: 8.4pt; line-height: 1.4; }
+
+    /* A button with nowhere to go is worse than no button. Three identical
+       payment footnotes become one line under the whole comparison. */
+    .cta .btn, .cta .after, .plan-pay, .plan .fine2 { display: none; }
+    .plansec .print-only { margin-top: 6px; font-size: 8pt; color: var(--ink-faint); text-align: center; }
     .cta { border-style: solid; }
     .print-only { display: block; }
     .cta .print-only { margin: 14px 0 0; font-size: 11pt; font-weight: 600; color: var(--ink); }
@@ -396,7 +453,7 @@
         <div class="welcome">
           <div class="monogram" aria-hidden="true">JP</div>
           <p class="msg">
-            Mr Shah — <b>your email of 5 August is received</b>, and thank you for the detail in it; it made this an easy brief to work with. You asked us to advise on the start date, so I have: <b>begin on 14 November, not the 15th</b>, and let us put you into Santiago on the evening of the 21st rather than on the 22nd itself. The rest of what follows is your itinerary, with the reasoning for every change set out before the day-by-day so you can accept or reject each one on its own merits.
+            Mr Shah — <b>your email of 5 August is received</b>, and thank you for the detail in it; it made this an easy brief to work with. You asked us to advise on the start date, so I have: <b>begin on 14 November, not the 15th</b>, and let us put you into Santiago on the evening of the 21st rather than on the 22nd itself. The rest of what follows is your itinerary, with the reasoning for every change set out before the day-by-day so you can accept or reject each one on its own merits. One thing to know before you read the figures: <b>the prices in the two quotations are what the trip costs on the ground</b> — the hotels, the flights, the guides. What you pay Tourevo is separate, fixed, and set out in the three plans near the end.
             <span class="sig">Warmly, <b>Juan Pablo</b> · Travel Manager, Tourevo</span>
           </p>
         </div>
@@ -677,7 +734,8 @@
       </section>
 
       <section>
-        <p class="label">Quotation 1 · what it costs</p>
+        <p class="label">Quotation 1 · what the ground costs</p>
+        <p class="lede">These are <b>supplier prices</b> — what the hotels, the airlines, the guides and the boats charge. On Plans 2 and 3 we make every one of these bookings for you and <b>you pay each supplier directly, in your own name, at exactly the price below</b>. We never hold your money and we take nothing out of these figures. Tourevo's own fee is the plan you choose, further down.</p>
         <div class="tbl-wrap">
           <table>
             <thead>
@@ -717,8 +775,8 @@
         </div>
         <div class="total">
           <div class="left">
-            <div class="tlabel">Quotation 1 · Argentine Patagonia</div>
-            <div class="calc">2 travellers · 7 nights · USD 2,250 per person</div>
+            <div class="tlabel">Quotation 1 · Argentine Patagonia · ground cost</div>
+            <div class="calc">2 travellers · 7 nights · USD 2,250 per person · paid direct to suppliers</div>
           </div>
           <div class="right">
             <div class="amount">USD 4,500</div>
@@ -842,7 +900,7 @@
       </section>
 
       <section>
-        <p class="label">Quotation 2 · what it costs</p>
+        <p class="label">Quotation 2 · what the ground costs</p>
         <div class="tbl-wrap">
           <table>
             <thead>
@@ -882,8 +940,8 @@
         </div>
         <div class="total">
           <div class="left">
-            <div class="tlabel">Quotation 2 · Easter Island</div>
-            <div class="calc">2 travellers · 4 nights · USD 1,740 per person</div>
+            <div class="tlabel">Quotation 2 · Easter Island · ground cost</div>
+            <div class="calc">2 travellers · 4 nights · USD 1,740 per person · paid direct to suppliers</div>
           </div>
           <div class="right">
             <div class="amount">USD 3,480</div>
@@ -892,8 +950,8 @@
 
         <div class="total grand">
           <div class="left">
-            <div class="tlabel">Both quotations together</div>
-            <div class="calc">2 travellers · USD 3,990 per person · plus park fees below</div>
+            <div class="tlabel">Both segments · total ground cost</div>
+            <div class="calc">2 travellers · USD 3,990 per person · plus park fees · <b>Tourevo's fee is separate — see the three plans</b></div>
           </div>
           <div class="right">
             <div class="amount">USD 7,980</div>
@@ -942,14 +1000,14 @@
         <p class="label">The detail</p>
         <div class="cols">
           <div class="card">
-            <h4>Included in both quotations</h4>
+            <h4>What the ground cost covers</h4>
             <ul>
               <li><b>All accommodation</b> as listed, four-star, double room, <b>breakfast every day</b>.</li>
               <li><b>All flights listed</b> — the three Patagonia legs and the Rapa Nui return, economy, with one checked bag each.</li>
               <li><b>All airport and intercity transfers</b>, private, with a meet-and-greet at every arrival.</li>
               <li><b>Every excursion named</b>, shared basis, <b>with an English-speaking guide</b> throughout.</li>
               <li>The End of the World Train ticket, the Safari Náutico boat, and the Isla Martillo landing permit.</li>
-              <li><b>One point of contact</b> — the same person, from this email to your flight home.</li>
+              <li><b>Who does the booking, and who looks after you while you travel, is not on this list</b> — that is what the three plans decide.</li>
             </ul>
           </div>
           <div class="card warn">
@@ -1025,13 +1083,89 @@
         </div>
       </section>
 
+      <section class="plansec">
+        <p class="label">How you work with us · three plans</p>
+        <p class="lede">Everything above is the trip. <b>This is the part you buy from us</b>, and where the planning starts — how far we go depends on which of the three you choose. The fee is fixed for both segments: <b>not a percentage of your trip, and it does not move with what you spend on the ground.</b></p>
+
+        <div class="plans">
+
+          <article class="plan">
+            <p class="plan-n">Plan 1</p>
+            <h4>The plan</h4>
+            <p class="pitch">The thinking, written down. You take it from there and book everything yourself.</p>
+            <div class="plan-price">
+              <span class="amt">US$ 760</span>
+              <span class="per">fixed, for the whole trip · for the two of you</span>
+            </div>
+            <ul>
+              <li>This document, finished — the thirteen travelling days, the alternatives, the reasoning behind each one</li>
+              <li><b>Who to book with and who to avoid</b>, by name, for every service in both segments</li>
+              <li>The booking order and the deadlines: the Isla Martillo landing permit, the Rapa Nui park entries, the El Calafate–Ushuaia flight, the Aerolíneas connection through Aeroparque</li>
+              <li>Weather windows, walking distances, the vegetarian briefing notes, and what to pack for a Patagonian November and a Rapa Nui December</li>
+              <li>Two rounds of revisions on the itinerary</li>
+              <li class="no">We do not contact any supplier on your behalf</li>
+              <li class="no">No assistance once you are travelling</li>
+            </ul>
+            <p class="close">Everything you need to run this trip without us — including who to call.</p>
+            <a class="plan-pay" href="#">Pay Plan 1</a>
+            <p class="fine2"><b>PayPal &amp; cards.</b> Terms and conditions apply — shown before you pay.</p>
+          </article>
+
+          <article class="plan pick">
+            <span class="plan-badge">Most people want this</span>
+            <p class="plan-n">Plan 2</p>
+            <h4>The plan, booked</h4>
+            <p class="pitch">We make every reservation for you. You pay each supplier directly, in your name.</p>
+            <div class="plan-price">
+              <span class="amt">US$ 1.440</span>
+              <span class="per">fixed, for the whole trip · for the two of you</span>
+            </div>
+            <ul>
+              <li>Everything in Plan 1</li>
+              <li><b>We book all of it</b> — hotels, every flight in both segments, guides, the Safari Náutico, the penguin landing, the park entries, the transfers</li>
+              <li>You pay each supplier directly, at their price. <b>We never hold your money</b></li>
+              <li>The paperwork handled: the Rapa Nui entry form, park tickets named to passports, the Isla Martillo permit and its daily quota</li>
+              <li>Re-booking and changes through the whole planning phase, unlimited</li>
+              <li>One document with every confirmation code, in order, on your phone</li>
+              <li class="no">No dedicated assistance during the trip beyond emergencies</li>
+            </ul>
+            <p class="close">The one that removes the work without removing your control of the money.</p>
+            <a class="plan-pay" href="#">Pay Plan 2</a>
+            <p class="fine2"><b>PayPal &amp; cards.</b> Terms and conditions apply — shown before you pay.</p>
+          </article>
+
+          <article class="plan">
+            <p class="plan-n">Plan 3</p>
+            <h4>The plan, booked, and watched</h4>
+            <p class="pitch">Everything above, plus a Tourevo host on the other end of WhatsApp from landing to departure.</p>
+            <div class="plan-price">
+              <span class="amt">US$ 2.380</span>
+              <span class="per">fixed, for the whole trip · for the two of you</span>
+            </div>
+            <ul>
+              <li>Everything in Plan 2</li>
+              <li><b>A Tourevo host reachable on WhatsApp</b>, 08:00 to midnight, every day you are travelling — in Argentina and on Rapa Nui alike</li>
+              <li>We watch the forecast and re-arrange days when the weather turns — before it costs you one</li>
+              <li>We stay in constant contact with your suppliers to confirm what you have booked, and to see that it happens on time and as agreed</li>
+              <li>If a supplier lets you down, <b>we do everything we can to put it right</b>. It is not entirely in our hands — it is a third party — but we will be there giving our best to find a solution, as far as one exists</li>
+              <li>We keep in touch as much as is useful and no more. We are not going to interrupt a good moment out there; the point is that you enjoy it</li>
+            </ul>
+            <p class="close">For a trip with one date that cannot move, and Patagonian weather that can rewrite a day at breakfast.</p>
+            <a class="plan-pay" href="#">Pay Plan 3</a>
+            <p class="fine2"><b>PayPal &amp; cards.</b> Terms and conditions apply — shown before you pay.</p>
+          </article>
+
+        </div>
+        <p class="print-only"><b>PayPal &amp; cards.</b> Terms and conditions apply — shown before you pay. To take a plan, reply to this quotation or use the link on the web version.</p>
+      </section>
+
       <section>
         <p class="label">Commercial conditions</p>
         <div class="terms">
           <div class="term"><div class="k">Currency</div><div class="v">US dollars (USD)</div></div>
-          <div class="term"><div class="k">Deposit</div><div class="v">30% to hold the dates</div></div>
-          <div class="term"><div class="k">Balance</div><div class="v">70% no later than 30 days before departure</div></div>
-          <div class="term"><div class="k">Cancellation</div><div class="v">Free to 45 days; deposit non-refundable thereafter</div></div>
+          <div class="term"><div class="k">What you pay us</div><div class="v">The plan you choose, fixed — 50% to begin, 50% before the first booking deadline</div></div>
+          <div class="term"><div class="k">What you pay suppliers</div><div class="v">Directly, in your own name, on each supplier's own terms</div></div>
+          <div class="term"><div class="k">Cancellation</div><div class="v">Plan fee non-refundable once work has begun; supplier cancellations follow each supplier</div></div>
         </div>
         <div class="pays">
           <span class="pay">PayPal</span>
@@ -1042,11 +1176,12 @@
           <span class="pay">Transfer · Global66</span>
         </div>
         <p class="fine">Visa, Mastercard, Amex, Discover and Diners · instalments depend on your bank or gateway · CLP and USD.</p>
-        <p class="fine"><b>On these prices:</b> rates are quoted on current tariffs and are indicative until confirmed. Air fares and hotel availability for November and December 2026 move with demand and are held only on deposit. Once you accept, the figures above are fixed for the services listed.</p>
+        <p class="fine"><b>On the plan fee:</b> it is fixed at the figure shown and covers both segments. It does not move with what you spend on the ground, and we take no commission out of the supplier prices in this document. You can move up a plan at any point during planning and pay only the difference.</p>
+        <p class="fine"><b>On the ground prices:</b> they are quoted on current tariffs and are indicative until each supplier confirms. Air fares and hotel availability for November and December 2026 move with demand and are held only against payment — which, on Plans 2 and 3, you make directly to the supplier at the moment we tell you it is time. We will always show you the price before you pay it.</p>
       </section>
 
       <div class="cta">
-        <p class="lead">Tell us which recommendations you accept and which you would rather we drop — we will re-issue the same day, and then hold Isla Martillo first.</p>
+        <p class="lead">Two things and we can start: tell us which recommendations you accept and which you would rather we drop, and pick a plan. Then we hold Isla Martillo first, and everything else in the order it needs.</p>
         <a class="btn" href="#" aria-label="Accept and confirm the programme">
           Accept &amp; confirm
           <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>

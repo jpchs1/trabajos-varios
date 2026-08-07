@@ -100,6 +100,54 @@
 
 ---
 
+## Modelo de cobro — los 3 planes
+
+Se incorporaron los 3 planes de servicio. **Esto cambió el modelo de precio de toda la propuesta**, porque
+el Plan 2 dice explícitamente *"you pay each supplier directly… we never hold your money"*, lo que es
+incompatible con el 30/70 sobre el total del viaje que tenía la versión anterior.
+
+Ahora la propuesta muestra **dos precios distintos y bien separados**:
+
+| | Qué es | Quién lo cobra | Cuánto |
+|---|---|---|---|
+| **Costo en tierra** | Hoteles, vuelos, guías, botes, traslados | Cada proveedor, directo, a nombre del pasajero | USD 7.980 (2 pax, ambos segmentos) |
+| **Fee Tourevo** | El plan que contraten | Tourevo | USD 760 / 1.440 / 2.380 |
+
+Cambios que esto obligó a hacer en el documento:
+
+- Nota de apertura: se agrega la aclaración de los dos precios antes de que el lector llegue a las cifras.
+- Bajada nueva sobre la tabla de la Cotización 1 explicando que son precios de proveedor y que no tomamos
+  comisión sobre ellos.
+- Los tres totales pasan de "what it costs" a **"what the ground costs"**, con "paid direct to suppliers"
+  en el subtítulo y "Tourevo's fee is separate" en el gran total.
+- Ficha "Included in both quotations" → **"What the ground cost covers"**. La viñeta de *One point of
+  contact* se reemplazó, porque eso ahora lo define el plan, no la cotización.
+- **Condiciones comerciales reescritas por completo**: se elimina el 30/70 sobre el viaje. Ahora: qué nos
+  pagan a nosotros / qué le pagan a los proveedores / fee del plan 50-50 / cancelación separada entre fee
+  y proveedores.
+- CTA: ahora pide dos cosas, aceptar/rechazar recomendaciones **y** elegir plan.
+
+### Decisiones que tomé y conviene que revises
+
+1. **Precio para 2 personas.** El adjunto decía "for a group of 4". Mantuve las tres cifras tal cual
+   (760 / 1.440 / 2.380) y solo cambié la etiqueta a **"for the two of you"**, leyendo tu "solo debes
+   cambiar que es para 2 personas" al pie de la letra. El fee es fijo por trabajo, no por pasajero, y el
+   trabajo de este viaje no baja por ser 2 en vez de 4 — de hecho son dos países y dos segmentos. **Si
+   querés otra cifra, es cambiar tres números y regenerar.**
+2. **Adaptación del copy del Plan 3.** El original decía *"every day you are in Chile"*. Este viaje es
+   mayormente **Argentina**, así que quedó *"every day you are travelling — in Argentina and on Rapa Nui
+   alike"*. Si no cubrimos Argentina con host, hay que corregirlo, porque tal como está lo estamos
+   prometiendo.
+3. **Viñetas del Plan 1 reescritas para este viaje.** El adjunto mencionaba "los once días", "the Grey
+   ice, the Serrano navigation" — eso es de un programa de Torres del Paine. Acá quedaron los trece días,
+   el permiso de Isla Martillo, las entradas de Rapa Nui, el vuelo FTE–USH y la conexión por Aeroparque.
+4. **Fee del plan 50% / 50%** (al empezar y antes del primer deadline de reserva). **Lo inventé yo**: el
+   adjunto no dice nada de cómo se cobra el fee. Confirmalo o cambialo.
+5. **"Podés subir de plan durante la planificación pagando solo la diferencia"** — también lo agregué yo.
+   Es una promesa comercial; si no la querés sostener, sacala de la letra chica.
+
+---
+
 ## Puntos a verificar antes de enviar
 
 1. **Tarifas.** Todas las cifras son estimación de mercado, no cotización de proveedor. Cargar reales.

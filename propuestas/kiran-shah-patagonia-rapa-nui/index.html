@@ -310,6 +310,38 @@
     .plans { grid-template-columns: 1fr; row-gap: 24px; }
   }
 
+  /* ---- In-page unlock: blur everything except the plans until the password
+     is typed. This is a screen-only, cosmetic gate — the real itinerary,
+     hotel names and prices are present in the page's HTML the moment it
+     loads; blur just keeps a casual reader (or a forwarded link) from
+     reading them at a glance. It is not a substitute for real access
+     control. See NOTAS-INTERNAS.md for the trade-off written out in full. */
+  .gate-wrap { position: relative; }
+  .gate-cta {
+    margin: 0 auto 18px;
+    max-width: 480px; padding: 16px 18px; border-radius: 14px;
+    background: var(--paper); border: 1px solid var(--line); box-shadow: var(--shadow);
+    display: flex; flex-direction: column; gap: 10px; align-items: center; text-align: center;
+  }
+  .gate-cta .lockring { width: 38px; height: 38px; border-radius: 50%; display: grid; place-items: center; background: color-mix(in srgb, var(--accent) 14%, var(--paper)); color: var(--accent); }
+  .gate-cta h3 { margin: 0; font-family: var(--font-serif); font-size: 17px; font-weight: 600; color: var(--ink); text-wrap: balance; }
+  .gate-cta p { margin: 0; font-size: 13px; color: var(--ink-soft); line-height: 1.45; }
+  .gate-form { display: flex; gap: 8px; width: 100%; flex-wrap: wrap; justify-content: center; }
+  .gate-form input { flex: 1; min-width: 160px; font: inherit; font-size: 14px; padding: 10px 13px; border-radius: 9px; border: 1px solid var(--line); background: var(--glacier-2); color: var(--ink); }
+  .gate-form input:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; }
+  .gate-form button { font: inherit; font-weight: 700; font-size: 13.5px; padding: 10px 16px; border-radius: 9px; border: 0; background: var(--accent); color: #fff; cursor: pointer; }
+  @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .gate-form button { color: #06201d; } }
+  :root[data-theme="dark"] .gate-form button { color: #06201d; }
+  .gate-form button:focus-visible { outline: 3px solid var(--summit); outline-offset: 2px; }
+  .gate-err { margin: 0; font-size: 12.5px; color: var(--warn); min-height: 1.2em; }
+  .gate-blur { filter: blur(7px); user-select: none; -webkit-user-select: none; pointer-events: none; }
+  .gate-hint { margin: -6px 0 14px; font-size: 12.5px; color: var(--ink-faint); }
+  .gate-hint a { color: var(--summit); font-weight: 600; text-decoration: none; }
+  html.unlocked .gate-cta { display: none; }
+  html.unlocked .gate-blur { filter: none; user-select: auto; -webkit-user-select: auto; pointer-events: auto; }
+  html.unlocked .gate-hint { display: none; }
+  .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }
+
   .print-only { display: none; }
 
   /* ---- Print / PDF ---- */
@@ -416,6 +448,12 @@
     .cta .print-only { margin: 14px 0 0; font-size: 11pt; font-weight: 600; color: var(--ink); }
     .cta .print-only span { color: var(--accent); font-weight: 700; }
     .foot .links a { color: var(--ink-soft); text-decoration: none; }
+
+    /* Paper is always the full document, whatever the on-screen unlock state
+       was at the moment of printing — a blurred PDF is useless to anyone. */
+    .gate-cta { display: none; }
+    .gate-blur { filter: none; user-select: auto; pointer-events: auto; }
+    .gate-hint { display: none; }
   }
 </style>
 
@@ -450,6 +488,23 @@
     </header>
 
     <div class="body">
+
+      <div class="gate-wrap" id="gateTop">
+        <div class="gate-cta">
+          <span class="lockring" aria-hidden="true">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="10" width="16" height="10" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg>
+          </span>
+          <h3>This part is blurred until you enter your password</h3>
+          <p>The day-by-day itinerary, the hotels, and what the trip costs on the ground — sent to your email. The plans below are visible either way.</p>
+          <form class="gate-form" id="gateForm">
+            <label for="gatePw" class="sr-only">Password</label>
+            <input id="gatePw" type="password" autocomplete="off" placeholder="Password" aria-describedby="gateErr">
+            <button type="submit">Unlock</button>
+          </form>
+          <p class="gate-err" id="gateErr" role="alert"></p>
+        </div>
+
+        <div class="gate-blur">
 
       <section>
         <div class="welcome">
@@ -1085,9 +1140,13 @@
         </div>
       </section>
 
+        </div>
+      </div>
+
       <section class="plansec">
         <p class="label">How you work with us · three plans</p>
         <p class="lede">Everything above is the trip. <b>This is the part you buy from us</b>, and where the planning starts — how far we go depends on which of the three you choose. The fee is fixed for both segments: <b>not a percentage of your trip, and it does not move with what you spend on the ground.</b></p>
+        <p class="gate-hint" id="gateHint">Everything above still blurred? <a href="#gateTop">Scroll up and enter the password from your email ↑</a></p>
 
         <div class="plans">
 
@@ -1209,3 +1268,52 @@
 
   <p class="legend">Tourevo · Chilean DMC · Quotation COT-2026-0159 · Kiran P. Shah · Argentine Patagonia &amp; Rapa Nui</p>
 </div>
+
+<script>
+(function () {
+  // Cosmetic unlock only — see the comment above .gate-wrap in <style> and
+  // NOTAS-INTERNAS.md. The itinerary, hotel names and prices are already in
+  // this page's HTML; this just stops a casual reader (or a forwarded link)
+  // from reading them at a glance without the password.
+  var HASH = '8360c9f5136ff61a6fdf492a762d863b3b2efbb99155044319b640163278087e';
+  var STORE_KEY = 'tourevo-cot-2026-0159-unlocked';
+
+  function sha256Hex(text) {
+    var bytes = new TextEncoder().encode(text);
+    return crypto.subtle.digest('SHA-256', bytes).then(function (buf) {
+      return Array.prototype.map.call(new Uint8Array(buf), function (b) {
+        return b.toString(16).padStart(2, '0');
+      }).join('');
+    });
+  }
+
+  function unlock() {
+    document.documentElement.classList.add('unlocked');
+    try { localStorage.setItem(STORE_KEY, '1'); } catch (e) {}
+  }
+
+  if (localStorage && (function(){ try { return localStorage.getItem(STORE_KEY) === '1'; } catch (e) { return false; } })()) {
+    unlock();
+  }
+
+  var form = document.getElementById('gateForm');
+  var input = document.getElementById('gatePw');
+  var err = document.getElementById('gateErr');
+  if (!form) return;
+
+  form.addEventListener('submit', function (e) {
+    e.preventDefault();
+    var value = input.value.trim();
+    if (!value) return;
+    sha256Hex(value).then(function (hex) {
+      if (hex === HASH) {
+        err.textContent = '';
+        unlock();
+      } else {
+        err.textContent = "That's not quite it — check the email we sent you.";
+        input.select();
+      }
+    });
+  });
+})();
+</script>

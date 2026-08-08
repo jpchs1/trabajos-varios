@@ -58,7 +58,11 @@
     border: 1px solid var(--line);
     border-radius: 16px;
     box-shadow: var(--shadow);
-    overflow: hidden;
+    /* No overflow:hidden here on purpose: it would establish a scrolling
+       container that breaks position:sticky for .gate-cta further down (the
+       sticky box would resolve against .paper instead of the real viewport
+       and never actually stick). The rounded corners it used to clip are
+       handled directly by .head/.foot below instead. */
   }
 
   /* ---- Header ---- */
@@ -67,6 +71,7 @@
     padding: clamp(26px, 5vw, 44px) clamp(22px, 5vw, 48px) 26px;
     border-bottom: 1px solid var(--line);
     background: linear-gradient(180deg, var(--glacier-2), var(--paper));
+    border-radius: 16px 16px 0 0;
     overflow: hidden;
   }
   .ridge { position: absolute; left: 0; right: 0; bottom: -1px; height: 46px; width: 100%; display: block; color: var(--accent); opacity: .10; }
@@ -258,7 +263,7 @@
   .cta .magic { color: var(--accent); font-weight: 700; }
 
   /* ---- Footer ---- */
-  .foot { border-top: 1px solid var(--line); padding: 20px clamp(22px, 5vw, 48px); display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; background: var(--glacier-2); }
+  .foot { border-top: 1px solid var(--line); padding: 20px clamp(22px, 5vw, 48px); display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; background: var(--glacier-2); border-radius: 0 0 16px 16px; }
   .foot .who { font-size: 13px; }
   .foot .who b { font-weight: 700; }
   .foot .who span { color: var(--ink-soft); }
@@ -318,6 +323,12 @@
      control. See NOTAS-INTERNAS.md for the trade-off written out in full. */
   .gate-wrap { position: relative; }
   .gate-cta {
+    /* Sticky, not fixed: it should follow you while you scroll through the
+       blurred stack, then scroll away naturally once .gate-wrap itself (its
+       containing block) ends and the crisp plans begin — a fixed box would
+       keep floating over the plans too, which is exactly what shouldn't
+       happen. This only works because .paper no longer clips overflow. */
+    position: sticky; top: 14px; z-index: 5;
     margin: 0 auto 18px;
     max-width: 480px; padding: 16px 18px; border-radius: 14px;
     background: var(--paper); border: 1px solid var(--line); box-shadow: var(--shadow);
@@ -361,10 +372,10 @@
     body { background: #fff; padding: 0; font-size: 9.6pt; line-height: 1.42; orphans: 3; widows: 3; }
     .wrap { max-width: none; }
     .paper { border: 0; border-radius: 0; box-shadow: none; }
-    .head { padding: 0 0 14px; background: none; border-bottom: 1px solid var(--line); }
+    .head { padding: 0 0 14px; background: none; border-bottom: 1px solid var(--line); border-radius: 0; }
     .ridge { display: none; }
     .body { padding: 16px 0 0; }
-    .foot { padding: 12px 0 0; background: none; }
+    .foot { padding: 12px 0 0; background: none; border-radius: 0; }
     .legend { margin-top: 8px; }
     section + section { margin-top: 18px; }
 

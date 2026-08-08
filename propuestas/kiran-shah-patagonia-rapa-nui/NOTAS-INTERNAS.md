@@ -202,6 +202,37 @@ quedó un `.htaccess` viejo de la v1 en `~/tourevo.cl/propuestas/kiran-shah-pata
 **hay que borrarlo**, porque si no la página nunca va a llegar a mostrar el gate: seguiría
 devolviendo `401` antes de que el navegador vea una sola línea de HTML.
 
+### Recuperación paga (USD $50) — ⚠️ pendiente el link real
+
+Se agregó una segunda opción en `.gate-cta`, debajo del campo de clave existente (que
+sigue funcionando igual que antes, sin tocarse): *"Lost the password? Pay USD $50 and
+we'll send the username and password to your email"* → botón **Pay USD $50 for access**.
+
+**Es para Kiran específicamente**, como vía de recuperación si perdió o no encuentra la
+clave que le mandamos — no es un producto abierto a cualquiera. El botón hoy apunta a:
+
+```
+mailto:info@tourevo.cl?subject=Recover access · Quotation COT-2026-0159&body=...
+```
+
+Es decir: **entrega manual**. Clickearlo abre un borrador de mail pidiendo pagar, alguien
+de Tourevo tiene que responder con instrucciones de pago, cobrar, y después mandar el
+usuario y la clave a mano. Funciona siempre (nunca es un link muerto), pero no es lo que
+se pidió — se pidió que fuera automático apenas se confirma el pago.
+
+**Para que sea automático de verdad, sin backend propio**, la opción más rápida es un
+servicio de venta de "producto digital" cuyo contenido es texto fijo (usuario+clave) que
+se manda solo al pagar — **Gumroad, Payhip o Lemon Squeezy** son ejemplos, cualquiera
+sirve. Se carga el producto con el usuario y la clave como contenido digital, y el link de
+pago que da esa plataforma reemplaza el `mailto:` de arriba en `.gate-recover-pay`. Un
+link de PayPal.me o de MercadoPago simple **no alcanza** para esto — cobran, pero no
+tienen forma nativa de disparar un mail con un texto custom al confirmarse el pago; para
+usar uno de esos habría que conectarlos por webhook a algo que mande el mail (Zapier/Make,
+o un backend propio en el `api/` de tourevo-cl), que es un trabajo bastante más grande.
+
+**Antes de reemplazar el link:** decidir también si el precio real es USD $50 o si conviene
+otro número — no vino de ningún dato del cliente, se pidió tal cual.
+
 ---
 
 ## Puntos a verificar antes de enviar

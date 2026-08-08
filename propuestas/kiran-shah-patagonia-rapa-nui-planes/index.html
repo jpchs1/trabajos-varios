@@ -98,6 +98,42 @@
   .locked p b { color: var(--ink); font-weight: 700; }
   .locked a { color: var(--summit); font-weight: 700; }
 
+  /* ---- Teaser: blurred preview of the protected quotation ----
+     The itinerary, hotel and price shown here are NOT the real ones.
+     Numbers, the hotel name and the destination are all placeholder/redacted
+     text (███ blocks, generic copy) — blur is cosmetic, the redaction is
+     what actually keeps real data out of the page even if someone disables
+     CSS or copies the text. Only the day titles are genuine marketing
+     flavour, already implied by the "Argentine Patagonia & Rapa Nui" chip
+     above, so nothing here is information a visitor doesn't already have. */
+  .teaser-wrap { position: relative; border-radius: 16px; overflow: hidden; margin-top: 22px; }
+  .teaser-blur { filter: blur(6px); user-select: none; -webkit-user-select: none; pointer-events: none; display: grid; gap: 12px; }
+  .tz-card { border: 1px solid var(--line); border-radius: 13px; background: var(--paper); overflow: hidden; }
+  .tz-head { display: flex; align-items: center; gap: 12px; padding: 12px 16px; background: var(--glacier-2); border-bottom: 1px solid var(--line); flex-wrap: wrap; }
+  .tz-date { font-size: 11px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--accent); }
+  .tz-name { font-family: var(--font-serif); font-size: 15.5px; font-weight: 600; flex: 1; min-width: 160px; }
+  .tz-sleep { font-size: 11px; font-weight: 650; color: var(--ink-soft); background: var(--paper); border: 1px solid var(--line); padding: 3px 9px; border-radius: 999px; }
+  .tz-body { padding: 10px 16px 14px; font-size: 13px; color: var(--ink-soft); line-height: 1.5; }
+  .tz-hotel { padding: 14px 16px; }
+  .tz-hotel .tz-date { margin-bottom: 4px; display: block; }
+  .tz-hotel .tz-body { padding: 4px 0 0; }
+  .mask { letter-spacing: 1px; opacity: .5; }
+  .tz-total { display: flex; justify-content: space-between; align-items: center; background: linear-gradient(135deg, var(--accent-deep), var(--summit)); border-radius: 13px; padding: 14px 18px; color: #fff; }
+  @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .tz-total { color: #06201d; } }
+  :root[data-theme="dark"] .tz-total { color: #06201d; }
+  .tz-total .tl { font-size: 11px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; opacity: .85; }
+  .tz-total .tc { font-size: 13px; font-weight: 600; opacity: .92; margin-top: 3px; }
+  .tz-total .ta { font-family: var(--font-serif); font-size: 26px; font-weight: 600; }
+  .teaser-fade { position: absolute; inset: 0; background: linear-gradient(180deg, transparent 0%, transparent 42%, var(--paper) 90%); pointer-events: none; }
+  .teaser-cta { position: absolute; left: 50%; top: 40%; transform: translate(-50%, -50%); z-index: 2; text-align: center; width: min(92%, 380px); }
+  .teaser-cta .lockring { width: 46px; height: 46px; border-radius: 50%; margin: 0 auto 12px; display: grid; place-items: center; background: var(--paper); border: 1px solid var(--line); box-shadow: var(--shadow); color: var(--accent); }
+  .teaser-cta h3 { margin: 0 0 6px; font-family: var(--font-serif); font-size: 19px; font-weight: 600; color: var(--ink); text-wrap: balance; }
+  .teaser-cta p { margin: 0 0 14px; font-size: 13px; color: var(--ink-soft); line-height: 1.45; }
+  .teaser-cta a { display: inline-flex; align-items: center; gap: 8px; background: var(--paper); color: var(--ink); font-weight: 700; font-size: 13.5px; padding: 10px 18px; border-radius: 9px; border: 1px solid var(--line); text-decoration: none; box-shadow: var(--shadow); }
+  .teaser-cta a:hover, .teaser-cta a:focus-visible { border-color: var(--accent); outline: none; }
+  .teaser-cta a:focus-visible { outline: 3px solid var(--summit); outline-offset: 3px; }
+  .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }
+
   .foot { border-top: 1px solid var(--line); padding: 20px clamp(22px, 5vw, 48px); display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; background: var(--glacier-2); }
   .foot .who { font-size: 13px; }
   .foot .who b { font-weight: 700; }
@@ -119,6 +155,7 @@
     .body { padding:16px 0 0; } .foot { padding:12px 0 0; background:none; }
     .plans, .plan, .terms, .locked { break-inside: avoid; }
     .plan-pay { display:none; }
+    .teaser-wrap { display:none; } /* a blurred teaser is pointless on paper */
   }
 </style>
 
@@ -150,6 +187,56 @@
     </header>
 
     <div class="body">
+
+      <section>
+        <p class="label">A look inside</p>
+        <p class="lede">A glimpse of the full quotation — the day-by-day itinerary, the hotel we recommend, and what the trip costs on the ground. <b>Unlock it with the password we sent you</b> to read every word.</p>
+
+        <div class="teaser-wrap">
+          <p class="sr-only">Preview of the private quotation: a day-by-day itinerary, a hotel recommendation, and the ground-cost total. The real detail is hidden here — full legible content is at the password-protected link.</p>
+          <div class="teaser-blur" aria-hidden="true">
+            <div class="tz-card">
+              <div class="tz-head">
+                <span class="tz-date">Day 1</span>
+                <span class="tz-name">Arrival, and the first sunrise</span>
+                <span class="tz-sleep">El Calafate</span>
+              </div>
+              <div class="tz-body">Met at the airport, with the afternoon left free — the glacier is tomorrow.</div>
+            </div>
+            <div class="tz-card">
+              <div class="tz-head">
+                <span class="tz-date">Day 5</span>
+                <span class="tz-name">The glacier, from the balconies and the water</span>
+                <span class="tz-sleep">El Calafate</span>
+              </div>
+              <div class="tz-body">The ice front up close, then an hour on the water at its foot.</div>
+            </div>
+            <div class="tz-card tz-hotel">
+              <span class="tz-date">Our recommendation</span>
+              <div class="tz-name"><span class="mask">██████████████████</span></div>
+              <div class="tz-body">Lake-facing, with a fifteen-minute walk into town along the waterfront.</div>
+            </div>
+            <div class="tz-total">
+              <div>
+                <div class="tl">Ground cost · both segments</div>
+                <div class="tc">2 travellers · per person <span class="mask">████</span></div>
+              </div>
+              <div class="ta"><span class="mask">USD ██,███</span></div>
+            </div>
+          </div>
+
+          <div class="teaser-fade"></div>
+
+          <div class="teaser-cta">
+            <span class="lockring" aria-hidden="true">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="10" width="16" height="10" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg>
+            </span>
+            <h3>The full quotation is behind a password</h3>
+            <p>Day-by-day itinerary, hotels, and what the trip costs on the ground — sent to your email.</p>
+            <a href="../kiran-shah-patagonia-rapa-nui/">Enter your password →</a>
+          </div>
+        </div>
+      </section>
 
       <section>
         <p class="label">Choose a plan</p>

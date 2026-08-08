@@ -53,7 +53,11 @@ fi
 DEST="${REMOTE_DIR%/}/$(basename "$LOCAL_DIR")"
 
 mirror_flags=(--reverse --only-newer --parallel=4 --verbose)
-mirror_flags+=(--exclude-glob '.*' --exclude-glob '*.md')
+# .htaccess SI se sube: alguna propuesta lo usa para Basic Auth (ver
+# propuestas/kiran-shah-patagonia-rapa-nui/). Solo se excluye basura de
+# editor/OS y el .htpasswd, que nunca vive en este repo -- se genera directo
+# en el servidor para no dejar el hash de ninguna clave en git publico.
+mirror_flags+=(--exclude-glob '.DS_Store' --exclude-glob '.htpasswd' --exclude-glob '*.md')
 [ "$DRY_RUN" = "true" ] && mirror_flags+=(--dry-run)
 
 echo "Publicando $LOCAL_DIR/ -> ${FTP_HOST}:${DEST}"

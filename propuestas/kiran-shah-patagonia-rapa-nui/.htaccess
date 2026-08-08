@@ -1,0 +1,17 @@
+# Tourevo · cotización privada — protege esta carpeta con Basic Auth.
+#
+# El .htpasswd NO vive en este repo (es público) — se genera directo en el
+# servidor. Ver NOTAS-INTERNAS.md para el comando exacto.
+#
+# planes.html queda afuera a propósito: el cliente tiene que poder elegir y
+# pagar un plan sin desenterrar la clave primero. Todo lo demás — el
+# itinerario día a día, los hoteles, el costo en tierra — pide clave.
+
+AuthType Basic
+AuthName "Tourevo · Cotizacion privada COT-2026-0159"
+AuthUserFile /home/wwimpo/tourevo.cl/propuestas/kiran-shah-patagonia-rapa-nui/.htpasswd
+Require valid-user
+
+<Files "planes.html">
+  Require all granted
+</Files>

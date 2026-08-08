@@ -148,6 +148,48 @@ Cambios que esto obligó a hacer en el documento:
 
 ---
 
+## Clave de acceso
+
+La cotización quedó pública en `tourevo.cl/propuestas/kiran-shah-patagonia-rapa-nui/`
+apenas se subió, así que se le agregó Basic Auth vía `.htaccess`. **`planes.html` queda
+afuera a propósito** — el cliente tiene que poder elegir y pagar un plan sin desenterrar
+la clave primero; el resto (itinerario día a día, hoteles, costo en tierra) pide clave.
+
+El `.htaccess` sí está en el repo. El `.htpasswd` **no**: este repo es público, y el hash
+de la clave real no debería quedar en el historial de git aunque `apr1` sea razonablemente
+resistente. Se genera directo en el servidor:
+
+```bash
+cd ~/tourevo.cl/propuestas/kiran-shah-patagonia-rapa-nui
+
+# si el servidor tiene htpasswd (Apache/httpd-tools):
+htpasswd -bc .htpasswd kiran 'Kiran321#'
+
+# si no lo tiene, con openssl (viene en cualquier cPanel):
+printf 'kiran:%s\n' "$(openssl passwd -apr1 'Kiran321#')" > .htpasswd
+
+chmod 644 .htpasswd
+```
+
+Después probar sin sesión (curl sin credenciales debe dar 401, con ellas 200):
+
+```bash
+curl -sI https://tourevo.cl/propuestas/kiran-shah-patagonia-rapa-nui/ | head -1
+curl -sI -u kiran:'Kiran321#' https://tourevo.cl/propuestas/kiran-shah-patagonia-rapa-nui/ | head -1
+curl -sI https://tourevo.cl/propuestas/kiran-shah-patagonia-rapa-nui/planes.html | head -1   # 200 sin clave
+```
+
+Si el 401 no aparece, es que el cPanel tiene `AllowOverride None` para `AuthConfig` en esa
+zona y el `.htaccess` no alcanza — en ese caso hay que activar la protección desde
+*cPanel → Privacidad de directorios* en vez de por archivo.
+
+**La clave viaja en texto plano por Basic Auth** (va con TLS porque el sitio es HTTPS, pero
+sin más cifrado que eso) y por email si se la mandan a Kiran por ese medio. Para una
+cotización no es un problema serio, pero no es el nivel de un login real — es una cortina,
+no una caja fuerte.
+
+---
+
 ## Puntos a verificar antes de enviar
 
 1. **Tarifas.** Todas las cifras son estimación de mercado, no cotización de proveedor. Cargar reales.

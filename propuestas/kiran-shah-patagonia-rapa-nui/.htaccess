@@ -3,15 +3,15 @@
 # El .htpasswd NO vive en este repo (es público) — se genera directo en el
 # servidor. Ver NOTAS-INTERNAS.md para el comando exacto.
 #
-# planes.html queda afuera a propósito: el cliente tiene que poder elegir y
-# pagar un plan sin desenterrar la clave primero. Todo lo demás — el
-# itinerario día a día, los hoteles, el costo en tierra — pide clave.
+# La página pública de los 3 planes (para elegir/pagar sin clave) vive
+# aparte, en ../kiran-shah-patagonia-rapa-nui-planes/ — sin .htaccess.
+# Antes vivía acá adentro como planes.html con una excepción <Files>, pero
+# ese Apache concreto no respetó el override (dio 401 igual que el resto de
+# la carpeta pese al "Require all granted"); mover el archivo a una carpeta
+# hermana sin auth es determinístico sin importar cómo esté configurado el
+# merging de autorización en este cPanel puntual.
 
 AuthType Basic
 AuthName "Tourevo · Cotizacion privada COT-2026-0159"
 AuthUserFile /home/wwimpo/tourevo.cl/propuestas/kiran-shah-patagonia-rapa-nui/.htpasswd
 Require valid-user
-
-<Files "planes.html">
-  Require all granted
-</Files>

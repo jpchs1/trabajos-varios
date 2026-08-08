@@ -1287,7 +1287,13 @@
   // this page's HTML; this just stops a casual reader (or a forwarded link)
   // from reading them at a glance without the password.
   var HASH = '8360c9f5136ff61a6fdf492a762d863b3b2efbb99155044319b640163278087e';
-  var STORE_KEY = 'tourevo-cot-2026-0159-unlocked';
+  // Bump GATE_VERSION any time everyone should see the password prompt
+  // again on their next visit — a previous unlock stored under the old
+  // key stops matching, so the page reverts to locked. This can't reach a
+  // tab someone already has open without a reload; nothing can, for a
+  // static page with no live channel to the browser.
+  var GATE_VERSION = 1;
+  var STORE_KEY = 'tourevo-cot-2026-0159-unlocked-v' + GATE_VERSION;
 
   function sha256Hex(text) {
     var bytes = new TextEncoder().encode(text);

@@ -148,59 +148,59 @@ Cambios que esto obligó a hacer en el documento:
 
 ---
 
-## Clave de acceso
+## Clave de acceso — versión 3: todo en una sola página
 
-La cotización quedó pública en `tourevo.cl/propuestas/kiran-shah-patagonia-rapa-nui/`
-apenas se subió, así que se le agregó Basic Auth vía `.htaccess`.
+Se probaron tres enfoques distintos para esto. Los primeros dos se descartaron; este es el
+que quedó en producción.
 
-**Los 3 planes quedan visibles a propósito** — el cliente tiene que poder elegirlos y
-pagar sin desenterrar la clave primero. Viven en una **carpeta hermana sin `.htaccess`**:
-`propuestas/kiran-shah-patagonia-rapa-nui-planes/index.html`, publicada en
-`tourevo.cl/propuestas/kiran-shah-patagonia-rapa-nui-planes/`.
+**v1 — Basic Auth (`.htaccess`) sobre toda la carpeta.** Protección real a nivel de
+servidor: sin clave, un `401` sin body. Problema: bloqueaba absolutamente todo, incluidos
+los 3 planes, y el pedido era justo lo contrario — que el cliente pudiera elegir y pagar un
+plan sin tener la clave a mano.
 
-Al principio esa página vivía adentro de la carpeta protegida, como `planes.html`, con una
-excepción `<Files "planes.html"> Require all granted </Files>` dentro del mismo
-`.htaccess`. En teoría un bloque `<Files>` más específico pisa el `Require valid-user` de
-más arriba — es el patrón estándar de Apache 2.4 para dejar un archivo público dentro de
-una carpeta protegida. **En este cPanel puntual no funcionó**: `curl` sin credenciales dio
-`401` también para `planes.html`, probablemente por cómo ese servidor mergea autorización
-entre el nivel de directorio y el de `<Files>` (`AuthMerging`, o una config de EasyApache
-que no se comporta como el Apache estándar). En vez de perseguir la causa exacta con
-sintaxis de `Require expr`, se movió el archivo a una carpeta separada sin `.htaccess` —
-determinístico, no depende de cómo esté configurado el merging en este servidor.
+**v2 — Basic Auth + una página separada `kiran-shah-patagonia-rapa-nui-planes/` sin
+`.htaccess`**, solo con los 3 planes, con un preview borroso del itinerario arriba a modo
+de gancho. Funcionaba, pero eran **dos URLs distintas** para la misma cotización, y el
+cliente lo rechazó explícitamente: *"tiene que ser la misma página... pero todo en una
+página"*. Esa carpeta y el `.htaccess` se eliminaron del repo.
 
-El `.htaccess` sí está en el repo. El `.htpasswd` **no**: este repo es público, y el hash
-de la clave real no debería quedar en el historial de git aunque `apr1` sea razonablemente
-resistente. Se genera directo en el servidor:
+**v3 — la actual: una sola página, todo con CSS + JavaScript, sin Basic Auth.** El bloque
+`.gate-wrap` envuelve todo el documento excepto el header, los 3 planes y las condiciones
+comerciales: nota de bienvenida, "prepared for", recomendaciones, los dos itinerarios día a
+día, hoteles, tablas de precio y el sello Tourevo. Por defecto está `filter: blur(7px)` +
+`user-select:none` + `pointer-events:none`. Un formulario (`#gateForm`) calcula el
+SHA-256 del texto ingresado (Web Crypto, `crypto.subtle.digest`) y lo compara contra un
+hash fijo en el `<script>` al final del archivo. Si coincide, se agrega la clase
+`unlocked` a `<html>`, que por CSS saca el blur, y se guarda en `localStorage` para que no
+haya que volver a tipear la clave en visitas siguientes desde el mismo navegador.
 
-```bash
-cd ~/tourevo.cl/propuestas/kiran-shah-patagonia-rapa-nui
-
-# si el servidor tiene htpasswd (Apache/httpd-tools):
-htpasswd -bc .htpasswd kiran 'Kiran321#'
-
-# si no lo tiene, con openssl (viene en cualquier cPanel):
-printf 'kiran:%s\n' "$(openssl passwd -apr1 'Kiran321#')" > .htpasswd
-
-chmod 644 .htpasswd
+```
+HASH sha256("Kiran321#") = 8360c9f5136ff61a6fdf492a762d863b3b2efbb99155044319b640163278087e
 ```
 
-Después probar sin sesión (curl sin credenciales debe dar 401, con ellas 200):
+Si cambia la clave, recalcular con: `python3 -c "import hashlib; print(hashlib.sha256('LA-NUEVA-CLAVE'.encode()).hexdigest())"`
+y reemplazar el valor de `HASH` en el `<script>` de `index.html`.
 
-```bash
-curl -sI https://tourevo.cl/propuestas/kiran-shah-patagonia-rapa-nui/ | head -1
-curl -sI -u kiran:'Kiran321#' https://tourevo.cl/propuestas/kiran-shah-patagonia-rapa-nui/ | head -1
-curl -sI https://tourevo.cl/propuestas/kiran-shah-patagonia-rapa-nui-planes/ | head -1   # 200 sin clave
-```
+**⚠️ Esto es una cortina, no una caja fuerte — y menos que la v1.** El HTML completo
+(itinerario real, nombre del hotel, precios exactos) se descarga al navegador del visitante
+apenas carga la página, tenga o no la clave. El blur es puramente visual: cualquiera que
+abra las herramientas de desarrollador, mire "ver código fuente" o simplemente desactive
+CSS lee todo sin escribir nada. El hash SHA-256 tampoco es una protección real — evita que
+la clave aparezca como texto plano en el código fuente, pero no impide que alguien se salte
+el gate sin conocerla. Es la decisión correcta para el objetivo que se pidió (mostrar algo
+"bien hecho" que tiente, sin trabar a nadie con un popup feo del navegador), pero **no
+sirve si en algún momento se necesita protección real** — para eso hay que volver a algo
+del lado del servidor (Basic Auth, o mejor, el portal `c/` de tourevo-cl con token HMAC,
+ver `TRASPASO-PORTAL.md`).
 
-Si el 401 no aparece, es que el cPanel tiene `AllowOverride None` para `AuthConfig` en esa
-zona y el `.htaccess` no alcanza — en ese caso hay que activar la protección desde
-*cPanel → Privacidad de directorios* en vez de por archivo.
+**La impresión/PDF siempre muestra todo sin blur**, sin importar si la página está
+desbloqueada en pantalla — hay una excepción específica dentro de `@media print` para que
+`Ctrl+P` desde cualquier estado del gate produzca el documento completo.
 
-**La clave viaja en texto plano por Basic Auth** (va con TLS porque el sitio es HTTPS, pero
-sin más cifrado que eso) y por email si se la mandan a Kiran por ese medio. Para una
-cotización no es un problema serio, pero no es el nivel de un login real — es una cortina,
-no una caja fuerte.
+Ya no hace falta generar `.htpasswd` en el servidor ni tocar `.htaccess` — de hecho, si
+quedó un `.htaccess` viejo de la v1 en `~/tourevo.cl/propuestas/kiran-shah-patagonia-rapa-nui/`,
+**hay que borrarlo**, porque si no la página nunca va a llegar a mostrar el gate: seguiría
+devolviendo `401` antes de que el navegador vea una sola línea de HTML.
 
 ---
 

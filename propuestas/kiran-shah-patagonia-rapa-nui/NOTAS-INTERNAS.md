@@ -151,9 +151,23 @@ Cambios que esto obligó a hacer en el documento:
 ## Clave de acceso
 
 La cotización quedó pública en `tourevo.cl/propuestas/kiran-shah-patagonia-rapa-nui/`
-apenas se subió, así que se le agregó Basic Auth vía `.htaccess`. **`planes.html` queda
-afuera a propósito** — el cliente tiene que poder elegir y pagar un plan sin desenterrar
-la clave primero; el resto (itinerario día a día, hoteles, costo en tierra) pide clave.
+apenas se subió, así que se le agregó Basic Auth vía `.htaccess`.
+
+**Los 3 planes quedan visibles a propósito** — el cliente tiene que poder elegirlos y
+pagar sin desenterrar la clave primero. Viven en una **carpeta hermana sin `.htaccess`**:
+`propuestas/kiran-shah-patagonia-rapa-nui-planes/index.html`, publicada en
+`tourevo.cl/propuestas/kiran-shah-patagonia-rapa-nui-planes/`.
+
+Al principio esa página vivía adentro de la carpeta protegida, como `planes.html`, con una
+excepción `<Files "planes.html"> Require all granted </Files>` dentro del mismo
+`.htaccess`. En teoría un bloque `<Files>` más específico pisa el `Require valid-user` de
+más arriba — es el patrón estándar de Apache 2.4 para dejar un archivo público dentro de
+una carpeta protegida. **En este cPanel puntual no funcionó**: `curl` sin credenciales dio
+`401` también para `planes.html`, probablemente por cómo ese servidor mergea autorización
+entre el nivel de directorio y el de `<Files>` (`AuthMerging`, o una config de EasyApache
+que no se comporta como el Apache estándar). En vez de perseguir la causa exacta con
+sintaxis de `Require expr`, se movió el archivo a una carpeta separada sin `.htaccess` —
+determinístico, no depende de cómo esté configurado el merging en este servidor.
 
 El `.htaccess` sí está en el repo. El `.htpasswd` **no**: este repo es público, y el hash
 de la clave real no debería quedar en el historial de git aunque `apr1` sea razonablemente
@@ -176,7 +190,7 @@ Después probar sin sesión (curl sin credenciales debe dar 401, con ellas 200):
 ```bash
 curl -sI https://tourevo.cl/propuestas/kiran-shah-patagonia-rapa-nui/ | head -1
 curl -sI -u kiran:'Kiran321#' https://tourevo.cl/propuestas/kiran-shah-patagonia-rapa-nui/ | head -1
-curl -sI https://tourevo.cl/propuestas/kiran-shah-patagonia-rapa-nui/planes.html | head -1   # 200 sin clave
+curl -sI https://tourevo.cl/propuestas/kiran-shah-patagonia-rapa-nui-planes/ | head -1   # 200 sin clave
 ```
 
 Si el 401 no aparece, es que el cPanel tiene `AllowOverride None` para `AuthConfig` en esa

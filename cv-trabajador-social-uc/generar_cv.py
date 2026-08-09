@@ -1,126 +1,180 @@
 # -*- coding: utf-8 -*-
+"""CV Jeniffer Mieres Contreras - Rediseno editorial ejecutivo.
+Contenido identico al aprobado; solo cambia el tratamiento visual."""
 from docx import Document
 from docx.shared import Pt, Cm, RGBColor
 from docx.enum.text import WD_TAB_ALIGNMENT
 from docx.oxml.ns import qn
 from docx.oxml import OxmlElement
 
-NAVY  = RGBColor(0x1F, 0x35, 0x5E)
-GRAY  = RGBColor(0x44, 0x44, 0x44)
-MID   = RGBColor(0x5A, 0x5A, 0x5A)
-BLACK = RGBColor(0x1A, 0x1A, 0x1A)
-FONT  = "Calibri"
-LINE  = 1.03
+# ---------- PALETA ----------
+INK    = RGBColor(0x16, 0x18, 0x1A)   # nombre, empresas, enfasis
+BODY   = RGBColor(0x33, 0x37, 0x3B)   # cuerpo
+META   = RGBColor(0x6C, 0x71, 0x76)   # fechas, cargos, instituciones
+FAINT  = RGBColor(0xA8, 0xAD, 0xB2)   # separadores tipograficos
+ACCENT = RGBColor(0x6E, 0x21, 0x30)   # oxblood - unico acento
+HAIR   = "6E2130"                      # hairline del header
+
+SERIF = "Cambria"      # primaria - editorial
+SANS  = "Calibri"      # capa meta - etiquetas, fechas, cargos
+
+# ---------- RETICULA ----------
+M_TOP, M_BOT, M_LEFT, M_RIGHT = 1.5, 1.35, 1.8, 1.6
+RAIL  = Cm(3.2)        # indentacion de la columna de contenido
+BUL   = Cm(0.34)       # sangria del bullet
 
 doc = Document()
 s = doc.sections[0]
-s.top_margin = Cm(1.15); s.bottom_margin = Cm(1.1)
-s.left_margin = Cm(1.6); s.right_margin = Cm(1.6)
-W = s.page_width - s.left_margin - s.right_margin
+s.top_margin, s.bottom_margin = Cm(M_TOP), Cm(M_BOT)
+s.left_margin, s.right_margin = Cm(M_LEFT), Cm(M_RIGHT)
+FULL = s.page_width - s.left_margin - s.right_margin   # 17.6 cm
 
 st = doc.styles["Normal"]
-st.font.name = FONT; st.font.size = Pt(9.5); st.font.color.rgb = BLACK
-st.element.rPr.rFonts.set(qn("w:eastAsia"), FONT)
+st.font.name = SERIF; st.font.size = Pt(9.5); st.font.color.rgb = BODY
+st.element.rPr.rFonts.set(qn("w:eastAsia"), SERIF)
 st.paragraph_format.space_before = Pt(0)
-st.paragraph_format.space_after = Pt(0)
-st.paragraph_format.line_spacing = LINE
+st.paragraph_format.space_after  = Pt(0)
+st.paragraph_format.line_spacing = 1.16
 
-def sp(p, before=0, after=0, line=LINE, keep=False):
-    p.paragraph_format.space_before = Pt(before)
-    p.paragraph_format.space_after = Pt(after)
-    p.paragraph_format.line_spacing = line
-    if keep: p.paragraph_format.keep_with_next = True
+def P(before=0, after=0, line=1.16, keep=False, indent=None, hang=None, tabs=()):
+    p = doc.add_paragraph()
+    pf = p.paragraph_format
+    pf.space_before, pf.space_after, pf.line_spacing = Pt(before), Pt(after), line
+    if keep: pf.keep_with_next = True
+    if indent is not None: pf.left_indent = indent
+    if hang   is not None: pf.first_line_indent = hang
+    for pos, al in tabs: pf.tab_stops.add_tab_stop(pos, al)
+    return p
 
-def run(p, text, size=9.5, bold=False, italic=False, color=BLACK, spacing=None):
+def R(p, text, font=SERIF, size=9.5, bold=False, italic=False, color=BODY, track=None, caps=False):
     r = p.add_run(text)
-    r.font.name = FONT; r.font.size = Pt(size); r.bold = bold; r.italic = italic
+    r.font.name = font; r.font.size = Pt(size); r.bold = bold; r.italic = italic
     r.font.color.rgb = color
-    r._element.rPr.rFonts.set(qn("w:eastAsia"), FONT)
-    if spacing:
-        el = OxmlElement("w:spacing"); el.set(qn("w:val"), str(spacing))
-        r._element.rPr.append(el)
+    rPr = r._element.get_or_add_rPr()
+    rPr.rFonts.set(qn("w:eastAsia"), font)
+    rPr.rFonts.set(qn("w:cs"), font)
+    if caps:
+        e = OxmlElement("w:caps"); e.set(qn("w:val"), "1"); rPr.append(e)
+    if track:
+        e = OxmlElement("w:spacing"); e.set(qn("w:val"), str(track)); rPr.append(e)
     return r
 
-def rule(p, color="1F355E", size=6, space=2):
+def hairline(p, color=HAIR, sz=6, space=6):
     pPr = p._p.get_or_add_pPr()
-    pbdr = OxmlElement("w:pBdr"); b = OxmlElement("w:bottom")
-    b.set(qn("w:val"), "single"); b.set(qn("w:sz"), str(size))
-    b.set(qn("w:space"), str(space)); b.set(qn("w:color"), color)
-    pbdr.append(b); pPr.append(pbdr)
+    b = OxmlElement("w:pBdr"); bt = OxmlElement("w:bottom")
+    bt.set(qn("w:val"), "single"); bt.set(qn("w:sz"), str(sz))
+    bt.set(qn("w:space"), str(space)); bt.set(qn("w:color"), color)
+    b.append(bt); pPr.append(b)
 
-def heading(text):
-    p = doc.add_paragraph(); sp(p, before=9, after=4, keep=True)
-    run(p, text.upper(), size=10, bold=True, color=NAVY, spacing=30)
-    rule(p)
+# --- etiqueta de seccion en el raíl izquierdo (comparte linea con el contenido) ---
+def rail(label, before=15, after=0, keep=True, right_tab=False):
+    tabs = [(RAIL, WD_TAB_ALIGNMENT.LEFT)]
+    if right_tab: tabs.append((FULL, WD_TAB_ALIGNMENT.RIGHT))
+    p = P(before=before, after=after, keep=keep, indent=RAIL, hang=-RAIL, tabs=tabs)
+    R(p, label, font=SANS, size=8, bold=True, color=ACCENT, track=28, caps=True)
+    p.add_run("\t")
+    return p
 
-def bullet(pre="", key="", post=""):
-    p = doc.add_paragraph(style="List Bullet")
-    p.paragraph_format.left_indent = Cm(0.40)
-    p.paragraph_format.first_line_indent = Cm(-0.40)
-    sp(p, before=0, after=1.5)
-    if pre:  run(p, pre)
-    if key:  run(p, key, bold=True)
-    if post: run(p, post)
+def rail_bullet(label, before=15):
+    """Etiqueta de seccion + primera vinieta en la misma linea."""
+    p = P(before=before, indent=RAIL + BUL, hang=-(RAIL + BUL),
+          tabs=[(RAIL, WD_TAB_ALIGNMENT.LEFT), (RAIL + BUL, WD_TAB_ALIGNMENT.LEFT)])
+    R(p, label, font=SANS, size=8, bold=True, color=ACCENT, track=28, caps=True)
+    p.add_run("\t")
+    R(p, "\u2022", size=8.5, color=ACCENT)
+    p.add_run("\t")
+    return p
 
-def job(org, period, title):
-    p = doc.add_paragraph(); sp(p, before=6.5, after=0, keep=True)
-    p.paragraph_format.tab_stops.add_tab_stop(W, WD_TAB_ALIGNMENT.RIGHT)
-    run(p, org, size=10, bold=True, color=NAVY)
-    run(p, "\t" + period, size=9, bold=True, color=MID)
-    q = doc.add_paragraph(); sp(q, before=1, after=2.5, keep=True)
-    run(q, title, size=9.5, italic=True, color=GRAY)
+def body_par(before=0, after=0, line=1.16, keep=False):
+    return P(before=before, after=after, line=line, keep=keep, indent=RAIL)
 
-def entry(title, inst, year):
-    p = doc.add_paragraph(); sp(p, before=3, after=0, keep=True)
-    p.paragraph_format.tab_stops.add_tab_stop(W, WD_TAB_ALIGNMENT.RIGHT)
-    run(p, title, bold=True)
-    run(p, "\t" + year, size=9, bold=True, color=MID)
-    q = doc.add_paragraph(); sp(q, before=0.5, after=0)
-    run(q, inst, size=9, italic=True, color=GRAY)
+def bullet(pre="", key="", post="", after=2.7):
+    p = P(after=after, indent=RAIL + BUL, hang=-BUL)
+    R(p, "•", size=8.5, color=ACCENT)
+    p.add_run("\t")
+    if pre:  R(p, pre)
+    if key:  R(p, key, bold=True, color=INK)
+    if post: R(p, post)
+    return p
 
-# ---------------- ENCABEZADO ----------------
-p = doc.add_paragraph(); sp(p, after=1)
-run(p, "JENIFFER MIERES CONTRERAS", size=19, bold=True, color=NAVY, spacing=8)
-p = doc.add_paragraph(); sp(p, before=1, after=2.5)
-run(p, "Trabajadora Social  |  Bienestar Laboral, Calidad de Vida y Gestión de Beneficios",
-    size=10.5, bold=True, color=GRAY)
-p = doc.add_paragraph(); sp(p, before=0, after=2)
-run(p, "+56 9 4903 1682  ·  jeniffer.mieres@gmail.com  ·  El Monte, Región Metropolitana", size=9, color=MID)
-rule(p, color="C9CEDB", size=6, space=4)
+def keywords(p, text, size=8.5):
+    """Mismos terminos y separadores; los '·' pasan a gris claro."""
+    for i, part in enumerate(text.split("  ·  ")):
+        if i: R(p, "  ·  ", size=size, color=FAINT)
+        R(p, part, size=size)
 
-# ---------------- PERFIL ----------------
-heading("Perfil profesional")
-p = doc.add_paragraph(); sp(p, after=0, line=1.05)
-run(p,
- "Trabajadora Social titulada con distinción y más de 9 años de experiencia en bienestar laboral, gestión de "
- "beneficios y atención social directa, desarrollada en instituciones de educación superior y en empresa privada. "
- "Creé desde cero el Departamento de Bienestar Social de una organización con más de 200 colaboradores, "
- "administrando el Seguro Complementario de Salud, las licencias médicas y las cargas familiares de la dotación. "
- "Luego lideré la gestión de personas y bienestar en la consultora minera Bmining, a cargo de los programas de "
- "bienestar, convenios, plan anual de capacitación, clima laboral y de la matriz de riesgo y salud en el trabajo "
- "con seguimiento por KPI. Hoy me desempeño en la Universidad de Santiago de Chile, donde realizo evaluaciones "
- "socioeconómicas en los sistemas del Ministerio de Educación, gestiono beneficios ministeriales e internos y "
- "acompaño casos que requieren articular áreas internas con redes de apoyo. A la atención directa sumo una mirada "
- "de proceso: fui auditora interna del Sistema de Gestión Integrado (ISO 9001, 14001 y 45001). Cursando el "
- "Diplomado en Bienestar Organizacional y Estrategias de Diversidad e Inclusión (USACH) y certificada como agente "
- "Gatekeeper en prevención del suicidio.")
+def job(company, role, dates, first=False, label=None):
+    if first:
+        p = rail(label, before=15, right_tab=True)
+    else:
+        p = P(before=9, keep=True, indent=RAIL,
+              tabs=[(FULL, WD_TAB_ALIGNMENT.RIGHT)])
+    R(p, company, size=10.5, bold=True, color=INK)
+    p.add_run("\t")
+    R(p, dates, font=SANS, size=8.5, color=META, track=14)
+    q = P(before=2, after=4.5, keep=True, indent=RAIL)
+    R(q, role, font=SANS, size=9, color=META, track=8)
 
-# ---------------- ÁREAS DE EXPERTISE ----------------
-heading("Áreas de expertise")
-p = doc.add_paragraph(); sp(p, after=0, line=1.07)
-run(p, "Creación, implementación y evaluación de programas de bienestar  ·  Gestión de beneficios internos y externos  ·  "
-       "Evaluación socioeconómica e informes sociales  ·  Seguro Complementario de Salud  ·  "
-       "Licencias médicas y cargas familiares  ·  Convenios institucionales y gestión de proveedores  ·  "
-       "Gestión y seguimiento de casos sociales  ·  Orientación en salud y vivienda  ·  "
-       "Coordinación de actividades y eventos  ·  Diseño y facilitación de talleres y capacitaciones  ·  "
-       "Articulación con redes de apoyo  ·  Diversidad e inclusión  ·  Calidad de servicio  ·  "
-       "Normativa laboral y gestión documental", size=9)
+def edu(title, inst, year, first=False, label=None):
+    if first:
+        p = rail(label, before=15, right_tab=True)
+    else:
+        p = P(before=8, keep=True, indent=RAIL,
+              tabs=[(FULL, WD_TAB_ALIGNMENT.RIGHT)])
+    R(p, title, size=9.5, bold=True, color=INK)
+    p.add_run("\t")
+    R(p, year, font=SANS, size=8.5, color=META, track=14)
+    q = P(before=1, indent=RAIL)
+    R(q, inst, font=SANS, size=8.5, color=META, track=8)
 
-# ---------------- EXPERIENCIA ----------------
-heading("Experiencia profesional")
+# ============================ ENCABEZADO ============================
+p = P(after=2.5)
+R(p, "JENIFFER MIERES CONTRERAS", size=21, color=INK, track=40)
 
-job("Universidad de Santiago de Chile", "Agosto 2023 – Actualidad",
-    "Trabajadora Social · Departamento de Beneficios Estudiantiles")
+p = P(before=0, after=3.5)
+R(p, "Trabajadora Social", font=SANS, size=10.5, color=RGBColor(0x4A,0x4F,0x54), track=16)
+R(p, "   |   ", font=SANS, size=10.5, color=ACCENT)
+R(p, "Bienestar Laboral, Calidad de Vida y Gestión de Beneficios",
+  font=SANS, size=10.5, color=RGBColor(0x4A,0x4F,0x54), track=16)
+
+p = P(before=0, after=0)
+for i, part in enumerate(["+56 9 4903 1682", "jeniffer.mieres@gmail.com",
+                          "El Monte, Región Metropolitana"]):
+    if i: R(p, "   ·   ", font=SANS, size=8.5, color=FAINT)
+    R(p, part, font=SANS, size=8.5, color=META, track=12)
+hairline(p, color=HAIR, sz=4, space=7)
+
+# ============================ PERFIL ============================
+p = rail("Perfil", before=16)
+R(p, "Trabajadora Social titulada con distinción y más de 9 años de experiencia en bienestar laboral, gestión de "
+     "beneficios y atención social directa, desarrollada en instituciones de educación superior y en empresa privada. "
+     "Creé desde cero el Departamento de Bienestar Social de una organización con más de 200 colaboradores, "
+     "administrando el Seguro Complementario de Salud, las licencias médicas y las cargas familiares de la dotación. "
+     "Luego lideré la gestión de personas y bienestar en la consultora minera Bmining, a cargo de los programas de "
+     "bienestar, convenios, plan anual de capacitación, clima laboral y de la matriz de riesgo y salud en el trabajo "
+     "con seguimiento por KPI. Hoy me desempeño en la Universidad de Santiago de Chile, donde realizo evaluaciones "
+     "socioeconómicas en los sistemas del Ministerio de Educación, gestiono beneficios ministeriales e internos y "
+     "acompaño casos que requieren articular áreas internas con redes de apoyo. A la atención directa sumo una mirada "
+     "de proceso: fui auditora interna del Sistema de Gestión Integrado (ISO 9001, 14001 y 45001). Cursando el "
+     "Diplomado en Bienestar Organizacional y Estrategias de Diversidad e Inclusión (USACH) y certificada como agente "
+     "Gatekeeper en prevención del suicidio.", size=9)
+p.paragraph_format.line_spacing = 1.12
+
+# ============================ ÁREAS DE EXPERTISE ============================
+p = rail("Expertise", before=13)
+p.paragraph_format.line_spacing = 1.2
+keywords(p,
+ "Creación, implementación y evaluación de programas de bienestar  ·  Gestión de beneficios internos y externos  ·  "
+ "Evaluación socioeconómica e informes sociales  ·  Seguro Complementario de Salud  ·  "
+ "Licencias médicas y cargas familiares  ·  Convenios institucionales y gestión de proveedores  ·  "
+ "Gestión y seguimiento de casos sociales  ·  Orientación en salud y vivienda  ·  "
+ "Coordinación de actividades y eventos  ·  Diseño y facilitación de talleres y capacitaciones  ·  "
+ "Articulación con redes de apoyo  ·  Diversidad e inclusión  ·  Calidad de servicio  ·  "
+ "Normativa laboral y gestión documental")
+
+# ============================ EXPERIENCIA ============================
+job("Universidad de Santiago de Chile", "Trabajadora Social · Departamento de Beneficios Estudiantiles",
+    "Agosto 2023 – Actualidad", first=True, label="Experiencia")
 bullet("Realizo la ", "evaluación socioeconómica",
        " de cada caso, revisando antecedentes y acreditaciones en los sistemas del Ministerio de Educación para "
        "definir con autonomía qué apoyo corresponde.")
@@ -135,8 +189,8 @@ bullet("", "Coordino casos complejos",
 bullet("Elaboro ", "informes sociales",
        " y mantengo la trazabilidad administrativa de la cartera de casos a mi cargo.")
 
-job("Bmining · Desarrollo e Innovación para la Minería SpA", "Octubre 2018 – Febrero 2023",
-    "Líder en Gestión de Personas · Consultora para la industria minera")
+job("Bmining · Desarrollo e Innovación para la Minería SpA",
+    "Líder en Gestión de Personas · Consultora para la industria minera", "Octubre 2018 – Febrero 2023")
 bullet("Estuve a cargo de los ", "programas de bienestar y beneficios",
        " de los colaboradores, desde la definición de la oferta hasta su implementación y seguimiento, con foco "
        "en el clima laboral y en el día a día de la empresa.")
@@ -155,8 +209,7 @@ bullet("Asumí durante un año el ", "Sistema de Gestión Integrado como auditor
        " en las certificaciones ISO 9001:2015 (Calidad), ISO 14001:2015 (Medio Ambiente) e ISO 45001:2018 "
        "(Seguridad y Salud en el Trabajo).")
 
-job("Fundación Fondo Esperanza", "Octubre 2017 – Septiembre 2018",
-    "Monitora · Grupo Emprendedores")
+job("Fundación Fondo Esperanza", "Monitora · Grupo Emprendedores", "Octubre 2017 – Septiembre 2018")
 bullet("Diseñé y dicté ", "capacitaciones",
        " para emprendedores que estaban partiendo o buscando hacer crecer su negocio, con metodologías "
        "prácticas y grupales.")
@@ -166,8 +219,8 @@ bullet("Orienté a los emprendedores en materia de ", "vivienda",
        ", articulando con las redes de la comuna, y los vinculé con recursos disponibles que muchas veces no "
        "sabían que tenían a su alcance.")
 
-job("Ferretería San Francisco", "Diciembre 2016 – Septiembre 2017",
-    "Encargada · Departamento de Bienestar Social")
+job("Ferretería San Francisco", "Encargada · Departamento de Bienestar Social",
+    "Diciembre 2016 – Septiembre 2017")
 bullet("", "Creé desde cero el área de Bienestar Social",
        " para una dotación de más de 200 colaboradores, definiendo la planificación de actividades y beneficios.")
 bullet("Administré el ", "Seguro Complementario de Salud",
@@ -181,36 +234,40 @@ bullet("Gestioné ", "convenios con instituciones externas", " para mejorar la c
 bullet("Administré vacaciones, carpetas personales y documentación laboral, y apoyé los ",
        "procesos administrativos de Recursos Humanos", ".")
 
-# ---------------- FORMACIÓN ----------------
-heading("Formación académica")
-entry("Diplomado en Bienestar Organizacional y Estrategias de Diversidad e Inclusión",
-      "Universidad de Santiago de Chile", "En curso")
-entry("Postítulo en Trabajo Social en Niñez, Adolescencia y Familia en el Contexto Judicial",
-      "Universidad Andrés Bello", "2016")
-entry("Trabajadora Social · Título profesional con distinción",
-      "Instituto Profesional AIEP", "2012")
+# ============================ FORMACIÓN ============================
+edu("Diplomado en Bienestar Organizacional y Estrategias de Diversidad e Inclusión",
+    "Universidad de Santiago de Chile", "En curso", first=True, label="Formación")
+edu("Postítulo en Trabajo Social en Niñez, Adolescencia y Familia en el Contexto Judicial",
+    "Universidad Andrés Bello", "2016")
+edu("Trabajadora Social · Título profesional con distinción",
+    "Instituto Profesional AIEP", "2012")
 
-# ---------------- CERTIFICACIONES ----------------
-heading("Cursos y certificaciones")
-bullet("", "Certificación Gatekeepers", " — agentes comunitarios en prevención del suicidio (2026).")
+# ============================ CERTIFICACIONES ============================
+p = rail_bullet("Certificaciones", before=15)
+R(p, "Certificación Gatekeepers", bold=True, color=INK)
+R(p, " — agentes comunitarios en prevención del suicidio (2026).")
 bullet("", "Interpretación auditor interno",
        " — TÜV Rheinland (2019). Respalda la auditoría del Sistema de Gestión Integrado ISO 9001 / 14001 / 45001.")
 bullet("", "Ley 21.327, Modernización de la Dirección del Trabajo", " — Bicentenario OTEC (2021).")
 bullet("", "Cálculo de finiquito", " — Consultores y Asesores en Capacitación Chile Ltda. (2022).")
 
-# ---------------- COMPETENCIAS ----------------
-heading("Competencias y herramientas")
-p = doc.add_paragraph(); sp(p, after=2.5, line=1.07)
-run(p, "Vocación y orientación al servicio  ·  Excelente trato al usuario y altos estándares de calidad de atención  ·  "
-       "Comunicación efectiva  ·  Trabajo en equipo y coordinación transversal con múltiples unidades  ·  "
-       "Autonomía y resolución de situaciones  ·  Flexibilidad y adaptación al cambio  ·  Manejo de conflictos  ·  "
-       "Proactividad y aporte al clima laboral  ·  Rigurosidad administrativa y normativa", size=9)
-bullet("", "Herramientas: ",
-       "Microsoft Office (Word, Excel y PowerPoint) nivel intermedio; conocimiento básico de BUK, SAP y Talana; "
-       "plataformas institucionales del Ministerio de Educación y gestión documental.")
-bullet("", "Disponibilidad: ",
-       "movilización propia y licencia clase B; disponibilidad para desempeñarse en Campus San Joaquín y en "
-       "otros campus de la Región Metropolitana.")
+# ============================ COMPETENCIAS ============================
+p = rail("Competencias", before=15)
+p.paragraph_format.line_spacing = 1.2
+keywords(p,
+ "Vocación y orientación al servicio  ·  Excelente trato al usuario y altos estándares de calidad de atención  ·  "
+ "Comunicación efectiva  ·  Trabajo en equipo y coordinación transversal con múltiples unidades  ·  "
+ "Autonomía y resolución de situaciones  ·  Flexibilidad y adaptación al cambio  ·  Manejo de conflictos  ·  "
+ "Proactividad y aporte al clima laboral  ·  Rigurosidad administrativa y normativa")
+
+# ============================ HERRAMIENTAS ============================
+p = rail("Herramientas", before=15)
+R(p, "Microsoft Office (Word, Excel y PowerPoint) nivel intermedio; conocimiento básico de BUK, SAP y Talana; "
+     "plataformas institucionales del Ministerio de Educación y gestión documental.")
+
+p = rail("Disponibilidad", before=10)
+R(p, "Movilización propia y licencia clase B; disponibilidad para desempeñarse en Campus San Joaquín y en "
+     "otros campus de la Región Metropolitana.")
 
 out = "/home/user/trabajos-varios/cv-trabajador-social-uc/CV_Jeniffer_Mieres_Contreras_Trabajadora_Social_UC.docx"
 doc.save(out)

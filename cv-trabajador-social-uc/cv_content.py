@@ -86,7 +86,7 @@ JOBS = [
       cargo="Encargada · Departamento de Bienestar Social",
       fechas="Diciembre 2016 – Septiembre 2017",
       bullets=[
-        ("", "Creé desde cero el área de Bienestar Social",
+        ("", "Creé el departamento desde cero",
          " para una dotación de más de 200 colaboradores, definiendo la planificación de actividades y "
          "beneficios."),
         ("Administré el ", "Seguro Complementario de Salud",

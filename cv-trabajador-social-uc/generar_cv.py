@@ -29,7 +29,7 @@ rPr.rFonts.set(qn("w:eastAsia"), SERIF)
 lang = OxmlElement("w:lang"); lang.set(qn("w:val"), "es-CL"); rPr.append(lang)
 st.paragraph_format.space_before = Pt(0)
 st.paragraph_format.space_after  = Pt(0)
-st.paragraph_format.line_spacing = 1.13
+st.paragraph_format.line_spacing = 1.17
 
 # --- particion de palabras: justificado sin rios ni huecos ---
 sett = doc.settings.element
@@ -37,7 +37,7 @@ for tag, val in (("w:autoHyphenation", "1"), ("w:consecutiveHyphenLimit", "2"),
                  ("w:doNotHyphenateCaps", "1"), ("w:hyphenationZone", "510")):
     e = OxmlElement(tag); e.set(qn("w:val"), val); sett.append(e)
 
-def P(before=0, after=0, line=1.13, keep=False, indent=None, hang=None, tabs=(), just=False):
+def P(before=0, after=0, line=1.17, keep=False, indent=None, hang=None, tabs=(), just=False):
     p = doc.add_paragraph(); pf = p.paragraph_format
     pf.space_before, pf.space_after, pf.line_spacing = Pt(before), Pt(after), line
     if keep: pf.keep_with_next = True
@@ -69,7 +69,7 @@ def label_run(p, label):
     R(p, label, font=SANS, size=7.5, bold=True, color=ACCENT, track=20, caps=True)
     p.add_run("\t")
 
-def rail(label, before=14, right_tab=False, just=True):
+def rail(label, before=16, right_tab=False, just=True):
     tabs = [(RAIL, WD_TAB_ALIGNMENT.LEFT)]
     if right_tab: tabs.append((FULL, WD_TAB_ALIGNMENT.RIGHT))
     p = P(before=before, keep=True, indent=RAIL, hang=-RAIL, tabs=tabs, just=just)
@@ -81,10 +81,10 @@ def rail_bullet(label, before=16):
           tabs=[(RAIL, WD_TAB_ALIGNMENT.LEFT), (RAIL + BUL, WD_TAB_ALIGNMENT.LEFT)])
     label_run(p, label)
     R(p, "•", size=8.5, color=ACCENT); p.add_run("\t")
-    p.paragraph_format.space_after = Pt(2.7)
+    p.paragraph_format.space_after = Pt(3.7)
     return p
 
-def bullet(pre="", key="", post="", after=2.7):
+def bullet(pre="", key="", post="", after=3.7):
     p = P(after=after, indent=RAIL + BUL, hang=-BUL, just=True)
     R(p, "•", size=8.5, color=ACCENT); p.add_run("\t")
     if pre:  R(p, pre)
@@ -137,26 +137,16 @@ hairline(p)
 
 # ---------------------------- PERFIL ----------------------------
 p = rail("Perfil", before=14)
-p.paragraph_format.line_spacing = 1.16
-R(p, "Trabajadora Social titulada con distinción y más de 9 años de experiencia en bienestar laboral, gestión de "
-     "beneficios y atención social directa, desarrollada en instituciones de educación superior y en empresa privada.")
+p.paragraph_format.line_spacing = 1.19
+R(p, "Trabajadora Social titulada con distinción y más de 9 años de experiencia en bienestar laboral, gestión de beneficios, evaluación socioeconómica y acompañamiento social.")
 for txt in (
-  "Creé desde cero el Departamento de Bienestar Social de una organización con más de 200 colaboradores, "
-  "administrando el Seguro Complementario de Salud, las licencias médicas y las cargas familiares de la dotación. "
-  "Luego lideré la gestión de personas y bienestar en la consultora minera Bmining, a cargo de los programas de "
-  "bienestar, convenios, plan anual de capacitación, clima laboral y de la matriz de riesgo y salud en el trabajo "
-  "con seguimiento por KPI.",
-  "Hoy me desempeño en la Universidad de Santiago de Chile, donde realizo evaluaciones socioeconómicas en los "
-  "sistemas del Ministerio de Educación, gestiono beneficios ministeriales e internos y acompaño casos que "
-  "requieren articular áreas internas con redes de apoyo. A la atención directa sumo una mirada de proceso: fui "
-  "auditora interna del Sistema de Gestión Integrado (ISO 9001, 14001 y 45001). Cursando el Diplomado en Bienestar "
-  "Organizacional y Estrategias de Diversidad e Inclusión (USACH) y certificada como agente Gatekeeper en "
-  "prevención del suicidio."):
-    q = P(before=4, line=1.16, indent=RAIL, just=True); R(q, txt)
+  "Creé desde cero el Departamento de Bienestar Social de una organización con más de 200 colaboradores, administrando el Seguro Complementario de Salud, las licencias médicas y las cargas familiares. Luego lideré la gestión de personas y bienestar en la consultora minera Bmining, a cargo de programas, convenios, capacitación y clima laboral, y de la matriz de riesgo y salud en el trabajo con seguimiento por KPI.",
+  "Hoy, en la Universidad de Santiago de Chile, realizo evaluaciones socioeconómicas, gestiono beneficios ministeriales e internos y acompaño casos que requieren articular áreas internas con redes de apoyo. Sumo además una mirada de proceso: fui auditora interna del Sistema de Gestión Integrado (ISO 9001, 14001 y 45001)."):
+    q = P(before=6, line=1.19, indent=RAIL, just=True); R(q, txt)
 
 # ---------------------------- EXPERTISE ----------------------------
 p = rail("Expertise", before=13)
-p.paragraph_format.line_spacing = 1.24
+p.paragraph_format.line_spacing = 1.34
 keywords(p,
  "Creación, implementación y evaluación de programas de bienestar  ·  Gestión de beneficios internos y externos  ·  "
  "Evaluación socioeconómica e informes sociales  ·  Seguro Complementario de Salud  ·  "
@@ -236,7 +226,7 @@ bullet("", "Cálculo de finiquito", " — Consultores y Asesores en Capacitació
 
 # ---------------------------- COMPETENCIAS ----------------------------
 p = rail("Competencias", before=26)
-p.paragraph_format.line_spacing = 1.24
+p.paragraph_format.line_spacing = 1.34
 keywords(p,
  "Vocación y orientación al servicio  ·  Excelente trato al usuario y altos estándares de calidad de atención  ·  "
  "Comunicación efectiva  ·  Trabajo en equipo y coordinación transversal con múltiples unidades  ·  "

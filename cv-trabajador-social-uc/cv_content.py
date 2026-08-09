@@ -10,17 +10,9 @@ MAIL     = "jeniffer.mieres@gmail.com"
 CIUDAD   = "El Monte, Región Metropolitana"
 
 PERFIL = [
- "Trabajadora Social titulada con distinción y más de 9 años de experiencia en bienestar laboral, gestión de "
- "beneficios y atención social directa, desarrollada en instituciones de educación superior y en empresa privada.",
- "Creé desde cero el Departamento de Bienestar Social de una organización con más de 200 colaboradores, "
- "administrando el Seguro Complementario de Salud, las licencias médicas y las cargas familiares de la dotación. "
- "Luego lideré la gestión de personas y bienestar en la consultora minera Bmining, a cargo de los programas de "
- "bienestar, convenios, plan anual de capacitación, clima laboral y de la matriz de riesgo y salud en el trabajo "
- "con seguimiento por KPI.",
- "Hoy me desempeño en la Universidad de Santiago de Chile, donde realizo evaluaciones socioeconómicas en los "
- "sistemas del Ministerio de Educación, gestiono beneficios ministeriales e internos y acompaño casos que "
- "requieren articular áreas internas con redes de apoyo. A la atención directa sumo una mirada de proceso: fui "
- "auditora interna del Sistema de Gestión Integrado (ISO 9001, 14001 y 45001).",
+ "Trabajadora Social titulada con distinción y más de 9 años de experiencia en bienestar laboral, gestión de beneficios, evaluación socioeconómica y acompañamiento social.",
+ "Creé desde cero el Departamento de Bienestar Social de una organización con más de 200 colaboradores, administrando el Seguro Complementario de Salud, las licencias médicas y las cargas familiares. Luego lideré la gestión de personas y bienestar en la consultora minera Bmining, a cargo de programas, convenios, capacitación y clima laboral, y de la matriz de riesgo y salud en el trabajo con seguimiento por KPI.",
+ "Hoy, en la Universidad de Santiago de Chile, realizo evaluaciones socioeconómicas, gestiono beneficios ministeriales e internos y acompaño casos que requieren articular áreas internas con redes de apoyo. Sumo además una mirada de proceso: fui auditora interna del Sistema de Gestión Integrado (ISO 9001, 14001 y 45001).",
 ]
 
 EXPERTISE = [

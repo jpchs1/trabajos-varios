@@ -146,7 +146,7 @@ SPECS = [
       note="Reglas cortas y gruesas, versales espaciadas, cero color. El lenguaje de las "
            "consultoras de búsqueda ejecutiva: nada decora, todo jerarquiza.",
       spec=[("Tipografía","Calibri"),("Cuerpo","9,1 pt"),("Acento","Ninguno"),
-            ("Holgura pág. 1","2,43 cm"),("Riesgo ATS","Nulo")], rec=False,
+            ("Holgura pág. 1","2,86 cm"),("Riesgo ATS","Nulo")], rec=False,
       pages=[v1_p1(), v1_p2()]),
  dict(id="banda", n="02", name="Banda", tag="Bloque de color a sangre",
       note="Bloque sólido en el encabezado con el nombre en blanco y cuerpo limpio abajo. "
@@ -158,7 +158,7 @@ SPECS = [
       note="Barra lateral tramada con expertise y competencias; columna principal con perfil y "
            "experiencia. Es el formato más usado hoy y el único con un matiz técnico.",
       spec=[("Tipografía","Calibri"),("Cuerpo","9,3 pt"),("Acento","Petróleo #1B3A4B"),
-            ("Holgura pág. 1","2,46 cm"),("Riesgo ATS","Bajo–moderado")], rec=False,
+            ("Holgura pág. 1","3,31 cm"),("Riesgo ATS","Bajo–moderado")], rec=False,
       pages=[v3_p1(), v3_p2()]),
 ]
 

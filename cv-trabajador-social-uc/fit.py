@@ -23,8 +23,8 @@ for it in range(5):
     print(f"iter {it}: " + "  ".join(f"{k} p1={v[0]:.3f} p2={v[1]:.3f}" for k,v in r.items()))
     done=True
     for k,(a,bq) in r.items():
-        if abs(a-TARGET_P1) > 0.008:
-            fits[k] = round(fits[k]*TARGET_P1/a, 4); done=False
+        if not (0.882 <= a <= 0.945):
+            fits[k] = round(fits[k]*0.915/a, 4); done=False
         if bq > 0.965:                      # nunca desbordar la pagina 2
             fits[k] = round(fits[k]*0.96/bq, 4); done=False
     json.dump(fits, open(f"{D}/fits.json","w"))

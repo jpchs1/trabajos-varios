@@ -111,7 +111,7 @@ def swiss():
     META = RGBColor(0x76,0x7B,0x80); FAINT= RGBColor(0xB0,0xB4,0xB8)
     doc = Document(); s = doc.sections[0]
     s.top_margin, s.bottom_margin = Cm(km(1.5)), Cm(km(1.3))
-    s.left_margin, s.right_margin = Cm(1.75), Cm(1.55)
+    s.left_margin, s.right_margin = Cm(1.6), Cm(1.45)
     W = s.page_width - s.left_margin - s.right_margin
     base_style(doc, F, kb(9.5), BODY, kl(1.18)); hyphenate(doc)
 
@@ -206,7 +206,7 @@ def banda():
     PALE = RGBColor(0xC5,0xD2,0xD6)
     doc = Document(); s = doc.sections[0]
     s.top_margin, s.bottom_margin = Cm(km(1.15)), Cm(km(1.25))
-    s.left_margin, s.right_margin = Cm(1.9), Cm(1.7)
+    s.left_margin, s.right_margin = Cm(1.6), Cm(1.45)
     W = s.page_width - s.left_margin - s.right_margin
     base_style(doc, TXT, kb(10), BODY, kl(1.16)); hyphenate(doc)
 
@@ -240,17 +240,17 @@ def banda():
         return p
 
     # ---- banda superior a sangre ----
-    BLEED_L, BLEED_R = Cm(-1.9), Cm(-1.7)
-    b1 = P(before=9, after=2, lind=BLEED_L, rind=BLEED_R)
-    shade(b1, DEEP); R(b1, "  " + C.NOMBRE_T, DISP, 23, color=WHITE, track=12)
-    b2 = P(after=3, lind=BLEED_L, rind=BLEED_R)
+    BLEED_L, BLEED_R = Cm(-1.6), Cm(-1.45)
+    b1 = P(before=5, after=1, lind=BLEED_L, rind=BLEED_R)
+    shade(b1, DEEP); R(b1, "  " + C.NOMBRE_T, DISP, 20, color=WHITE, track=10)
+    b2 = P(after=2, lind=BLEED_L, rind=BLEED_R)
     shade(b2, DEEP); R(b2, "  " + C.TITULO.upper() + "   |   " + C.CLAIM.upper(),
-                       TXT, 8.5, bold=True, color=PALE, track=40)
+                       TXT, 8, bold=True, color=PALE, track=34)
     b3 = P(after=0, lind=BLEED_L, rind=BLEED_R)
     shade(b3, DEEP)
-    R(b3, "  " + C.FONO + "   ·   " + C.MAIL + "   ·   " + C.CIUDAD, TXT, 9, color=PALE)
-    b4 = P(after=14, line=1, lind=BLEED_L, rind=BLEED_R)
-    shade(b4, DEEP); R(b4, "", TXT, 5)
+    R(b3, "  " + C.FONO + "   ·   " + C.MAIL + "   ·   " + C.CIUDAD, TXT, 8.5, color=PALE)
+    b4 = P(after=11, line=1, lind=BLEED_L, rind=BLEED_R)
+    shade(b4, DEEP); R(b4, "", TXT, 4)
 
     head("Perfil profesional", before=0)
     for i, t in enumerate(C.PERFIL):

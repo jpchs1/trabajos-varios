@@ -5,7 +5,35 @@ sys.path.insert(0, '.')
 import cv_content as C
 
 E = lambda s: html.escape(s, quote=True)
-import json, os
+import json, os, base64
+
+DOCX_MIME = "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+FILES = {
+  "minimal":  ("/home/user/trabajos-varios/cv-trabajador-social-uc/CV_Jeniffer_Mieres_01_Minimal.docx",
+               "fin_CV_Jeniffer_Mieres_01_Minimal.pdf",
+               "CV Jeniffer Mieres - Minimal"),
+  "banda":    ("/home/user/trabajos-varios/cv-trabajador-social-uc/CV_Jeniffer_Mieres_02_Banda.docx",
+               "fin_CV_Jeniffer_Mieres_02_Banda.pdf",
+               "CV Jeniffer Mieres - Banda"),
+  "sidebar":  ("/home/user/trabajos-varios/cv-trabajador-social-uc/CV_Jeniffer_Mieres_03_Sidebar.docx",
+               "fin_CV_Jeniffer_Mieres_03_Sidebar.pdf",
+               "CV Jeniffer Mieres - Sidebar"),
+}
+def b64(path):
+    return base64.b64encode(open(path, "rb").read()).decode()
+
+def downloads(sid):
+    docx_p, pdf_p, label = FILES[sid]
+    docx_href = f"data:{DOCX_MIME};base64,{b64(docx_p)}"
+    pdf_href  = f"data:application/pdf;base64,{b64(pdf_p)}"
+    return f'''<div class="dl">
+      <a class="dl-btn word" download="{E(label)}.docx" href="{docx_href}">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 3h9l5 5v13a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><path d="M14 3v5h5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><path d="M7.2 12.5l1.15 5h.05l1.1-5h1l1.1 5h.05l1.15-5" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <span>Descargar Word<i>.docx</i></span></a>
+      <a class="dl-btn pdf" download="{E(label)}.pdf" href="{pdf_href}">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 3h9l5 5v13a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><path d="M14 3v5h5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><path d="M7 17.2V12h1.55c.85 0 1.45.6 1.45 1.4s-.6 1.4-1.45 1.4H7m5.3 2.4V12h1.1c1.35 0 2.2 1 2.2 2.6s-.85 2.6-2.2 2.6h-1.1zm5.5 0V12h2.6M17.8 14.6h2" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <span>Descargar PDF<i>.pdf</i></span></a>
+    </div>'''
 FITS = json.load(open("fits.json")) if os.path.exists("fits.json") else {"minimal":1.0,"banda":1.0,"sidebar":1.0}
 FONTS = open('fsub/fonts.css').read()
 
@@ -180,6 +208,7 @@ for i, s in enumerate(SPECS):
       <h2>{E(s['name'])}{' <em>Recomendado</em>' if s['rec'] else ''}</h2>
       <p class="kicker">{E(s['tag'])}</p>
       <p class="note">{E(s['note'])}</p>
+      {downloads(s['id'])}
     </div>
     <dl class="specs">{rows}</dl>
   </div>
@@ -192,17 +221,20 @@ CSS = FONTS + r"""
   --ground:#EBEDEF; --raise:#F7F8F9; --ink:#14171A; --muted:#6A7075;
   --line:#D6D9DD; --line-soft:#E2E5E8; --accent:#1B3A4B; --accent-ink:#FFFFFF;
   --shadow:0 1px 2px rgba(16,22,26,.06), 0 12px 32px -12px rgba(16,22,26,.28);
+  --dl-word:#2957A4; --dl-pdf:#B23A2E;
   --ui:ui-sans-serif,"Segoe UI",Roboto,system-ui,-apple-system,"Helvetica Neue",Arial,sans-serif;
 }
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
   --ground:#131619; --raise:#1B1F23; --ink:#E7E9EB; --muted:#979DA3;
   --line:#272C31; --line-soft:#22262A; --accent:#8AB6C7; --accent-ink:#0E1417;
   --shadow:0 1px 2px rgba(0,0,0,.5), 0 18px 44px -14px rgba(0,0,0,.72);
+  --dl-word:#8FB4EE; --dl-pdf:#EE998B;
 }}
 :root[data-theme="dark"]{
   --ground:#131619; --raise:#1B1F23; --ink:#E7E9EB; --muted:#979DA3;
   --line:#272C31; --line-soft:#22262A; --accent:#8AB6C7; --accent-ink:#0E1417;
   --shadow:0 1px 2px rgba(0,0,0,.5), 0 18px 44px -14px rgba(0,0,0,.72);
+  --dl-word:#8FB4EE; --dl-pdf:#EE998B;
 }
 *{box-sizing:border-box}
 body{margin:0;background:var(--ground);color:var(--ink);font-family:var(--ui);
@@ -247,6 +279,20 @@ body{margin:0;background:var(--ground);color:var(--ink);font-family:var(--ui);
   font-weight:700;color:var(--accent-ink);background:var(--accent);padding:5px 10px;border-radius:999px}
 .kicker{margin:7px 0 0;font-size:.74rem;letter-spacing:.15em;text-transform:uppercase;color:var(--muted)}
 .note{margin:16px 0 0;color:var(--muted);max-width:56ch;font-size:.94rem}
+.dl{display:flex;flex-wrap:wrap;gap:10px;margin-top:22px}
+.dl-btn{display:inline-flex;align-items:center;gap:9px;appearance:none;text-decoration:none;
+  cursor:pointer;border-radius:9px;padding:10px 15px 10px 12px;font:inherit;font-size:.85rem;
+  font-weight:600;letter-spacing:.005em;border:1px solid var(--line);
+  background:var(--raise);color:var(--ink);transition:background .16s,border-color .16s,transform .12s}
+.dl-btn svg{width:19px;height:19px;flex:none}
+.dl-btn i{font-style:normal;font-weight:500;color:var(--muted);margin-left:1px}
+.dl-btn:hover{border-color:var(--accent);transform:translateY(-1px)}
+.dl-btn:active{transform:translateY(0)}
+.dl-btn.word{color:var(--dl-word)}
+.dl-btn.word:hover{background:color-mix(in srgb,var(--dl-word) 10%,var(--raise))}
+.dl-btn.pdf{color:var(--dl-pdf)}
+.dl-btn.pdf:hover{background:color-mix(in srgb,var(--dl-pdf) 10%,var(--raise))}
+
 .specs{margin:0;display:grid;grid-template-columns:1fr;gap:0;
   border-top:1px solid var(--line)}
 .sp{display:flex;justify-content:space-between;gap:20px;padding:9px 0;

@@ -30,6 +30,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           cd cv-trabajador-social-uc/site
+          mkdir -p CVJeni && cp index.html CVJeni/index.html
           touch .nojekyll
           git init -q -b gh-pages
           git config user.name "github-actions[bot]"

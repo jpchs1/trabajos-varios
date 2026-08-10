@@ -23,7 +23,7 @@ def build(name, preset):
     return f, f'sf_{base}.pdf'
 
 CHOSEN={}
-for name in ('swiss','banda','sidebar'):
+for name in ('swiss','banda','sidebar','editorial','clasico','impacto'):
     for i, pr in enumerate(PRESETS):
         f, pdf = build(name, pr)
         sl = measure(pdf)

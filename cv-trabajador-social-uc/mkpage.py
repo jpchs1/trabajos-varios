@@ -21,11 +21,21 @@ FILES = {
   "sidebar":  ("/home/user/trabajos-varios/cv-trabajador-social-uc/CV_Jeniffer_Mieres_03_Sidebar.docx",
                "fin_CV_Jeniffer_Mieres_03_Sidebar.pdf",
                "CV Jeniffer Mieres - Sidebar"),
+  "editorial":("/home/user/trabajos-varios/cv-trabajador-social-uc/CV_Jeniffer_Mieres_04_Editorial.docx",
+               "fin_CV_Jeniffer_Mieres_04_Editorial.pdf",
+               "CV Jeniffer Mieres - Editorial"),
+  "clasico":  ("/home/user/trabajos-varios/cv-trabajador-social-uc/CV_Jeniffer_Mieres_05_Clasico.docx",
+               "fin_CV_Jeniffer_Mieres_05_Clasico.pdf",
+               "CV Jeniffer Mieres - Clasico"),
+  "impacto":  ("/home/user/trabajos-varios/cv-trabajador-social-uc/CV_Jeniffer_Mieres_06_Impacto.docx",
+               "fin_CV_Jeniffer_Mieres_06_Impacto.pdf",
+               "CV Jeniffer Mieres - Impacto"),
 }
 def b64(path):
     return base64.b64encode(open(path, "rb").read()).decode()
 
-FITS = json.load(open("fits.json")) if os.path.exists("fits.json") else {"minimal":1.0,"banda":1.0,"sidebar":1.0}
+FITS = json.load(open("fits.json")) if os.path.exists("fits.json") else {}
+for _k in ("minimal","banda","sidebar","editorial","clasico","impacto"): FITS.setdefault(_k, 1.0)
 FONTS = open('fsub/fonts.css').read()
 
 # ---------------------------------------------------------------- edicion en linea
@@ -248,6 +258,126 @@ def v3_p2():
     {s3_head('Formación académica')}{edu}
   </main></div></div>"""
 
+
+# ================================================================ VARIANTE 4 (Editorial · rail)
+def s4_row(label, inner, cls=""):
+    if label:
+        lab = f'<span {ED("s4-lab")} data-role="h">{E(label)}</span>'
+    else:
+        lab = '<span class="s4-lab" aria-hidden="true"></span>'
+    return f'<div class="s4-row {cls}">{lab}<div class="s4-bd">{inner}</div></div>'
+
+def s4_job(j):
+    return (f'{org_line("s4-org", j)}'
+            f'{leaf("p","s4-role","role", j["cargo"])}'
+            f'<ul class="s4-ul">{bullets(j, "•")}</ul>')
+
+def v4_p1():
+    perfil = ''.join(leaf('p','s4-p','p', x) for x in C.PERFIL)
+    return f"""<div class="s4 pg">
+  {leaf('h1','s4-name','name', C.NOMBRE)}
+  {claim_pipe('s4-claim')}
+  {meta_flat('s4-meta')}
+  {s4_row('Perfil', perfil)}
+  {s4_row('Expertise', f'<p class="s4-tags" data-role="tagline">{tags(C.EXPERTISE)}</p>')}
+  {s4_row('Experiencia', s4_job(C.JOBS[0]) + s4_job(C.JOBS[1]), cls='exp')}
+</div>"""
+
+def v4_p2():
+    edu = "".join(edu_block('s4-edu', t, i, y) for t, i, y in C.EDU)
+    k0, r0 = C.CERTS[0]
+    certs = (f'<p class="s4-cert" {ED()} data-role="p"><b>{E(k0)}</b>{E(r0)}</p>'
+             f'<ul class="s4-ul">' +
+             "".join(f'<li data-role="bullet"><span class="bg">•</span>'
+                     f'<span {ED()}><b>{E(k)}</b>{E(r)}</span></li>' for k, r in C.CERTS[1:]) +
+             '</ul>')
+    return f"""<div class="s4 pg">
+  {s4_row('', s4_job(C.JOBS[2]), cls='exp first')}
+  {s4_row('', s4_job(C.JOBS[3]), cls='exp')}
+  {s4_row('Formación', edu)}
+  {s4_row('Certificaciones', certs)}
+  {s4_row('Competencias', f'<p class="s4-tags" data-role="tagline">{tags(C.COMPETENCIAS)}</p>')}
+  {s4_row('Herramientas', f'<p class="s4-sp" {ED()} data-role="p">{E(C.HERRAMIENTAS)}</p>')}
+  {s4_row('Disponibilidad', f'<p class="s4-sp" {ED()} data-role="p">{E(C.DISPONIBILIDAD)}</p>')}
+</div>"""
+
+# ================================================================ VARIANTE 5 (Clasico · centrado)
+def s5_head(t): return f'{leaf("h2","s5-h","h",t)}<div class="s5-rule"></div>'
+def s5_job(j):
+    return f"""<div class="s5-job">
+  {org_line('s5-org', j)}
+  {leaf('p','s5-role','role', j['cargo'])}
+  <ul class="s5-ul">{bullets(j, '·')}</ul></div>"""
+
+def v5_p1():
+    return f"""<div class="s5 pg">
+  {leaf('h1','s5-name','name', C.NOMBRE)}
+  {claim_dot('s5-claim')}
+  {meta_flat('s5-meta')}
+  <div class="s5-double"></div>
+  {s5_head('Perfil profesional')}
+  {''.join(leaf('p','s5-p','p', x) for x in C.PERFIL)}
+  {s5_head('Áreas de expertise')}
+  <p class="s5-tags" data-role="tagline">{tags(C.EXPERTISE)}</p>
+  {s5_head('Experiencia profesional')}
+  {s5_job(C.JOBS[0])}{s5_job(C.JOBS[1])}
+</div>"""
+
+def v5_p2():
+    edu = "".join(edu_block('s5-edu', t, i, y) for t, i, y in C.EDU)
+    certs = "".join(f'<li data-role="bullet"><span class="bg">·</span>'
+                     f'<span {ED()}><b>{E(k)}</b>{E(r)}</span></li>' for k, r in C.CERTS)
+    return f"""<div class="s5 pg top2">
+  {s5_job(C.JOBS[2])}{s5_job(C.JOBS[3])}
+  {s5_head('Formación académica')}{edu}
+  {s5_head('Cursos y certificaciones')}<ul class="s5-ul">{certs}</ul>
+  {s5_head('Competencias')}
+  <p class="s5-tags" data-role="tagline">{tags(C.COMPETENCIAS)}</p>
+  {s5_head('Herramientas y disponibilidad')}
+  <ul class="s5-ul">
+    <li data-role="bullet"><span class="bg">·</span><span {ED()}><b>Herramientas: </b>{E(C.HERRAMIENTAS)}</span></li>
+    <li data-role="bullet"><span class="bg">·</span><span {ED()}><b>Disponibilidad: </b>{E(C.DISPONIBILIDAD)}</span></li>
+  </ul>
+</div>"""
+
+# ================================================================ VARIANTE 6 (Impacto · franjas)
+def s6_head(t): return leaf('h2','s6-h','h', t)
+def s6_job(j):
+    return f"""<div class="s6-job">
+  {org_line('s6-org', j)}
+  {leaf('p','s6-role','role', j['cargo'])}
+  <ul class="s6-ul">{bullets(j, '▪')}</ul></div>"""
+
+def v6_p1():
+    return f"""<div class="s6 pg">
+  {leaf('h1','s6-name','name', C.NOMBRE_T)}
+  {claim_pipe('s6-claim')}
+  {meta_flat('s6-meta')}
+  {s6_head('Perfil profesional')}
+  {''.join(leaf('p','s6-p','p', x) for x in C.PERFIL)}
+  {s6_head('Áreas de expertise')}
+  <p class="s6-tags" data-role="tagline">{tags(C.EXPERTISE)}</p>
+  {s6_head('Experiencia profesional')}
+  {s6_job(C.JOBS[0])}{s6_job(C.JOBS[1])}
+</div>"""
+
+def v6_p2():
+    edu = "".join(edu_block('s6-edu', t, i, y) for t, i, y in C.EDU)
+    certs = "".join(f'<li data-role="bullet"><span class="bg">▪</span>'
+                     f'<span {ED()}><b>{E(k)}</b>{E(r)}</span></li>' for k, r in C.CERTS)
+    return f"""<div class="s6 pg top2">
+  {s6_job(C.JOBS[2])}{s6_job(C.JOBS[3])}
+  {s6_head('Formación académica')}{edu}
+  {s6_head('Cursos y certificaciones')}<ul class="s6-ul">{certs}</ul>
+  {s6_head('Competencias')}
+  <p class="s6-tags" data-role="tagline">{tags(C.COMPETENCIAS)}</p>
+  {s6_head('Herramientas y disponibilidad')}
+  <ul class="s6-ul">
+    <li data-role="bullet"><span class="bg">▪</span><span {ED()}><b>Herramientas: </b>{E(C.HERRAMIENTAS)}</span></li>
+    <li data-role="bullet"><span class="bg">▪</span><span {ED()}><b>Disponibilidad: </b>{E(C.DISPONIBILIDAD)}</span></li>
+  </ul>
+</div>"""
+
 # ---------------------------------------------------------------- ficha tecnica
 SPECS = [
  dict(id="minimal", n="01", name="Minimal", tag="Suizo · sin color", accent="0D0D0D", font="Calibri",
@@ -260,14 +390,32 @@ SPECS = [
       note="Bloque sólido en el encabezado con el nombre en blanco y cuerpo limpio abajo. "
            "Serif para nombre y cargos contra sans en el texto. Máximo impacto sin riesgo técnico.",
       spec=[("Tipografía","Cambria + Calibri"),("Cuerpo","9,6 pt"),("Acento","Petróleo #13323C"),
-            ("Holgura pág. 1","2,62 cm"),("Riesgo ATS","Nulo")], rec=True,
+            ("Holgura pág. 1","2,67 cm"),("Riesgo ATS","Nulo")], rec=True,
       pages=[v2_p1(), v2_p2()]),
  dict(id="sidebar", n="03", name="Sidebar", tag="Dos columnas", accent="1B3A4B", font="Calibri",
       note="Barra lateral tramada con expertise y competencias; columna principal con perfil y "
            "experiencia. Es el formato más usado hoy y el único con un matiz técnico.",
       spec=[("Tipografía","Calibri"),("Cuerpo","9,3 pt"),("Acento","Petróleo #1B3A4B"),
-            ("Holgura pág. 1","3,31 cm"),("Riesgo ATS","Bajo–moderado")], rec=False,
+            ("Holgura pág. 1","3,35 cm"),("Riesgo ATS","Bajo–moderado")], rec=False,
       pages=[v3_p1(), v3_p2()]),
+ dict(id="editorial", n="04", name="Editorial", tag="Raíl de etiquetas · serif", accent="6E2130", font="Cambria",
+      note="Las etiquetas de sección viven en una columna propia y el contenido cuelga de una espina "
+           "vertical. Serif editorial con acento vino: el lenguaje de un dossier de executive search.",
+      spec=[("Tipografía","Cambria + Calibri"),("Cuerpo","9,5 pt"),("Acento","Vino #6E2130"),
+            ("Holgura pág. 1","3,23 cm"),("Riesgo ATS","Nulo")], rec=False, new=True,
+      pages=[v4_p1(), v4_p2()]),
+ dict(id="clasico", n="05", name="Clásico", tag="Centrado · doble filete", accent="7A5C2E", font="Cambria",
+      note="Encabezado centrado con versales espaciadas y doble filete, títulos de sección centrados "
+           "con regla corta. Serif en todo el cuerpo y acento bronce: sobriedad académica.",
+      spec=[("Tipografía","Cambria"),("Cuerpo","9,5 pt"),("Acento","Bronce #7A5C2E"),
+            ("Holgura pág. 1","2,55 cm"),("Riesgo ATS","Nulo")], rec=False, new=True,
+      pages=[v5_p1(), v5_p2()]),
+ dict(id="impacto", n="06", name="Impacto", tag="Franjas de sección en color", accent="24435C", font="Calibri",
+      note="Nombre a gran tamaño y cada sección abre con una franja sólida de color con el título en "
+           "blanco. El más contemporáneo de los seis, manteniendo párrafos puros aptos para ATS.",
+      spec=[("Tipografía","Calibri"),("Cuerpo","9,5 pt"),("Acento","Pizarra #24435C"),
+            ("Holgura pág. 1","2,55 cm"),("Riesgo ATS","Nulo")], rec=False, new=True,
+      pages=[v6_p1(), v6_p2()]),
 ]
 
 tabs = "".join(
@@ -292,7 +440,7 @@ for i, s in enumerate(SPECS):
 <section role="tabpanel" id="p-{s['id']}" aria-labelledby="t-{s['id']}" {'hidden' if i!=1 else ''}>
   <div class="lede">
     <div class="lede-txt">
-      <h2>{E(s['name'])}{' <em>Recomendado</em>' if s['rec'] else ''}</h2>
+      <h2>{E(s['name'])}{' <em>Recomendado</em>' if s['rec'] else (' <em class="alt">Nuevo</em>' if s.get('new') else '')}</h2>
       <p class="kicker">{E(s['tag'])}</p>
       <p class="note">{E(s['note'])}</p>
       {downloads(s['id'])}
@@ -374,6 +522,7 @@ body{margin:0;background:var(--ground);color:var(--ink);font-family:var(--ui);
   display:flex;align-items:center;gap:12px;flex-wrap:wrap}
 .lede h2 em{font-style:normal;font-size:.6rem;letter-spacing:.15em;text-transform:uppercase;
   font-weight:700;color:var(--accent-ink);background:var(--accent);padding:5px 10px;border-radius:999px}
+.lede h2 em.alt{background:transparent;color:var(--accent);border:1px solid var(--accent);padding:4px 9px}
 .kicker{margin:7px 0 0;font-size:.74rem;letter-spacing:.15em;text-transform:uppercase;color:var(--muted)}
 .note{margin:16px 0 0;color:var(--muted);max-width:56ch;font-size:.94rem}
 .dl{display:flex;flex-wrap:wrap;gap:10px;margin-top:22px}
@@ -449,8 +598,8 @@ body{margin:0;background:var(--ground);color:var(--ink);font-family:var(--ui);
 .s1-job{margin-top:1.25em}.s1-job.first{margin-top:0}
 .s1-org{display:flex;justify-content:space-between;align-items:baseline;gap:1em;
   font-size:1.21em;font-weight:700;color:#0D0D0D}
-.s1-org span{font-size:.77em;font-weight:400;color:#767B80;letter-spacing:.055em;white-space:nowrap}
-.s1-role{font-size:.99em;color:#767B80;letter-spacing:.03em;margin-top:.22em!important}
+.s1-org span{font-size:.78em;font-weight:400;color:#767B80;letter-spacing:.22em;text-transform:uppercase;white-space:nowrap}
+.s1-role{font-size:.99em;font-style:italic;color:#767B80;letter-spacing:.03em;margin-top:.22em!important}
 .s1-ul{margin-top:.5em}
 .s1-ul li{gap:.62em;margin-bottom:.42em;text-align:justify;hyphens:auto}
 .s1-ul .bg{color:#B0B4B8}
@@ -458,7 +607,7 @@ body{margin:0;background:var(--ground);color:var(--ink);font-family:var(--ui);
 .s1-edu{margin-top:.72em}
 .s1-edu p:first-child{display:flex;justify-content:space-between;gap:1em;align-items:baseline}
 .s1-edu p:first-child b{color:#0D0D0D;font-size:1.04em}
-.s1-edu p:first-child span{font-size:.93em;color:#767B80;letter-spacing:.055em}
+.s1-edu p:first-child span{font-size:.78em;color:#767B80;letter-spacing:.22em;text-transform:uppercase}
 .s1-edu .i{font-size:.99em;color:#767B80}
 
 /* ============ 02 BANDA ============ */
@@ -482,9 +631,9 @@ body{margin:0;background:var(--ground);color:var(--ink);font-family:var(--ui);
 .s2-body .s2-rule + .s2-job{margin-top:0}
 .s2-org{display:flex;justify-content:space-between;align-items:baseline;gap:1em;
   font-family:'CVSerif',Cambria,Georgia,serif;font-size:1.09em;font-weight:700;color:#151A1C}
-.s2-org span{font-family:'CVSans',Calibri,sans-serif;font-size:.86em;font-weight:400;
-  color:#6E7478;letter-spacing:.045em;white-space:nowrap}
-.s2-role{font-size:.95em;color:#6E7478;letter-spacing:.02em;margin-top:.2em!important}
+.s2-org span{font-family:'CVSans',Calibri,sans-serif;font-size:.76em;font-weight:400;
+  color:#6E7478;letter-spacing:.2em;text-transform:uppercase;white-space:nowrap}
+.s2-role{font-family:'CVSerif',Cambria,Georgia,serif;font-style:italic;font-size:.98em;color:#6E7478;margin-top:.2em!important}
 .s2-ul{margin-top:.48em}
 .s2-ul li{gap:.6em;margin-bottom:.44em;text-align:justify;hyphens:auto}
 .s2-ul .bg{color:#13323C;font-size:.7em;line-height:1.9}
@@ -492,7 +641,7 @@ body{margin:0;background:var(--ground);color:var(--ink);font-family:var(--ui);
 .s2-edu{margin-top:.7em}
 .s2-edu p:first-child{display:flex;justify-content:space-between;gap:1em;align-items:baseline}
 .s2-edu p:first-child b{font-family:'CVSerif',Cambria,Georgia,serif;color:#151A1C;font-size:1.04em}
-.s2-edu p:first-child span{font-size:.9em;color:#6E7478;letter-spacing:.045em}
+.s2-edu p:first-child span{font-size:.76em;color:#6E7478;letter-spacing:.2em;text-transform:uppercase}
 .s2-edu .i{font-size:.95em;color:#6E7478}
 
 /* ============ 03 SIDEBAR ============ */
@@ -504,7 +653,7 @@ body{margin:0;background:var(--ground);color:var(--ink);font-family:var(--ui);
 .s3-meta{font-size:.9em;margin-top:.36em!important;opacity:.92}
 .s3-cols{display:grid;grid-template-columns:25.7% 1fr;gap:0;align-items:start;
   padding:1.1em 6.67cqw 0 7.14cqw}
-.s3-side{background:#F1F4F5;padding:1.15em 1.25em 1.6em;margin-left:-1.25em}
+.s3-side{background:#EFF3F5;border-left:.34em solid #1B3A4B;padding:1.15em 1.25em 1.6em;margin-left:-1.25em}
 .s3-main{padding-left:1.9em}
 .s3-h{font-size:.82em;font-weight:700;letter-spacing:.2em;text-transform:uppercase;
   color:#1B3A4B;margin:1.5em 0 0;text-wrap:balance}
@@ -519,13 +668,127 @@ body{margin:0;background:var(--ground);color:var(--ink);font-family:var(--ui);
 .s3-main .s3-rule + .s3-job{margin-top:0}
 .s3-org{font-size:1.12em;font-weight:700;color:#151A1C}
 .s3-role{font-size:.95em;color:#6E7478;margin-top:.16em!important}
-.s3-dates{font-size:.9em;font-weight:700;color:#1B3A4B;letter-spacing:.045em;margin-top:.1em!important}
+.s3-dates{font-size:.8em;font-weight:700;color:#1B3A4B;letter-spacing:.18em;text-transform:uppercase;margin-top:.12em!important}
 .s3-ul{margin-top:.45em}
 .s3-ul li{gap:.55em;margin-bottom:.42em;text-align:justify;hyphens:auto}
 .s3-ul b{color:#151A1C}
 .s3-edu{margin-top:.62em}
 .s3-edu b{color:#151A1C}
 .s3-edu .i{font-size:.94em;color:#6E7478}
+
+/* ============ 04 EDITORIAL ============ */
+.s4{font-family:'CVSerif',Cambria,Georgia,serif;font-size:calc(1.575cqw*var(--fit,1));line-height:1.42;
+  padding:4.6cqw 7.14cqw 0 8.10cqw;color:#33373B}
+.s4-name{font-size:2.08em;font-weight:400;color:#16181A;letter-spacing:.09em}
+.s4-claim{font-family:'CVSans',Calibri,sans-serif;font-size:1.03em;color:#4A4F54;
+  letter-spacing:.045em;margin-top:.32em!important}
+.s4-claim i{font-style:normal;color:#6E2130;padding:0 .8em}
+.s4-meta{font-family:'CVSans',Calibri,sans-serif;font-size:.88em;color:#6C7176;letter-spacing:.03em;
+  margin-top:.5em!important;padding-bottom:.65em;border-bottom:1px solid #6E2130}
+.s4-row{display:grid;grid-template-columns:16.3% 1fr;margin-top:1.55em}
+.s4-row.exp{margin-top:1.45em}
+.s4-row.exp.first{margin-top:1.05em}
+.s4-row.exp + .s4-row.exp{margin-top:1.25em}
+.s4-lab{font-family:'CVSans',Calibri,sans-serif;font-size:.77em;font-weight:700;color:#6E2130;
+  letter-spacing:.18em;text-transform:uppercase;padding-top:.28em}
+.s4-bd{min-width:0}
+.s4-p{margin-bottom:.55em!important;text-align:justify;hyphens:auto}
+.s4-p:last-child{margin-bottom:0!important}
+.s4-tags{line-height:1.55;font-size:.9em}
+.s4-tags .sep{font-style:normal;color:#A8ADB2;padding:0 .5em}
+.s4-org{display:flex;justify-content:space-between;align-items:baseline;gap:1em;
+  font-size:1.1em;font-weight:700;color:#16181A}
+.s4-org span:last-child{font-family:'CVSans',Calibri,sans-serif;font-size:.71em;font-weight:400;
+  color:#6C7176;letter-spacing:.2em;text-transform:uppercase;white-space:nowrap}
+.s4-role{font-family:'CVSans',Calibri,sans-serif;font-style:italic;font-size:.93em;color:#6C7176;
+  margin-top:.18em!important}
+.s4-ul{margin-top:.45em}
+.s4-bd > .s4-org ~ .s4-org{margin-top:1.25em}
+.s4-ul li{gap:.55em;margin-bottom:.5em;text-align:justify;hyphens:auto}
+.s4-ul .bg{color:#6E2130;font-size:.85em;line-height:1.65}
+.s4-ul b{color:#16181A}
+.s4-cert{margin-bottom:.5em!important;text-align:justify;hyphens:auto}
+.s4-cert b,.s4-edu b{color:#16181A}
+.s4-edu{margin-top:.65em}
+.s4-edu:first-child{margin-top:0}
+.s4-edu p:first-child{display:flex;justify-content:space-between;gap:1em;align-items:baseline}
+.s4-edu p:first-child span{font-family:'CVSans',Calibri,sans-serif;font-size:.76em;color:#6C7176;
+  letter-spacing:.2em;text-transform:uppercase}
+.s4-edu .i{font-family:'CVSans',Calibri,sans-serif;font-style:italic;font-size:.9em;color:#6C7176}
+.s4-sp{text-align:justify;hyphens:auto;font-size:.95em}
+
+/* ============ 05 CLASICO ============ */
+.s5{font-family:'CVSerif',Cambria,Georgia,serif;font-size:calc(1.60cqw*var(--fit,1));line-height:1.42;
+  padding:4.9cqw 9.05cqw 0 9.05cqw;color:#35383B}
+.s5.top2{padding-top:5.4cqw}
+.s5-name{font-size:1.98em;font-weight:400;color:#1A1A1A;letter-spacing:.26em;text-align:center;
+  text-transform:uppercase}
+.s5-claim{font-family:'CVSans',Calibri,sans-serif;font-size:.83em;font-weight:700;color:#70747A;
+  letter-spacing:.3em;text-transform:uppercase;text-align:center;margin-top:.55em!important}
+.s5-claim .csep{font-style:normal;color:#7A5C2E;padding:0 .8em}
+.s5-meta{font-family:'CVSans',Calibri,sans-serif;font-size:.89em;color:#70747A;letter-spacing:.05em;
+  text-align:center;margin-top:.5em!important}
+.s5-double{border-bottom:4px double #7A5C2E;margin-top:.75em}
+.s5-h{font-family:'CVSans',Calibri,sans-serif;font-size:.84em;font-weight:700;color:#7A5C2E;
+  letter-spacing:.4em;text-transform:uppercase;text-align:center;margin-top:1.6em}
+.s5 > .s5-h:first-of-type{margin-top:1.35em}
+.s5.top2 > .s5-h:first-of-type{margin-top:1.6em}
+.s5-rule{width:12.5%;margin:.42em auto .75em;border-bottom:2px solid #7A5C2E}
+.s5-p{margin-bottom:.55em!important;text-align:justify;hyphens:auto}
+.s5-tags{line-height:1.55;font-size:.9em;text-align:center}
+.s5-tags .sep{font-style:normal;color:#7A5C2E;padding:0 .5em}
+.s5-job{margin-top:1.3em}
+.s5-rule + .s5-job{margin-top:0}
+.s5-org{display:flex;justify-content:space-between;align-items:baseline;gap:1em;
+  font-size:1.1em;font-weight:700;color:#1A1A1A}
+.s5-org span:last-child{font-family:'CVSans',Calibri,sans-serif;font-size:.71em;font-weight:700;
+  color:#7A5C2E;letter-spacing:.18em;text-transform:uppercase;white-space:nowrap}
+.s5-role{font-style:italic;font-size:.97em;color:#70747A;margin-top:.18em!important}
+.s5-ul{margin-top:.45em}
+.s5-ul li{gap:.55em;margin-bottom:.48em;text-align:justify;hyphens:auto}
+.s5-ul .bg{color:#7A5C2E;font-weight:700}
+.s5-ul b{color:#1A1A1A}
+.s5-edu{margin-top:.62em}
+.s5-edu p:first-child{display:flex;justify-content:space-between;gap:1em;align-items:baseline}
+.s5-edu p:first-child b{color:#1A1A1A}
+.s5-edu p:first-child span{font-family:'CVSans',Calibri,sans-serif;font-size:.71em;font-weight:700;
+  color:#7A5C2E;letter-spacing:.18em;text-transform:uppercase}
+.s5-edu .i{font-style:italic;font-size:.92em;color:#70747A}
+
+/* ============ 06 IMPACTO ============ */
+.s6{font-family:'CVSans',Calibri,sans-serif;font-size:calc(1.575cqw*var(--fit,1));line-height:1.38;
+  padding:4.6cqw 7.14cqw 0 7.62cqw;color:#33373B}
+.s6.top2{padding-top:5.1cqw}
+.s6-name{font-size:2.72em;font-weight:700;color:#171A1E;letter-spacing:-.005em;line-height:1.04}
+.s6-claim{font-size:.88em;font-weight:700;color:#24435C;letter-spacing:.26em;text-transform:uppercase;
+  margin-top:.45em!important}
+.s6-claim i{font-style:normal;opacity:.5;padding:0 .8em}
+.s6-meta{font-size:.94em;color:#6E7378;margin-top:.45em!important;padding-bottom:.6em;
+  border-bottom:.3em solid #24435C}
+.s6-h{background:#24435C;color:#FFFFFF;font-size:.88em;font-weight:700;letter-spacing:.28em;
+  text-transform:uppercase;padding:.3em .7em;margin-top:1.45em}
+.s6 > .s6-h:first-of-type{margin-top:1.25em}
+.s6.top2 > .s6-h:first-of-type{margin-top:1.45em}
+.s6-h + .s6-p,.s6-h + .s6-tags,.s6-h + .s6-job,.s6-h + .s6-ul,.s6-h + .s6-edu{margin-top:.65em}
+.s6-p{margin-bottom:.55em!important;text-align:justify;hyphens:auto}
+.s6-tags{line-height:1.5;font-size:.94em}
+.s6-tags .sep{font-style:normal;color:#AEB3B6;padding:0 .5em}
+.s6-job{margin-top:1.15em}
+.s6-org{display:flex;justify-content:space-between;align-items:baseline;gap:1em;
+  font-size:1.1em;font-weight:700;color:#171A1E}
+.s6-org span:last-child{font-size:.73em;font-weight:700;color:#24435C;letter-spacing:.18em;
+  text-transform:uppercase;white-space:nowrap}
+.s6-role{font-style:italic;font-size:.94em;color:#6E7378;margin-top:.16em!important}
+.s6-ul{margin-top:.45em}
+.s6-ul li{gap:.55em;margin-bottom:.5em;text-align:justify;hyphens:auto}
+.s6-ul .bg{color:#24435C;font-size:.68em;line-height:2}
+.s6-ul b{color:#171A1E}
+.s6-edu{margin-top:.62em}
+.s6-edu p:first-child{display:flex;justify-content:space-between;gap:1em;align-items:baseline}
+.s6-edu p:first-child b{color:#171A1E}
+.s6-edu p:first-child span{font-size:.73em;font-weight:700;color:#24435C;letter-spacing:.18em;
+  text-transform:uppercase}
+.s6-edu .i{font-style:italic;font-size:.92em;color:#6E7378}
 
 /* ---------- pie ---------- */
 .foot{margin-top:64px;padding-top:26px;border-top:1px solid var(--line);
@@ -542,6 +805,7 @@ body{margin:0;background:var(--ground);color:var(--ink);font-family:var(--ui);
   #print-root .pframe:last-child{break-after:auto}
   #print-root .sheet{width:210mm;height:297mm;box-shadow:none;border-radius:0}
   #print-root .ed{background:none!important;box-shadow:none!important}
+  #print-root *{-webkit-print-color-adjust:exact;print-color-adjust:exact}
   @page{size:A4;margin:0}
 }
 @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
@@ -842,12 +1106,12 @@ HTML = f"""<title>Propuestas de diseño de CV · Jeniffer Mieres Contreras</titl
 <div class="wrap">
   <header class="top">
     <div>
-      <p class="eyebrow">Tres propuestas · Agosto 2026</p>
+      <p class="eyebrow">Seis propuestas · Agosto 2026</p>
       <h1 class="title">Jeniffer Mieres Contreras<span>Trabajadora Social</span></h1>
     </div>
-    <p class="stand">Tres tratamientos visuales para la postulación a <b>Trabajador/a Social ·
+    <p class="stand">Seis tratamientos visuales para la postulación a <b>Trabajador/a Social ·
       Subdirección de Bienestar y Compensaciones</b> de la Pontificia Universidad Católica de Chile.
-      El contenido es idéntico en los tres; solo cambia el diseño.</p>
+      El contenido es idéntico en los seis; solo cambia el diseño.</p>
   </header>
   <p class="edit-hint">{PENCIL}<span>Haz clic en cualquier texto de una hoja para editarlo. Los cambios se
     guardan <b>automáticamente en este navegador</b> — nadie más los ve, y puedes restablecer el original
@@ -857,7 +1121,7 @@ HTML = f"""<title>Propuestas de diseño de CV · Jeniffer Mieres Contreras</titl
   {panels}
 
   <footer class="foot">
-    <p>Las tres cierran en <b>2 páginas exactas</b>, sin ningún cargo partido entre páginas.</p>
+    <p>Las seis cierran en <b>2 páginas exactas</b>, sin ningún cargo partido entre páginas.</p>
     <p>Tipografías incrustadas con las métricas de <b>Calibri</b> y <b>Cambria</b>.</p>
   </footer>
 </div>

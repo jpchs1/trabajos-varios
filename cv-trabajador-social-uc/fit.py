@@ -8,7 +8,7 @@ def measure():
         pg = b.new_context(viewport={'width':1440,'height':1200}).new_page()
         pg.goto(f"file://{D}/cv_propuestas.html"); pg.wait_for_timeout(600)
         res={}
-        for tab in ("minimal","banda","sidebar"):
+        for tab in ("minimal","banda","sidebar","editorial","clasico","impacto"):
             pg.click(f"#t-{tab}"); pg.wait_for_timeout(220)
             res[tab]=pg.evaluate("""()=>[...document.querySelectorAll('section:not([hidden]) .pg')].map(el=>{
               const box=el.getBoundingClientRect(); let last=0;

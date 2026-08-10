@@ -43,9 +43,9 @@ def base_style(doc, font, size, color, line):
     pf = st.paragraph_format
     pf.space_before = Pt(0); pf.space_after = Pt(0); pf.line_spacing = line
 
-def R(p, text, font, size, bold=False, color=None, track=None, caps=False):
+def R(p, text, font, size, bold=False, color=None, track=None, caps=False, italic=False):
     r = p.add_run(text)
-    r.font.name = font; r.font.size = Pt(size); r.bold = bold
+    r.font.name = font; r.font.size = Pt(size); r.bold = bold; r.italic = italic
     if color is not None: r.font.color.rgb = color
     rp = r._element.get_or_add_rPr()
     rp.rFonts.set(qn("w:eastAsia"), font); rp.rFonts.set(qn("w:cs"), font)
@@ -169,14 +169,14 @@ def swiss():
         p = P(before=0 if j == 0 else kj(12), keep=True, tabs=[(W, WD_TAB_ALIGNMENT.RIGHT)])
         if j == 2: p.paragraph_format.page_break_before = True
         R(p, job["empresa"], F, kb(11), bold=True, color=INK)
-        R(p, "\t" + job["fechas"], F, 8.5, color=META, track=16)
-        q = P(before=2, after=5, keep=True); R(q, job["cargo"], F, 9, color=META, track=8)
+        R(p, "\t" + job["fechas"], F, 7.4, color=META, track=24, caps=True)
+        q = P(before=2, after=5, keep=True); R(q, job["cargo"], F, 9, color=META, track=8, italic=True)
         keep_block([p, q] + [bullet(*b) for b in job["bullets"]])
 
     head("Formación académica")
     for i, (t, inst, y) in enumerate(C.EDU):
         p = P(before=0 if i == 0 else 8, keep=True, tabs=[(W, WD_TAB_ALIGNMENT.RIGHT)])
-        R(p, t, F, 9.5, bold=True, color=INK); R(p, "\t" + y, F, 8.5, color=META, track=16)
+        R(p, t, F, 9.5, bold=True, color=INK); R(p, "\t" + y, F, 7.4, color=META, track=24, caps=True)
         q = P(before=1.5); R(q, inst, F, 9, color=META); keep_block([p, q])
 
     head("Cursos y certificaciones")
@@ -267,14 +267,14 @@ def banda():
         p = P(before=0 if j == 0 else kj(12), keep=True, tabs=[(W, WD_TAB_ALIGNMENT.RIGHT)])
         if j == 2: p.paragraph_format.page_break_before = True
         R(p, job["empresa"], DISP, kb(10.5), bold=True, color=INK)
-        R(p, "\t" + job["fechas"], TXT, 9, color=META, track=12)
-        q = P(before=2, after=5, keep=True); R(q, job["cargo"], TXT, 9.5, color=META, track=6)
+        R(p, "\t" + job["fechas"], TXT, 7.6, color=META, track=22, caps=True)
+        q = P(before=2, after=5, keep=True); R(q, job["cargo"], DISP, 9.5, color=META, track=4, italic=True)
         keep_block([p, q] + [bullet(*b) for b in job["bullets"]])
 
     head("Formación académica")
     for i, (t, inst, y) in enumerate(C.EDU):
         p = P(before=0 if i == 0 else 8, keep=True, tabs=[(W, WD_TAB_ALIGNMENT.RIGHT)])
-        R(p, t, DISP, 10, bold=True, color=INK); R(p, "\t" + y, TXT, 9, color=META, track=12)
+        R(p, t, DISP, 10, bold=True, color=INK); R(p, "\t" + y, TXT, 7.6, color=META, track=22, caps=True)
         q = P(before=1.5); R(q, inst, TXT, 9.5, color=META); keep_block([p, q])
 
     head("Cursos y certificaciones")
@@ -359,7 +359,10 @@ def sidebar():
         t = doc.add_table(rows=1, cols=2); t.alignment = WD_TABLE_ALIGNMENT.LEFT
         fixed_table(t, [SIDE, MAIN])
         L, Rc = t.rows[0].cells[0], t.rows[0].cells[1]
-        cell_shade(L, "F1F4F5")
+        cell_shade(L, "EFF3F5")
+        tb = OxmlElement("w:tcBorders")
+        tb.append(el("w:start", val="single", sz=18, space=0, color=DEEP))
+        L._tc.get_or_add_tcPr().append(tb)
         cell_pad(L, 0.32, 0.32, 0.32, 0.32); cell_pad(Rc, 0.32, 0.5, 0.32, 0)
         for c in (L, Rc):
             c.paragraphs[0].text = ""
@@ -370,7 +373,7 @@ def sidebar():
         p = par(cont, keep=True); R(p, job["empresa"], F, kb(10.5), bold=True, color=INK)
         q = par(cont, before=1.5, keep=True); R(q, job["cargo"], F, kb(9), color=META)
         d = par(cont, before=0.5, after=4, keep=True)
-        R(d, job["fechas"], F, kb(8.5), bold=True, color=ACC, track=12)
+        R(d, job["fechas"], F, 7.6, bold=True, color=ACC, track=20, caps=True)
         keep_block([p, q, d] + [bullet(cont, *b) for b in job["bullets"]])
         return p
 
@@ -414,6 +417,304 @@ def sidebar():
 
     f = OUT + "CV_Jeniffer_Mieres_03_Sidebar.docx"; doc.save(f); return f
 
-BUILDERS = dict(swiss=swiss, banda=banda, sidebar=sidebar)
+
+# =============================================================================
+# VARIANTE 4 — EDITORIAL (rail de etiquetas, serif, acento oxblood)
+# =============================================================================
+def rail():
+    SERIF, SANS = "Cambria", "Calibri"
+    INK = RGBColor(0x16,0x18,0x1A); BODY = RGBColor(0x33,0x37,0x3B)
+    META = RGBColor(0x6C,0x71,0x76); FAINT = RGBColor(0xA8,0xAD,0xB2)
+    ACC = RGBColor(0x6E,0x21,0x30); HAIR = "6E2130"
+    doc = Document(); s = doc.sections[0]
+    s.top_margin, s.bottom_margin = Cm(km(1.25)), Cm(km(1.15))
+    s.left_margin, s.right_margin = Cm(1.7), Cm(1.5)
+    W = s.page_width - s.left_margin - s.right_margin
+    RAILW, BUL = Cm(2.9), Cm(0.34)
+    base_style(doc, SERIF, kb(9.5), BODY, kl(1.21)); hyphenate(doc, zone=510)
+
+    def P(before=0, after=0, line=None, keep=False, indent=None, hang=None, tabs=(), just=False, brk=False):
+        p = doc.add_paragraph(); pf = p.paragraph_format
+        pf.space_before, pf.space_after = Pt(before), Pt(after)
+        pf.line_spacing = kl(1.21) if line is None else line
+        if keep: pf.keep_with_next = True
+        if indent is not None: pf.left_indent = indent
+        if hang is not None: pf.first_line_indent = hang
+        for pos, al in tabs: pf.tab_stops.add_tab_stop(pos, al)
+        if just: p.alignment = WD_ALIGN_PARAGRAPH.JUSTIFY
+        if brk: pf.page_break_before = True
+        return p
+
+    def railp(label, before, right_tab=False, just=True, brk=False):
+        tabs = [(RAILW, WD_TAB_ALIGNMENT.LEFT)]
+        if right_tab: tabs.append((W, WD_TAB_ALIGNMENT.RIGHT))
+        p = P(before=ks(before), keep=True, indent=RAILW, hang=-RAILW, tabs=tabs, just=just, brk=brk)
+        R(p, label, SANS, 7.5, bold=True, color=ACC, track=20, caps=True); p.add_run("\t")
+        return p
+
+    def bullet(pre, key, post):
+        p = P(after=kbu(4.6), indent=RAILW+BUL, hang=-BUL, just=True)
+        R(p, "\u2022", SERIF, 8.5, color=ACC); p.add_run("\t")
+        if pre: R(p, pre, SERIF, kb(9.5))
+        if key: R(p, key, SERIF, kb(9.5), bold=True, color=INK)
+        if post: R(p, post, SERIF, kb(9.5))
+        return p
+
+    p = P(after=2); R(p, C.NOMBRE, SERIF, 20, color=INK, track=36)
+    p = P(after=3)
+    R(p, C.TITULO, SANS, 10, color=RGBColor(0x4A,0x4F,0x54), track=14)
+    R(p, "   |   ", SANS, 10, color=ACC)
+    R(p, C.CLAIM, SANS, 10, color=RGBColor(0x4A,0x4F,0x54), track=14)
+    p = P(after=0)
+    R(p, C.FONO + "   \u00b7   " + C.MAIL + "   \u00b7   " + C.CIUDAD, SANS, 8.5, color=META, track=10)
+    border(p, "bottom", HAIR, 4, space=7)
+
+    p = railp("Perfil", 14); R(p, C.PERFIL[0], SERIF, kb(9.5))
+    for t in C.PERFIL[1:]:
+        q = P(before=kp(6), indent=RAILW, just=True); R(q, t, SERIF, kb(9.5))
+
+    p = railp("Expertise", 13, just=False); no_hyph(p)
+    p.paragraph_format.line_spacing = kl(1.3)
+    for i, t in enumerate(C.EXPERTISE):
+        if i: R(p, "  \u00b7  ", SERIF, 8.5, color=FAINT)
+        R(p, t, SERIF, 8.5)
+
+    def job(j, first=False, label=None, brk=False):
+        if first:
+            p = railp(label, 14, right_tab=True, just=False, brk=brk)
+        else:
+            p = P(before=kj(12), keep=True, indent=RAILW,
+                  tabs=[(W, WD_TAB_ALIGNMENT.RIGHT)], brk=brk)
+        R(p, j["empresa"], SERIF, kb(10.5), bold=True, color=INK); p.add_run("\t")
+        R(p, j["fechas"], SANS, 7.6, color=META, track=20, caps=True)
+        q = P(before=1.5, after=3.5, keep=True, indent=RAILW)
+        R(q, j["cargo"], SANS, 8.8, color=META, track=6, italic=True)
+        keep_block([p, q] + [bullet(*b) for b in j["bullets"]])
+
+    job(C.JOBS[0], first=True, label="Experiencia")
+    job(C.JOBS[1])
+    job(C.JOBS[2], brk=True)
+    job(C.JOBS[3])
+
+    def edu(t, inst, y, first=False):
+        if first:
+            p = railp("Formaci\u00f3n", 14, right_tab=True, just=False)
+        else:
+            p = P(before=6.5, keep=True, indent=RAILW, tabs=[(W, WD_TAB_ALIGNMENT.RIGHT)])
+        R(p, t, SERIF, kb(9.5), bold=True, color=INK); p.add_run("\t")
+        R(p, y, SANS, 7.6, color=META, track=20, caps=True)
+        q = P(before=1, indent=RAILW); R(q, inst, SANS, 8.5, color=META, italic=True)
+        keep_block([p, q])
+    for i, (t, inst, y) in enumerate(C.EDU): edu(t, inst, y, first=(i == 0))
+
+    p = railp("Certificaciones", 13)
+    k, r = C.CERTS[0]
+    R(p, k, SERIF, kb(9.5), bold=True, color=INK); R(p, r, SERIF, kb(9.5))
+    for k, r in C.CERTS[1:]: bullet("", k, r)
+
+    p = railp("Competencias", 13, just=False); no_hyph(p)
+    p.paragraph_format.line_spacing = kl(1.3)
+    for i, t in enumerate(C.COMPETENCIAS):
+        if i: R(p, "  \u00b7  ", SERIF, 8.5, color=FAINT)
+        R(p, t, SERIF, 8.5)
+    p = railp("Herramientas", 12); R(p, C.HERRAMIENTAS, SERIF, kb(9))
+    p = railp("Disponibilidad", 9); R(p, C.DISPONIBILIDAD, SERIF, kb(9))
+
+    f = OUT + "CV_Jeniffer_Mieres_04_Editorial.docx"; doc.save(f); return f
+
+# =============================================================================
+# VARIANTE 5 — CLASICO (centrado, serif, doble filete, acento bronce)
+# =============================================================================
+def centro():
+    SERIF, SANS = "Cambria", "Calibri"
+    INK = RGBColor(0x1A,0x1A,0x1A); BODY = RGBColor(0x35,0x38,0x3B)
+    META = RGBColor(0x70,0x74,0x78); ACC = RGBColor(0x7A,0x5C,0x2E); HAIR = "7A5C2E"
+    doc = Document(); s = doc.sections[0]
+    s.top_margin, s.bottom_margin = Cm(km(1.3)), Cm(km(1.2))
+    s.left_margin, s.right_margin = Cm(1.9), Cm(1.9)
+    W = s.page_width - s.left_margin - s.right_margin
+    base_style(doc, SERIF, kb(9.5), BODY, kl(1.18)); hyphenate(doc, zone=510)
+
+    def P(before=0, after=0, line=None, keep=False, indent=None, hang=None, tabs=(),
+          just=False, center=False, brk=False, lind=None, rind=None):
+        p = doc.add_paragraph(); pf = p.paragraph_format
+        pf.space_before, pf.space_after = Pt(before), Pt(after)
+        pf.line_spacing = kl(1.18) if line is None else line
+        if keep: pf.keep_with_next = True
+        if indent is not None: pf.left_indent = indent
+        if lind is not None: pf.left_indent = lind
+        if rind is not None: pf.right_indent = rind
+        if hang is not None: pf.first_line_indent = hang
+        for pos, al in tabs: pf.tab_stops.add_tab_stop(pos, al)
+        if just: p.alignment = WD_ALIGN_PARAGRAPH.JUSTIFY
+        if center: p.alignment = WD_ALIGN_PARAGRAPH.CENTER
+        if brk: pf.page_break_before = True
+        return p
+
+    def head(t, before=14, brk=False):
+        h = P(before=ks(before), after=1, keep=True, center=True, brk=brk)
+        R(h, t.upper(), SANS, 8, bold=True, color=ACC, track=44)
+        from docx.shared import Emu
+        side = Emu(int((W - Cm(2.4)) / 2))
+        r = P(before=1.5, after=6, line=1, keep=True, lind=side, rind=side)
+        border(r, "bottom", HAIR, 8, space=0); R(r, "", SANS, 2)
+
+    def bullet(pre, key, post):
+        p = P(after=kbu(3.4), indent=Cm(0.4), hang=Cm(-0.4), just=True)
+        R(p, "\u00b7", SERIF, 10, bold=True, color=ACC); p.add_run("\t")
+        p.paragraph_format.tab_stops.add_tab_stop(Cm(0.4), WD_TAB_ALIGNMENT.LEFT)
+        if pre: R(p, pre, SERIF, kb(9.5))
+        if key: R(p, key, SERIF, kb(9.5), bold=True, color=INK)
+        if post: R(p, post, SERIF, kb(9.5))
+        return p
+
+    p = P(after=3, center=True); R(p, C.NOMBRE, SERIF, 19, color=INK, track=52, caps=True)
+    p = P(after=2.5, center=True)
+    R(p, C.TITULO.upper(), SANS, 8, bold=True, color=META, track=36)
+    R(p, "   \u00b7   ", SANS, 8, color=ACC)
+    R(p, C.CLAIM.upper(), SANS, 8, bold=True, color=META, track=36)
+    p = P(after=2, center=True)
+    R(p, C.FONO + "   \u00b7   " + C.MAIL + "   \u00b7   " + C.CIUDAD, SANS, 8.5, color=META, track=8)
+    r = P(after=0, line=1)
+    b = OxmlElement("w:pBdr"); bt = el("w:bottom", val="double", sz=8, space=6, color=HAIR)
+    b.append(bt); r._p.get_or_add_pPr().append(b); R(r, "", SANS, 2)
+
+    head("Perfil profesional", 12)
+    for i, t in enumerate(C.PERFIL):
+        q = P(before=0 if i == 0 else kp(4.5), just=True); R(q, t, SERIF, kb(9.5))
+
+    head("\u00c1reas de expertise", 13)
+    p = P(just=False, center=True, line=kl(1.3)); no_hyph(p)
+    for i, t in enumerate(C.EXPERTISE):
+        if i: R(p, "  \u00b7  ", SERIF, 8.5, color=ACC)
+        R(p, t, SERIF, 8.5)
+
+    def job(j, brk=False, before=kj(10)):
+        p = P(before=before, keep=True, tabs=[(W, WD_TAB_ALIGNMENT.RIGHT)], brk=brk)
+        R(p, j["empresa"], SERIF, kb(10.5), bold=True, color=INK); p.add_run("\t")
+        R(p, j["fechas"], SANS, 7.6, bold=True, color=ACC, track=18, caps=True)
+        q = P(before=1.5, after=3.5, keep=True)
+        R(q, j["cargo"], SERIF, kb(9.3), color=META, italic=True)
+        keep_block([p, q] + [bullet(*b) for b in j["bullets"]])
+
+    head("Experiencia profesional", 13)
+    job(C.JOBS[0], before=0); job(C.JOBS[1])
+    job(C.JOBS[2], brk=True); job(C.JOBS[3])
+
+    head("Formaci\u00f3n acad\u00e9mica", 14)
+    for i, (t, inst, y) in enumerate(C.EDU):
+        p = P(before=0 if i == 0 else 6.5, keep=True, tabs=[(W, WD_TAB_ALIGNMENT.RIGHT)])
+        R(p, t, SERIF, kb(9.5), bold=True, color=INK); p.add_run("\t")
+        R(p, y, SANS, 7.6, bold=True, color=ACC, track=18, caps=True)
+        q = P(before=1); R(q, inst, SERIF, kb(8.8), color=META, italic=True)
+        keep_block([p, q])
+
+    head("Cursos y certificaciones", 13)
+    for k, r_ in C.CERTS: bullet("", k, r_)
+
+    head("Competencias", 13)
+    p = P(just=False, center=True, line=kl(1.3)); no_hyph(p)
+    for i, t in enumerate(C.COMPETENCIAS):
+        if i: R(p, "  \u00b7  ", SERIF, 8.5, color=ACC)
+        R(p, t, SERIF, 8.5)
+
+    head("Herramientas y disponibilidad", 13)
+    bullet("", "Herramientas: ", C.HERRAMIENTAS)
+    bullet("", "Disponibilidad: ", C.DISPONIBILIDAD)
+
+    f = OUT + "CV_Jeniffer_Mieres_05_Clasico.docx"; doc.save(f); return f
+
+# =============================================================================
+# VARIANTE 6 — IMPACTO (franjas de seccion en color, sans, acento pizarra)
+# =============================================================================
+def impacto():
+    F = "Calibri"
+    INK = RGBColor(0x17,0x1A,0x1E); BODY = RGBColor(0x33,0x37,0x3B)
+    META = RGBColor(0x6E,0x73,0x78); ACC = RGBColor(0x24,0x43,0x5C)
+    WHITE = RGBColor(0xFF,0xFF,0xFF); FILL = "24435C"
+    doc = Document(); s = doc.sections[0]
+    s.top_margin, s.bottom_margin = Cm(km(1.2)), Cm(km(1.1))
+    s.left_margin, s.right_margin = Cm(1.6), Cm(1.5)
+    W = s.page_width - s.left_margin - s.right_margin
+    base_style(doc, F, kb(9.5), BODY, kl(1.16)); hyphenate(doc, zone=510)
+
+    def P(before=0, after=0, line=None, keep=False, indent=None, hang=None, tabs=(), just=False, brk=False):
+        p = doc.add_paragraph(); pf = p.paragraph_format
+        pf.space_before, pf.space_after = Pt(before), Pt(after)
+        pf.line_spacing = kl(1.16) if line is None else line
+        if keep: pf.keep_with_next = True
+        if indent is not None: pf.left_indent = indent
+        if hang is not None: pf.first_line_indent = hang
+        for pos, al in tabs: pf.tab_stops.add_tab_stop(pos, al)
+        if just: p.alignment = WD_ALIGN_PARAGRAPH.JUSTIFY
+        if brk: pf.page_break_before = True
+        return p
+
+    def head(t, before=13, brk=False):
+        h = P(before=ks(before), after=5, keep=True, line=1.35, brk=brk)
+        shade(h, FILL)
+        R(h, "  " + t.upper(), F, 8.5, bold=True, color=WHITE, track=32)
+
+    def bullet(pre, key, post):
+        p = P(after=kbu(3.6), indent=Cm(0.4), hang=Cm(-0.4), just=True)
+        R(p, "\u25aa", F, 6.5, color=ACC); p.add_run("\t")
+        if pre: R(p, pre, F, kb(9.5))
+        if key: R(p, key, F, kb(9.5), bold=True, color=INK)
+        if post: R(p, post, F, kb(9.5))
+        return p
+
+    p = P(after=2); R(p, C.NOMBRE_T, F, 26, bold=True, color=INK)
+    p = P(after=2.5)
+    R(p, C.TITULO.upper() + "   |   " + C.CLAIM.upper(), F, 8.5, bold=True, color=ACC, track=30)
+    p = P(after=0)
+    R(p, C.FONO + "   \u00b7   " + C.MAIL + "   \u00b7   " + C.CIUDAD, F, 9, color=META)
+    border(p, "bottom", FILL, 22, space=6)
+
+    head("Perfil profesional", 12)
+    for i, t in enumerate(C.PERFIL):
+        q = P(before=0 if i == 0 else kp(4.5), just=True); R(q, t, F, kb(9.5))
+
+    head("\u00c1reas de expertise")
+    p = P(line=kl(1.3)); no_hyph(p)
+    for i, t in enumerate(C.EXPERTISE):
+        if i: R(p, "  \u00b7  ", F, 9, color=RGBColor(0xAE,0xB3,0xB6))
+        R(p, t, F, 9)
+
+    def job(j, brk=False, before=kj(10.5)):
+        p = P(before=before, keep=True, tabs=[(W, WD_TAB_ALIGNMENT.RIGHT)], brk=brk)
+        R(p, j["empresa"], F, kb(10.5), bold=True, color=INK); p.add_run("\t")
+        R(p, j["fechas"], F, 7.6, bold=True, color=ACC, track=20, caps=True)
+        q = P(before=1.5, after=3.5, keep=True)
+        R(q, j["cargo"], F, kb(9), color=META, italic=True)
+        keep_block([p, q] + [bullet(*b) for b in j["bullets"]])
+
+    head("Experiencia profesional")
+    job(C.JOBS[0], before=0); job(C.JOBS[1])
+    job(C.JOBS[2], brk=True); job(C.JOBS[3])
+
+    head("Formaci\u00f3n acad\u00e9mica", 14)
+    for i, (t, inst, y) in enumerate(C.EDU):
+        p = P(before=0 if i == 0 else 6.5, keep=True, tabs=[(W, WD_TAB_ALIGNMENT.RIGHT)])
+        R(p, t, F, kb(9.5), bold=True, color=INK); p.add_run("\t")
+        R(p, y, F, 7.6, bold=True, color=ACC, track=20, caps=True)
+        q = P(before=1); R(q, inst, F, kb(8.8), color=META, italic=True)
+        keep_block([p, q])
+
+    head("Cursos y certificaciones")
+    for k, r_ in C.CERTS: bullet("", k, r_)
+
+    head("Competencias")
+    p = P(line=kl(1.3)); no_hyph(p)
+    for i, t in enumerate(C.COMPETENCIAS):
+        if i: R(p, "  \u00b7  ", F, 9, color=RGBColor(0xAE,0xB3,0xB6))
+        R(p, t, F, 9)
+
+    head("Herramientas y disponibilidad")
+    bullet("", "Herramientas: ", C.HERRAMIENTAS)
+    bullet("", "Disponibilidad: ", C.DISPONIBILIDAD)
+
+    f = OUT + "CV_Jeniffer_Mieres_06_Impacto.docx"; doc.save(f); return f
+
+BUILDERS = dict(swiss=swiss, banda=banda, sidebar=sidebar, editorial=rail, clasico=centro, impacto=impacto)
 if __name__ == "__main__":
     for n, fn in BUILDERS.items(): print("OK ->", fn())

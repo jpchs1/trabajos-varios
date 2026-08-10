@@ -13,7 +13,7 @@ for name in dir(C):
     if not name.startswith("_"): eat(getattr(C, name))
 chars.update("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789")
 chars.update("ÁÉÍÓÚÜÑáéíóúüñ¿¡ÀÈÌÒÙçÇ")
-chars.update("Propuestas de diseño · Formato Ficha técnica Recomendado Página")
+chars.update("Propuestas de diseño · Formato Ficha técnica Recomendado Página Nuevo Vino Bronce Pizarra Raíl Clásico Impacto Editorial franjas")
 
 FONTS = {
  "cv-sans":      ("/usr/share/fonts/truetype/crosextra/Carlito-Regular.ttf", 400, "normal"),
@@ -21,9 +21,10 @@ FONTS = {
  "cv-sans-i":    ("/usr/share/fonts/truetype/crosextra/Carlito-Italic.ttf",  400, "italic"),
  "cv-serif":     ("/usr/share/fonts/truetype/crosextra/Caladea-Regular.ttf", 400, "normal"),
  "cv-serif-b":   ("/usr/share/fonts/truetype/crosextra/Caladea-Bold.ttf",    700, "normal"),
+ "cv-serif-i":   ("/usr/share/fonts/truetype/crosextra/Caladea-Italic.ttf",  400, "italic"),
 }
 FAMILY = {"cv-sans":"CVSans","cv-sans-b":"CVSans","cv-sans-i":"CVSans",
-          "cv-serif":"CVSerif","cv-serif-b":"CVSerif"}
+          "cv-serif":"CVSerif","cv-serif-b":"CVSerif","cv-serif-i":"CVSerif"}
 
 os.makedirs("fsub", exist_ok=True)
 text = "".join(sorted(chars))

@@ -2,7 +2,7 @@ import sys, os, subprocess
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import variantes as V
 from tune import PRESETS
-CHOSEN = dict(swiss=6, banda=6, sidebar=5)
+CHOSEN = dict(swiss=6, banda=6, sidebar=5, editorial=0, clasico=2, impacto=1)
 for name, idx in CHOSEN.items():
     V.K.update(PRESETS[idx])
     f = V.BUILDERS[name]()

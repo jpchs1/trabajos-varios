@@ -919,6 +919,15 @@ document.querySelectorAll('.reset-btn').forEach(btn=>{
   });
 });
 
+/* ================= texto de ayuda segun entorno ================= */
+if(!(window.claude && window.claude.downloads)){
+  document.querySelectorAll('.dl-hint').forEach(h=>{
+    h.innerHTML = '<b>Word</b> y <b>PDF</b> descargan directo la plantilla original, verificada y lista ' +
+      'para enviar. Si editas cualquier texto de una hoja, aparecen dos botones verdes: <b>Word</b> ' +
+      'de tu versi\u00f3n editada directo, y <b>PDF</b> mediante el di\u00e1logo de impresi\u00f3n.';
+  });
+}
+
 /* ================= reporte de cambios del usuario ================= */
 function normTxt(t){ return t.replace(/\s+/g,' ').trim(); }
 function collectChanges(){

@@ -138,9 +138,9 @@ def downloads(sid):
       <button type="button" class="dl-btn edit export-pdf" data-variant="{sid}" hidden>
         {pdf_svg()}<span>Guardar edición<i>PDF</i></span></button>
     </div>
-    <p class="dl-hint"><b>Word</b> y <b>PDF</b> descargan la plantilla original, verificada y lista para enviar.
-      Si editas cualquier texto de una hoja, aparecen dos botones verdes para bajar tu versión editada:
-      <b>Word</b> directo, y <b>PDF</b> mediante el diálogo de impresión (elige «Guardar como PDF»).</p>'''
+    <p class="dl-hint"><b>Word</b> descarga la plantilla original con confirmación del visor; <b>PDF</b> abre el
+      diálogo de impresión de la plantilla original (elige «Guardar como PDF»). Si editas una hoja, aparecen
+      dos botones verdes con tu versión editada: <b>Word</b> directo y <b>PDF</b> por impresión.</p>'''
 
 # ================================================================ VARIANTE 1 (Minimal)
 def v1_p1():
@@ -810,6 +810,11 @@ body{margin:0;background:var(--ground);color:var(--ink);font-family:var(--ui);
   #print-root *{-webkit-print-color-adjust:exact;print-color-adjust:exact}
   @page{size:A4;margin:0}
 }
+#toast{position:fixed;left:50%;bottom:26px;transform:translate(-50%,14px);z-index:99;
+  max-width:min(92vw,480px);padding:11px 18px;border-radius:10px;font-size:.86rem;font-weight:560;
+  background:var(--ink);color:var(--ground);box-shadow:var(--shadow);opacity:0;pointer-events:none;
+  transition:opacity .22s,transform .22s;text-align:center}
+#toast.show{opacity:1;transform:translate(-50%,0)}
 @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
 """
 
@@ -899,19 +904,84 @@ document.querySelectorAll('.reset-btn').forEach(btn=>{
   });
 });
 
+/* ================= entrega de archivos (visor claude.ai o navegador) ================= */
+function toast(msg){
+  let t = document.getElementById('toast');
+  if(!t){
+    t = document.createElement('div'); t.id='toast'; t.setAttribute('role','status');
+    document.body.appendChild(t);
+  }
+  t.textContent = msg; t.classList.add('show');
+  clearTimeout(t._t); t._t = setTimeout(()=>t.classList.remove('show'), 4200);
+}
+function anchorDownload(filename, bytes){
+  let bin=''; const CH=0x8000;
+  for(let i=0;i<bytes.length;i+=CH) bin+=String.fromCharCode.apply(null, bytes.subarray(i,i+CH));
+  const a=document.createElement('a');
+  a.href='data:application/octet-stream;base64,'+btoa(bin);
+  a.download=filename;
+  document.body.appendChild(a); a.click(); a.remove();
+}
+async function deliver(filename, bytes){
+  if(window.claude && window.claude.downloads){
+    try{
+      await window.claude.downloads.save({filename, data: bytes});
+      toast('Descarga confirmada: ' + filename);
+    }catch(e){
+      const code = e && e.code;
+      if(code === 'declined') return;
+      if(code === 'rate_limited'){ toast('Hay una descarga pendiente de confirmar. Espera un momento y reintenta.'); return; }
+      if(code === 'extension_not_enabled' || code === 'rejected_extension'){
+        toast('Este visor no permite guardar este tipo de archivo. Usa los archivos enviados en el chat.');
+        return;
+      }
+      toast('No se pudo guardar: ' + ((e && e.message) || 'sin detalle'));
+    }
+    return;
+  }
+  anchorDownload(filename, bytes);
+}
+function b64ToBytes(b64){
+  const bin = atob(b64), out = new Uint8Array(bin.length);
+  for(let i=0;i<bin.length;i++) out[i] = bin.charCodeAt(i);
+  return out;
+}
+/* Botones preestablecidos: interceptar el ancla y entregar via la API del visor */
+document.querySelectorAll('a.dl-btn.word').forEach(aEl=>{
+  aEl.addEventListener('click', e=>{
+    e.preventDefault();
+    const b64 = aEl.getAttribute('href').split('base64,')[1];
+    deliver(aEl.getAttribute('download'), b64ToBytes(b64));
+  });
+});
+document.querySelectorAll('a.dl-btn.pdf').forEach(aEl=>{
+  aEl.addEventListener('click', e=>{
+    if(!(window.claude && window.claude.downloads)) return;   // fuera del visor: ancla normal
+    e.preventDefault();
+    // El visor no permite guardar .pdf directamente: se imprime la plantilla
+    // ORIGINAL (sin ediciones) y el usuario elige "Guardar como PDF".
+    const sid = aEl.closest('section').id.replace('p-','');
+    buildPrintRootPristine(sid);
+    toast('En el diálogo de impresión elige «Guardar como PDF».');
+    requestAnimationFrame(()=>requestAnimationFrame(()=>window.print()));
+  });
+});
+
 /* ================= imprimir / PDF de la version actual ================= */
-function buildPrintRoot(sid){
+function buildPrintRoot(sid, pristine){
   const root=document.getElementById('print-root');
   root.innerHTML='';
   document.querySelectorAll('#p-'+sid+' .sheet').forEach(sh=>{
     const wrap=document.createElement('div'); wrap.className='pframe';
-    const clone=sh.cloneNode(true);
+    const clone=sh.cloneNode(pristine ? false : true);
+    if(pristine) clone.innerHTML = originals.get(sh);
     clone.removeAttribute('style');
     clone.querySelectorAll('.ed').forEach(e=>e.removeAttribute('contenteditable'));
     wrap.appendChild(clone);
     root.appendChild(wrap);
   });
 }
+function buildPrintRootPristine(sid){ buildPrintRoot(sid, true); }
 document.querySelectorAll('.dl-btn.print').forEach(btn=>{
   btn.addEventListener('click', ()=>{
     buildPrintRoot(btn.dataset.variant);
@@ -1091,12 +1161,7 @@ function exportVariantDocx(sid){
     {name:'_rels/.rels', data:enc.encode(rels)},
     {name:'word/document.xml', data:enc.encode(doc)},
   ]);
-  let bin=''; const CH=0x8000;
-  for(let i=0;i<bytes.length;i+=CH) bin+=String.fromCharCode.apply(null, bytes.subarray(i,i+CH));
-  const a = document.createElement('a');
-  a.href = 'data:application/vnd.openxmlformats-officedocument.wordprocessingml.document;base64,' + btoa(bin);
-  a.download = 'CV Jeniffer Mieres - ' + sid + ' (editado).docx';
-  document.body.appendChild(a); a.click(); a.remove();
+  deliver('CV Jeniffer Mieres - ' + sid + ' (editado).docx', bytes);
 }
 document.querySelectorAll('.dl-btn.export-word').forEach(btn=>{
   btn.addEventListener('click', ()=>{

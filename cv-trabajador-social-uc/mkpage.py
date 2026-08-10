@@ -138,9 +138,9 @@ def downloads(sid):
       <button type="button" class="dl-btn edit export-pdf" data-variant="{sid}" hidden>
         {pdf_svg()}<span>Guardar edición<i>PDF</i></span></button>
     </div>
-    <p class="dl-hint"><b>Word</b> descarga la plantilla original con confirmación del visor; <b>PDF</b> abre el
-      diálogo de impresión de la plantilla original (elige «Guardar como PDF»). Si editas una hoja, aparecen
-      dos botones verdes con tu versión editada: <b>Word</b> directo y <b>PDF</b> por impresión.</p>'''
+    <p class="dl-hint"><b>Word</b> descarga directo (con la confirmación del visor). Para <b>PDF</b>, claude.ai
+      no permite hoy la descarga directa de ese formato: el botón lo intenta y, si el visor lo rechaza, abre la
+      impresión para «Guardar como PDF». Si editas una hoja, aparecen dos botones verdes con tu versión editada.</p>'''
 
 # ================================================================ VARIANTE 1 (Minimal)
 def v1_p1():
@@ -955,14 +955,26 @@ document.querySelectorAll('a.dl-btn.word').forEach(aEl=>{
   });
 });
 document.querySelectorAll('a.dl-btn.pdf').forEach(aEl=>{
-  aEl.addEventListener('click', e=>{
+  aEl.addEventListener('click', async e=>{
     if(!(window.claude && window.claude.downloads)) return;   // fuera del visor: ancla normal
     e.preventDefault();
-    // El visor no permite guardar .pdf directamente: se imprime la plantilla
-    // ORIGINAL (sin ediciones) y el usuario elige "Guardar como PDF".
+    const name = aEl.getAttribute('download');
+    // Intento de descarga directa primero: si el visor algun dia permite
+    // .pdf, el boton descargara sin pasos extra.
+    try{
+      const b64 = aEl.getAttribute('href').split('base64,')[1];
+      await window.claude.downloads.save({filename: name, data: b64ToBytes(b64)});
+      toast('Descarga confirmada: ' + name);
+      return;
+    }catch(err){
+      const code = err && err.code;
+      if(code === 'declined') return;
+      if(code === 'rate_limited'){ toast('Hay una descarga pendiente de confirmar. Reintenta en unos segundos.'); return; }
+      // rejected_extension / extension_not_enabled / resto: caer a impresion
+    }
     const sid = aEl.closest('section').id.replace('p-','');
     buildPrintRootPristine(sid);
-    toast('En el diálogo de impresión elige «Guardar como PDF».');
+    toast('claude.ai no permite bajar .pdf directo. En el diálogo elige «Guardar como PDF» — un solo clic más.');
     requestAnimationFrame(()=>requestAnimationFrame(()=>window.print()));
   });
 });

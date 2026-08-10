@@ -815,6 +815,18 @@ body{margin:0;background:var(--ground);color:var(--ink);font-family:var(--ui);
   background:var(--ink);color:var(--ground);box-shadow:var(--shadow);opacity:0;pointer-events:none;
   transition:opacity .22s,transform .22s;text-align:center}
 #toast.show{opacity:1;transform:translate(-50%,0)}
+#changes-btn{margin-left:auto;flex:none;appearance:none;cursor:pointer;font:inherit;font-size:.8rem;
+  font-weight:620;color:var(--accent);background:transparent;border:1px solid var(--accent);
+  border-radius:999px;padding:7px 14px;transition:background .16s}
+#changes-btn:hover{background:color-mix(in srgb,var(--accent) 12%,transparent)}
+#changes-dlg{border:1px solid var(--line);border-radius:14px;background:var(--raise);color:var(--ink);
+  padding:22px 24px;max-width:min(92vw,760px);width:100%;box-shadow:var(--shadow)}
+#changes-dlg::backdrop{background:rgba(10,14,17,.55);backdrop-filter:blur(2px)}
+#changes-dlg h3{margin:0 0 6px;font-size:1.05rem;letter-spacing:-.01em}
+#changes-dlg p{margin:0 0 14px;font-size:.85rem;color:var(--muted)}
+#changes-txt{width:100%;height:min(46vh,340px);resize:vertical;font:12px/1.55 ui-monospace,Consolas,monospace;
+  color:var(--ink);background:var(--ground);border:1px solid var(--line);border-radius:8px;padding:12px}
+.dlg-row{display:flex;gap:10px;justify-content:flex-end;margin-top:14px}
 @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
 """
 
@@ -867,6 +879,7 @@ document.querySelectorAll('.sheet').forEach(sh=>{
   if(saved) sh.innerHTML = saved;
 });
 Object.keys(VARIANTS).forEach(refreshEditedUI);
+refreshChangesBtn();
 
 const timers = new WeakMap();
 document.addEventListener('input', e=>{
@@ -880,6 +893,7 @@ document.addEventListener('input', e=>{
     localStorage.setItem(sheetKey(sh), sh.innerHTML);
     setStatus(fig, 'Guardado');
     refreshEditedUI(variantOf(sh));
+    refreshChangesBtn();
   }, 500));
 });
 
@@ -901,7 +915,53 @@ document.querySelectorAll('.reset-btn').forEach(btn=>{
     localStorage.removeItem(sheetKey(sh));
     setStatus(fig, 'Restablecido');
     refreshEditedUI(variantOf(sh));
+    refreshChangesBtn();
   });
+});
+
+/* ================= reporte de cambios del usuario ================= */
+function normTxt(t){ return t.replace(/\s+/g,' ').trim(); }
+function collectChanges(){
+  const lines = [];
+  document.querySelectorAll('section[role=tabpanel]').forEach(sec=>{
+    const variant = sec.querySelector('h2').firstChild.textContent.trim();
+    sec.querySelectorAll('.sheet').forEach((sh, pi)=>{
+      const orig = originals.get(sh);
+      if(sh.innerHTML === orig) return;
+      const tmp = document.createElement('div'); tmp.innerHTML = orig;
+      const oldEds = tmp.querySelectorAll('.ed');
+      const newEds = sh.querySelectorAll('.ed');
+      if(oldEds.length !== newEds.length){
+        lines.push(`[${variant} · página ${pi+1}] estructura modificada — revisar manualmente`);
+        return;
+      }
+      for(let i=0;i<oldEds.length;i++){
+        const o = normTxt(oldEds[i].textContent), n = normTxt(newEds[i].textContent);
+        if(o !== n){
+          lines.push(`[${variant} · página ${pi+1}]`);
+          lines.push(`  ANTES : ${o}`);
+          lines.push(`  AHORA : ${n}`);
+          lines.push('');
+        }
+      }
+    });
+  });
+  return lines.length ? lines.join('\n') : 'Sin diferencias respecto del original.';
+}
+function refreshChangesBtn(){
+  const any = [...document.querySelectorAll('.sheet')].some(sh => sh.innerHTML !== originals.get(sh));
+  const btn = document.getElementById('changes-btn');
+  if(btn) btn.hidden = !any;
+}
+document.getElementById('changes-btn').addEventListener('click', ()=>{
+  document.getElementById('changes-txt').value = collectChanges();
+  document.getElementById('changes-dlg').showModal();
+});
+document.getElementById('changes-close').addEventListener('click',
+  ()=> document.getElementById('changes-dlg').close());
+document.getElementById('changes-dl').addEventListener('click', ()=>{
+  const txt = document.getElementById('changes-txt').value;
+  deliver('cambios-cv-jeniffer.txt', new TextEncoder().encode(txt));
 });
 
 /* ================= entrega de archivos (visor claude.ai o navegador) ================= */
@@ -1209,7 +1269,18 @@ HTML = f"""<title>Propuestas de diseño de CV · Jeniffer Mieres Contreras</titl
   </header>
   <p class="edit-hint">{PENCIL}<span>Haz clic en cualquier texto de una hoja para editarlo. Los cambios se
     guardan <b>automáticamente en este navegador</b> — nadie más los ve, y puedes restablecer el original
-    en cualquier momento.</span></p>
+    en cualquier momento.</span>
+    <button type="button" id="changes-btn" hidden>Ver mis cambios</button></p>
+  <dialog id="changes-dlg">
+    <h3>Tus cambios respecto del original</h3>
+    <p>Copia este texto y pégaselo a Claude en el chat para replicar los cambios en los seis diseños,
+      o descárgalo como archivo.</p>
+    <textarea id="changes-txt" readonly spellcheck="false"></textarea>
+    <div class="dlg-row">
+      <button type="button" id="changes-dl" class="dl-btn edit">Descargar .txt</button>
+      <button type="button" id="changes-close" class="dl-btn ghost">Cerrar</button>
+    </div>
+  </dialog>
 
   <div class="tabs" role="tablist" aria-label="Propuestas de diseño">{tabs}</div>
   {panels}

@@ -135,10 +135,12 @@ def downloads(sid):
         {printer_svg()}<span>Imprimir esta versión<i>PDF</i></span></button>
       <button type="button" class="dl-btn edit export-word" data-variant="{sid}" hidden>
         {word_svg()}<span>Descargar edición<i>.docx</i></span></button>
+      <button type="button" class="dl-btn edit export-pdf" data-variant="{sid}" hidden>
+        {pdf_svg()}<span>Guardar edición<i>PDF</i></span></button>
     </div>
     <p class="dl-hint"><b>Word</b> y <b>PDF</b> descargan la plantilla original, verificada y lista para enviar.
-      Haz clic en cualquier texto de una hoja para editarlo — se guarda solo en este navegador — y aparecerá
-      la opción de descargar tu versión editada.</p>'''
+      Si editas cualquier texto de una hoja, aparecen dos botones verdes para bajar tu versión editada:
+      <b>Word</b> directo, y <b>PDF</b> mediante el diálogo de impresión (elige «Guardar como PDF»).</p>'''
 
 # ================================================================ VARIANTE 1 (Minimal)
 def v1_p1():
@@ -827,6 +829,7 @@ tabs.forEach((t,i)=>{
 });
 
 /* ================= edicion en linea + autoguardado ================= */
+const VARIANTS = __VARIANT_CFG__;
 const originals = new Map();
 function sheetKey(sh){
   const section = sh.closest('section');
@@ -839,8 +842,10 @@ function isEdited(sid){
     .some(sh=> sh.innerHTML !== originals.get(sh));
 }
 function refreshEditedUI(sid){
-  const btn = document.querySelector(`.dl-btn.export-word[data-variant="${sid}"]`);
-  if(btn) btn.hidden = !isEdited(sid);
+  const on = isEdited(sid);
+  document.querySelectorAll(
+    `.dl-btn.export-word[data-variant="${sid}"], .dl-btn.export-pdf[data-variant="${sid}"]`
+  ).forEach(btn=>{ btn.hidden = !on; });
 }
 function setStatus(fig, text){
   const tag = fig.querySelector('.status');
@@ -856,7 +861,7 @@ document.querySelectorAll('.sheet').forEach(sh=>{
   const saved = localStorage.getItem(sheetKey(sh));
   if(saved) sh.innerHTML = saved;
 });
-['minimal','banda','sidebar'].forEach(refreshEditedUI);
+Object.keys(VARIANTS).forEach(refreshEditedUI);
 
 const timers = new WeakMap();
 document.addEventListener('input', e=>{
@@ -918,7 +923,6 @@ window.addEventListener('afterprint', ()=>{
 });
 
 /* ================= exportar Word de la version editada ================= */
-const VARIANTS = __VARIANT_CFG__;
 const CRC_TABLE = (()=>{ let c, t=new Uint32Array(256);
   for(let n=0;n<256;n++){ c=n; for(let k=0;k<8;k++) c=(c&1)?(0xEDB88320^(c>>>1)):(c>>>1); t[n]=c>>>0; }
   return t; })();
@@ -954,8 +958,11 @@ function zipStore(files){
   edv.setUint32(0,0x06054b50,true); edv.setUint16(4,0,true); edv.setUint16(6,0,true);
   edv.setUint16(8,files.length,true); edv.setUint16(10,files.length,true);
   edv.setUint32(12,centralSize,true); edv.setUint32(16,centralStart,true); edv.setUint16(20,0,true);
-  return new Blob([...parts, ...centrals, eocd],
-    {type:'application/vnd.openxmlformats-officedocument.wordprocessingml.document'});
+  const chunks=[...parts, ...centrals, eocd];
+  let total=0; chunks.forEach(c=>total+=c.length);
+  const out=new Uint8Array(total); let off=0;
+  chunks.forEach(c=>{ out.set(c, off); off+=c.length; });
+  return out;
 }
 
 function xesc(t){ return t.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
@@ -1079,19 +1086,29 @@ function exportVariantDocx(sid){
     '<Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" Target="word/document.xml"/>' +
     '</Relationships>';
   const enc = new TextEncoder();
-  const blob = zipStore([
+  const bytes = zipStore([
     {name:'[Content_Types].xml', data:enc.encode(ct)},
     {name:'_rels/.rels', data:enc.encode(rels)},
     {name:'word/document.xml', data:enc.encode(doc)},
   ]);
+  let bin=''; const CH=0x8000;
+  for(let i=0;i<bytes.length;i+=CH) bin+=String.fromCharCode.apply(null, bytes.subarray(i,i+CH));
   const a = document.createElement('a');
-  a.href = URL.createObjectURL(blob);
+  a.href = 'data:application/vnd.openxmlformats-officedocument.wordprocessingml.document;base64,' + btoa(bin);
   a.download = 'CV Jeniffer Mieres - ' + sid + ' (editado).docx';
   document.body.appendChild(a); a.click(); a.remove();
-  setTimeout(()=>URL.revokeObjectURL(a.href), 4000);
 }
 document.querySelectorAll('.dl-btn.export-word').forEach(btn=>{
-  btn.addEventListener('click', ()=> exportVariantDocx(btn.dataset.variant));
+  btn.addEventListener('click', ()=>{
+    try{ exportVariantDocx(btn.dataset.variant); }
+    catch(e){ alert('No se pudo generar el Word editado: ' + e.message); }
+  });
+});
+document.querySelectorAll('.dl-btn.export-pdf').forEach(btn=>{
+  btn.addEventListener('click', ()=>{
+    buildPrintRoot(btn.dataset.variant);
+    requestAnimationFrame(()=>requestAnimationFrame(()=>window.print()));
+  });
 });
 """
 JS = JS.replace("__VARIANT_CFG__", VARIANT_CFG)

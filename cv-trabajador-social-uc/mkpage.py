@@ -127,30 +127,24 @@ def downloads(sid):
     docx_href = f"data:{DOCX_MIME};base64,{b64(docx_p)}"
     pdf_href  = f"data:application/pdf;base64,{b64(pdf_p)}"
     return f'''<div class="dl">
-      <div class="dlgrp">
-        <span class="dlg-l">Plantilla original</span>
-        <div class="dlg-b">
-          <a class="dl-btn word" download="{E(label)}.docx" href="{docx_href}">
-            {word_svg()}<span>Word<i>.docx</i></span></a>
-          <a class="dl-btn pdf" download="{E(label)}.pdf" href="{pdf_href}">
-            {pdf_svg()}<span>PDF<i>.pdf</i></span></a>
-        </div>
+      <div class="dlg-b">
+        <a class="dl-btn word main-word" data-variant="{sid}" download="{E(label)}.docx" href="{docx_href}">
+          {word_svg()}<span>Word<i class="sub">.docx</i></span></a>
+        <a class="dl-btn pdf main-pdf" data-variant="{sid}" download="{E(label)}.pdf" href="{pdf_href}">
+          {pdf_svg()}<span>PDF<i class="sub">.pdf</i></span></a>
       </div>
-      <div class="dlgrp grp-edit" data-variant="{sid}" hidden>
-        <span class="dlg-l">Tu versión editada
-          <em class="saved" data-variant="{sid}" aria-live="polite">guardada ✓</em></span>
-        <div class="dlg-b">
-          <button type="button" class="dl-btn edit export-word" data-variant="{sid}">
-            {word_svg()}<span>Word con tu edición<i>mismo diseño</i></span></button>
-          <button type="button" class="dl-btn edit export-pdf" data-variant="{sid}">
-            {pdf_svg()}<span>PDF con tu edición<i>imprimir</i></span></button>
-          <button type="button" class="dl-btn ghost reset-variant" data-variant="{sid}">
-            <span>Restablecer</span></button>
-        </div>
+      <div class="editstate" data-variant="{sid}" hidden>
+        <span class="es-txt">Editada · <em class="saved" data-variant="{sid}"
+          aria-live="polite">guardada ✓</em></span>
+        <span class="es-acts">
+          <button type="button" class="linklike reset-variant" data-variant="{sid}">Restablecer</button>
+          <a class="linklike orig-link" data-variant="{sid}" download="{E(label)} (original).docx"
+            href="#">bajar original</a>
+        </span>
       </div>
-    </div>
-    <p class="dl-hint">Haz clic en cualquier texto de las hojas para editarlo: se guarda solo y aparece el
-      grupo <b>Tu versión editada</b>. El Word editado conserva el diseño exacto de esta plantilla.</p>'''
+      <p class="dl-hint">Edita cualquier texto de las hojas: <b>se guarda solo</b> y estos mismos botones
+        pasan a descargar tu versión editada, con el diseño exacto de la plantilla.</p>
+    </div>'''
 
 # ================================================================ VARIANTE 1 (Minimal)
 def v1_p1():
@@ -541,8 +535,14 @@ body{margin:0;background:var(--ground);color:var(--ink);font-family:var(--ui);
 .dlg-l .saved{font-style:normal;text-transform:none;letter-spacing:.01em;font-size:.72rem;font-weight:600;
   color:var(--dl-edit)}
 .dlg-b{display:flex;flex-wrap:wrap;gap:10px}
-.grp-edit{padding:12px 14px;border:1px dashed var(--dl-edit);border-radius:12px;
-  background:color-mix(in srgb,var(--dl-edit) 6%,transparent)}
+.editstate[hidden]{display:none!important}
+.editstate{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 14px;
+  font-size:.8rem;color:var(--muted)}
+.editstate .saved{font-style:normal;font-weight:650;color:var(--dl-edit)}
+.es-acts{display:flex;gap:14px}
+.linklike{appearance:none;border:none;background:none;cursor:pointer;font:inherit;font-size:.8rem;
+  color:var(--muted);text-decoration:underline;text-underline-offset:2px;padding:0}
+.linklike:hover{color:var(--accent)}
 .tabs button.edited::after{content:"";display:inline-block;width:7px;height:7px;border-radius:50%;
   background:var(--dl-edit);margin-left:7px;vertical-align:middle}
 .dl-btn{display:inline-flex;align-items:center;gap:9px;appearance:none;text-decoration:none;
@@ -877,10 +877,14 @@ function isEdited(sid){
 }
 function refreshEditedUI(sid){
   const on = isEdited(sid);
-  const grp = document.querySelector(`.grp-edit[data-variant="${sid}"]`);
-  if(grp) grp.hidden = !on;
+  const st = document.querySelector(`.editstate[data-variant="${sid}"]`);
+  if(st) st.hidden = !on;
   const tab = document.getElementById('t-'+sid);
   if(tab) tab.classList.toggle('edited', on);
+  const ws = document.querySelector(`a.main-word[data-variant="${sid}"] .sub`);
+  if(ws) ws.textContent = on ? 'con tu edición' : '.docx';
+  const ps = document.querySelector(`a.main-pdf[data-variant="${sid}"] .sub`);
+  if(ps) ps.textContent = on ? 'imprimir' : '.pdf';
 }
 function setSaved(sid, txt){
   const chip = document.querySelector(`.saved[data-variant="${sid}"]`);
@@ -936,13 +940,6 @@ document.querySelectorAll('.reset-variant').forEach(btn=>{
 });
 
 /* ================= texto de ayuda segun entorno ================= */
-if(!(window.claude && window.claude.downloads)){
-  document.querySelectorAll('.dl-hint').forEach(h=>{
-    h.innerHTML = '<b>Word</b> y <b>PDF</b> descargan directo la plantilla original, verificada y lista ' +
-      'para enviar. Si editas cualquier texto de una hoja, aparecen dos botones verdes: <b>Word</b> ' +
-      'de tu versi\u00f3n editada directo, y <b>PDF</b> mediante el di\u00e1logo de impresi\u00f3n.';
-  });
-}
 
 /* ================= reporte de cambios del usuario ================= */
 function normTxt(t){ return t.replace(/\s+/g,' ').trim(); }
@@ -1031,21 +1028,55 @@ function b64ToBytes(b64){
   for(let i=0;i<bin.length;i++) out[i] = bin.charCodeAt(i);
   return out;
 }
-/* Botones preestablecidos: interceptar el ancla y entregar via la API del visor */
-document.querySelectorAll('a.dl-btn.word').forEach(aEl=>{
-  aEl.addEventListener('click', e=>{
-    e.preventDefault();
-    const b64 = aEl.getAttribute('href').split('base64,')[1];
-    deliver(aEl.getAttribute('download'), b64ToBytes(b64));
+/* Word: descarga la edicion si existe; si no, la plantilla original */
+document.querySelectorAll('a.main-word').forEach(aEl=>{
+  aEl.addEventListener('click', async e=>{
+    const sid = aEl.dataset.variant;
+    if(isEdited(sid)){
+      e.preventDefault();
+      try{
+        if(!window.DecompressionStream) throw Object.assign(new Error('sin soporte'), {code:'nods'});
+        await exportPatchedDocx(sid);
+      }catch(err){
+        if(err && err.code === 'struct'){
+          toast('La estructura de una hoja cambió demasiado. Usa Restablecer y reaplica tus cambios.');
+          return;
+        }
+        try{ exportVariantDocx(sid); toast('Descargado en formato simplificado (respaldo).'); }
+        catch(e2){ toast('No se pudo generar el Word: ' + e2.message); }
+      }
+      return;
+    }
+    if(window.claude && window.claude.downloads){
+      e.preventDefault();
+      deliver(aEl.getAttribute('download'), b64ToBytes(aEl.getAttribute('href').split('base64,')[1]));
+    }
   });
 });
-document.querySelectorAll('a.dl-btn.pdf').forEach(aEl=>{
+document.querySelectorAll('a.orig-link').forEach(aEl=>{
+  const w = document.querySelector('a.main-word[data-variant="' + aEl.dataset.variant + '"]');
+  if(w) aEl.setAttribute('href', w.getAttribute('href'));
+});
+document.querySelectorAll('a.orig-link').forEach(aEl=>{
+  aEl.addEventListener('click', e=>{
+    if(!(window.claude && window.claude.downloads)) return;
+    e.preventDefault();
+    deliver(aEl.getAttribute('download'), b64ToBytes(aEl.getAttribute('href').split('base64,')[1]));
+  });
+});
+document.querySelectorAll('a.main-pdf').forEach(aEl=>{
   aEl.addEventListener('click', async e=>{
-    if(!(window.claude && window.claude.downloads)) return;   // fuera del visor: ancla normal
+    const sid = aEl.dataset.variant;
+    if(isEdited(sid)){
+      e.preventDefault();
+      buildPrintRoot(sid);
+      toast('Tu edición: en el diálogo elige «Guardar como PDF».');
+      requestAnimationFrame(()=>requestAnimationFrame(()=>window.print()));
+      return;
+    }
+    if(!(window.claude && window.claude.downloads)) return;
     e.preventDefault();
     const name = aEl.getAttribute('download');
-    // Intento de descarga directa primero: si el visor algun dia permite
-    // .pdf, el boton descargara sin pasos extra.
     try{
       const b64 = aEl.getAttribute('href').split('base64,')[1];
       await window.claude.downloads.save({filename: name, data: b64ToBytes(b64)});
@@ -1055,11 +1086,9 @@ document.querySelectorAll('a.dl-btn.pdf').forEach(aEl=>{
       const code = err && err.code;
       if(code === 'declined') return;
       if(code === 'rate_limited'){ toast('Hay una descarga pendiente de confirmar. Reintenta en unos segundos.'); return; }
-      // rejected_extension / extension_not_enabled / resto: caer a impresion
     }
-    const sid = aEl.closest('section').id.replace('p-','');
     buildPrintRootPristine(sid);
-    toast('claude.ai no permite bajar .pdf directo. En el diálogo elige «Guardar como PDF» — un solo clic más.');
+    toast('claude.ai no permite bajar .pdf directo. En el diálogo elige «Guardar como PDF».');
     requestAnimationFrame(()=>requestAnimationFrame(()=>window.print()));
   });
 });
@@ -1079,12 +1108,7 @@ function buildPrintRoot(sid, pristine){
   });
 }
 function buildPrintRootPristine(sid){ buildPrintRoot(sid, true); }
-document.querySelectorAll('.dl-btn.print').forEach(btn=>{
-  btn.addEventListener('click', ()=>{
-    buildPrintRoot(btn.dataset.variant);
-    requestAnimationFrame(()=>requestAnimationFrame(()=>window.print()));
-  });
-});
+
 window.addEventListener('afterprint', ()=>{
   const r=document.getElementById('print-root'); if(r) r.innerHTML='';
 });
@@ -1397,28 +1421,7 @@ function exportVariantDocx(sid){
   ]);
   deliver('CV Jeniffer Mieres - ' + sid + ' (editado).docx', bytes);
 }
-document.querySelectorAll('.dl-btn.export-word').forEach(btn=>{
-  btn.addEventListener('click', async ()=>{
-    const sid = btn.dataset.variant;
-    try{
-      if(!window.DecompressionStream) throw Object.assign(new Error('sin soporte'), {code:'nods'});
-      await exportPatchedDocx(sid);
-    }catch(e){
-      if(e && e.code === 'struct'){
-        toast('La estructura de una hoja cambio demasiado. Usa Restablecer y reaplica tus cambios.');
-        return;
-      }
-      try{ exportVariantDocx(sid); toast('Descargado en formato simplificado (respaldo).'); }
-      catch(e2){ toast('No se pudo generar el Word editado: ' + e2.message); }
-    }
-  });
-});
-document.querySelectorAll('.dl-btn.export-pdf').forEach(btn=>{
-  btn.addEventListener('click', ()=>{
-    buildPrintRoot(btn.dataset.variant);
-    requestAnimationFrame(()=>requestAnimationFrame(()=>window.print()));
-  });
-});
+
 """
 JS = JS.replace("__VARIANT_CFG__", VARIANT_CFG)
 

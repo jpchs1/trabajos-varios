@@ -127,20 +127,30 @@ def downloads(sid):
     docx_href = f"data:{DOCX_MIME};base64,{b64(docx_p)}"
     pdf_href  = f"data:application/pdf;base64,{b64(pdf_p)}"
     return f'''<div class="dl">
-      <a class="dl-btn word" download="{E(label)}.docx" href="{docx_href}">
-        {word_svg()}<span>Descargar Word<i>.docx</i></span></a>
-      <a class="dl-btn pdf" download="{E(label)}.pdf" href="{pdf_href}">
-        {pdf_svg()}<span>Descargar PDF<i>.pdf</i></span></a>
-      <button type="button" class="dl-btn ghost print" data-variant="{sid}">
-        {printer_svg()}<span>Imprimir esta versión<i>PDF</i></span></button>
-      <button type="button" class="dl-btn edit export-word" data-variant="{sid}" hidden>
-        {word_svg()}<span>Descargar edición<i>.docx</i></span></button>
-      <button type="button" class="dl-btn edit export-pdf" data-variant="{sid}" hidden>
-        {pdf_svg()}<span>Guardar edición<i>PDF</i></span></button>
+      <div class="dlgrp">
+        <span class="dlg-l">Plantilla original</span>
+        <div class="dlg-b">
+          <a class="dl-btn word" download="{E(label)}.docx" href="{docx_href}">
+            {word_svg()}<span>Word<i>.docx</i></span></a>
+          <a class="dl-btn pdf" download="{E(label)}.pdf" href="{pdf_href}">
+            {pdf_svg()}<span>PDF<i>.pdf</i></span></a>
+        </div>
+      </div>
+      <div class="dlgrp grp-edit" data-variant="{sid}" hidden>
+        <span class="dlg-l">Tu versión editada
+          <em class="saved" data-variant="{sid}" aria-live="polite">guardada ✓</em></span>
+        <div class="dlg-b">
+          <button type="button" class="dl-btn edit export-word" data-variant="{sid}">
+            {word_svg()}<span>Word con tu edición<i>mismo diseño</i></span></button>
+          <button type="button" class="dl-btn edit export-pdf" data-variant="{sid}">
+            {pdf_svg()}<span>PDF con tu edición<i>imprimir</i></span></button>
+          <button type="button" class="dl-btn ghost reset-variant" data-variant="{sid}">
+            <span>Restablecer</span></button>
+        </div>
+      </div>
     </div>
-    <p class="dl-hint"><b>Word</b> descarga directo (con la confirmación del visor). Para <b>PDF</b>, claude.ai
-      no permite hoy la descarga directa de ese formato: el botón lo intenta y, si el visor lo rechaza, abre la
-      impresión para «Guardar como PDF». Si editas una hoja, aparecen dos botones verdes con tu versión editada.</p>'''
+    <p class="dl-hint">Haz clic en cualquier texto de las hojas para editarlo: se guarda solo y aparece el
+      grupo <b>Tu versión editada</b>. El Word editado conserva el diseño exacto de esta plantilla.</p>'''
 
 # ================================================================ VARIANTE 1 (Minimal)
 def v1_p1():
@@ -428,10 +438,7 @@ tabs = "".join(
 def figure(sheet_html, page_no, fit):
     return f'''<figure class="frame">
       <div class="sheet" style="--fit:{fit:.4f}">{sheet_html}</div>
-      <figcaption><span>Página {page_no}</span>
-        <span class="fig-tools"><button type="button" class="reset-btn">Restablecer</button>
-        <span class="status" aria-live="polite"></span></span>
-      </figcaption>
+      <figcaption><span>Página {page_no}</span></figcaption>
     </figure>'''
 
 panels = ""
@@ -453,7 +460,7 @@ for i, s in enumerate(SPECS):
 </section>"""
 
 VARIANT_CFG = "{" + ",".join(
-  f'"{s["id"]}":{{accent:"{s["accent"]}",font:"{s["font"]}"}}' for s in SPECS) + "}"
+  f'"{s["id"]}":{{accent:"{s["accent"]}",font:"{s["font"]}",label:"{s["name"]}"}}' for s in SPECS) + "}"
 
 # ---------------------------------------------------------------- CSS
 CSS = FONTS + r"""
@@ -527,7 +534,17 @@ body{margin:0;background:var(--ground);color:var(--ink);font-family:var(--ui);
 .lede h2 em.alt{background:transparent;color:var(--accent);border:1px solid var(--accent);padding:4px 9px}
 .kicker{margin:7px 0 0;font-size:.74rem;letter-spacing:.15em;text-transform:uppercase;color:var(--muted)}
 .note{margin:16px 0 0;color:var(--muted);max-width:56ch;font-size:.94rem}
-.dl{display:flex;flex-wrap:wrap;gap:10px;margin-top:22px}
+.dl{display:flex;flex-direction:column;gap:14px;margin-top:22px}
+.dlgrp{display:flex;flex-direction:column;gap:8px}
+.dlg-l{font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);font-weight:650;
+  display:flex;align-items:center;gap:10px}
+.dlg-l .saved{font-style:normal;text-transform:none;letter-spacing:.01em;font-size:.72rem;font-weight:600;
+  color:var(--dl-edit)}
+.dlg-b{display:flex;flex-wrap:wrap;gap:10px}
+.grp-edit{padding:12px 14px;border:1px dashed var(--dl-edit);border-radius:12px;
+  background:color-mix(in srgb,var(--dl-edit) 6%,transparent)}
+.tabs button.edited::after{content:"";display:inline-block;width:7px;height:7px;border-radius:50%;
+  background:var(--dl-edit);margin-left:7px;vertical-align:middle}
 .dl-btn{display:inline-flex;align-items:center;gap:9px;appearance:none;text-decoration:none;
   cursor:pointer;border-radius:9px;padding:10px 15px 10px 12px;font:inherit;font-size:.85rem;
   font-weight:600;letter-spacing:.005em;border:1px solid var(--line);
@@ -860,17 +877,14 @@ function isEdited(sid){
 }
 function refreshEditedUI(sid){
   const on = isEdited(sid);
-  document.querySelectorAll(
-    `.dl-btn.export-word[data-variant="${sid}"], .dl-btn.export-pdf[data-variant="${sid}"]`
-  ).forEach(btn=>{ btn.hidden = !on; });
+  const grp = document.querySelector(`.grp-edit[data-variant="${sid}"]`);
+  if(grp) grp.hidden = !on;
+  const tab = document.getElementById('t-'+sid);
+  if(tab) tab.classList.toggle('edited', on);
 }
-function setStatus(fig, text){
-  const tag = fig.querySelector('.status');
-  if(!tag) return;
-  tag.textContent = text;
-  tag.classList.add('show');
-  clearTimeout(tag._t);
-  tag._t = setTimeout(()=>tag.classList.remove('show'), 1800);
+function setSaved(sid, txt){
+  const chip = document.querySelector(`.saved[data-variant="${sid}"]`);
+  if(chip){ chip.textContent = txt; }
 }
 
 document.querySelectorAll('.sheet').forEach(sh=>{
@@ -886,13 +900,13 @@ document.addEventListener('input', e=>{
   const ed = e.target.closest('.ed');
   if(!ed) return;
   const sh = ed.closest('.sheet');
-  const fig = sh.closest('figure');
-  setStatus(fig, 'Editando…');
+  const sid = variantOf(sh);
+  refreshEditedUI(sid); setSaved(sid, 'guardando…');
   clearTimeout(timers.get(sh));
   timers.set(sh, setTimeout(()=>{
     localStorage.setItem(sheetKey(sh), sh.innerHTML);
-    setStatus(fig, 'Guardado');
-    refreshEditedUI(variantOf(sh));
+    setSaved(sid, 'guardada ✓');
+    refreshEditedUI(sid);
     refreshChangesBtn();
   }, 500));
 });
@@ -907,15 +921,17 @@ document.addEventListener('paste', e=>{
   document.execCommand('insertText', false, text);
 });
 
-document.querySelectorAll('.reset-btn').forEach(btn=>{
+document.querySelectorAll('.reset-variant').forEach(btn=>{
   btn.addEventListener('click', ()=>{
-    const fig = btn.closest('figure');
-    const sh = fig.querySelector('.sheet');
-    sh.innerHTML = originals.get(sh);
-    localStorage.removeItem(sheetKey(sh));
-    setStatus(fig, 'Restablecido');
-    refreshEditedUI(variantOf(sh));
+    const sid = btn.dataset.variant;
+    if(!confirm('¿Volver esta propuesta al original? Se pierden tus ediciones de esta variante.')) return;
+    document.querySelectorAll('#p-'+sid+' .sheet').forEach(sh=>{
+      sh.innerHTML = originals.get(sh);
+      localStorage.removeItem(sheetKey(sh));
+    });
+    refreshEditedUI(sid);
     refreshChangesBtn();
+    toast('Propuesta restablecida al original.');
   });
 });
 
@@ -1211,6 +1227,143 @@ function buildParagraphs(sheetEl, accentHex, font){
   return out;
 }
 
+/* ======== exportacion con el diseno de la plantilla (parche de docx) ======== */
+async function inflateRaw(u8){
+  const ds = new DecompressionStream('deflate-raw');
+  const st = new Blob([u8]).stream().pipeThrough(ds);
+  return new Uint8Array(await new Response(st).arrayBuffer());
+}
+async function unzipDocx(bytes){
+  const dv = new DataView(bytes.buffer, bytes.byteOffset, bytes.byteLength);
+  let e = bytes.length - 22;
+  while(e >= 0 && dv.getUint32(e, true) !== 0x06054b50) e--;
+  if(e < 0) throw new Error('ZIP invalido');
+  const n = dv.getUint16(e+10, true), cdOff = dv.getUint32(e+16, true);
+  const files = []; let p = cdOff;
+  const td = new TextDecoder();
+  for(let i=0;i<n;i++){
+    const method = dv.getUint16(p+10,true), csize = dv.getUint32(p+20,true);
+    const nameLen = dv.getUint16(p+28,true), extraLen = dv.getUint16(p+30,true), cmtLen = dv.getUint16(p+32,true);
+    const lho = dv.getUint32(p+42,true);
+    const name = td.decode(bytes.subarray(p+46, p+46+nameLen));
+    const lnl = dv.getUint16(lho+26,true), lel = dv.getUint16(lho+28,true);
+    const dataOff = lho+30+lnl+lel;
+    files.push({name, method, raw: bytes.subarray(dataOff, dataOff+csize)});
+    p += 46+nameLen+extraLen+cmtLen;
+  }
+  for(const f of files){
+    f.data = f.method === 8 ? await inflateRaw(f.raw) : new Uint8Array(f.raw);
+    delete f.raw;
+  }
+  return files;
+}
+const W_NS = 'http://schemas.openxmlformats.org/wordprocessingml/2006/main';
+function escRx(txt){ return txt.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); }
+function flexRegex(txt){ return new RegExp(escRx(txt).replace(/\s+/g, '\\s+')); }
+function fullRegex(txt){ return new RegExp('^' + escRx(txt).replace(/\s+/g, '\\s+') + '$'); }
+function collectFieldChanges(sid){
+  const out = [];
+  document.querySelectorAll('#p-'+sid+' .sheet').forEach(sh=>{
+    const tmp = document.createElement('div'); tmp.innerHTML = originals.get(sh);
+    const o = tmp.querySelectorAll('.ed'), c = sh.querySelectorAll('.ed');
+    if(o.length !== c.length) throw Object.assign(new Error('estructura'), {code:'struct'});
+    for(let i=0;i<o.length;i++){
+      const a = normTxt(o[i].textContent), b = normTxt(c[i].textContent);
+      if(a !== b) out.push({old: a, node: c[i]});
+    }
+  });
+  return out;
+}
+function runText(r){
+  let t=''; const ts = r.getElementsByTagNameNS(W_NS,'t');
+  for(const x of ts) t += x.textContent;
+  return t;
+}
+function makeRun(xdoc, templateRun, text, bold){
+  const r = xdoc.createElementNS(W_NS,'w:r');
+  const tpr = templateRun && templateRun.getElementsByTagNameNS(W_NS,'rPr')[0];
+  if(tpr){
+    const pr = tpr.cloneNode(true);
+    const bs = [...pr.getElementsByTagNameNS(W_NS,'b')];
+    bs.forEach(x=>pr.removeChild(x));
+    if(bold) pr.appendChild(xdoc.createElementNS(W_NS,'w:b'));
+    r.appendChild(pr);
+  } else if(bold){
+    const pr = xdoc.createElementNS(W_NS,'w:rPr');
+    pr.appendChild(xdoc.createElementNS(W_NS,'w:b'));
+    r.appendChild(pr);
+  }
+  const t = xdoc.createElementNS(W_NS,'w:t');
+  t.setAttribute('xml:space','preserve');
+  t.textContent = text;
+  r.appendChild(t);
+  return r;
+}
+function applyChange(xdoc, ch){
+  const rx  = flexRegex(ch.old);
+  const rxU = flexRegex(ch.old.toUpperCase());
+  const newText = normTxt(ch.node.textContent);
+  // Caso A: el texto completo vive dentro de un solo w:t
+  for(const t of xdoc.getElementsByTagNameNS(W_NS,'t')){
+    if(rx.test(t.textContent)){
+      t.textContent = t.textContent.replace(rx, newText);
+      t.setAttribute('xml:space','preserve');
+      return true;
+    }
+    if(rxU.test(t.textContent)){
+      t.textContent = t.textContent.replace(rxU, newText.toUpperCase());
+      t.setAttribute('xml:space','preserve');
+      return true;
+    }
+  }
+  // Caso B: el texto abarca la cola de runs de un parrafo (vinietas con negrita)
+  for(const par of xdoc.getElementsByTagNameNS(W_NS,'p')){
+    const rs = [...par.getElementsByTagNameNS(W_NS,'r')].filter(r => r.parentNode === par);
+    for(let k=0;k<rs.length;k++){
+      let concat = '';
+      for(let j=k;j<rs.length;j++) concat += runText(rs[j]);
+      if(!fullRegex(ch.old).test(normTxt(concat))) continue;
+      const isBold = r => r.getElementsByTagNameNS(W_NS,'b').length > 0;
+      const tail = rs.slice(k);
+      const baseTpl = tail.find(r=>!isBold(r)) || tail[0];
+      const boldTpl = tail.find(isBold) || baseTpl;
+      tail.forEach(r=>par.removeChild(r));
+      (function emit(node){
+        for(const nd of node.childNodes){
+          if(nd.nodeType === 3){
+            if(nd.textContent) par.appendChild(makeRun(xdoc, baseTpl, nd.textContent, false));
+          } else if(nd.nodeType === 1){
+            if(nd.tagName === 'B' || nd.tagName === 'STRONG')
+              par.appendChild(makeRun(xdoc, boldTpl, nd.textContent, true));
+            else if(!nd.classList.contains('bg')) emit(nd);
+          }
+        }
+      })(ch.node);
+      return true;
+    }
+  }
+  return false;
+}
+async function exportPatchedDocx(sid){
+  const cfg = VARIANTS[sid];
+  const srcA = document.querySelector('#p-' + sid + ' a.dl-btn.word');
+  const bytes = b64ToBytes(srcA.getAttribute('href').split('base64,')[1]);
+  const files = await unzipDocx(bytes);
+  const docF = files.find(f=>f.name === 'word/document.xml');
+  const xml = new TextDecoder().decode(docF.data);
+  const xdoc = new DOMParser().parseFromString(xml, 'application/xml');
+  if(xdoc.getElementsByTagName('parsererror').length) throw new Error('XML de plantilla ilegible');
+  const changes = collectFieldChanges(sid);
+  const missed = [];
+  for(const ch of changes){
+    if(!applyChange(xdoc, ch)) missed.push(ch.old.slice(0, 40));
+  }
+  docF.data = new TextEncoder().encode(new XMLSerializer().serializeToString(xdoc));
+  const out = zipStore(files.map(f=>({name: f.name, data: f.data})));
+  await deliver('CV Jeniffer Mieres - ' + cfg.label + ' (editado).docx', out);
+  if(missed.length) toast('Ojo: ' + missed.length + ' cambio(s) no se pudieron aplicar automaticamente.');
+}
+
 function exportVariantDocx(sid){
   const cfg = VARIANTS[sid];
   const sheets = [...document.querySelectorAll('#p-'+sid+' .sheet')];
@@ -1245,9 +1398,19 @@ function exportVariantDocx(sid){
   deliver('CV Jeniffer Mieres - ' + sid + ' (editado).docx', bytes);
 }
 document.querySelectorAll('.dl-btn.export-word').forEach(btn=>{
-  btn.addEventListener('click', ()=>{
-    try{ exportVariantDocx(btn.dataset.variant); }
-    catch(e){ alert('No se pudo generar el Word editado: ' + e.message); }
+  btn.addEventListener('click', async ()=>{
+    const sid = btn.dataset.variant;
+    try{
+      if(!window.DecompressionStream) throw Object.assign(new Error('sin soporte'), {code:'nods'});
+      await exportPatchedDocx(sid);
+    }catch(e){
+      if(e && e.code === 'struct'){
+        toast('La estructura de una hoja cambio demasiado. Usa Restablecer y reaplica tus cambios.');
+        return;
+      }
+      try{ exportVariantDocx(sid); toast('Descargado en formato simplificado (respaldo).'); }
+      catch(e2){ toast('No se pudo generar el Word editado: ' + e2.message); }
+    }
   });
 });
 document.querySelectorAll('.dl-btn.export-pdf').forEach(btn=>{

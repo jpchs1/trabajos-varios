@@ -122,29 +122,32 @@ def pdf_svg():
             '2.6s-.85 2.6-2.2 2.6h-1.1zm5.5 0V12h2.6M17.8 14.6h2" fill="none" stroke="currentColor" '
             'stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>')
 
+def dl_btn(sid, fmt, mode, dis=False):
+    icon = word_svg() if fmt == "docx" else pdf_svg()
+    return (f'<button type="button" class="dl-btn {fmt}" '
+            f'data-variant="{sid}" data-fmt="{fmt}" data-mode="{mode}"{" disabled" if dis else ""}>'
+            f'{icon}<span>{"Word" if fmt=="docx" else "PDF"}<i>.{fmt}</i></span></button>')
+
 def downloads(sid):
     docx_p, pdf_p, label = FILES[sid]
-    docx_href = f"data:{DOCX_MIME};base64,{b64(docx_p)}"
-    pdf_href  = f"data:application/pdf;base64,{b64(pdf_p)}"
     return f'''<div class="dl">
-      <div class="dlg-b">
-        <a class="dl-btn word main-word" data-variant="{sid}" download="{E(label)}.docx" href="{docx_href}">
-          {word_svg()}<span>Word<i class="sub">.docx</i></span></a>
-        <a class="dl-btn pdf main-pdf" data-variant="{sid}" download="{E(label)}.pdf" href="{pdf_href}">
-          {pdf_svg()}<span>PDF<i class="sub">.pdf</i></span></a>
+      <div class="dlcol">
+        <p class="dlcol-l">Diseño original</p>
+        <div class="dlrow">{dl_btn(sid,"docx","orig")}{dl_btn(sid,"pdf","orig")}</div>
       </div>
-      <div class="editstate" data-variant="{sid}" hidden>
-        <span class="es-txt">Editada · <em class="saved" data-variant="{sid}"
-          aria-live="polite">guardada ✓</em></span>
-        <span class="es-acts">
-          <button type="button" class="linklike reset-variant" data-variant="{sid}">Restablecer</button>
-          <a class="linklike orig-link" data-variant="{sid}" download="{E(label)} (original).docx"
-            href="#">bajar original</a>
-        </span>
+      <div class="dlcol dledit" data-variant="{sid}">
+        <p class="dlcol-l">Con tu edición
+          <em class="saved" data-variant="{sid}" aria-live="polite">guardada ✓</em></p>
+        <div class="dlrow">{dl_btn(sid,"docx","edit",True)}{dl_btn(sid,"pdf","edit",True)}</div>
+        <button type="button" class="linklike reset-variant" data-variant="{sid}">Restablecer el original</button>
       </div>
-      <p class="dl-hint">Edita cualquier texto de las hojas: <b>se guarda solo</b> y estos mismos botones
-        pasan a descargar tu versión editada, con el diseño exacto de la plantilla.</p>
-    </div>'''
+      <a class="src-docx" data-variant="{sid}" hidden
+        href="data:{DOCX_MIME};base64,{b64(docx_p)}">.</a>
+      <a class="src-pdf" data-variant="{sid}" hidden
+        href="data:application/pdf;base64,{b64(pdf_p)}">.</a>
+    </div>
+    <p class="dl-hint">Los cuatro botones descargan el archivo <b>al instante</b>, sin diálogos.
+      Edita cualquier texto de las hojas —se guarda solo— y se activan los dos de la derecha.</p>'''
 
 # ================================================================ VARIANTE 1 (Minimal)
 def v1_p1():
@@ -528,21 +531,24 @@ body{margin:0;background:var(--ground);color:var(--ink);font-family:var(--ui);
 .lede h2 em.alt{background:transparent;color:var(--accent);border:1px solid var(--accent);padding:4px 9px}
 .kicker{margin:7px 0 0;font-size:.74rem;letter-spacing:.15em;text-transform:uppercase;color:var(--muted)}
 .note{margin:16px 0 0;color:var(--muted);max-width:56ch;font-size:.94rem}
-.dl{display:flex;flex-direction:column;gap:14px;margin-top:22px}
-.dlgrp{display:flex;flex-direction:column;gap:8px}
-.dlg-l{font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);font-weight:650;
-  display:flex;align-items:center;gap:10px}
-.dlg-l .saved{font-style:normal;text-transform:none;letter-spacing:.01em;font-size:.72rem;font-weight:600;
-  color:var(--dl-edit)}
-.dlg-b{display:flex;flex-wrap:wrap;gap:10px}
-.editstate[hidden]{display:none!important}
-.editstate{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 14px;
-  font-size:.8rem;color:var(--muted)}
-.editstate .saved{font-style:normal;font-weight:650;color:var(--dl-edit)}
-.es-acts{display:flex;gap:14px}
-.linklike{appearance:none;border:none;background:none;cursor:pointer;font:inherit;font-size:.8rem;
-  color:var(--muted);text-decoration:underline;text-underline-offset:2px;padding:0}
+.dl{display:flex;flex-wrap:wrap;gap:20px 28px;margin-top:24px;align-items:flex-start}
+.dlcol{display:flex;flex-direction:column;gap:9px;min-width:0}
+.dlcol+.dlcol{padding-left:28px;border-left:1px solid var(--line)}
+.dlcol-l{margin:0;font-size:.71rem;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--muted);font-weight:650;display:flex;align-items:baseline;gap:9px}
+.dlcol-l .saved{font-style:normal;text-transform:none;letter-spacing:.01em;font-size:.72rem;
+  font-weight:600;color:var(--dl-edit);opacity:0;transition:opacity .2s}
+.dlcol.on .dlcol-l .saved{opacity:1}
+.dlcol.dledit.on{border-left-color:var(--dl-edit)}
+.dlrow{display:flex;flex-wrap:wrap;gap:10px}
+.linklike{appearance:none;border:none;background:none;cursor:pointer;font:inherit;font-size:.76rem;
+  color:var(--muted);text-decoration:underline;text-underline-offset:2px;padding:0;align-self:flex-start}
 .linklike:hover{color:var(--accent)}
+.linklike[hidden]{display:none!important}
+@media (max-width:620px){
+  .dlcol+.dlcol{padding-left:0;border-left:none;padding-top:20px;
+    border-top:1px solid var(--line);width:100%}
+}
 .tabs button.edited::after{content:"";display:inline-block;width:7px;height:7px;border-radius:50%;
   background:var(--dl-edit);margin-left:7px;vertical-align:middle}
 .dl-btn{display:inline-flex;align-items:center;gap:9px;appearance:none;text-decoration:none;
@@ -553,13 +559,16 @@ body{margin:0;background:var(--ground);color:var(--ink);font-family:var(--ui);
 .dl-btn i{font-style:normal;font-weight:500;color:var(--muted);margin-left:1px}
 .dl-btn:hover{border-color:var(--accent);transform:translateY(-1px)}
 .dl-btn:active{transform:translateY(0)}
-.dl-btn.word{color:var(--dl-word)}
-.dl-btn.word:hover{background:color-mix(in srgb,var(--dl-word) 10%,var(--raise))}
+.dl-btn.docx{color:var(--dl-word)}
+.dl-btn.docx:hover{background:color-mix(in srgb,var(--dl-word) 10%,var(--raise))}
 .dl-btn.pdf{color:var(--dl-pdf)}
 .dl-btn.pdf:hover{background:color-mix(in srgb,var(--dl-pdf) 10%,var(--raise))}
 .dl-btn.ghost{color:var(--muted)}
 .dl-btn.ghost:hover{color:var(--ink);background:var(--raise)}
 .dl-btn[hidden]{display:none!important}
+.dl-btn[disabled]{opacity:.4;cursor:default;filter:grayscale(.7)}
+.dl-btn[disabled]:hover{transform:none;border-color:var(--line);background:var(--raise)}
+.dl-btn.busy{opacity:.6;cursor:progress}
 .dl-btn.edit{color:var(--dl-edit);border-color:var(--dl-edit)}
 .dl-btn.edit:hover{background:color-mix(in srgb,var(--dl-edit) 12%,var(--raise))}
 .dl-hint{margin:12px 0 0;font-size:.78rem;color:var(--muted);max-width:54ch;line-height:1.5}
@@ -818,14 +827,34 @@ body{margin:0;background:var(--ground);color:var(--ink);font-family:var(--ui);
 /* ---------- impresion ---------- */
 #print-root{display:none}
 @media print{
+  @page{size:A4;margin:10mm}
+  body{background:#fff}
   body>*:not(#print-root){display:none!important}
   #print-root{display:block!important}
   #print-root .pframe{break-after:page}
   #print-root .pframe:last-child{break-after:auto}
-  #print-root .sheet{width:210mm;height:297mm;box-shadow:none;border-radius:0}
-  #print-root .ed{background:none!important;box-shadow:none!important}
+  #print-root .sheet{width:190mm;min-height:277mm;box-shadow:none;border-radius:0;
+    container-type:normal;overflow:visible}
+  #print-root .pg{aspect-ratio:auto;min-height:277mm;overflow:visible}
+  /* Ojo: las franjas de seccion son campos .ed; borrarles el fondo dejaba
+     texto blanco sobre blanco. Solo se neutraliza el realce de edicion. */
+  #print-root .ed{box-shadow:none!important;cursor:auto;outline:none}
   #print-root *{-webkit-print-color-adjust:exact;print-color-adjust:exact}
-  @page{size:A4;margin:0}
+  /* Los tamanos en cqw no existen al imprimir: equivalentes absolutos
+     para una hoja de 190mm (1cqw = 1.9mm). */
+  #print-root .s1{font-size:calc(2.9051mm*var(--fit,1));padding:9.5mm 13.11mm 0 14.478mm}
+  #print-root .s2{font-size:calc(3.0647mm*var(--fit,1))}
+  #print-root .s2-band{padding-left:14.478mm;padding-right:14.478mm}
+  #print-root .s2-body{padding-left:14.478mm;padding-right:13.11mm}
+  #print-root .s2-body.s2-cont{padding-top:9.88mm}
+  #print-root .s3{font-size:calc(2.9678mm*var(--fit,1))}
+  #print-root .s3-band{padding-left:13.566mm;padding-right:13.566mm}
+  #print-root .s3-cols{padding-left:13.566mm;padding-right:12.673mm}
+  #print-root .s4{font-size:calc(2.9925mm*var(--fit,1));padding:8.74mm 13.566mm 0 15.39mm}
+  #print-root .s5{font-size:calc(3.04mm*var(--fit,1));padding:9.31mm 17.195mm 0 17.195mm}
+  #print-root .s5.top2{padding-top:10.26mm}
+  #print-root .s6{font-size:calc(2.9925mm*var(--fit,1));padding:8.74mm 13.566mm 0 14.478mm}
+  #print-root .s6.top2{padding-top:9.69mm}
 }
 #toast{position:fixed;left:50%;bottom:26px;transform:translate(-50%,14px);z-index:99;
   max-width:min(92vw,480px);padding:11px 18px;border-radius:10px;font-size:.86rem;font-weight:560;
@@ -877,14 +906,15 @@ function isEdited(sid){
 }
 function refreshEditedUI(sid){
   const on = isEdited(sid);
-  const st = document.querySelector(`.editstate[data-variant="${sid}"]`);
-  if(st) st.hidden = !on;
+  const col = document.querySelector(`.dlcol.dledit[data-variant="${sid}"]`);
+  if(col) col.classList.toggle('on', on);
+  document.querySelectorAll(`.dl-btn[data-variant="${sid}"][data-mode="edit"]`)
+    .forEach(b=>{ b.disabled = !on;
+      b.title = on ? '' : 'Edita algún texto de las hojas para activarlo'; });
+  const rs = document.querySelector(`.reset-variant[data-variant="${sid}"]`);
+  if(rs) rs.hidden = !on;
   const tab = document.getElementById('t-'+sid);
   if(tab) tab.classList.toggle('edited', on);
-  const ws = document.querySelector(`a.main-word[data-variant="${sid}"] .sub`);
-  if(ws) ws.textContent = on ? 'con tu edición' : '.docx';
-  const ps = document.querySelector(`a.main-pdf[data-variant="${sid}"] .sub`);
-  if(ps) ps.textContent = on ? 'imprimir' : '.pdf';
 }
 function setSaved(sid, txt){
   const chip = document.querySelector(`.saved[data-variant="${sid}"]`);
@@ -1009,87 +1039,76 @@ async function deliver(filename, bytes){
     try{
       await window.claude.downloads.save({filename, data: bytes});
       toast('Descarga confirmada: ' + filename);
+      return 'ok';
     }catch(e){
       const code = e && e.code;
-      if(code === 'declined') return;
-      if(code === 'rate_limited'){ toast('Hay una descarga pendiente de confirmar. Espera un momento y reintenta.'); return; }
-      if(code === 'extension_not_enabled' || code === 'rejected_extension'){
-        toast('Este visor no permite guardar este tipo de archivo. Usa los archivos enviados en el chat.');
-        return;
+      if(code === 'declined') return 'declined';
+      if(code === 'rate_limited'){
+        toast('Hay una descarga pendiente de confirmar. Espera un momento y reintenta.');
+        return 'busy';
       }
+      if(code === 'extension_not_enabled' || code === 'rejected_extension') return 'unsupported';
       toast('No se pudo guardar: ' + ((e && e.message) || 'sin detalle'));
+      return 'error';
     }
-    return;
   }
   anchorDownload(filename, bytes);
+  toast('Descargando: ' + filename);
+  return 'ok';
 }
 function b64ToBytes(b64){
   const bin = atob(b64), out = new Uint8Array(bin.length);
   for(let i=0;i<bin.length;i++) out[i] = bin.charCodeAt(i);
   return out;
 }
-/* Word: descarga la edicion si existe; si no, la plantilla original */
-document.querySelectorAll('a.main-word').forEach(aEl=>{
-  aEl.addEventListener('click', async e=>{
-    const sid = aEl.dataset.variant;
-    if(isEdited(sid)){
-      e.preventDefault();
-      try{
-        if(!window.DecompressionStream) throw Object.assign(new Error('sin soporte'), {code:'nods'});
-        await exportPatchedDocx(sid);
-      }catch(err){
-        if(err && err.code === 'struct'){
-          toast('La estructura de una hoja cambió demasiado. Usa Restablecer y reaplica tus cambios.');
-          return;
-        }
-        try{ exportVariantDocx(sid); toast('Descargado en formato simplificado (respaldo).'); }
-        catch(e2){ toast('No se pudo generar el Word: ' + e2.message); }
-      }
+/* ---------- los cuatro botones, sin dialogos ---------- */
+function srcBytes(sid, kind){
+  const a = document.querySelector('a.src-'+kind+'[data-variant="'+sid+'"]');
+  return b64ToBytes(a.getAttribute('href').split('base64,')[1]);
+}
+function fileName(sid, edited, ext){
+  return 'CV Jeniffer Mieres - ' + VARIANTS[sid].label + (edited ? ' (editado)' : '') + '.' + ext;
+}
+async function doDocx(sid, edited){
+  if(!edited) return deliver(fileName(sid, false, 'docx'), srcBytes(sid, 'docx'));
+  try{
+    if(!window.DecompressionStream) throw Object.assign(new Error('sin soporte'), {code:'nods'});
+    return await exportPatchedDocx(sid);
+  }catch(err){
+    if(err && err.code === 'struct'){
+      toast('La estructura de una hoja cambió demasiado. Usa «Restablecer el original» y reaplica tus cambios.');
       return;
     }
-    if(window.claude && window.claude.downloads){
-      e.preventDefault();
-      deliver(aEl.getAttribute('download'), b64ToBytes(aEl.getAttribute('href').split('base64,')[1]));
-    }
-  });
-});
-document.querySelectorAll('a.orig-link').forEach(aEl=>{
-  const w = document.querySelector('a.main-word[data-variant="' + aEl.dataset.variant + '"]');
-  if(w) aEl.setAttribute('href', w.getAttribute('href'));
-});
-document.querySelectorAll('a.orig-link').forEach(aEl=>{
-  aEl.addEventListener('click', e=>{
-    if(!(window.claude && window.claude.downloads)) return;
-    e.preventDefault();
-    deliver(aEl.getAttribute('download'), b64ToBytes(aEl.getAttribute('href').split('base64,')[1]));
-  });
-});
-document.querySelectorAll('a.main-pdf').forEach(aEl=>{
-  aEl.addEventListener('click', async e=>{
-    const sid = aEl.dataset.variant;
-    if(isEdited(sid)){
-      e.preventDefault();
-      buildPrintRoot(sid);
-      toast('Tu edición: en el diálogo elige «Guardar como PDF».');
-      requestAnimationFrame(()=>requestAnimationFrame(()=>window.print()));
-      return;
-    }
-    if(!(window.claude && window.claude.downloads)) return;
-    e.preventDefault();
-    const name = aEl.getAttribute('download');
+    try{ exportVariantDocx(sid); toast('Descargado en formato simplificado (respaldo).'); }
+    catch(e2){ toast('No se pudo generar el Word: ' + e2.message); }
+  }
+}
+async function doPdf(sid, edited){
+  let bytes = null;
+  try{ bytes = await generatePdf(sid, !edited); }
+  catch(e){ console.error('generatePdf', e); }
+  if(!bytes && !edited){ try{ bytes = srcBytes(sid, 'pdf'); }catch(e){} }
+  if(bytes){
+    const st = await deliver(fileName(sid, edited, 'pdf'), bytes);
+    if(st !== 'unsupported') return;
+  }
+  buildPrintRoot(sid, !edited);
+  toast('Este visor no permite guardar .pdf: en el diálogo elige «Guardar como PDF».');
+  requestAnimationFrame(()=>requestAnimationFrame(()=>window.print()));
+}
+document.querySelectorAll('.dl-btn[data-mode]').forEach(btn=>{
+  btn.addEventListener('click', async ()=>{
+    if(btn.disabled) return;
+    const sid = btn.dataset.variant, edited = btn.dataset.mode === 'edit';
+    btn.disabled = true; btn.classList.add('busy');
     try{
-      const b64 = aEl.getAttribute('href').split('base64,')[1];
-      await window.claude.downloads.save({filename: name, data: b64ToBytes(b64)});
-      toast('Descarga confirmada: ' + name);
-      return;
-    }catch(err){
-      const code = err && err.code;
-      if(code === 'declined') return;
-      if(code === 'rate_limited'){ toast('Hay una descarga pendiente de confirmar. Reintenta en unos segundos.'); return; }
+      if(btn.dataset.fmt === 'docx') await doDocx(sid, edited);
+      else await doPdf(sid, edited);
+    } finally {
+      btn.classList.remove('busy');
+      btn.disabled = false;
+      refreshEditedUI(sid);
     }
-    buildPrintRootPristine(sid);
-    toast('claude.ai no permite bajar .pdf directo. En el diálogo elige «Guardar como PDF».');
-    requestAnimationFrame(()=>requestAnimationFrame(()=>window.print()));
   });
 });
 
@@ -1101,7 +1120,6 @@ function buildPrintRoot(sid, pristine){
     const wrap=document.createElement('div'); wrap.className='pframe';
     const clone=sh.cloneNode(pristine ? false : true);
     if(pristine) clone.innerHTML = originals.get(sh);
-    clone.removeAttribute('style');
     clone.querySelectorAll('.ed').forEach(e=>e.removeAttribute('contenteditable'));
     wrap.appendChild(clone);
     root.appendChild(wrap);
@@ -1121,27 +1139,45 @@ function crc32(bytes){ let crc=0xFFFFFFFF;
   for(let i=0;i<bytes.length;i++) crc=CRC_TABLE[(crc^bytes[i])&0xFF]^(crc>>>8);
   return (crc^0xFFFFFFFF)>>>0; }
 
+async function deflateRaw(u8){
+  if(!window.CompressionStream) return null;
+  const cs=new CompressionStream('deflate-raw');
+  const st=new Blob([u8]).stream().pipeThrough(cs);
+  return new Uint8Array(await new Response(st).arrayBuffer());
+}
+/* Comprime cada entrada si el navegador lo permite; si no, las deja almacenadas. */
+async function zipPack(files){
+  for(const f of files){
+    if(f.data.length < 256) continue;
+    try{
+      const d = await deflateRaw(f.data);
+      if(d && d.length < f.data.length){ f.comp = d; f.method = 8; }
+    }catch(e){}
+  }
+  return zipStore(files);
+}
 function zipStore(files){
   const enc=new TextEncoder(); let parts=[], centrals=[], offset=0;
   files.forEach(f=>{
+    const body=f.comp||f.data, method=f.method||0;
     const nameBytes=enc.encode(f.name), crc=crc32(f.data), size=f.data.length;
     const lh=new Uint8Array(30+nameBytes.length), dv=new DataView(lh.buffer);
     dv.setUint32(0,0x04034b50,true); dv.setUint16(4,20,true); dv.setUint16(6,0,true);
-    dv.setUint16(8,0,true); dv.setUint16(10,0,true); dv.setUint16(12,0,true);
-    dv.setUint32(14,crc,true); dv.setUint32(18,size,true); dv.setUint32(22,size,true);
+    dv.setUint16(8,method,true); dv.setUint16(10,0,true); dv.setUint16(12,0,true);
+    dv.setUint32(14,crc,true); dv.setUint32(18,body.length,true); dv.setUint32(22,size,true);
     dv.setUint16(26,nameBytes.length,true); dv.setUint16(28,0,true);
     lh.set(nameBytes,30);
-    parts.push(lh, f.data);
+    parts.push(lh, body);
     const ch=new Uint8Array(46+nameBytes.length), cdv=new DataView(ch.buffer);
     cdv.setUint32(0,0x02014b50,true); cdv.setUint16(4,20,true); cdv.setUint16(6,20,true);
-    cdv.setUint16(8,0,true); cdv.setUint16(10,0,true); cdv.setUint16(12,0,true); cdv.setUint16(14,0,true);
-    cdv.setUint32(16,crc,true); cdv.setUint32(20,size,true); cdv.setUint32(24,size,true);
+    cdv.setUint16(8,0,true); cdv.setUint16(10,method,true); cdv.setUint16(12,0,true); cdv.setUint16(14,0,true);
+    cdv.setUint32(16,crc,true); cdv.setUint32(20,body.length,true); cdv.setUint32(24,size,true);
     cdv.setUint16(28,nameBytes.length,true); cdv.setUint16(30,0,true); cdv.setUint16(32,0,true);
     cdv.setUint16(34,0,true); cdv.setUint16(36,0,true); cdv.setUint32(38,0,true);
     cdv.setUint32(42,offset,true);
     ch.set(nameBytes,46);
     centrals.push(ch);
-    offset += lh.length + f.data.length;
+    offset += lh.length + body.length;
   });
   const centralStart=offset;
   let centralSize=0; centrals.forEach(c=>centralSize+=c.length);
@@ -1370,8 +1406,7 @@ function applyChange(xdoc, ch){
 }
 async function exportPatchedDocx(sid){
   const cfg = VARIANTS[sid];
-  const srcA = document.querySelector('#p-' + sid + ' a.dl-btn.word');
-  const bytes = b64ToBytes(srcA.getAttribute('href').split('base64,')[1]);
+  const bytes = srcBytes(sid, 'docx');
   const files = await unzipDocx(bytes);
   const docF = files.find(f=>f.name === 'word/document.xml');
   const xml = new TextDecoder().decode(docF.data);
@@ -1383,8 +1418,8 @@ async function exportPatchedDocx(sid){
     if(!applyChange(xdoc, ch)) missed.push(ch.old.slice(0, 40));
   }
   docF.data = new TextEncoder().encode(new XMLSerializer().serializeToString(xdoc));
-  const out = zipStore(files.map(f=>({name: f.name, data: f.data})));
-  await deliver('CV Jeniffer Mieres - ' + cfg.label + ' (editado).docx', out);
+  const out = await zipPack(files.map(f=>({name: f.name, data: f.data})));
+  await deliver(fileName(sid, true, 'docx'), out);
   if(missed.length) toast('Ojo: ' + missed.length + ' cambio(s) no se pudieron aplicar automaticamente.');
 }
 
@@ -1424,6 +1459,8 @@ function exportVariantDocx(sid){
 
 """
 JS = JS.replace("__VARIANT_CFG__", VARIANT_CFG)
+# Tipografias incrustadas + generador de PDF en el navegador (sin dialogo de impresion)
+JS = open('pdffonts.js', encoding='utf-8').read() + "\n" + JS + "\n" + open('pdfgen.js', encoding='utf-8').read()
 
 PENCIL = ('<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20l1-4.2L15.6 5.2a1.5 1.5 0 0 1 2.1 0l1.1 1.1a1.5 '
           '1.5 0 0 1 0 2.1L8.2 19l-4.2 1z" fill="none" stroke="currentColor" stroke-width="1.5" '
@@ -1431,6 +1468,7 @@ PENCIL = ('<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20l1-4.2L15.6
 
 HTML = f"""<title>Propuestas de diseño de CV · Jeniffer Mieres Contreras</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
 <style>{CSS}</style>
 <div class="wrap">
   <header class="top">

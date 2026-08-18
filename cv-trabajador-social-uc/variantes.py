@@ -110,6 +110,7 @@ def swiss():
     INK  = RGBColor(0x0D,0x0D,0x0D); BODY = RGBColor(0x3A,0x3E,0x42)
     META = RGBColor(0x76,0x7B,0x80); FAINT= RGBColor(0xB0,0xB4,0xB8)
     doc = Document(); s = doc.sections[0]
+    s.page_width, s.page_height = Cm(21.0), Cm(29.7)
     s.top_margin, s.bottom_margin = Cm(km(1.5)), Cm(km(1.3))
     s.left_margin, s.right_margin = Cm(1.6), Cm(1.45)
     W = s.page_width - s.left_margin - s.right_margin
@@ -205,6 +206,7 @@ def banda():
     ACC  = RGBColor(0x13,0x32,0x3C); WHITE= RGBColor(0xFF,0xFF,0xFF)
     PALE = RGBColor(0xC5,0xD2,0xD6)
     doc = Document(); s = doc.sections[0]
+    s.page_width, s.page_height = Cm(21.0), Cm(29.7)
     s.top_margin, s.bottom_margin = Cm(km(1.15)), Cm(km(1.25))
     s.left_margin, s.right_margin = Cm(1.6), Cm(1.45)
     W = s.page_width - s.left_margin - s.right_margin
@@ -302,6 +304,7 @@ def sidebar():
     META = RGBColor(0x6E,0x74,0x78); ACC  = RGBColor(0x1B,0x3A,0x4B)
     WHITE= RGBColor(0xFF,0xFF,0xFF); PALE = RGBColor(0xC7,0xD4,0xDA)
     doc = Document(); s = doc.sections[0]
+    s.page_width, s.page_height = Cm(21.0), Cm(29.7)
     s.top_margin, s.bottom_margin = Cm(km(1.1)), Cm(km(1.1))
     s.left_margin, s.right_margin = Cm(1.5), Cm(1.4)
     SIDE, MAIN = Cm(5.4), Cm(12.7)
@@ -427,6 +430,7 @@ def rail():
     META = RGBColor(0x6C,0x71,0x76); FAINT = RGBColor(0xA8,0xAD,0xB2)
     ACC = RGBColor(0x6E,0x21,0x30); HAIR = "6E2130"
     doc = Document(); s = doc.sections[0]
+    s.page_width, s.page_height = Cm(21.0), Cm(29.7)
     s.top_margin, s.bottom_margin = Cm(km(1.25)), Cm(km(1.15))
     s.left_margin, s.right_margin = Cm(1.7), Cm(1.5)
     W = s.page_width - s.left_margin - s.right_margin
@@ -530,6 +534,7 @@ def centro():
     INK = RGBColor(0x1A,0x1A,0x1A); BODY = RGBColor(0x35,0x38,0x3B)
     META = RGBColor(0x70,0x74,0x78); ACC = RGBColor(0x7A,0x5C,0x2E); HAIR = "7A5C2E"
     doc = Document(); s = doc.sections[0]
+    s.page_width, s.page_height = Cm(21.0), Cm(29.7)
     s.top_margin, s.bottom_margin = Cm(km(1.3)), Cm(km(1.2))
     s.left_margin, s.right_margin = Cm(1.9), Cm(1.9)
     W = s.page_width - s.left_margin - s.right_margin
@@ -633,6 +638,7 @@ def impacto():
     META = RGBColor(0x6E,0x73,0x78); ACC = RGBColor(0x24,0x43,0x5C)
     WHITE = RGBColor(0xFF,0xFF,0xFF); FILL = "24435C"
     doc = Document(); s = doc.sections[0]
+    s.page_width, s.page_height = Cm(21.0), Cm(29.7)
     s.top_margin, s.bottom_margin = Cm(km(1.2)), Cm(km(1.1))
     s.left_margin, s.right_margin = Cm(1.6), Cm(1.5)
     W = s.page_width - s.left_margin - s.right_margin

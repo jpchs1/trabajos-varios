@@ -18,12 +18,12 @@ if ( php_sapi_name() !== 'cli' ) { exit; } // solo terminal, nunca via web
  *       php hvkp-fotos-autos.php restore    (volver a las fotos anteriores)
  */
 
-$HVKF_BASE  = 'https://raw.githubusercontent.com/jpchs1/trabajos-varios/main/homvuk-deploy/autos/';
+$HVKF_BASE  = 'https://raw.githubusercontent.com/jpchs1/trabajos-varios/2f650184a76acf5d899cec340309827b968ad17d/homvuk-deploy/autos/';
 $HVKF_FOTOS = array(
-    'porsche-cayenne-2018'             => array( 'archivo' => 'porsche-cayenne-2018-pro.jpg', 'md5' => '7c1d26d9657e192233ff3f636327a8b6', 'alt' => 'Arriendo Porsche Cayenne 2018 en Santiago - HOMVUK' ),
-    'mg3-2019'                         => array( 'archivo' => 'mg3-2019-pro.jpg',             'md5' => '20d407be214d917dec3355e9cfec06fc', 'alt' => 'Arriendo MG3 2019 en Santiago - HOMVUK' ),
-    'new-mg-zs-2026'                   => array( 'archivo' => 'new-mg-zs-2026-pro.jpg',       'md5' => '7dbb2a6ec7f9374214b8dca84b013549', 'alt' => 'Arriendo MG ZS 2026 plateado en Santiago - HOMVUK' ),
-    'jaguar-xf-2012-3-0cc-automatico'  => array( 'archivo' => 'jaguar-xf-2012-pro.jpg',       'md5' => '9a014b70d8ca49bd6c3402694dd9477d', 'alt' => 'Arriendo Jaguar XF 3.0 2012 en Santiago - HOMVUK' ),
+    'porsche-cayenne-2018'             => array( 'archivo' => 'porsche-cayenne-2018-pro.jpg', 'md5' => '166610e6a4c6c845d5e7cf93dbc8daf2', 'alt' => 'Arriendo Porsche Cayenne 2018 en Santiago - HOMVUK' ),
+    'mg3-2019'                         => array( 'archivo' => 'mg3-2019-pro.jpg',             'md5' => 'fa1a4490c7b0c2ecedc76db3f7ee8c51', 'alt' => 'Arriendo MG3 2019 en Santiago - HOMVUK' ),
+    'new-mg-zs-2026'                   => array( 'archivo' => 'new-mg-zs-2026-pro.jpg',       'md5' => '78e9bee4579f9fc4dc3ef2cc5823bc08', 'alt' => 'Arriendo MG ZS 2026 plateado en Santiago - HOMVUK' ),
+    'jaguar-xf-2012-3-0cc-automatico'  => array( 'archivo' => 'jaguar-xf-2012-pro.jpg',       'md5' => '8943d374c1cf3241b837090c4f631a55', 'alt' => 'Arriendo Jaguar XF 3.0 2012 en Santiago - HOMVUK' ),
 );
 
 require __DIR__ . '/wp-load.php';

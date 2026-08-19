@@ -14,6 +14,7 @@ if ( php_sapi_name() !== 'cli' ) { exit; } // solo terminal, nunca via web
  * Uso:  php hvkp-foto-zs.php                 (usa la ultima imagen subida)
  *       php hvkp-foto-zs.php --forzar       (aunque no sea reciente)
  *       php hvkp-foto-zs.php <URL>          (descarga la foto de esa direccion)
+ *       php hvkp-foto-zs.php <archivo>      (usa un archivo del servidor)
  *       php hvkp-foto-zs.php 1234            (usa la imagen con ese ID)
  *       php hvkp-foto-zs.php --no-publicar   (deja el auto en borrador)
  */
@@ -127,11 +128,16 @@ $publicar = true;
 $forzar   = false;
 $attach_id = 0;
 $url_foto  = '';
+$ruta_local = '';
 foreach ( array_slice( $argv, 1 ) as $a ) {
     if ( '--no-publicar' === $a ) { $publicar = false; }
     elseif ( '--forzar' === $a ) { $forzar = true; }
     elseif ( ctype_digit( $a ) ) { $attach_id = (int) $a; $forzar = true; }
     elseif ( 0 === stripos( $a, 'http' ) ) { $url_foto = $a; $forzar = true; }
+    elseif ( file_exists( $a ) || file_exists( __DIR__ . '/' . ltrim( $a, '/' ) ) ) {
+        $ruta_local = file_exists( $a ) ? $a : __DIR__ . '/' . ltrim( $a, '/' );
+        $forzar     = true;
+    }
     else {
         echo "[ERROR] No entiendo el dato \"$a\".\n";
         echo "        Se espera una direccion web que empiece con http, el numero de una imagen,\n";
@@ -163,7 +169,63 @@ if ( ! $auto ) {
 }
 echo "[OK]    Producto: MG ZS (id " . $auto->ID . ", estado actual: " . $auto->post_status . ")\n";
 
-// 2) La imagen: si se paso una direccion web, se descarga primero
+// 2) La imagen. Si no se indico nada, se busca un archivo subido a mano
+//    (por ejemplo con el Administrador de Archivos de cPanel), que WordPress
+//    todavia no tiene registrado en su biblioteca.
+if ( ! $url_foto && ! $attach_id && ! $ruta_local ) {
+    $updir  = wp_upload_dir();
+    $base   = $updir['basedir'];
+    $mejor  = ''; $mejor_t = 0;
+    foreach ( array( $updir['path'], $base . '/' . gmdate( 'Y/m' ), $base ) as $dir ) {
+        if ( ! is_dir( $dir ) ) {
+            continue;
+        }
+        foreach ( (array) glob( $dir . '/*.{jpg,jpeg,png,webp,JPG,JPEG,PNG,WEBP}', GLOB_BRACE ) as $f ) {
+            // descartar las copias de distintos tamanos que genera WordPress
+            if ( preg_match( '/-\d+x\d+\.[a-z]+$/i', $f ) ) {
+                continue;
+            }
+            $t = filemtime( $f );
+            if ( $t > $mejor_t ) {
+                $mejor_t = $t; $mejor = $f;
+            }
+        }
+    }
+    if ( $mejor && ( time() - $mejor_t ) < 6 * HOUR_IN_SECONDS ) {
+        $registrado = (int) $wpdb->get_var( $wpdb->prepare(
+            "SELECT post_id FROM {$wpdb->postmeta} WHERE meta_key = '_wp_attached_file' AND meta_value LIKE %s LIMIT 1",
+            '%' . $wpdb->esc_like( basename( $mejor ) )
+        ) );
+        if ( $registrado ) {
+            $attach_id = $registrado;
+            $forzar    = true;
+            echo "[OK]    Encontrada en la biblioteca: " . basename( $mejor ) . "\n";
+        } else {
+            $ruta_local = $mejor;
+            echo "[OK]    Encontrado archivo subido a mano: " . basename( $mejor ) . " (" . round( filesize( $mejor ) / 1024 ) . " KB)\n";
+        }
+    }
+}
+
+// Registrar en la biblioteca un archivo que esta en el disco pero WordPress no conoce
+if ( $ruta_local ) {
+    $tipo_l = wp_check_filetype( $ruta_local );
+    if ( empty( $tipo_l['type'] ) || 0 !== stripos( $tipo_l['type'], 'image/' ) ) {
+        echo "[ERROR] Ese archivo no es una imagen: " . basename( $ruta_local ) . "\n";
+        exit( 1 );
+    }
+    $attach_id = wp_insert_attachment( array(
+        'post_mime_type' => $tipo_l['type'],
+        'post_title'     => 'MG ZS 2026 plateado (original)',
+        'post_status'    => 'inherit',
+    ), $ruta_local );
+    require_once ABSPATH . 'wp-admin/includes/image.php';
+    wp_update_attachment_metadata( $attach_id, wp_generate_attachment_metadata( $attach_id, $ruta_local ) );
+    $forzar = true;
+    echo "[OK]    Registrado en la biblioteca de WordPress (id $attach_id)\n";
+}
+
+// Si se paso una direccion web, se descarga primero
 if ( $url_foto ) {
     $res = wp_remote_get( $url_foto, array( 'timeout' => 90, 'sslverify' => false ) );
     if ( is_wp_error( $res ) ) {

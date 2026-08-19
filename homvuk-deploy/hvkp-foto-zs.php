@@ -13,6 +13,7 @@ if ( php_sapi_name() !== 'cli' ) { exit; } // solo terminal, nunca via web
  *
  * Uso:  php hvkp-foto-zs.php                 (usa la ultima imagen subida)
  *       php hvkp-foto-zs.php --forzar       (aunque no sea reciente)
+ *       php hvkp-foto-zs.php <URL>          (descarga la foto de esa direccion)
  *       php hvkp-foto-zs.php 1234            (usa la imagen con ese ID)
  *       php hvkp-foto-zs.php --no-publicar   (deja el auto en borrador)
  */
@@ -125,10 +126,12 @@ global $wpdb;
 $publicar = true;
 $forzar   = false;
 $attach_id = 0;
+$url_foto  = '';
 foreach ( array_slice( $argv, 1 ) as $a ) {
     if ( '--no-publicar' === $a ) { $publicar = false; }
     elseif ( '--forzar' === $a ) { $forzar = true; }
     elseif ( ctype_digit( $a ) ) { $attach_id = (int) $a; $forzar = true; }
+    elseif ( 0 === stripos( $a, 'http' ) ) { $url_foto = $a; $forzar = true; }
 }
 
 if ( ! function_exists( 'imagecreatetruecolor' ) ) {
@@ -153,7 +156,34 @@ if ( ! $auto ) {
 }
 echo "[OK]    Producto: MG ZS (id " . $auto->ID . ", estado actual: " . $auto->post_status . ")\n";
 
-// 2) La imagen
+// 2) La imagen: si se paso una direccion web, se descarga primero
+if ( $url_foto ) {
+    $res = wp_remote_get( $url_foto, array( 'timeout' => 90, 'sslverify' => false ) );
+    if ( is_wp_error( $res ) ) {
+        echo "[ERROR] No se pudo descargar la foto: " . $res->get_error_message() . "\n";
+        exit( 1 );
+    }
+    $bytes = wp_remote_retrieve_body( $res );
+    $mime  = (string) wp_remote_retrieve_header( $res, 'content-type' );
+    if ( strlen( $bytes ) < 5000 || 0 !== stripos( $mime, 'image/' ) ) {
+        echo "[ERROR] Esa direccion no devolvio una imagen (tipo: $mime, " . strlen( $bytes ) . " bytes).\n";
+        echo "        Si es un enlace de Google Drive o Dropbox, usa el de descarga directa.\n";
+        exit( 1 );
+    }
+    $ext_url = ( false !== stripos( $mime, 'png' ) ) ? 'png' : ( ( false !== stripos( $mime, 'webp' ) ) ? 'webp' : 'jpg' );
+    $updir   = wp_upload_dir();
+    $tmp     = trailingslashit( $updir['path'] ) . 'mg-zs-original.' . $ext_url;
+    file_put_contents( $tmp, $bytes );
+    $attach_id = wp_insert_attachment( array(
+        'post_mime_type' => $mime,
+        'post_title'     => 'MG ZS 2026 (original)',
+        'post_status'    => 'inherit',
+    ), $tmp );
+    require_once ABSPATH . 'wp-admin/includes/image.php';
+    wp_update_attachment_metadata( $attach_id, wp_generate_attachment_metadata( $attach_id, $tmp ) );
+    echo "[OK]    Foto descargada (" . round( strlen( $bytes ) / 1024 ) . " KB) y guardada en la biblioteca\n";
+}
+
 if ( ! $attach_id ) {
     $attach_id = (int) $wpdb->get_var(
         "SELECT ID FROM {$wpdb->posts} WHERE post_type = 'attachment' AND post_mime_type LIKE 'image/%' ORDER BY post_date DESC LIMIT 1"

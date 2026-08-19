@@ -12,6 +12,7 @@ if ( php_sapi_name() !== 'cli' ) { exit; } // solo terminal, nunca via web
  * el auto nunca se toca.
  *
  * Uso:  php hvkp-foto-zs.php                 (usa la ultima imagen subida)
+ *       php hvkp-foto-zs.php --forzar       (aunque no sea reciente)
  *       php hvkp-foto-zs.php 1234            (usa la imagen con ese ID)
  *       php hvkp-foto-zs.php --no-publicar   (deja el auto en borrador)
  */
@@ -122,10 +123,12 @@ require __DIR__ . '/wp-load.php';
 global $wpdb;
 
 $publicar = true;
+$forzar   = false;
 $attach_id = 0;
 foreach ( array_slice( $argv, 1 ) as $a ) {
     if ( '--no-publicar' === $a ) { $publicar = false; }
-    elseif ( ctype_digit( $a ) ) { $attach_id = (int) $a; }
+    elseif ( '--forzar' === $a ) { $forzar = true; }
+    elseif ( ctype_digit( $a ) ) { $attach_id = (int) $a; $forzar = true; }
 }
 
 if ( ! function_exists( 'imagecreatetruecolor' ) ) {
@@ -133,15 +136,22 @@ if ( ! function_exists( 'imagecreatetruecolor' ) ) {
     exit( 1 );
 }
 
-// 1) El auto
+// 1) El auto (en la papelera WordPress le agrega __trashed al identificador)
 $auto = $wpdb->get_row( $wpdb->prepare(
-    "SELECT ID, post_status FROM {$wpdb->posts} WHERE post_name = %s AND post_type = 'product' LIMIT 1",
-    $HVKF_SLUG
+    "SELECT ID, post_status FROM {$wpdb->posts} WHERE post_name IN (%s, %s) AND post_type = 'product' LIMIT 1",
+    $HVKF_SLUG, $HVKF_SLUG . '__trashed'
 ) );
 if ( ! $auto ) {
-    echo "[ERROR] No se encontro el producto $HVKF_SLUG\n";
+    $guardado = (int) get_option( 'hvkp_mgzx_id' );
+    if ( $guardado ) {
+        $auto = $wpdb->get_row( $wpdb->prepare( "SELECT ID, post_status FROM {$wpdb->posts} WHERE ID = %d LIMIT 1", $guardado ) );
+    }
+}
+if ( ! $auto ) {
+    echo "[ERROR] No se encontro el MG ZS (ni publicado ni en la papelera).\n";
     exit( 1 );
 }
+echo "[OK]    Producto: MG ZS (id " . $auto->ID . ", estado actual: " . $auto->post_status . ")\n";
 
 // 2) La imagen
 if ( ! $attach_id ) {
@@ -159,6 +169,16 @@ if ( ! $ruta || ! file_exists( $ruta ) ) {
     exit( 1 );
 }
 echo "[OK]    Imagen: " . basename( $ruta ) . " (id $attach_id, subida " . get_the_date( 'd/m/Y H:i', $attach_id ) . ")\n";
+
+// Resguardo: si la imagen no es reciente, probablemente no es la que subiste
+$edad = time() - get_post_time( 'U', true, $attach_id );
+if ( ! $forzar && $edad > 2 * HOUR_IN_SECONDS ) {
+    echo "[AVISO] Esa imagen se subio hace " . human_time_diff( time() - $edad ) . ", asi que quiza no es la foto del MG ZS.\n";
+    echo "        Si es la correcta, vuelve a correrlo asi:  php hvkp-foto-zs.php --forzar\n";
+    echo "        O indica el ID de la imagen:                php hvkp-foto-zs.php <ID>\n";
+    echo "        No se modifico nada.\n";
+    exit( 0 );
+}
 
 // 3) Procesar: fondo blanco parejo y tamano de catalogo
 $tipo = wp_check_filetype( $ruta );

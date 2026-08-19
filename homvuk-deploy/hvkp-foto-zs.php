@@ -132,6 +132,13 @@ foreach ( array_slice( $argv, 1 ) as $a ) {
     elseif ( '--forzar' === $a ) { $forzar = true; }
     elseif ( ctype_digit( $a ) ) { $attach_id = (int) $a; $forzar = true; }
     elseif ( 0 === stripos( $a, 'http' ) ) { $url_foto = $a; $forzar = true; }
+    else {
+        echo "[ERROR] No entiendo el dato \"$a\".\n";
+        echo "        Se espera una direccion web que empiece con http, el numero de una imagen,\n";
+        echo "        o las opciones --forzar / --no-publicar.\n";
+        echo "        Si venias siguiendo un ejemplo, reemplaza el texto de muestra por el enlace real.\n";
+        exit( 1 );
+    }
 }
 
 if ( ! function_exists( 'imagecreatetruecolor' ) ) {

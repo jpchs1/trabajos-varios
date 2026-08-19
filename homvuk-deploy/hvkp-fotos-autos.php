@@ -3,10 +3,13 @@ if ( php_sapi_name() !== 'cli' ) { exit; } // solo terminal, nunca via web
 /**
  * HOMVUK - Fotos de los autos con fondo uniforme (hvkp-fotos-autos)
  *
- * Instala las fotos editadas: cada auto recortado de su fondo original y
- * montado sobre el mismo fondo claro de marca, con sombra bajo las ruedas y
- * el mismo encuadre, para que la seccion de vehiculos se vea pareja.
- * Al Porsche se le puso la patente HOMVUK; el MG ZS ya la traia.
+ * Instala las fotos editadas en alta calidad: cada auto recortado de su foto
+ * original (siempre desde el archivo de mayor resolucion disponible, nunca se
+ * amplia una foto chica), con el borde limpio -sin el fleco borroso alrededor
+ * de las ruedas-, montado sobre el mismo fondo claro de marca, con sombra de
+ * contacto real y el mismo encuadre, para que la seccion se vea pareja.
+ * Los cuatro autos llevan la patente HOMVUK con los colores del logo, puesta
+ * en perspectiva justo donde va la patente de cada vehiculo.
  *
  * Las fotos originales NO se borran: quedan en la biblioteca por si quieres
  * volver atras, y este script tiene modo restore.
@@ -17,9 +20,10 @@ if ( php_sapi_name() !== 'cli' ) { exit; } // solo terminal, nunca via web
 
 $HVKF_BASE  = 'https://raw.githubusercontent.com/jpchs1/trabajos-varios/main/homvuk-deploy/autos/';
 $HVKF_FOTOS = array(
-    'porsche-cayenne-2018' => array( 'archivo' => 'porsche-cayenne-2018.jpg', 'md5' => 'eb66803710aee57bceb2c75bde3c0e26', 'alt' => 'Arriendo Porsche Cayenne 2018 en Santiago - HOMVUK' ),
-    'mg3-2019'             => array( 'archivo' => 'mg3-2019.jpg',             'md5' => '8247686e5639632326038f2a79d0a9bc', 'alt' => 'Arriendo MG3 2019 en Santiago - HOMVUK' ),
-    'new-mg-zs-2026'       => array( 'archivo' => 'new-mg-zs-2026.jpg',       'md5' => '4346153c378f63fdd3f17d2613fbaa1b', 'alt' => 'Arriendo MG ZS 2026 plateado en Santiago - HOMVUK' ),
+    'porsche-cayenne-2018'             => array( 'archivo' => 'porsche-cayenne-2018-pro.jpg', 'md5' => '7c1d26d9657e192233ff3f636327a8b6', 'alt' => 'Arriendo Porsche Cayenne 2018 en Santiago - HOMVUK' ),
+    'mg3-2019'                         => array( 'archivo' => 'mg3-2019-pro.jpg',             'md5' => '20d407be214d917dec3355e9cfec06fc', 'alt' => 'Arriendo MG3 2019 en Santiago - HOMVUK' ),
+    'new-mg-zs-2026'                   => array( 'archivo' => 'new-mg-zs-2026-pro.jpg',       'md5' => '7dbb2a6ec7f9374214b8dca84b013549', 'alt' => 'Arriendo MG ZS 2026 plateado en Santiago - HOMVUK' ),
+    'jaguar-xf-2012-3-0cc-automatico'  => array( 'archivo' => 'jaguar-xf-2012-pro.jpg',       'md5' => '9a014b70d8ca49bd6c3402694dd9477d', 'alt' => 'Arriendo Jaguar XF 3.0 2012 en Santiago - HOMVUK' ),
 );
 
 require __DIR__ . '/wp-load.php';
@@ -105,16 +109,6 @@ if ( class_exists( '\Elementor\Plugin' ) ) {
     try { \Elementor\Plugin::instance()->files_manager->clear_cache(); } catch ( \Throwable $e ) {}
 }
 $ok[] = 'Caches purgadas';
-
-// Datos del Jaguar, para poder editar su foto tambien
-$jag = $wpdb->get_row( "SELECT ID FROM {$wpdb->posts} WHERE post_name = 'jaguar-xf-2012-3-0cc-automatico' AND post_type = 'product' LIMIT 1" );
-if ( $jag ) {
-    $tid = get_post_thumbnail_id( (int) $jag->ID );
-    if ( $tid ) {
-        echo "\n== Jaguar (pendiente de editar) ==\n";
-        echo "   " . wp_get_attachment_url( $tid ) . "\n";
-    }
-}
 
 echo "\n== HOMVUK - Fotos de los autos ==\n";
 foreach ( $ok as $m )   { echo "[OK]    $m\n"; }

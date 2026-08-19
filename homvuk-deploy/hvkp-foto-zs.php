@@ -15,6 +15,7 @@ if ( php_sapi_name() !== 'cli' ) { exit; } // solo terminal, nunca via web
  *       php hvkp-foto-zs.php --forzar       (aunque no sea reciente)
  *       php hvkp-foto-zs.php <URL>          (descarga la foto de esa direccion)
  *       php hvkp-foto-zs.php <archivo>      (usa un archivo del servidor)
+ *       php hvkp-foto-zs.php --sin-retoque  (no tocar el fondo)
  *       php hvkp-foto-zs.php 1234            (usa la imagen con ese ID)
  *       php hvkp-foto-zs.php --no-publicar   (deja el auto en borrador)
  */
@@ -126,12 +127,14 @@ global $wpdb;
 
 $publicar = true;
 $forzar   = false;
+$sin_retoque = false;
 $attach_id = 0;
 $url_foto  = '';
 $ruta_local = '';
 foreach ( array_slice( $argv, 1 ) as $a ) {
     if ( '--no-publicar' === $a ) { $publicar = false; }
     elseif ( '--forzar' === $a ) { $forzar = true; }
+    elseif ( '--sin-retoque' === $a ) { $sin_retoque = true; $forzar = true; }
     elseif ( ctype_digit( $a ) ) { $attach_id = (int) $a; $forzar = true; }
     elseif ( 0 === stripos( $a, 'http' ) ) { $url_foto = $a; $forzar = true; }
     elseif ( file_exists( $a ) || file_exists( __DIR__ . '/' . ltrim( $a, '/' ) ) ) {
@@ -304,9 +307,14 @@ if ( $w > $HVKF_ANCHO ) {
     echo "[OK]    Redimensionada a {$w}x{$h} para el catalogo\n";
 }
 
-$cambiados = hvkf_limpiar_fondo( $im, $HVKF_TOL );
+$cambiados = $sin_retoque ? 0 : hvkf_limpiar_fondo( $im, $HVKF_TOL );
+if ( $sin_retoque ) {
+    echo "[OK]    Sin retoque de fondo: se usa la foto tal como esta\n";
+}
 $porc = round( 100 * $cambiados / ( $w * $h ) );
-if ( $porc < 3 ) {
+if ( $sin_retoque ) {
+    // se conserva la foto tal cual, solo redimensionada
+} elseif ( $porc < 3 ) {
     echo "[AVISO] El fondo no es parejo (solo $porc% limpiado): se deja la foto tal cual\n";
 } elseif ( $porc > 85 ) {
     echo "[AVISO] Se detecto demasiado fondo ($porc%): se deja la foto original por seguridad\n";

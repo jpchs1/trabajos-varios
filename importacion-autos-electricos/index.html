@@ -1,0 +1,755 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Guia operativa del circuito aduanero para nacionalizar un auto electrico nuevo en Chile como particular: requisitos, impuestos, orden de tramites y agentes de aduana.">
+<title>Internación de autos eléctricos</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700&family=IBM+Plex+Mono:wght@400;500&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&display=swap">
+
+<style>
+  :root{
+    --paper:#f2f4f3;
+    --card:#ffffff;
+    --sunk:#e9edec;
+    --ink:#10222a;
+    --ink-soft:#2c4149;
+    --muted:#5c7078;
+    --line:#d3dcda;
+    --line-soft:#e3e9e8;
+    --accent:#0a6b5a;
+    --accent-ink:#075347;
+    --accent-wash:#e6f0ed;
+    --flag:#b4400e;
+    --flag-wash:#fbeee7;
+    --ok:#1b7a46;
+    --ok-wash:#e7f2eb;
+    --shadow:0 1px 2px rgba(16,34,42,.06), 0 8px 24px -18px rgba(16,34,42,.5);
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --paper:#0c171c;
+      --card:#132329;
+      --sunk:#0f1e24;
+      --ink:#dce7e5;
+      --ink-soft:#b9cac7;
+      --muted:#8ba3a4;
+      --line:#25393f;
+      --line-soft:#1c2d33;
+      --accent:#46bfa2;
+      --accent-ink:#6fd2b8;
+      --accent-wash:#12312c;
+      --flag:#e8834f;
+      --flag-wash:#2e1c13;
+      --ok:#5cc487;
+      --ok-wash:#122a1e;
+      --shadow:0 1px 2px rgba(0,0,0,.4), 0 8px 24px -18px rgba(0,0,0,.9);
+    }
+  }
+  :root[data-theme="dark"]{
+    --paper:#0c171c;
+    --card:#132329;
+    --sunk:#0f1e24;
+    --ink:#dce7e5;
+    --ink-soft:#b9cac7;
+    --muted:#8ba3a4;
+    --line:#25393f;
+    --line-soft:#1c2d33;
+    --accent:#46bfa2;
+    --accent-ink:#6fd2b8;
+    --accent-wash:#12312c;
+    --flag:#e8834f;
+    --flag-wash:#2e1c13;
+    --ok:#5cc487;
+    --ok-wash:#122a1e;
+    --shadow:0 1px 2px rgba(0,0,0,.4), 0 8px 24px -18px rgba(0,0,0,.9);
+  }
+
+  *{box-sizing:border-box}
+
+  body{
+    margin:0;
+    background:var(--paper);
+    color:var(--ink);
+    font-family:"Source Serif 4","Iowan Old Style",Georgia,serif;
+    font-size:17px;
+    line-height:1.62;
+    -webkit-font-smoothing:antialiased;
+  }
+
+  .wrap{max-width:50rem;margin:0 auto;padding:0 1.5rem}
+
+  /* ---------- masthead ---------- */
+  .masthead{
+    border-bottom:1px solid var(--line);
+    background:var(--card);
+    padding:2.75rem 0 2.25rem;
+  }
+  .masthead .wrap{display:flex;flex-direction:column;gap:1.15rem}
+  .eyebrow{
+    font-family:"Archivo",system-ui,sans-serif;
+    font-size:.7rem;font-weight:600;letter-spacing:.16em;text-transform:uppercase;
+    color:var(--accent);
+    display:flex;flex-wrap:wrap;gap:.5rem .9rem;align-items:center;
+  }
+  .eyebrow .dot{width:4px;height:4px;border-radius:50%;background:var(--line);flex:none}
+  .eyebrow .plain{color:var(--muted)}
+  h1{
+    font-family:"Archivo",system-ui,sans-serif;
+    font-weight:700;font-size:clamp(1.85rem,5.2vw,2.7rem);
+    line-height:1.1;letter-spacing:-.02em;text-wrap:balance;
+    margin:0;color:var(--ink);
+  }
+  .standfirst{
+    margin:0;font-size:1.09rem;color:var(--ink-soft);max-width:36rem;
+  }
+
+  /* ---------- verdict ---------- */
+  .verdict{
+    background:var(--accent-wash);
+    border:1px solid var(--line);
+    border-radius:3px;
+    padding:1.35rem 1.5rem;
+    display:flex;flex-direction:column;gap:.6rem;
+    margin-top:.35rem;
+  }
+  .verdict .k{
+    font-family:"Archivo",system-ui,sans-serif;
+    font-size:.68rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;
+    color:var(--accent-ink);
+  }
+  .verdict p{margin:0;color:var(--ink)}
+  .verdict p + p{margin-top:.15rem}
+
+  main{padding:3rem 0 4.5rem}
+
+  h2{
+    font-family:"Archivo",system-ui,sans-serif;
+    font-weight:700;font-size:1.42rem;letter-spacing:-.012em;line-height:1.2;
+    text-wrap:balance;color:var(--ink);
+    margin:3.5rem 0 .35rem;
+    padding-bottom:.55rem;border-bottom:2px solid var(--ink);
+  }
+  h2:first-child{margin-top:0}
+  h2 .num{
+    font-family:"IBM Plex Mono",ui-monospace,monospace;
+    font-size:.82rem;font-weight:500;color:var(--accent);
+    margin-right:.6rem;vertical-align:.14em;
+  }
+  h3{
+    font-family:"Archivo",system-ui,sans-serif;
+    font-weight:600;font-size:1.02rem;letter-spacing:.005em;
+    color:var(--ink);margin:2.1rem 0 .2rem;text-wrap:balance;
+  }
+  p{margin:.85rem 0}
+  a{color:var(--accent-ink);text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:2px}
+  a:hover{text-decoration-thickness:2px}
+  a:focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:2px}
+  strong{font-weight:600;color:var(--ink)}
+  code{
+    font-family:"IBM Plex Mono",ui-monospace,monospace;
+    font-size:.86em;background:var(--sunk);border:1px solid var(--line-soft);
+    padding:.08em .38em;border-radius:2px;color:var(--ink);white-space:nowrap;
+  }
+  ul,ol{padding-left:1.25rem;margin:.85rem 0}
+  li{margin:.4rem 0}
+  li::marker{color:var(--muted)}
+
+  .lede{font-size:1.03rem;color:var(--ink-soft);margin-top:1rem}
+
+  /* ---------- rail of steps ---------- */
+  .rail{
+    list-style:none;padding:0;margin:1.6rem 0 0;
+    display:flex;flex-direction:column;gap:0;
+  }
+  .rail > li{
+    position:relative;
+    padding:0 0 1.9rem 3.1rem;
+    margin:0;
+    border-left:2px solid var(--line);
+  }
+  .rail > li:last-child{border-left-color:transparent;padding-bottom:0}
+  .rail .marker{
+    position:absolute;left:-1.05rem;top:-.1rem;
+    width:2.05rem;height:2.05rem;border-radius:50%;
+    background:var(--card);border:2px solid var(--accent);
+    color:var(--accent-ink);
+    font-family:"IBM Plex Mono",ui-monospace,monospace;
+    font-size:.82rem;font-weight:500;
+    display:flex;align-items:center;justify-content:center;
+  }
+  .rail .who{
+    font-family:"Archivo",system-ui,sans-serif;
+    font-size:.66rem;font-weight:700;letter-spacing:.13em;text-transform:uppercase;
+    color:var(--muted);display:block;margin-bottom:.2rem;
+  }
+  .rail h3{margin-top:0}
+  .rail p{margin:.5rem 0}
+  .rail ul{margin:.6rem 0}
+
+  /* ---------- callouts ---------- */
+  .flag,.note{
+    border-radius:3px;padding:1.1rem 1.3rem;margin:1.7rem 0;
+    border:1px solid var(--line);
+  }
+  .flag{background:var(--flag-wash);border-left:3px solid var(--flag)}
+  .note{background:var(--sunk);border-left:3px solid var(--accent)}
+  .flag .label,.note .label{
+    font-family:"Archivo",system-ui,sans-serif;
+    font-size:.68rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;
+    display:block;margin-bottom:.4rem;
+  }
+  .flag .label{color:var(--flag)}
+  .note .label{color:var(--accent-ink)}
+  .flag p,.note p{margin:.5rem 0}
+  .flag p:last-child,.note p:last-child{margin-bottom:0}
+  .flag ul,.note ul{margin:.55rem 0 0}
+
+  /* ---------- tables ---------- */
+  .scroll{overflow-x:auto;margin:1.5rem 0;border:1px solid var(--line);border-radius:3px;background:var(--card)}
+  table{border-collapse:collapse;width:100%;min-width:34rem;font-size:.94rem}
+  th,td{padding:.7rem .85rem;text-align:left;vertical-align:top;border-bottom:1px solid var(--line-soft)}
+  thead th{
+    font-family:"Archivo",system-ui,sans-serif;
+    font-size:.68rem;font-weight:700;letter-spacing:.11em;text-transform:uppercase;
+    color:var(--muted);background:var(--sunk);
+    border-bottom:1px solid var(--line);white-space:nowrap;
+  }
+  tbody tr:last-child td{border-bottom:none}
+  td.num,th.num{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+  .mono{font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:.86rem;white-space:nowrap}
+  .pill{
+    display:inline-block;font-family:"Archivo",system-ui,sans-serif;
+    font-size:.66rem;font-weight:700;letter-spacing:.07em;text-transform:uppercase;
+    padding:.18em .55em;border-radius:2px;white-space:nowrap;
+  }
+  .pill.ok{background:var(--ok-wash);color:var(--ok);border:1px solid var(--ok)}
+  .pill.pay{background:var(--flag-wash);color:var(--flag);border:1px solid var(--flag)}
+  .pill.dead{background:var(--sunk);color:var(--muted);border:1px solid var(--line)}
+
+  caption{
+    caption-side:bottom;text-align:left;padding:.7rem .85rem;
+    font-size:.83rem;color:var(--muted);border-top:1px solid var(--line-soft);
+  }
+
+  /* ---------- worked example ---------- */
+  .calc{
+    background:var(--card);border:1px solid var(--line);border-radius:3px;
+    padding:1.3rem 1.45rem;margin:1.7rem 0;box-shadow:var(--shadow);
+  }
+  .calc .label{
+    font-family:"Archivo",system-ui,sans-serif;
+    font-size:.68rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;
+    color:var(--muted);display:block;margin-bottom:.9rem;
+  }
+  .calc dl{margin:0;display:grid;grid-template-columns:1fr auto;gap:.5rem 1.5rem;align-items:baseline}
+  .calc dt{color:var(--ink-soft);font-size:.96rem}
+  .calc dd{
+    margin:0;text-align:right;font-family:"IBM Plex Mono",ui-monospace,monospace;
+    font-size:.92rem;font-variant-numeric:tabular-nums;color:var(--ink);
+  }
+  .calc dt.total,.calc dd.total{
+    border-top:1px solid var(--line);padding-top:.6rem;margin-top:.25rem;
+    font-weight:600;color:var(--ink);
+  }
+  .calc dd.zero{color:var(--ok)}
+  .calc .fine{margin:.95rem 0 0;font-size:.85rem;color:var(--muted)}
+
+  /* ---------- sources ---------- */
+  .sources{margin-top:3.5rem;padding-top:1.5rem;border-top:1px solid var(--line)}
+  .sources h2{border:none;margin:0 0 .3rem;padding:0;font-size:1.05rem}
+  .sources ol{font-size:.9rem;color:var(--muted);columns:2;column-gap:2.5rem}
+  .sources li{margin:.45rem 0;break-inside:avoid}
+  .sources a{color:var(--muted)}
+
+  .colophon{
+    margin-top:2.5rem;padding-top:1.2rem;border-top:1px solid var(--line-soft);
+    font-size:.85rem;color:var(--muted);
+  }
+
+  @media (max-width:34rem){
+    body{font-size:16px}
+    .rail > li{padding-left:2.5rem}
+    .rail .marker{width:1.8rem;height:1.8rem;left:-.95rem;font-size:.75rem}
+    .sources ol{columns:1}
+    .calc dl{grid-template-columns:1fr auto}
+  }
+  @media (prefers-reduced-motion:reduce){
+    *{animation:none !important;transition:none !important}
+  }
+</style>
+</head>
+<body>
+<header class="masthead">
+  <div class="wrap">
+    <div class="eyebrow">
+      <span>Aduana e internación</span>
+      <span class="dot" aria-hidden="true"></span>
+      <span>Chile</span>
+      <span class="dot" aria-hidden="true"></span>
+      <span class="plain">Vigente a agosto 2026</span>
+    </div>
+    <h1>Internación de autos eléctricos a Chile</h1>
+    <p class="standfirst">
+      Cómo un particular nacionaliza un vehículo eléctrico nuevo comprado en el extranjero,
+      qué paga, en qué orden, y quién puede tramitarlo.
+    </p>
+    <div class="verdict">
+      <span class="k">La respuesta corta</span>
+      <p>
+        Sí se puede, y no hace falta ser dealer ni representante de marca: basta tener RUT chileno.
+        El trámite se hace obligatoriamente <strong>a través de un agente de aduana</strong>, y cualquiera
+        de los 271 agentes vigentes está habilitado — no existe una licencia especial para vehículos.
+      </p>
+      <p>
+        El filtro real no es aduanero sino de origen: el auto tiene que ser
+        <strong>nuevo sin uso</strong> según la definición chilena. Ahí se cae la mayoría de las operaciones.
+      </p>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <h2><span class="num">00</span>El filtro que decide todo</h2>
+
+  <p>
+    Antes de cotizar flete o calcular impuestos, hay que pasar esta puerta. El
+    <strong>artículo 21 de la Ley 18.483 prohíbe importar vehículos usados</strong> a Chile.
+    No es una traba tributaria que se resuelva pagando más: es una prohibición.
+  </p>
+
+  <p>Para Aduana, un vehículo es <strong>«sin uso»</strong> cuando cumple las dos condiciones a la vez:</p>
+
+  <ul>
+    <li>
+      <strong>Año modelo.</strong> Corresponde al mismo año de la aceptación a trámite de la declaración
+      de ingreso, o al año inmediatamente anterior <em>siempre que la declaración se acepte a trámite
+      hasta el 30 de abril</em> del año siguiente al del modelo.
+    </li>
+    <li>
+      <strong>Kilometraje.</strong> Cero kilómetros, o únicamente el kilometraje necesario para trasladar
+      el vehículo desde el vendedor extranjero hasta el puerto de destino en Chile.
+    </li>
+  </ul>
+
+  <div class="flag">
+    <span class="label">Donde se cae la operación</span>
+    <p>
+      Un auto que ya fue <strong>inscrito en el DMV</strong> a nombre de alguien —aunque tenga 300 millas,
+      aunque el dealer lo llame «demo» o «executive driven»— ya es usado y no entra por esta vía.
+      La factura tiene que ser de primera venta, a nombre del importador chileno, sobre una unidad
+      que nunca se registró en el extranjero.
+    </p>
+    <p>
+      Las excepciones que existen —retorno definitivo de chilenos (partida <code>00.33</code>),
+      zonas francas de Iquique y Punta Arenas, vehículos de competencia, ambulancias y usos
+      especiales— <strong>no le sirven a un particular que compra un auto nuevo para usarlo en Santiago</strong>.
+    </p>
+  </div>
+
+  <p class="lede">
+    Si el auto pasa este filtro, el resto es un circuito administrativo largo pero predecible.
+    Va en este orden, y el orden importa: cada paso produce el documento que exige el siguiente.
+  </p>
+
+  <h2><span class="num">01</span>El circuito, paso a paso</h2>
+
+  <ol class="rail">
+
+    <li>
+      <span class="marker" aria-hidden="true">1</span>
+      <span class="who">Importador</span>
+      <h3>Constituirse como importador y designar agente</h3>
+      <p>
+        Sólo se necesita <strong>RUT chileno</strong> (persona natural o jurídica) e iniciación de
+        actividades si se va a operar como empresa. Un particular puede importar a su nombre.
+      </p>
+      <p>
+        La internación de vehículos <strong>debe hacerse por intermedio de un agente de aduana</strong>,
+        cuyos honorarios se pactan libremente. Se le otorga un <strong>mandato para despachar</strong>
+        conforme al artículo 197 de la Ordenanza de Aduanas.
+      </p>
+    </li>
+
+    <li>
+      <span class="marker" aria-hidden="true">2</span>
+      <span class="who">Importador · vendedor en origen</span>
+      <h3>Compra, documentos de origen y embarque</h3>
+      <p>Lo que hay que traer del extranjero, y que después no se puede improvisar:</p>
+      <ul>
+        <li><strong>Factura comercial</strong> de primera venta, emitida al importador con su RUT.</li>
+        <li>
+          <strong>Certificado de origen</strong>, si se quiere arancel 0 %. Bajo el TLC Chile–EE.UU. no
+          se exige un formato predeterminado y se admite autocertificación del productor, exportador
+          o importador; pero tiene que existir y respaldarse.
+        </li>
+        <li><strong>Conocimiento de embarque (B/L)</strong> consignado al importador.</li>
+        <li><strong>Póliza o certificado de seguro</strong> del transporte.</li>
+      </ul>
+      <p>
+        El embarque puede ser <strong>RoRo</strong> (más barato, el auto va sobre cubierta) o
+        <strong>contenedor</strong> (más caro, más protegido). Los puertos habituales para carga
+        rodante son San Antonio y Valparaíso.
+      </p>
+    </li>
+
+    <li>
+      <span class="marker" aria-hidden="true">3</span>
+      <span class="who">Agente de aduana</span>
+      <h3>Declaración de Ingreso y pago de tributos</h3>
+      <p>
+        El agente confecciona y presenta la <strong>Declaración de Ingreso (DIN)</strong>, clasifica el
+        vehículo en su partida arancelaria y liquida los tributos sobre el
+        <strong>valor aduanero (CIF)</strong> = precio + flete + seguro.
+      </p>
+      <p>
+        Un auto eléctrico de pasajeros clasifica en <code>8703.80</code>; una camioneta eléctrica de
+        carga en <code>8704.60</code>. La clasificación la define el agente y no es trivial en pickups
+        —incide en tributos y en cómo se homologa después.
+      </p>
+      <p>
+        <strong>La fecha de aceptación a trámite de esta DIN</strong> es la que se compara contra el año
+        modelo. Es el reloj del filtro del paso 00.
+      </p>
+    </li>
+
+    <li>
+      <span class="marker" aria-hidden="true">4</span>
+      <span class="who">Importador · puerto</span>
+      <h3>Retiro del vehículo</h3>
+      <p>
+        Pagados derechos, IVA y las tasas de <strong>almacenaje y movilización</strong>, se retira la unidad.
+      </p>
+      <p>
+        Ojo con lo obvio: el auto está nacionalizado pero <strong>todavía no tiene patente</strong> y no
+        puede circular. Sale del puerto en camión o grúa, y así se mueve hasta que termine el paso 6.
+      </p>
+    </li>
+
+    <li>
+      <span class="marker" aria-hidden="true">5</span>
+      <span class="who">3CV · Ministerio de Transportes</span>
+      <h3>Homologación individual (CHI-e)</h3>
+      <p>
+        El <strong>Centro de Control y Certificación Vehicular (3CV)</strong> emite el Certificado de
+        Homologación Individual Electrónico mediante <strong>verificación física del vehículo</strong>:
+        hay que entregar y luego retirar la unidad en Vicente Reyes 198, Maipú.
+      </p>
+      <p>
+        <strong>Este paso va después de nacionalizar</strong>, no antes: entre los documentos exigidos
+        está la fotocopia de la declaración de importación del vehículo.
+      </p>
+      <p>Documentos:</p>
+      <ul>
+        <li>Formulario de solicitud de homologación individual para vehículos nuevos.</li>
+        <li>Fotocopia de la declaración de importación.</li>
+        <li>
+          Acreditación de la norma de emisión. <strong>Para vehículos desde EE.UU. basta la fotografía
+          de la etiqueta adherida al interior del vehículo</strong> que indica la norma de escape.
+        </li>
+        <li><strong>Acreditación de consumo eléctrico</strong> — el requisito propio del EV.</li>
+        <li>Acreditación de los elementos de seguridad obligatorios.</li>
+      </ul>
+      <div class="note">
+        <span class="label">Dos límites que hay que mirar antes de embarcar</span>
+        <p>
+          <strong>Volumen.</strong> El procedimiento aplica a vehículos nuevos del mismo modelo importados
+          por la misma persona en volúmenes que <strong>no excedan tres vehículos al año</strong>.
+        </p>
+        <p>
+          <strong>Territorio.</strong> Está previsto para uso en las regiones <strong>Metropolitana,
+          de Valparaíso y de O'Higgins</strong>. Para otras regiones hay que pedir revisión especial
+          de gases y autorización a la SEREMI de Transportes, según el Oficio Circular N° 23 de 2011.
+        </p>
+      </div>
+      <p>
+        Los requisitos técnicos y constructivos propios de los eléctricos están en el
+        <strong>DS 145 de 2017</strong>. El CHI-e resultante consigna marca, modelo, VIN, número de motor
+        y el <strong>código de informe técnico (CIT)</strong>, y tiene una vigencia de 24 a 36 meses.
+      </p>
+    </li>
+
+    <li>
+      <span class="marker" aria-hidden="true">6</span>
+      <span class="who">Tesorería General de la República</span>
+      <h3>Impuesto verde: Formulario 88</h3>
+      <p>
+        Los <strong>vehículos a propulsión eléctrica están exentos</strong> del impuesto verde según el SII.
+        Pero exento no significa que no haya trámite.
+      </p>
+      <p>
+        Hay que declarar el <strong>Formulario 88</strong> en el sitio de Tesorería usando el
+        <strong>CIT</strong> que entregó el 3CV, para obtener el <strong>comprobante de pago</strong> —en este
+        caso con valor cero— que el Registro Civil va a exigir en el paso siguiente. Sin CIT no hay F88,
+        y sin F88 no hay inscripción.
+      </p>
+    </li>
+
+    <li>
+      <span class="marker" aria-hidden="true">7</span>
+      <span class="who">Servicio de Registro Civil e Identificación</span>
+      <h3>Primera inscripción y placa patente</h3>
+      <div class="note">
+        <span class="label">El documento que más se olvida</span>
+        <p>
+          En una importación directa <strong>no existe factura chilena de primera venta</strong>. En su
+          lugar se presenta el <strong>documento aduanero de uso exclusivo del Registro de Vehículos
+          Motorizados</strong>, extendido por la Dirección Nacional de Aduanas, donde consta la internación
+          legal y el pago de los derechos. <strong>Hay que pedírselo al agente de aduana durante el
+          despacho</strong>, no después.
+        </p>
+      </div>
+      <p>
+        Con eso, el comprobante del F88 y la cédula del propietario se solicita hora en el Registro Civil.
+        La primera inscripción de automóviles cuesta <strong>$89.560</strong> ($56.090 de inscripción más
+        $33.470 de placas). Las placas se entregan en el momento; el padrón llega después al domicilio.
+      </p>
+      <p>
+        Terminado esto quedan los trámites comunes de cualquier auto: <strong>SOAP</strong>,
+        <strong>revisión técnica</strong> y <strong>permiso de circulación</strong> — que en un eléctrico
+        va con descuento por la Ley 21.505, decreciente desde el 100 % los dos primeros años.
+      </p>
+    </li>
+
+  </ol>
+
+  <h2><span class="num">02</span>Qué se paga</h2>
+
+  <div class="scroll">
+    <table>
+      <thead>
+        <tr>
+          <th>Concepto</th>
+          <th>Base de cálculo</th>
+          <th>Tasa</th>
+          <th>EV nuevo desde EE.UU.</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Derecho ad valorem</strong></td>
+          <td>Valor aduanero (CIF)</td>
+          <td class="mono">6 %</td>
+          <td><span class="pill ok">0 % con TLC</span> si se acredita origen estadounidense</td>
+        </tr>
+        <tr>
+          <td><strong>IVA</strong></td>
+          <td>CIF + derechos</td>
+          <td class="mono">19 %</td>
+          <td><span class="pill pay">Se paga</span> siempre</td>
+        </tr>
+        <tr>
+          <td><strong>Impuesto verde</strong></td>
+          <td>Rendimiento urbano, NOx y precio</td>
+          <td class="mono">Fórmula</td>
+          <td><span class="pill ok">Exento</span> por propulsión eléctrica</td>
+        </tr>
+        <tr>
+          <td><strong>Impuesto al lujo</strong></td>
+          <td>—</td>
+          <td class="mono">—</td>
+          <td><span class="pill dead">Derogado</span> arts. 46 y 46 bis del DL 825, desde el 1-ene-2007</td>
+        </tr>
+        <tr>
+          <td><strong>Almacenaje y movilización</strong></td>
+          <td>Tarifa portuaria y días en puerto</td>
+          <td class="mono">Variable</td>
+          <td><span class="pill pay">Se paga</span> — corre desde la descarga</td>
+        </tr>
+        <tr>
+          <td><strong>Honorarios del agente</strong></td>
+          <td>Acuerdo entre las partes</td>
+          <td class="mono">Libres</td>
+          <td><span class="pill pay">Se paga</span> — conviene cotizar varios</td>
+        </tr>
+        <tr>
+          <td><strong>Homologación 3CV</strong></td>
+          <td>Tabla de valores vigente del 3CV</td>
+          <td class="mono">Arancel fijo</td>
+          <td><span class="pill pay">Se paga</span> por unidad</td>
+        </tr>
+        <tr>
+          <td><strong>Primera inscripción</strong></td>
+          <td>Arancel del Registro Civil</td>
+          <td class="mono">$89.560</td>
+          <td><span class="pill pay">Se paga</span> inscripción + placas</td>
+        </tr>
+      </tbody>
+      <caption>
+        El arancel preferencial del TLC no es automático: depende de que la mercancía cumpla las reglas
+        de origen del acuerdo y de que el importador tenga la certificación documental correcta al momento
+        del despacho.
+      </caption>
+    </table>
+  </div>
+
+  <div class="calc">
+    <span class="label">Ejemplo ilustrativo · pickup eléctrica, CIF US$ 70.000</span>
+    <dl>
+      <dt>Valor aduanero (CIF)</dt>
+      <dd>US$ 70.000</dd>
+      <dt>Ad valorem 6 % <em>— con certificado de origen TLC</em></dt>
+      <dd class="zero">US$ 0</dd>
+      <dt>IVA 19 % sobre CIF + derechos</dt>
+      <dd>US$ 13.300</dd>
+      <dt>Impuesto verde <em>— eléctrico</em></dt>
+      <dd class="zero">US$ 0</dd>
+      <dt class="total">Tributos a pagar en aduana</dt>
+      <dd class="total">US$ 13.300</dd>
+    </dl>
+    <p class="fine">
+      Fuera de este cálculo quedan flete y seguro (ya incluidos en el CIF), almacenaje portuario,
+      honorarios del agente, transporte terrestre, homologación 3CV e inscripción. Sin certificado
+      de origen válido, el ad valorem sube a US$ 4.200 y el IVA a US$ 14.098.
+    </p>
+  </div>
+
+  <h2><span class="num">03</span>Qué agencia de aduanas lo hace</h2>
+
+  <p>
+    Aquí hay un malentendido frecuente que conviene despejar de entrada:
+    <strong>no existe una licencia ni un registro especial de «agentes de aduana para vehículos»</strong>.
+    Un agente de aduana es un profesional auxiliar de la función pública aduanera, y su licencia lo
+    habilita para despachar cualquier mercancía. Los <strong>271 agentes vigentes</strong> del registro
+    oficial pueden, legalmente, tramitar esta operación.
+  </p>
+
+  <p>
+    La diferencia entre uno y otro es de <strong>rodaje</strong>, no de habilitación: haber hecho el
+    circuito 3CV muchas veces, saber clasificar una pickup eléctrica sin equivocarse de partida, y
+    acordarse de pedir el documento aduanero para el Registro Civil antes de cerrar la carpeta.
+  </p>
+
+  <h3>La fuente correcta para elegir</h3>
+
+  <p>
+    El Servicio Nacional de Aduanas publica y actualiza la
+    <a href="https://www.aduana.cl/nomina-de-agentes-de-aduana/aduana/2019-01-04/161432.html">Nómina de Agentes de Aduana</a>
+    con código, RUT, domicilio, correo, teléfono y sitio web de cada agente. Es la única lista
+    autoritativa, y conviene bajarla en vez de guiarse por publicidad.
+  </p>
+
+  <div class="scroll">
+    <table>
+      <thead>
+        <tr><th>Plaza</th><th class="num">Agentes vigentes</th><th>Por qué importa</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Santiago</td><td class="num">161</td><td>Oficinas centrales; operan vía apoderados en puerto</td></tr>
+        <tr><td>Valparaíso</td><td class="num">76</td><td>Puerto de entrada habitual de carga rodante</td></tr>
+        <tr><td>Viña del Mar</td><td class="num">9</td><td>Misma jurisdicción portuaria</td></tr>
+        <tr><td>Talcahuano</td><td class="num">9</td><td>Alternativa para destino sur</td></tr>
+        <tr><td>Iquique</td><td class="num">6</td><td>Zona franca — régimen distinto</td></tr>
+        <tr><td>San Antonio</td><td class="num">1</td><td>Puerto de entrada; se opera mayoritariamente desde Valparaíso</td></tr>
+        <tr><td>Otras plazas</td><td class="num">9</td><td>Los Andes, Concepción, Coquimbo, Punta Arenas, Arica, Puerto Montt</td></tr>
+      </tbody>
+      <caption>Distribución de los 271 agentes vigentes según la nómina oficial de Aduanas al 18/08/2026.</caption>
+    </table>
+  </div>
+
+  <h3>Agentes en el puerto de entrada</h3>
+
+  <p>
+    Estos son agentes <strong>vigentes en Valparaíso</strong>, tomados textualmente de la nómina oficial.
+    Se listan por cercanía a la plaza donde llega la carga rodante — no como recomendación ni como
+    acreditación de que se especialicen en vehículos, cosa que hay que preguntar directamente.
+  </p>
+
+  <div class="scroll">
+    <table>
+      <thead>
+        <tr><th>Código</th><th>Agente</th><th>Correo</th><th>Teléfono</th></tr>
+      </thead>
+      <tbody>
+        <tr><td class="mono">C-06</td><td>Coradines Rondanelli, Ester</td><td class="mono">ecoradines@estercoradines.cl</td><td class="mono">(32) 235 2300</td></tr>
+        <tr><td class="mono">G-04</td><td>Zulueta Govoni, Rodrigo</td><td class="mono">aduana@agenciazulueta.cl</td><td class="mono">(32) 245 9800</td></tr>
+        <tr><td class="mono">C-12</td><td>Hardy Tudor, Iain</td><td class="mono">valparaiso@hardy.cl</td><td class="mono">(32) 216 0000</td></tr>
+        <tr><td class="mono">C-82</td><td>Rossi Soffia, Carlo</td><td class="mono">carlorossi@rossi.cl</td><td class="mono">(32) 216 1400</td></tr>
+        <tr><td class="mono">I-41</td><td>Vio Aris, Jorge</td><td class="mono">jorgevio@agenciavio.cl</td><td class="mono">(32) 245 9500</td></tr>
+        <tr><td class="mono">B-34</td><td>Stephens Valenzuela, Juan C.</td><td class="mono">juancarlos@agenciastephens.com</td><td class="mono">(32) 217 1000</td></tr>
+        <tr><td class="mono">C-95</td><td>Moya Damilano, Jorge A.</td><td class="mono">info@moya.cl</td><td class="mono">(32) 235 0100</td></tr>
+        <tr><td class="mono">A-11</td><td>Navarro Prats, Mauricio</td><td class="mono">contacto@agencianavarro.cl</td><td class="mono">(32) 251 5800</td></tr>
+        <tr><td class="mono">B-55</td><td>Pizarro Flores, Hernán</td><td class="mono">aduana@pizarro-comex.cl</td><td class="mono">(32) 245 8900</td></tr>
+        <tr><td class="mono">A-84</td><td>Toro Pizarro, Demetrio</td><td class="mono">demetrio.toro@agenciatoro.cl</td><td class="mono">(32) 255 5600</td></tr>
+      </tbody>
+      <caption>Datos de contacto según la nómina oficial de Aduanas al 18/08/2026. Verificar vigencia antes de contratar.</caption>
+    </table>
+  </div>
+
+  <h3>Qué preguntar al cotizar</h3>
+
+  <ul>
+    <li>¿Cuántos vehículos particulares han despachado este año, y cuántos eléctricos?</li>
+    <li>¿Gestionan ustedes la homologación en el 3CV o eso queda por mi cuenta?</li>
+    <li>¿Los honorarios incluyen la obtención del documento aduanero para el Registro Civil?</li>
+    <li>¿Cómo clasifican esta unidad y qué arancel resulta? Que lo pongan por escrito.</li>
+    <li>¿Qué pasa si Aduana objeta el certificado de origen o la condición de «sin uso»?</li>
+  </ul>
+
+  <h2><span class="num">04</span>El caso de la F-150 «STX eléctrica»</h2>
+
+  <div class="flag">
+    <span class="label">Antes de cotizar, aclarar con el cliente</span>
+    <p>
+      <strong>Esa combinación no existe.</strong> <em>STX</em> es una versión de acabado de la F-150 de
+      bencina. La F-150 eléctrica es la <strong>Lightning</strong>, y sus versiones son Pro, XLT, Flash,
+      Lariat y Platinum.
+    </p>
+    <p>
+      Además, <strong>Ford terminó la producción de la F-150 Lightning a fines de 2025</strong>. Ya no se
+      fabrica: sólo hay stock remanente sin inscribir, que choca de frente con la regla del año modelo
+      y la fecha del 30 de abril del paso 00. Cada mes que pasa, ese stock se acerca a quedar fuera de
+      la definición de «sin uso».
+    </p>
+    <p>
+      Conviene devolver la pregunta antes de armar la cotización: ¿busca la Lightning en stock
+      remanente, otra pickup eléctrica —Silverado EV, Rivian R1T, Cybertruck—, o una F-150 STX de
+      bencina o híbrida, que es lo que el nombre sugiere?
+    </p>
+  </div>
+
+  <h2><span class="num">05</span>Los tres errores que cuestan plata</h2>
+
+  <ol>
+    <li>
+      <strong>Comprar antes de verificar la condición «sin uso».</strong> Si la unidad se registró en el
+      DMV, el auto ya está comprado y no entra. No hay forma de arreglarlo pagando más impuesto.
+    </li>
+    <li>
+      <strong>Embarcar sin certificado de origen.</strong> Conseguirlo después del despacho es lento y a
+      veces imposible. Sobre un CIF de US$ 70.000 la diferencia es de unos US$ 5.000 entre arancel e IVA.
+    </li>
+    <li>
+      <strong>Cerrar el despacho sin pedir el documento aduanero para el Registro Civil.</strong>
+      Sin factura chilena, ese papel es lo único que permite inscribir el vehículo. Volver a pedirlo
+      cuando el expediente ya se cerró es trámite adicional y semanas perdidas.
+    </li>
+  </ol>
+
+  <div class="sources">
+    <h2>Fuentes</h2>
+    <ol>
+      <li><a href="https://www.aduana.cl/importacion-de-vehiculos/aduana/2017-11-22/101502.html">Servicio Nacional de Aduanas — Importación de vehículos</a></li>
+      <li><a href="https://www.aduana.cl/nomina-de-agentes-de-aduana/aduana/2019-01-04/161432.html">Aduanas — Nómina de Agentes de Aduana (18/08/2026)</a></li>
+      <li><a href="https://www.aduana.cl/tratado-de-libre-comercio-chile-estados-unidos/aduana/2007-07-11/153552.html">Aduanas — TLC Chile–Estados Unidos</a></li>
+      <li><a href="https://www.chileatiende.gob.cl/fichas/3961-homologacion-individual-de-vehiculos-livianos-y-medianos-nuevos-sin-uso-importacion-directa">ChileAtiende 3961 — Certificado de homologación individual electrónico</a></li>
+      <li><a href="https://www.chileatiende.gob.cl/fichas/3388-primera-inscripcion-de-vehiculos-motorizados">ChileAtiende 3388 — Primera inscripción de vehículos motorizados</a></li>
+      <li><a href="https://www.sii.cl/portales/reforma_tributaria/impuestoverde.html">SII — Impuesto Verde a Vehículos Motorizados Nuevos</a></li>
+      <li><a href="https://www.subtrans.gob.cl/3cv/certificado-de-homologacion-individual-electronico-chi-e/">Subsecretaría de Transportes — CHI-e</a></li>
+      <li><a href="https://www.bcn.cl/leychile/navegar?idNorma=1125120">BCN — DS 145 de 2017, vehículos eléctricos</a></li>
+      <li><a href="https://www.bcn.cl/leychile/Navegar?idNorma=1055243">BCN — Resolución Exenta 9978 de 2013, Aduanas</a></li>
+      <li><a href="https://www.prochile.gob.cl/certificacion-de-origen/autocertificaci%C3%B3n">ProChile — Autocertificación de origen</a></li>
+    </ol>
+    <p class="colophon">
+      Guía operativa preparada en agosto de 2026 a partir de fuentes oficiales chilenas. Los aranceles,
+      tasas y valores cambian; verificar la tabla de valores vigente del 3CV y la nómina de agentes antes
+      de comprometer una cotización. No constituye asesoría legal ni tributaria.
+    </p>
+  </div>
+
+</main>
+</body>
+</html>

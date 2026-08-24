@@ -12,7 +12,7 @@
 | Archivo | Qué es |
 |---|---|
 | `Tourevo-COT-2026-0160-Segar-ES.pdf` · `-EN.pdf` | Cotización, 7 páginas |
-| `Tourevo-COT-2026-0160-Segar-Ajustes-ES.pdf` · `-EN.pdf` | Comparativo contra el itinerario del cliente, 5 páginas |
+| `Tourevo-COT-2026-0160-Segar-Dias-y-horarios-ES.pdf` · `-EN.pdf` | Comparativo contra el itinerario del sistema Tourevo, 5 páginas |
 
 ---
 
@@ -49,22 +49,48 @@ Efecto de cada alternativa sobre el pack (base jueves AM: CLP 117.500 p/p):
 | 2 · Trekking Cornisas + Valle de Marte | CLP 270.000 mín. 2 pax (141.000 p/p de referencia) | A recotizar para 4 pax |
 | 3 · Bike Valle de Catarpe | CLP 105.000 p/p | −12.500 → pack 797.000 |
 
-## Comparativo contra el itinerario del cliente
+## Comparativo contra el itinerario del sistema Tourevo
 
-El itinerario que mandó el cliente no coincide con el programa cotizado. El
-documento de ajustes lo desglosa; el resumen es que **de los CLP 809.500 por
-persona sólo se mantienen CLP 111.000** (traslado de llegada y tour
-arqueológico): CLP 457.500 hay que recotizarlos y CLP 241.000 se caen del
-itinerario.
+La primera versión de este comparativo se hizo contra un export suelto y quedó
+mal en tres puntos: decía que Puritama faltaba (está el 24), que faltaba el
+traslado de salida (está el 26 a las 10:24) y marcaba dos bloqueos que el
+sistema ya tenía resueltos. El comparativo actual se hace contra el **itinerario
+cargado en sistema, que ya se vio con Segar**, y es el que vale.
 
-Tres cosas bloquean y hay que resolverlas antes de reservar nada:
+De los nueve servicios cotizados, ocho están en el sistema y **ninguno coincide
+en día y hora a la vez**:
 
-1. **24 y 25 de diciembre son feriado.** Los dos días más caros del programa. Disponibilidad y recargo, primero que nada.
-2. **La aclimatación del 22 de 09:00 a 13:00 es imposible:** el vuelo llega 18:15. Probablemente va el 23.
-3. **El Valle del Arcoíris no se combina con Piedras Rojas:** están en direcciones opuestas. Necesita su propia media jornada.
+| Diferencia | Servicios | Valor |
+|---|---|---|
+| Se fija la hora que la cotización dejaba abierta | 2 (los dos traslados) | CLP 60.000 |
+| Mismo día, cambia el horario | 4 (Valle de la Luna, Valle de la Muerte, full day, Quitor) | CLP 498.500 |
+| Corre de día | 2 (Puritama 23→24, astronómico 23→24) | CLP 150.000 |
+| No está en el sistema | 1 (Cejar + Tebenquiche) | CLP 101.000 |
+
+Ya resuelto en el sistema, no hay que volver a tocarlo: la aclimatación quedó el
+23 y no el 22, y el Valle del Arcoíris salió del día de Piedras Rojas.
+
+Dos choques de horario del propio sistema hay que destrabarlos para que el 24
+sea operable:
+
+1. **Puritama termina 13:30 y el Valle de la Muerte empieza 13:30.** Las termas
+   están a ~30 km. Propuesta: correr el Valle de la Muerte a la tarde libre,
+   15:30–17:30 — resuelve el choque y saca los quads de la hora de más calor.
+2. **Cejar y el Valle de la Muerte no caben los dos el 24.** Si Cejar entra, la
+   tarde del 23 es el único hueco donde cabe completo. Antes de recotizarlo,
+   revisar los 11 servicios quitados que el sistema marca como restaurables.
+
+Menores: 15 minutos entre la cena de Nochebuena y la astronomía del 24, y 24
+minutos entre Quitor y el traslado del 26 (se arregla haciendo el check-out
+antes de salir a Quitor).
+
+**El movimiento de Puritama al 24 parece deliberado y bien pensado**: deja el 23
+para aclimatar a 2.400 m antes de subir a 3.500 m, con Miscanti sobre 4.000 m el
+25. No conviene devolverlo al 23 sólo para descomprimir.
 
 ## Pendientes
 
+0. **La cotización todavía refleja los días del operador, no los del sistema.** Se dejó así a propósito: el comparativo es el puente. Una vez resueltos Cejar, sandboard-vs-quads y el horario del Valle de la Muerte, se realinea `contenido.mjs` y se regenera.
 1. **Condiciones de pago y cancelación.** No venían en el programa del operador y **no se inventaron**. Quedan fuera del documento a propósito: se piden al operador y recién ahí se agregan.
 2. **Fotos de los vehículos.** No estaban disponibles al generar los PDF. La sección de flota se arma igual, con las fichas de los dos vehículos como tira compacta, y el texto avisa que las fotos van adjuntas. El camino con fotos está probado: dejarlas en `vehiculos/` (ver `LEEME.md`) y volver a correr el build. Con 4 pax la ficha de capacidad dejó de ser decorativa: la Tahoe entra cómoda con equipaje, la 4Runner queda al límite en el full day.
 3. **Erratum del correo original.** El trekking de Vilama venía con "Altitud mínima: 2.940 / Altitud máxima: 2.850", con la mínima por sobre la máxima. Se publicó como rango `2.850 – 2.940 m`, que respeta los dos números. Chequear con el operador.
@@ -75,7 +101,7 @@ Tres cosas bloquean y hay que resolverlas antes de reservar nada:
 ```bash
 cd cotizaciones/segar-san-pedro-atacama
 node build.mjs               # cotización: HTML + PDF, ES y EN
-node build-diferencias.mjs   # comparativo: HTML + PDF, ES y EN
+node build-diferencias.mjs   # días y horarios: HTML + PDF, ES y EN
 # --solo-html en cualquiera de los dos si no hay Chromium a mano
 ```
 
@@ -90,7 +116,7 @@ idiomas. Los `.html` son generados — no editarlos a mano.
 | `estilos.mjs` | Hoja compartida por los dos documentos, incluida la de impresión |
 | `comun.mjs` | Formato de moneda y fecha, cabecera, pie e impresión a PDF |
 | `build.mjs` | Cotización |
-| `build-diferencias.mjs` | Comparativo, con el itinerario recibido y los hallazgos |
+| `build-diferencias.mjs` | Comparativo de días y horarios contra el sistema, con los choques |
 
 Esta carpeta va en `cotizaciones/`, no en `propuestas/`: ese árbol se movió a
 `tourevo-cl/website/propuestas/` y el workflow de FTP publica cualquier cosa que

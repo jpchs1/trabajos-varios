@@ -1,11 +1,12 @@
 #!/usr/bin/env node
-// Comparativo entre el programa cotizado (COT-2026-0160) y el itinerario que
-// mandó el cliente. Sale en español y en inglés, HTML y PDF.
+// Comparativo de días y horarios: la cotización COT-2026-0160 contra el
+// itinerario cargado en el sistema Tourevo (el que ya se vio con Segar).
+// Sale en español y en inglés, HTML y PDF.
 //
 //   node build-diferencias.mjs [--solo-html]
 //
 // Los montos se leen de contenido.mjs, así que si la cotización cambia, el
-// impacto en el valor de este documento se recalcula solo.
+// desglose por categoría se recalcula solo.
 
 import { writeFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
@@ -18,264 +19,250 @@ import { plata, fecha, mayus, esc, cabecera, piePagina, aPdf } from './comun.mjs
 const AQUI = dirname(fileURLToPath(import.meta.url));
 const soloHtml = process.argv.includes('--solo-html');
 
-// --- Impacto en el valor -----------------------------------------------------
-// Qué pasa con cada uno de los nueve servicios cotizados bajo el itinerario
-// nuevo. Los montos salen de contenido.mjs; acá sólo se clasifica.
-
-const DESTINO = {
-  'transfer-in': 'mantiene',     // mismo servicio, ahora con horario
-  'puritama': 'sale',            // no aparece en el itinerario
-  'luna-sur': 'recotiza',        // otro horario, circuito por confirmar
-  'astronomico': 'recotiza',     // compartido → privado, y otro día
-  'marte-sandboard': 'recotiza', // sandboard → cuadriciclos
-  'cejar': 'sale',               // no aparece; el itinerario apunta a Baltinache
-  'piedras-rojas': 'recotiza',   // otro alcance y dos horas más
-  'arqueologico': 'mantiene',    // mismo servicio, cambia de día
-  'transfer-out': 'sale',        // falta en el itinerario
-};
-
-const sub = (s) => s.valor + s.entradas;
-const impacto = { mantiene: 0, recotiza: 0, sale: 0 };
-const cuenta = { mantiene: 0, recotiza: 0, sale: 0 };
-for (const s of programa) {
-  impacto[DESTINO[s.id]] += sub(s);
-  cuenta[DESTINO[s.id]] += 1;
-}
-const totalPack = programa.reduce((a, s) => a + sub(s), 0);
-const pct = (n) => `${Math.round((n / totalPack) * 1000) / 10}`.replace('.', ',');
-const pctEn = (n) => `${Math.round((n / totalPack) * 1000) / 10}`;
-
-// --- Comparativo día a día ---------------------------------------------------
+// --- Comparación servicio por servicio ---------------------------------------
+// Los nueve servicios cotizados contra lo que hoy está en el sistema. `e` es la
+// diferencia en días y horarios, que es lo que se está revisando:
+//   fija  → mismo día; la cotización no tenía hora y el sistema la fija
+//   hora  → mismo día, distinto horario
+//   dia   → corre de día
+//   falta → no está en el sistema
 
 const ESTADOS = {
-  ok:    { c: 'b-ok',  t: { es: 'Se mantiene', en: 'Unchanged' } },
-  chg:   { c: 'b-chg', t: { es: 'Cambia', en: 'Changes' } },
-  x:     { c: 'b-x',   t: { es: 'Hay que resolver', en: 'Needs resolving' } },
-  out:   { c: 'b-out', t: { es: 'No aparece', en: 'Not in schedule' } },
+  fija:  { c: 'b-ok',  t: { es: 'Se fija la hora', en: 'Time now set' } },
+  hora:  { c: 'b-chg', t: { es: 'Cambia el horario', en: 'Time changes' } },
+  dia:   { c: 'b-x',   t: { es: 'Corre de día', en: 'Moves day' } },
+  falta: { c: 'b-out', t: { es: 'No está en el sistema', en: 'Not in the system' } },
 };
 
-const N = { es: '—', en: '—' };
-
 const COMPARACION = [
-  { f: '2026-12-22', e: 'ok',
-    cot: { t: { es: 'Traslado de llegada · El Loa → San Pedro', en: 'Arrival transfer · El Loa → San Pedro' }, h: { es: 'Horario a coordinar', en: 'Time to be confirmed' } },
-    rec: { t: { es: 'Transfer Calama → San Pedro de Atacama', en: 'Transfer Calama → San Pedro de Atacama' }, h: { es: '18:15 – 19:35', en: '18:15 – 19:35' } },
-    obs: { es: 'Mismo servicio. El itinerario fija el horario que la cotización dejaba abierto.', en: 'Same service. The schedule pins down the time the quotation had left open.' } },
+  { id: 'transfer-in', e: 'fija',
+    cot: { d: '2026-12-22', h: { es: 'Horario a coordinar', en: 'Time to be confirmed' } },
+    sis: { d: '2026-12-22', h: { es: '18:15 – 19:15', en: '18:15 – 19:15' } },
+    obs: { es: 'Mismo día. El sistema le pone la hora que la cotización dejaba abierta: llegada a San Pedro 19:15 y check-in 19:35. El 22 no queda espacio para nada más, y el sistema tampoco lo tiene: es día completo de viaje desde Puerto Natales.',
+           en: 'Same day. The system fills in the time the quotation had left open: arrival in San Pedro 19:15, check-in 19:35. Nothing else fits on the 22nd, and the system does not try: it is a full travel day from Puerto Natales.' } },
 
-  { f: '2026-12-22', e: 'x',
-    cot: null,
-    rec: { t: { es: 'Aclimatación · mañana tranquila en San Pedro', en: 'Acclimatization · calm morning in San Pedro' }, h: { es: '09:00 – 13:00', en: '09:00 – 13:00' } },
-    obs: { es: 'Choca con la llegada de las 19:35 del mismo día — ver el punto 2. En esta línea el itinerario anota «Check Baltinache», que no es lo mismo que Cejar.', en: 'Clashes with the 19:35 arrival on the same day — see point 2. On this line the schedule notes “Check Baltinache”, which is not the same thing as Cejar.' } },
+  { id: 'puritama', e: 'dia',
+    cot: { d: '2026-12-23', h: { es: '09:30 – 13:30', en: '09:30 – 13:30' } },
+    sis: { d: '2026-12-24', h: { es: '09:30 – 13:30', en: '09:30 – 13:30' } },
+    obs: { es: 'La hora es idéntica; el día corre uno. El sistema anota Puritama a 3.500 m, y correrlo al 24 deja el 23 para aclimatar en San Pedro a 2.400 m antes de subir, con Miscanti por encima de 4.000 m el 25. Leído así el cambio es deliberado y está bien pensado — pero deja el 24 con cinco bloques. Ver el choque 1.',
+           en: 'The time is identical; the day moves by one. The system notes Puritama at 3,500 m, and moving it to the 24th leaves the 23rd to acclimatize in San Pedro at 2,400 m before climbing, with Miscanti above 4,000 m on the 25th. Read that way the change is deliberate and well judged — but it leaves the 24th with five blocks. See conflict 1.' } },
 
-  { f: '2026-12-22', e: 'chg',
-    cot: { t: { es: 'Tour astronómico · compartido', en: 'Astronomy tour · shared' }, h: { es: 'Mié 23 · 21:00 – 23:00', en: 'Wed 23 · 21:00 – 23:00' } },
-    rec: { t: { es: 'Astronomía privada', en: 'Private astronomy' }, h: { es: '22:15 – 23:59', en: '22:15 – 23:59' } },
-    obs: { es: 'Cambia de día, de horario y de modalidad. Lo cotizado es compartido, CLP 40.000 por persona, coordinado como cortesía. Privado es otro producto y hay que cotizarlo.', en: 'Changes day, time and format. What is quoted is the shared tour at CLP 40,000 per person, coordinated as a courtesy. Private is a different product and has to be quoted.' } },
+  { id: 'luna-sur', e: 'hora',
+    cot: { d: '2026-12-23', h: { es: '16:30 – 20:30', en: '16:30 – 20:30' } },
+    sis: { d: '2026-12-23', h: { es: '17:30 – 20:45', en: '17:30 – 20:45' } },
+    obs: { es: 'Mismo día, una hora más tarde y quince minutos más largo. Hay que confirmar que el circuito cotizado — el off circuit por el Vallecito, que se hace caminando — entre en esa ventana. El recorrido estándar sí entra, pero es otro producto y con mucha más gente.',
+           en: 'Same day, an hour later and fifteen minutes longer. Worth confirming the quoted route — the off-circuit through El Vallecito, which is walked — fits that window. The standard circuit does, but it is a different product and far busier.' } },
 
-  { f: '2026-12-23', e: 'out',
-    cot: { t: { es: 'Termas de Puritama', en: 'Puritama Hot Springs' }, h: { es: '09:30 – 13:30', en: '09:30 – 13:30' } },
-    rec: null,
-    obs: { es: 'No está en el itinerario. Son CLP 75.000 más CLP 35.000 de entrada por persona.', en: 'Not in the schedule. It is CLP 75,000 plus CLP 35,000 in park fees per person.' } },
+  { id: 'astronomico', e: 'dia',
+    cot: { d: '2026-12-23', h: { es: '21:00 – 23:00 · compartido', en: '21:00 – 23:00 · shared' } },
+    sis: { d: '2026-12-24', h: { es: '22:15 – 23:59 · privado', en: '22:15 – 23:59 · private' } },
+    obs: { es: 'Corre del 23 al 24, arranca una hora y cuarto más tarde y pasa de compartido a privado. Lo cotizado es el compartido a CLP 40.000 por persona, que coordinamos como cortesía; el privado es otro producto y hay que cotizarlo. Además queda pegado a la cena de Nochebuena. Ver el choque 2.',
+           en: 'Moves from the 23rd to the 24th, starts an hour and a quarter later, and goes from shared to private. What is quoted is the shared tour at CLP 40,000 per person, which we coordinate as a courtesy; private is a different product and has to be quoted. It also lands right on top of the Christmas Eve dinner. See conflict 2.' } },
 
-  { f: '2026-12-23', e: 'chg',
-    cot: { t: { es: 'Valle de la Luna Sur', en: 'Valle de la Luna South' }, h: { es: '16:30 – 20:30', en: '16:30 – 20:30' } },
-    rec: { t: { es: 'Valle de la Luna al atardecer', en: 'Valle de la Luna at sunset' }, h: { es: '17:30 – 20:45', en: '17:30 – 20:45' } },
-    obs: { es: 'Una hora más tarde y quince minutos más largo. Hay que confirmar que sea el mismo circuito off circuit por el Vallecito y no el recorrido estándar, que es otro producto y con mucha más gente.', en: 'An hour later and fifteen minutes longer. Worth confirming it is the same off-circuit route through El Vallecito and not the standard circuit, which is a different product and far busier.' } },
+  { id: 'marte-sandboard', e: 'hora',
+    cot: { d: '2026-12-24', h: { es: '09:30 – 13:30 · 4 h', en: '09:30 – 13:30 · 4 h' } },
+    sis: { d: '2026-12-24', h: { es: '13:30 – 15:30 · 2 h', en: '13:30 – 15:30 · 2 h' } },
+    obs: { es: 'Mismo día, pero pasa de la mañana a la tarde y de cuatro horas a dos. El sistema lo deja como «sandboard or quad bikes», sin decidir: el sandboard está cotizado, los cuadriciclos no y no los operamos nosotros. Y a las 13:30 choca con Puritama. Ver el choque 1.',
+           en: 'Same day, but it moves from morning to afternoon and from four hours to two. The system leaves it as “sandboard or quad bikes”, undecided: sandboarding is quoted, quad bikes are not and we do not operate them. And at 13:30 it collides with Puritama. See conflict 1.' } },
 
-  { f: '2026-12-23', e: 'chg',
-    cot: { t: { es: 'Cotizado para el sábado 26', en: 'Quoted for Saturday 26' }, h: { es: '08:00 – 10:00', en: '08:00 – 10:00' } },
-    rec: { t: { es: 'Pukará de Quitor', en: 'Pukará de Quitor' }, h: { es: 'Sin horario', en: 'No time given' } },
-    obs: { es: 'Se adelanta del sábado 26 al miércoles 23 y queda sin hora. Además preguntan si guiado o autoguiado: la respuesta está en el punto 6.', en: 'Moves forward from Saturday 26 to Wednesday 23 and has no time. The schedule also asks whether it is self-guided: the answer is in point 6.' } },
+  { id: 'cejar', e: 'falta',
+    cot: { d: '2026-12-24', h: { es: '15:30 – 19:30', en: '15:30 – 19:30' } },
+    sis: null,
+    obs: { es: 'El único servicio cotizado que no está en el sistema. En su lugar el 24 tiene «Free afternoon» de 15:30 a 17:30 — exactamente donde arrancaba Cejar, pero dos horas en vez de cuatro. Y en la línea del Valle de la Muerte hay un mensaje sin responder: preguntaron si la caminata se puede combinar con una flotada. Esa flotada es Cejar.',
+           en: 'The only quoted service missing from the system. In its place the 24th has a “Free afternoon” from 15:30 to 17:30 — exactly where Cejar started, but two hours instead of four. And on the Valle de la Muerte line there is an unanswered message: they asked whether the walk can be combined with a float. That float is Cejar.' } },
 
-  { f: '2026-12-24', e: 'chg',
-    cot: { t: { es: 'Valle de Marte + Sandboard', en: 'Valle de Marte + Sandboarding' }, h: { es: '09:30 – 13:30', en: '09:30 – 13:30' } },
-    rec: { t: { es: 'Death Valley · cuadriciclos', en: 'Death Valley · quad bikes' }, h: { es: '13:30 – 15:30', en: '13:30 – 15:30' } },
-    obs: { es: 'Es el mismo valle — «Valle de la Muerte» viene de una mala transcripción de Valle de Marte — pero otro producto y otro operador. Dos horas en vez de cuatro, y en la franja de más calor de un día de diciembre. No está cotizado.', en: 'It is the same valley — “Valle de la Muerte” comes from a mistranscription of Valle de Marte — but a different product and a different operator. Two hours instead of four, and in the hottest part of a December day. Not quoted.' } },
+  { id: 'piedras-rojas', e: 'hora',
+    cot: { d: '2026-12-25', h: { es: '10:00 – 18:00', en: '10:00 – 18:00' } },
+    sis: { d: '2026-12-25', h: { es: '08:00 – 18:00', en: '08:00 – 18:00' } },
+    obs: { es: 'Mismo día, dos horas más: arranca a las 08:00. El alcance también cambió — entra Chaxa, que tiene su propia entrada, y salen Tuyajto y las protoaldeas. El Valle del Arcoíris ya no aparece: eso quedó resuelto.',
+           en: 'Same day, two hours longer: it starts at 08:00. The scope changed too — Chaxa comes in, with its own entrance fee, and Tuyajto and the proto-villages drop out. Rainbow Valley no longer appears: that one is settled.' } },
 
-  { f: '2026-12-24', e: 'out',
-    cot: { t: { es: 'Laguna Cejar + Ojos de Tebenquiche + Laguna de Tebenquiche', en: 'Cejar Lagoon + Ojos de Tebenquiche + Tebenquiche Lagoon' }, h: { es: '15:30 – 19:30', en: '15:30 – 19:30' } },
-    rec: null,
-    obs: { es: 'No está en el itinerario. Son CLP 80.000 más CLP 21.000 de entrada por persona. Si la idea es reemplazarlo por Baltinache, es otra cotización: otro acceso, otro cupo y sin la flotación de Cejar.', en: 'Not in the schedule. It is CLP 80,000 plus CLP 21,000 in park fees per person. If the idea is to swap it for Baltinache, that is a separate quote: different access, different capacity, and without the floating at Cejar.' } },
+  { id: 'arqueologico', e: 'hora',
+    cot: { d: '2026-12-26', h: { es: '08:00 – 10:00 · 2 h', en: '08:00 – 10:00 · 2 h' } },
+    sis: { d: '2026-12-26', h: { es: '08:30 – 10:00 · 1 h 30', en: '08:30 – 10:00 · 1 h 30' } },
+    obs: { es: 'Mismo día, media hora más tarde y media hora más corto. El guiado está cotizado a dos horas: en hora y media hay que recortar el recorrido. Y el traslado a Calama sale 24 minutos después de que termina. Ver el choque 3.',
+           en: 'Same day, half an hour later and half an hour shorter. The guided visit is quoted at two hours: in ninety minutes the route has to be cut back. And the transfer to Calama leaves 24 minutes after it ends. See conflict 3.' } },
 
-  { f: '2026-12-25', e: 'x',
-    cot: { t: { es: 'Piedras Rojas + Tuyajto + Lagunas Altiplánicas + Protoaldeas + Pueblos', en: 'Piedras Rojas + Tuyajto + Altiplanic Lagoons + Proto-villages + Andean towns' }, h: { es: '10:00 – 18:00', en: '10:00 – 18:00' } },
-    rec: { t: { es: 'Altiplano · Chaxa, Toconao, Miscanti, Piedras Rojas y Valle del Arcoíris', en: 'Altiplano · Chaxa, Toconao, Miscanti, Piedras Rojas & Rainbow Valley' }, h: { es: '08:00 – 18:00', en: '08:00 – 18:00' } },
-    obs: { es: 'Dos horas más y otro alcance: entra Chaxa, que tiene su propia entrada, y el Valle del Arcoíris; salen Tuyajto y las protoaldeas. El Arcoíris no se combina con Piedras Rojas — ver el punto 3.', en: 'Two hours longer and a different scope: Chaxa comes in, with its own entrance fee, and Rainbow Valley; Tuyajto and the proto-villages drop out. Rainbow Valley does not combine with Piedras Rojas — see point 3.' } },
-
-  { f: '2026-12-26', e: 'chg',
-    cot: { t: { es: 'Tour arqueológico · Pukará de Quitor', en: 'Archaeological tour · Pukará de Quitor' }, h: { es: '08:00 – 10:00', en: '08:00 – 10:00' } },
-    rec: { t: { es: 'Movido al miércoles 23', en: 'Moved to Wednesday 23' }, h: { es: '—', en: '—' } },
-    obs: { es: 'El servicio sigue siendo el mismo; cambia el día.', en: 'The service itself is unchanged; only the day moves.' } },
-
-  { f: '2026-12-26', e: 'x',
-    cot: { t: { es: 'Traslado de salida · San Pedro → El Loa', en: 'Departure transfer · San Pedro → El Loa' }, h: { es: 'Horario a confirmar', en: 'Time to be confirmed' } },
-    rec: null,
-    obs: { es: 'No está en el itinerario, y hace falta el vuelo de salida para fijarlo. Ver el punto 4.', en: 'Not in the schedule, and the outbound flight is needed to set it. See point 4.' } },
+  { id: 'transfer-out', e: 'fija',
+    cot: { d: '2026-12-26', h: { es: 'Horario a confirmar', en: 'Time to be confirmed' } },
+    sis: { d: '2026-12-26', h: { es: '10:24 – 11:44', en: '10:24 – 11:44' } },
+    obs: { es: 'Mismo día y ahora con hora. Llega a Calama 11:44 para el vuelo de las 13:44: dos horas de margen, bien para un doméstico. Lo apretado no es el vuelo, es salir de Quitor.',
+           en: 'Same day and now with a time. It reaches Calama at 11:44 for the 13:44 flight: two hours of margin, fine for a domestic leg. The tight part is not the flight, it is getting away from Quitor.' } },
 ];
 
-// --- Lo que hay que resolver -------------------------------------------------
-// Ordenado por lo que rompe el viaje si no se toca, no por fecha.
+// Lo que el sistema tiene y la cotización no cubre.
+const EXTRA = [
+  { d: '2026-12-22', t: { es: 'El tramo completo desde Puerto Natales: traslado a PNT 06:35, vuelo PNT → Santiago 09:05, conexión y almuerzo en Santiago 13:45, vuelo Santiago → Calama 15:33, y el check-in en San Pedro 19:35. De todo eso, la cotización sólo cubre el traslado Calama → San Pedro.',
+                          en: 'The whole leg down from Puerto Natales: transfer to PNT 06:35, PNT → Santiago 09:05, connection and lunch in Santiago 13:45, Santiago → Calama 15:33, and check-in in San Pedro 19:35. Of all that, the quotation only covers the Calama → San Pedro transfer.' } },
+  { d: '2026-12-23', t: { es: 'Aclimatación · mañana tranquila en San Pedro, 09:00 – 13:00. Hay que definir si es servicio guiado o simplemente tiempo libre: si es guiado, hay que cotizarlo.',
+                          en: 'Acclimatization · calm morning in San Pedro, 09:00 – 13:00. We need to settle whether it is a guided service or simply free time: if it is guided, it needs quoting.' } },
+  { d: '2026-12-24', t: { es: 'Tarde libre 15:30 – 17:30 y cena de Nochebuena 20:00 – 22:00.',
+                          en: 'Free afternoon 15:30 – 17:30 and Christmas Eve dinner 20:00 – 22:00.' } },
+  { d: '2026-12-25', t: { es: 'Cena 20:00 – 21:30.', en: 'Dinner 20:00 – 21:30.' } },
+  { d: '2026-12-26', t: { es: 'Vuelo Calama → Santiago 13:44, check-in internacional 20:00 y vuelo Santiago → Dallas AA940 23:45, ya comprado. Fuera del alcance de la cotización.',
+                          en: 'Calama → Santiago flight 13:44, international check-in 20:00 and the Santiago → Dallas AA940 at 23:45, already purchased. Outside the scope of the quotation.' } },
+];
 
-const HALLAZGOS = [
+// --- Choques de horario dentro del propio sistema ----------------------------
+
+const CHOQUES = [
   { grave: true,
-    tit: { es: 'El 24 y el 25 son Nochebuena y Navidad', en: '24 and 25 December are Christmas Eve and Christmas Day' },
+    tit: { es: 'El 24: Puritama termina y el Valle de la Muerte empieza a la misma hora',
+           en: 'The 24th: Puritama ends and Valle de la Muerte begins at the same time' },
     cuerpo: {
-      es: ['Dos de los cuatro días de actividades caen en feriado: el <b>jueves 24</b> con los cuadriciclos y el <b>viernes 25</b> con el full day al altiplano, que además es el servicio más caro del programa y el más difícil de armar.',
-           'En San Pedro esos dos días la operación se achica. Hay operadores que directamente no salen el 25, los guías y conductores que sí trabajan van con recargo, y los sitios administrados por CONAF pueden tener horario especial. Nada de esto es imposible, pero es lo primero que hay que confirmar y lo último que conviene dejar para el final.'],
-      en: ['Two of the four activity days fall on public holidays: <b>Thursday 24</b> with the quad bikes and <b>Friday 25</b> with the full-day altiplano trip, which is also the most expensive service in the programme and the hardest to put together.',
-           'Operations in San Pedro shrink on those two days. Some operators simply do not run on the 25th, the guides and drivers who do work carry a holiday supplement, and CONAF-administered sites may keep special hours. None of this is impossible, but it is the first thing to confirm and the last thing to leave until the end.'],
+      es: ['Puritama va de <b>09:30 a 13:30</b> y el Valle de la Muerte de <b>13:30 a 15:30</b>. Las termas están a unos 30 km de San Pedro, cerca de una hora de camino: no se puede terminar allá a las 13:30 y estar en el valle a las 13:30.',
+           'Aparte del choque, serían dos horas de sandboard o cuadriciclos en la franja de más calor de un día de diciembre, justo después de cuatro horas de termas.'],
+      en: ['Puritama runs <b>09:30 to 13:30</b> and Valle de la Muerte <b>13:30 to 15:30</b>. The hot springs are some 30 km from San Pedro, close to an hour on the road: you cannot finish there at 13:30 and be in the valley at 13:30.',
+           'Beyond the clash, it would be two hours of sandboarding or quad bikes in the hottest part of a December day, straight after four hours in hot springs.'],
     },
-    fix: { es: 'Pedir disponibilidad del 24 y del 25 antes que cualquier otra cosa, con el recargo de feriado por escrito. Si el 25 no sale, el full day se corre al miércoles 23 y el resto del programa se reordena alrededor.',
-           en: 'Ask for availability on the 24th and 25th before anything else, with the holiday supplement in writing. If the 25th is not viable, the full day moves to Wednesday 23 and the rest of the programme reorders around it.' } },
+    fix: { es: 'Correr el Valle de la Muerte a la franja de la tarde libre, <b>15:30 a 17:30</b>. Resuelve el choque, deja margen real después de Puritama y saca los quads de la peor hora.',
+           en: 'Move Valle de la Muerte into the free-afternoon slot, <b>15:30 to 17:30</b>. It resolves the clash, leaves real margin after Puritama and takes the quads out of the worst hour.' } },
 
   { grave: true,
-    tit: { es: 'La mañana del 22 no existe: el vuelo llega a las 18:15', en: 'The morning of the 22nd does not exist: the flight lands at 18:15' },
+    tit: { es: 'Cejar y el Valle de la Muerte no caben los dos el 24',
+           en: 'Cejar and Valle de la Muerte do not both fit on the 24th' },
     cuerpo: {
-      es: ['El itinerario tiene una <b>aclimatación de 09:00 a 13:00 el martes 22</b> y, el mismo día, el traslado desde Calama que llega a San Pedro <b>a las 19:35</b>. No se puede tener una mañana tranquila en San Pedro nueve horas antes de llegar.',
-           'Es además la única línea del itinerario que no dice <i>To be booked</i>, así que probablemente sea un marcador de posición y no un servicio pedido.'],
-      en: ['The schedule has an <b>acclimatization block from 09:00 to 13:00 on Tuesday 22</b> and, on the same day, the transfer from Calama arriving in San Pedro <b>at 19:35</b>. You cannot have a calm morning in San Pedro nine hours before arriving there.',
-           'It is also the only line in the schedule that does not say <i>To be booked</i>, so it is most likely a placeholder rather than a requested service.'],
+      es: ['Cejar está cotizado de <b>15:30 a 19:30</b>, cuatro horas. Si el Valle de la Muerte se corre a esa franja para resolver el choque anterior, Cejar no entra. Y si Cejar se queda donde estaba cotizado, el Valle de la Muerte tiene que volver a las 13:30 y el choque vuelve.',
+           'La tarde del <b>miércoles 23</b> es el único hueco donde Cejar entra completo: la aclimatación termina 13:00 y el Valle de la Luna arranca 17:30. Son cuatro horas y media, justas — habría que salir apenas termine la aclimatación. A favor: Cejar está a nivel del salar, así que no rompe la aclimatación del día.'],
+      en: ['Cejar is quoted <b>15:30 to 19:30</b>, four hours. If Valle de la Muerte moves into that slot to fix the previous clash, Cejar does not fit. And if Cejar stays where it was quoted, Valle de la Muerte has to go back to 13:30 and the clash returns.',
+           'The afternoon of <b>Wednesday 23</b> is the only gap where Cejar fits whole: the acclimatization ends at 13:00 and Valle de la Luna starts at 17:30. That is four and a half hours, just enough — you would have to leave as soon as the acclimatization ends. In its favour: Cejar sits at salt-flat level, so it does not undo the day’s acclimatization.'],
     },
-    fix: { es: 'Confirmar si la aclimatación va el <b>miércoles 23 por la mañana</b>. Si va ahí, hay que decidir qué pasa con el Pukará de Quitor, que también está el 23 y sin horario.',
-           en: 'Confirm whether the acclimatization belongs on <b>Wednesday 23 in the morning</b>. If it does, a decision is needed on the Pukará de Quitor, which is also on the 23rd and has no time.' } },
-
-  { grave: true,
-    tit: { es: 'El Valle del Arcoíris no cabe en el día de Piedras Rojas', en: 'Rainbow Valley does not fit into the Piedras Rojas day' },
-    cuerpo: {
-      es: ['El viernes 25 junta <b>Chaxa, Toconao, Miscanti, Piedras Rojas y el Valle del Arcoíris</b> en una sola salida de 08:00 a 18:00.',
-           'Los primeros cuatro están al <b>sureste</b> de San Pedro, subiendo por el borde este del salar hasta más de 4.000 metros. El Valle del Arcoíris está al <b>noroeste</b>, camino a Río Grande, en la dirección contraria. Meterlos en el mismo día son varios cientos de kilómetros extra y deja todo lo demás en pasadas de auto.'],
-      en: ['Friday 25 puts <b>Chaxa, Toconao, Miscanti, Piedras Rojas and Rainbow Valley</b> into a single outing from 08:00 to 18:00.',
-           'The first four lie <b>south-east</b> of San Pedro, climbing the eastern rim of the salt flat to over 4,000 metres. Rainbow Valley lies <b>north-west</b>, on the road to Río Grande, in the opposite direction. Putting them in one day adds several hundred kilometres of driving and reduces everything else to drive-past stops.'],
-    },
-    fix: { es: 'Sacar el Valle del Arcoíris del 25 y darle su propia media jornada. El <b>jueves 24 por la mañana</b> es el hueco natural, antes de los cuadriciclos de las 13:30 — sujeto a que haya operación en Nochebuena.',
-           en: 'Take Rainbow Valley out of the 25th and give it its own half day. <b>Thursday 24 in the morning</b> is the natural gap, before the 13:30 quad bikes — subject to operators running on Christmas Eve.' } },
+    fix: { es: 'Decidir primero si Cejar entra. Si entra, la tarde del 23; si no, el 24 se ordena solo con el Valle de la Muerte a las 15:30. Antes de recotizarlo conviene mirar los <b>11 servicios quitados</b> que el sistema marca como restaurables: puede que Cejar esté ahí.',
+           en: 'Decide first whether Cejar is in. If it is, the afternoon of the 23rd; if not, the 24th sorts itself out with Valle de la Muerte at 15:30. Before requoting it, check the <b>11 removed services</b> the system flags as restorable: Cejar may be among them.' } },
 
   { grave: false,
-    tit: { es: 'Falta el traslado de salida', en: 'The departure transfer is missing' },
+    tit: { es: 'El 24: quince minutos entre la cena de Nochebuena y la astronomía',
+           en: 'The 24th: fifteen minutes between the Christmas Eve dinner and the astronomy' },
     cuerpo: {
-      es: ['El itinerario tiene el traslado de llegada del 22, pero <b>no tiene el de vuelta</b> al aeropuerto de El Loa. La cotización sí lo incluye, el sábado 26, a CLP 30.000 por persona.'],
-      en: ['The schedule has the arrival transfer on the 22nd but <b>not the return</b> to El Loa airport. The quotation does include it, on Saturday 26, at CLP 30,000 per person.'],
+      es: ['La cena va de <b>20:00 a 22:00</b> y la astronomía privada arranca <b>22:15</b>. Quince minutos para levantarse de la mesa y salir. Se puede, pero el operador tiene que saberlo de antemano.'],
+      en: ['Dinner runs <b>20:00 to 22:00</b> and the private astronomy starts at <b>22:15</b>. Fifteen minutes to get up from the table and go. It is doable, but the operator has to know in advance.'],
     },
-    fix: { es: 'Mandar el vuelo de salida para fijar el horario. Y si el viaje termina antes del 26, decirlo: cambia el último día del programa.',
-           en: 'Send the outbound flight so the time can be set. And if the trip ends before the 26th, say so: it changes the last day of the programme.' } },
+    fix: { es: 'Fijar el punto de recogida en el restaurante y no en el hotel, o cerrar la cena a las 21:30. Y confirmar que haya operación astronómica la noche del 24.',
+           en: 'Set the pickup at the restaurant rather than the hotel, or close dinner at 21:30. And confirm the astronomy operates on the night of the 24th.' } },
 
   { grave: false,
-    tit: { es: 'El miércoles 23 tiene dos actividades y sólo una tiene hora', en: 'Wednesday 23 has two activities and only one has a time' },
+    tit: { es: 'El 26: veinticuatro minutos entre Quitor y el traslado',
+           en: 'The 26th: twenty-four minutes between Quitor and the transfer' },
     cuerpo: {
-      es: ['El 23 aparecen el <b>Valle de la Luna al atardecer, de 17:30 a 20:45</b>, y el <b>Pukará de Quitor sin horario</b>. En la cotización, Quitor estaba el sábado 26 de 08:00 a 10:00.',
-           'Si además se mueve ahí la aclimatación de 09:00 a 13:00, el día queda con tres bloques y Quitor sin lugar donde entrar.'],
-      en: ['The 23rd carries the <b>Valle de la Luna at sunset, 17:30 to 20:45</b>, and the <b>Pukará de Quitor with no time</b>. In the quotation, Quitor sat on Saturday 26 from 08:00 to 10:00.',
-           'If the 09:00–13:00 acclimatization also moves there, the day ends up with three blocks and Quitor has nowhere to go.'],
+      es: ['Quitor termina <b>10:00</b> y el traslado a Calama sale <b>10:24</b>. En esos 24 minutos hay que volver del pukará, pasar por el hotel, hacer el check-out y cargar el equipaje.'],
+      en: ['Quitor ends at <b>10:00</b> and the transfer to Calama leaves at <b>10:24</b>. In those 24 minutes you have to come back from the pukará, stop at the hotel, check out and load the luggage.'],
     },
-    fix: { es: 'Decidir el orden del 23. Quitor temprano y la aclimatación después funciona; los tres bloques juntos, no.',
-           en: 'Decide the order of the 23rd. Quitor early with the acclimatization after it works; all three blocks together does not.' } },
+    fix: { es: 'Hacer el check-out <b>antes</b> de salir a Quitor y llevar el equipaje en el vehículo. Así el traslado sale directo desde el pukará y los 24 minutos sobran.',
+           en: 'Check out <b>before</b> heading to Quitor and carry the luggage in the vehicle. The transfer then leaves straight from the pukará and 24 minutes is more than enough.' } },
 
   { grave: false,
-    tit: { es: 'Quitor: se puede ir por cuenta propia, pero no conviene', en: 'Quitor: you can go on your own, but it is not worth it' },
+    tit: { es: 'El 23 tiene dos bloques y el 24 tiene cinco',
+           en: 'The 23rd has two blocks and the 24th has five' },
     cuerpo: {
-      es: ['Es la pregunta que trae el itinerario. Al Pukará se puede entrar por cuenta propia pagando la entrada a la comunidad: es un sitio abierto y con senderos marcados.',
-           'Dicho eso, sin guía es una ladera con muros de piedra. Lo que hace que la visita valga son las dos horas de interpretación: qué era cada recinto, cómo cayó y por qué se lo recuerda como la última resistencia atacameña. La cotización lo lleva guiado, a CLP 75.000 por persona más CLP 6.000 de entrada.'],
-      en: ['This is the question the schedule raises. You can visit the Pukará on your own by paying the community entrance: it is an open site with marked paths.',
-           'That said, without a guide it is a hillside with stone walls. What makes the visit worth it is the two hours of interpretation: what each enclosure was, how it fell, and why it is remembered as the last Atacameño stand. The quotation carries it guided, at CLP 75,000 per person plus CLP 6,000 entrance.'],
+      es: ['El 23 queda con la aclimatación de la mañana y el Valle de la Luna al atardecer. El 24, que es Nochebuena, acumula Puritama, el Valle de la Muerte, la tarde libre, la cena y la astronomía.',
+           'La progresión de altura justifica que Puritama esté el 24, así que el desbalance no se arregla devolviéndolo al 23. Se arregla con lo que se mueva a la tarde del 23.'],
+      en: ['The 23rd is left with the morning acclimatization and Valle de la Luna at sunset. The 24th, which is Christmas Eve, piles up Puritama, Valle de la Muerte, the free afternoon, dinner and the astronomy.',
+           'The altitude progression justifies Puritama sitting on the 24th, so the imbalance is not fixed by moving it back. It is fixed by whatever moves into the afternoon of the 23rd.'],
     },
-    fix: { es: 'Recomendamos guiado. Si prefieren autoguiado, se descuentan los CLP 75.000 del servicio y queda sólo la entrada.',
-           en: 'We recommend the guided version. If you prefer self-guided, the CLP 75,000 service comes off and only the entrance fee remains.' } },
+    fix: { es: 'La tarde del 23 es el espacio libre que queda en todo el programa. Cejar es el candidato natural.',
+           en: 'The afternoon of the 23rd is the only free space left in the whole programme. Cejar is the natural candidate.' } },
 ];
 
 const PREGUNTAS = [
-  { q: { es: '¿La aclimatación del 22 es en realidad el 23?', en: 'Is the acclimatization on the 22nd actually meant to be the 23rd?' },
-    d: { es: '¿Y es un servicio guiado o simplemente tiempo libre en San Pedro? Si es guiado, hay que cotizarlo.', en: 'And is it a guided service or simply free time in San Pedro? If it is guided, it needs quoting.' } },
-  { q: { es: '¿Cuál es el vuelo de salida?', en: 'What is the outbound flight?' },
-    d: { es: 'Sin eso no se puede fijar el traslado a El Loa ni cerrar el último día.', en: 'Without it the transfer to El Loa cannot be scheduled and the last day cannot be closed.' } },
-  { q: { es: '¿El Valle del Arcoíris se saca o se le da su propia media jornada?', en: 'Does Rainbow Valley come out, or does it get its own half day?' },
-    d: { es: 'Si se queda, el jueves 24 por la mañana es el hueco natural.', en: 'If it stays, Thursday 24 in the morning is the natural gap.' } },
-  { q: { es: '¿Baltinache en vez de Cejar, o ninguno de los dos?', en: 'Baltinache instead of Cejar, or neither?' },
-    d: { es: 'El itinerario lo deja anotado como pendiente de revisar, y son productos distintos.', en: 'The schedule leaves it flagged for review, and they are different products.' } },
-  { q: { es: '¿Puritama queda fuera del viaje?', en: 'Is Puritama out of the trip?' },
-    d: { es: 'Estaba en el programa cotizado y no aparece en el itinerario.', en: 'It was in the quoted programme and does not appear in the schedule.' } },
-  { q: { es: '¿Quitor guiado o autoguiado, y a qué hora?', en: 'Quitor guided or self-guided, and at what time?' },
-    d: { es: 'Nuestra recomendación está en el punto 6.', en: 'Our recommendation is in point 6.' } },
-  { q: { es: '¿Los cuadriciclos reemplazan al sandboard?', en: 'Do the quad bikes replace the sandboarding?' },
-    d: { es: 'No los operamos nosotros: hay que buscar quién y cotizarlo aparte.', en: 'We do not operate them: we need to find who does and quote it separately.' } },
+  { q: { es: '¿Cejar entra o queda fuera?', en: 'Is Cejar in or out?' },
+    d: { es: 'Es el único servicio cotizado que no está en el sistema, y hay un mensaje del cliente preguntando por una flotada. Si entra, la tarde del 23.', en: 'It is the only quoted service missing from the system, and there is a client message asking about a float. If it is in, the afternoon of the 23rd.' } },
+  { q: { es: '¿Sandboard o cuadriciclos en el Valle de la Muerte?', en: 'Sandboarding or quad bikes in the Valle de la Muerte?' },
+    d: { es: 'El sistema lo deja sin decidir. El sandboard está cotizado; los cuadriciclos no, y no los operamos nosotros.', en: 'The system leaves it undecided. Sandboarding is quoted; quad bikes are not, and we do not operate them.' } },
+  { q: { es: '¿Movemos el Valle de la Muerte a las 15:30?', en: 'Do we move Valle de la Muerte to 15:30?' },
+    d: { es: 'Es lo que destraba el 24. Depende de qué se decida con Cejar.', en: 'It is what unblocks the 24th. It depends on what is decided about Cejar.' } },
   { q: { es: '¿La astronomía privada va confirmada?', en: 'Is the private astronomy confirmed?' },
-    d: { es: 'Cambia el valor respecto de la compartida que está cotizada, y cambia de noche.', en: 'It changes the price against the shared tour that is quoted, and it changes night.' } },
-  { q: { es: 'Disponibilidad y recargo del 24 y 25 de diciembre.', en: 'Availability and holiday supplement for 24 and 25 December.' },
-    d: { es: 'Es lo primero que hay que cerrar: condiciona los dos días más caros del programa.', en: 'This is the first thing to close: it governs the two most expensive days of the programme.' } },
-  { q: { es: 'Qué vehículo va al full day con 4 pasajeros.', en: 'Which vehicle takes the full day with 4 travellers.' },
-    d: { es: 'Con 4 pax más guía-conductor la Tahoe entra cómoda con equipaje; la 4Runner queda al límite en una salida de diez horas al altiplano. Conviene fijarlo ahora.', en: 'With 4 travellers plus a guide-driver the Tahoe is comfortable with luggage; the 4Runner is at its limit on a ten-hour run up to the altiplano. Better settled now.' } },
+    d: { es: 'Cambia el valor respecto del compartido que está cotizado, y hay que confirmar que opere la noche del 24.', en: 'It changes the price against the shared tour that is quoted, and we need to confirm it runs on the night of the 24th.' } },
+  { q: { es: '¿El Valle de la Luna del 23 a las 17:30 es el circuito cotizado?', en: 'Is the 17:30 Valle de la Luna on the 23rd the quoted route?' },
+    d: { es: 'Lo cotizado es el off circuit por el Vallecito, que se hace caminando. El estándar entra igual en la ventana, pero es otro producto.', en: 'What is quoted is the off-circuit through El Vallecito, which is walked. The standard one also fits the window, but it is a different product.' } },
+  { q: { es: '¿Quitor en hora y media o volvemos a las dos horas cotizadas?', en: 'Quitor in ninety minutes, or back to the two hours quoted?' },
+    d: { es: 'En 1 h 30 hay que recortar el recorrido. Y conviene hacer el check-out antes de salir.', en: 'In 1 h 30 the route has to be cut back. And it is worth checking out before leaving.' } },
+  { q: { es: '¿Chaxa entra al full day del 25?', en: 'Does Chaxa go into the full day on the 25th?' },
+    d: { es: 'No estaba en lo cotizado y suma su propia entrada. Salen Tuyajto y las protoaldeas.', en: 'It was not in the quotation and adds its own entrance fee. Tuyajto and the proto-villages drop out.' } },
+  { q: { es: '¿La aclimatación del 23 es servicio guiado o tiempo libre?', en: 'Is the acclimatization on the 23rd a guided service or free time?' },
+    d: { es: 'Si es guiado hay que cotizarlo; si es tiempo libre, no cuesta nada.', en: 'If it is guided it needs quoting; if it is free time, it costs nothing.' } },
+  { q: { es: 'Disponibilidad y recargo del 24 y 25.', en: 'Availability and holiday supplement for the 24th and 25th.' },
+    d: { es: 'Nochebuena y Navidad, con el full day más caro del programa el 25. Es lo primero que hay que cerrar.', en: 'Christmas Eve and Christmas Day, with the programme’s most expensive full day on the 25th. This is the first thing to close.' } },
+  { q: { es: '¿Son 4 pasajeros?', en: 'Is it 4 travellers?' },
+    d: { es: 'El itinerario dice 4 en todas las líneas, pero la cena del 25 está rotulada «Segar & Shreya». La cotización va sobre 4; conviene confirmarlo antes de pedir las tarifas de grupo.', en: 'The schedule says 4 on every line, but the dinner on the 25th is labelled “Segar & Shreya”. The quotation is built on 4; worth confirming before requesting group rates.' } },
 ];
+
+// --- Desglose por tipo de diferencia -----------------------------------------
+
+const sub = (s) => s.valor + s.entradas;
+const porId = Object.fromEntries(programa.map((s) => [s.id, s]));
+const CAT = ['fija', 'hora', 'dia', 'falta'];
+const monto = Object.fromEntries(CAT.map((c) => [c, 0]));
+const cuenta = Object.fromEntries(CAT.map((c) => [c, 0]));
+for (const c of COMPARACION) {
+  monto[c.e] += sub(porId[c.id]);
+  cuenta[c.e] += 1;
+}
+const totalPack = programa.reduce((a, s) => a + sub(s), 0);
 
 // --- Textos ------------------------------------------------------------------
 
 const T = {
   es: {
-    titulo: `Tourevo · Ajustes de días y horarios — ${cliente.nombre}`,
-    eyebrow: 'Ajustes al programa',
-    h1: 'Diferencias entre lo cotizado y el itinerario recibido',
-    sub: 'Qué coincide, qué cambia de día u horario, qué falta y qué hay que resolver antes de reservar. Comparación línea por línea entre la cotización COT-2026-0160 y el itinerario que nos enviaron.',
+    titulo: `Tourevo · Días y horarios — ${cliente.nombre}`,
+    eyebrow: 'Revisión de días y horarios',
+    h1: 'La cotización contra el itinerario en sistema',
+    sub: 'Los nueve servicios cotizados en COT-2026-0160, uno por uno, contra lo que hoy está cargado en el sistema Tourevo y ya visto con Segar. Qué coincide, qué corre de día, qué cambia de hora y qué no está.',
     chips: [['Ref.', doc.numero], ['Programa', '22 – 26 dic 2026'], ['Pasajeros', String(doc.pax)]],
-    lHall: 'Lo que hay que resolver primero',
-    ledeHall: 'Seis puntos, en orden de lo que rompe el viaje si no se toca. Los tres primeros bloquean: hoy el itinerario, tal como está, no se puede operar.',
-    lCmp: 'Día a día: lo cotizado contra lo recibido',
-    ledeCmp: 'Once líneas. A la izquierda el programa cotizado, a la derecha el itinerario que llegó.',
-    thCot: 'Programa cotizado',
-    thRec: 'Itinerario recibido',
-    thEst: 'Estado',
-    lImp: 'Qué pasa con el valor cotizado',
-    impKeep: 'Se mantiene', impReq: 'Hay que recotizar', impGone: 'Sale del itinerario',
-    impSvc: (n) => `${n} de ${programa.length} servicios`,
-    ledeImp1: `Sobre los <b>${plata(totalPack, 'es')} por persona</b> de la cotización, hoy sólo pasan sin cambios el traslado de llegada y el tour arqueológico. Todo lo demás cambia de alcance, de modalidad o se cae.`,
-    ledeImp2: `A eso se le suman dos cosas que mueven el valor por su cuenta y que no dependen del itinerario: el grupo pasó de 2 a <b>${doc.pax} pasajeros</b> — las dos alternativas de trekking estaban cotizadas como tarifa mínima para 2 y hay que volver a pedirlas — y el viaje es del <b>22 al 26 de diciembre</b>, temporada alta y con dos feriados adentro. En la práctica, la cotización hay que rehacerla casi entera.`,
-    lNuevo: 'Además, en el itinerario hay cinco cosas que no están cotizadas',
-    nuevos: [
-      'La <b>aclimatación</b> del primer día, si es servicio guiado y no tiempo libre.',
-      'La <b>astronomía privada</b>, en vez de la compartida que está cotizada.',
-      'Los <b>cuadriciclos</b> en el Valle de la Muerte.',
-      'La <b>laguna Chaxa</b>, agregada al día de altiplano, con su propia entrada.',
-      'El <b>Valle del Arcoíris</b>, que necesita su propia media jornada.',
-    ],
+    lResumen: 'Los nueve servicios, por tipo de diferencia',
+    ledeResumen: 'Ocho de los nueve están en el sistema. Ninguno coincide con la cotización en día y hora a la vez: dos corren de día, cuatro cambian de horario, dos recién ahora tienen hora y uno no aparece.',
+    catFija: 'Se fija la hora', catHora: 'Cambia el horario', catDia: 'Corre de día', catFalta: 'No está',
+    svc: (n) => `${n} de ${programa.length} servicios`,
+    lYaOk: 'Lo que ya quedó resuelto',
+    ledeYaOk: 'Dos cosas que marqué la vez pasada sobre el export y que en el sistema ya están arregladas: la <b>aclimatación</b> quedó el miércoles 23 y no el 22, así que ya no choca con la llegada de las 19:15; y el <b>Valle del Arcoíris</b> salió del día de Piedras Rojas, que era la combinación que no se podía operar. Puritama tampoco faltaba: está el 24. Nada de eso hay que volver a tocarlo.',
+    lCmp: 'Servicio por servicio',
+    thSvc: 'Servicio',
+    thCot: 'Cotizado',
+    thSis: 'Sistema Tourevo',
+    thDif: 'Diferencia',
+    lChoques: 'Choques de horario dentro del propio sistema',
+    ledeChoques: 'Cinco puntos que no dependen de la cotización sino del itinerario tal como está armado hoy. Los dos primeros hay que resolverlos para que el 24 sea operable.',
+    queHacemos: 'Qué proponemos',
+    lExtra: 'Lo que el sistema tiene y la cotización no cubre',
     lQs: 'Lo que necesito confirmar',
-    queHacemos: 'Qué hacemos',
-    cierre: 'Con esas respuestas rearmo el programa y mando la cotización corregida para 4 pasajeros y fechas de diciembre.',
-    legend: `Comparativo sobre la cotización ${doc.numero} · Tourevo`,
+    nota: 'El sistema marca además <b>cuatro mensajes sin responder</b> — uno en el Valle de la Luna, uno en la cena de Nochebuena y dos en el Valle de la Muerte — y <b>11 servicios quitados</b> que se pueden restaurar.',
+    cierre: 'Con esas respuestas cierro el programa y mando la cotización alineada con el sistema.',
+    legend: `Días y horarios sobre la cotización ${doc.numero} · Tourevo`,
   },
 
   en: {
-    titulo: `Tourevo · Day and time adjustments — ${cliente.nombre}`,
-    eyebrow: 'Programme adjustments',
-    h1: 'Differences between the quotation and the schedule received',
-    sub: 'What matches, what changes day or time, what is missing and what has to be resolved before booking. A line-by-line comparison between quotation COT-2026-0160 and the schedule sent to us.',
+    titulo: `Tourevo · Days and times — ${cliente.nombre}`,
+    eyebrow: 'Day and time review',
+    h1: 'The quotation against the itinerary in the system',
+    sub: 'The nine services quoted in COT-2026-0160, one by one, against what is loaded today in the Tourevo system and already reviewed with Segar. What matches, what moves day, what changes time and what is missing.',
     chips: [['Ref.', doc.numero], ['Programme', '22 – 26 Dec 2026'], ['Travellers', String(doc.pax)]],
-    lHall: 'What has to be resolved first',
-    ledeHall: 'Six points, ordered by what breaks the trip if left alone. The first three are blocking: as it stands today, the schedule cannot be operated.',
-    lCmp: 'Day by day: quoted against received',
-    ledeCmp: 'Eleven lines. On the left the quoted programme, on the right the schedule that arrived.',
-    thCot: 'Quoted programme',
-    thRec: 'Schedule received',
-    thEst: 'Status',
-    lImp: 'What happens to the quoted price',
-    impKeep: 'Holds', impReq: 'Needs requoting', impGone: 'Out of the schedule',
-    impSvc: (n) => `${n} of ${programa.length} services`,
-    ledeImp1: `Of the <b>${plata(totalPack, 'en')} per person</b> in the quotation, only the arrival transfer and the archaeological tour carry over unchanged today. Everything else changes scope, changes format, or drops out.`,
-    ledeImp2: `On top of that, two things move the price on their own and have nothing to do with the schedule: the party went from 2 to <b>${doc.pax} travellers</b> — both trekking alternatives were quoted as a minimum rate for 2 and have to be requested again — and the trip runs <b>22 to 26 December</b>, high season with two public holidays inside it. In practice the quotation has to be rebuilt almost entirely.`,
-    lNuevo: 'The schedule also carries five things that are not quoted',
-    nuevos: [
-      'The <b>acclimatization</b> on day one, if it is a guided service and not free time.',
-      'The <b>private astronomy</b> tour, instead of the shared one that is quoted.',
-      'The <b>quad bikes</b> in the Valle de la Muerte.',
-      '<b>Laguna Chaxa</b>, added to the altiplano day, with its own entrance fee.',
-      '<b>Rainbow Valley</b>, which needs a half day of its own.',
-    ],
+    lResumen: 'The nine services, by type of difference',
+    ledeResumen: 'Eight of the nine are in the system. None matches the quotation on both day and time: two move day, four change time, two only now have a time, and one is missing.',
+    catFija: 'Time now set', catHora: 'Time changes', catDia: 'Moves day', catFalta: 'Missing',
+    svc: (n) => `${n} of ${programa.length} services`,
+    lYaOk: 'What is already settled',
+    ledeYaOk: 'Two things I flagged last time against the export are already fixed in the system: the <b>acclimatization</b> now sits on Wednesday 23 rather than the 22nd, so it no longer clashes with the 19:15 arrival; and <b>Rainbow Valley</b> has come out of the Piedras Rojas day, which was the combination that could not be operated. Puritama was not missing either: it is on the 24th. None of that needs touching again.',
+    lCmp: 'Service by service',
+    thSvc: 'Service',
+    thCot: 'Quoted',
+    thSis: 'Tourevo system',
+    thDif: 'Difference',
+    lChoques: 'Timing clashes inside the system itself',
+    ledeChoques: 'Five points that do not depend on the quotation but on the itinerary as it stands today. The first two have to be resolved for the 24th to be operable.',
+    queHacemos: 'What we propose',
+    lExtra: 'What the system has that the quotation does not cover',
     lQs: 'What I need confirmed',
-    queHacemos: 'What we do',
-    cierre: 'With those answers I will rebuild the programme and send the corrected quotation for 4 travellers on December dates.',
-    legend: `Comparison against quotation ${doc.numero} · Tourevo`,
+    nota: 'The system also flags <b>four unanswered messages</b> — one on Valle de la Luna, one on the Christmas Eve dinner and two on Valle de la Muerte — and <b>11 removed services</b> that can be restored.',
+    cierre: 'With those answers I will close the programme and send the quotation aligned to the system.',
+    legend: `Days and times against quotation ${doc.numero} · Tourevo`,
   },
 };
 
 // --- Render ------------------------------------------------------------------
 
-const hallazgo = (h, i, l) => `
+const dLargo = (iso, l) => mayus(fecha(iso, l, { weekday: 'long', day: 'numeric', month: 'long' }));
+const dCorto = (iso, l) => mayus(fecha(iso, l, { weekday: 'short', day: 'numeric', month: 'short' }));
+
+const choque = (h, i, l) => `
         <article class="find${h.grave ? ' stop' : ''}">
           <div class="find-top">
             <span class="find-n">${i + 1}</span>
@@ -286,42 +273,36 @@ const hallazgo = (h, i, l) => `
         </article>`;
 
 function comparativo(t, l) {
-  let html = '';
-  let dia = null;
-  for (const c of COMPARACION) {
-    if (c.f !== dia) {
-      dia = c.f;
-      html += `
-          <tbody class="dg"><tr class="daybar"><td colspan="3">${esc(mayus(fecha(c.f, l, { weekday: 'long', day: 'numeric', month: 'long' })))}</td></tr></tbody>`;
-    }
-    const celda = (x, clase) => x
-      ? `<td class="${clase}">${esc(x.t[l])}<span class="hr">${esc(x.h[l])}</span></td>`
-      : `<td class="${clase}"><span class="nada">${N[l]}</span></td>`;
+  const celda = (x, clase) => x
+    ? `<td class="${clase}">${esc(dCorto(x.d, l))}<span class="hr">${esc(x.h[l])}</span></td>`
+    : `<td class="${clase}"><span class="nada">—</span></td>`;
+
+  const filas = COMPARACION.map((c) => {
     const e = ESTADOS[c.e];
-    html += `
+    return `
           <tbody class="cg">
             <tr>
+              <td class="svcname"><b>${esc(porId[c.id].titulo[l])}</b></td>
               ${celda(c.cot, 'was')}
-              ${celda(c.rec, 'now')}
+              ${celda(c.sis, 'now')}
               <td><span class="badge ${e.c}">${e.t[l]}</span></td>
             </tr>
-            <tr><td colspan="3" class="obsrow"><span class="obs">${c.obs[l]}</span></td></tr>
+            <tr><td colspan="4" class="obsrow"><span class="obs">${c.obs[l]}</span></td></tr>
           </tbody>`;
-  }
+  }).join('');
+
   return `
       <div class="tbl-wrap">
         <table class="cmp">
           <thead>
-            <tr><th>${t.thCot}</th><th>${t.thRec}</th><th>${t.thEst}</th></tr>
-          </thead>
-${html}
+            <tr><th>${t.thSvc}</th><th>${t.thCot}</th><th>${t.thSis}</th><th>${t.thDif}</th></tr>
+          </thead>${filas}
         </table>
       </div>`;
 }
 
 function pagina(l) {
   const t = T[l];
-  const p = l === 'es' ? pct : pctEn;
   return `<!-- Generado por build-diferencias.mjs — no editar a mano. -->
 <title>${esc(t.titulo)}</title>
 <meta charset="utf-8">
@@ -335,33 +316,41 @@ ${cabecera({ eyebrow: t.eyebrow, h1: t.h1, sub: t.sub, chips: t.chips })}
     <div class="body">
 
       <section>
-        <p class="label">${t.lHall}</p>
-        <p class="lede">${t.ledeHall}</p>
-        <div class="finds">
-${HALLAZGOS.map((h, i) => hallazgo(h, i, l)).join('\n')}
+        <p class="label">${t.lResumen}</p>
+        <p class="lede">${t.ledeResumen}</p>
+        <div class="impact cuatro">
+          <div class="imp keep"><div class="k">${t.catFija}</div><div class="v">${plata(monto.fija, l)}</div><div class="p">${t.svc(cuenta.fija)}</div></div>
+          <div class="imp req"><div class="k">${t.catHora}</div><div class="v">${plata(monto.hora, l)}</div><div class="p">${t.svc(cuenta.hora)}</div></div>
+          <div class="imp move"><div class="k">${t.catDia}</div><div class="v">${plata(monto.dia, l)}</div><div class="p">${t.svc(cuenta.dia)}</div></div>
+          <div class="imp gone"><div class="k">${t.catFalta}</div><div class="v">${plata(monto.falta, l)}</div><div class="p">${t.svc(cuenta.falta)}</div></div>
         </div>
+      </section>
+
+      <section>
+        <p class="label">${t.lYaOk}</p>
+        <p class="lede">${t.ledeYaOk}</p>
       </section>
 
       <section>
         <p class="label">${t.lCmp}</p>
-        <p class="lede">${t.ledeCmp}</p>
 ${comparativo(t, l)}
       </section>
 
       <section>
-        <p class="label">${t.lImp}</p>
-        <div class="impact">
-          <div class="imp keep"><div class="k">${t.impKeep}</div><div class="v">${plata(impacto.mantiene, l)}</div><div class="p">${t.impSvc(cuenta.mantiene)} · ${p(impacto.mantiene)}%</div></div>
-          <div class="imp req"><div class="k">${t.impReq}</div><div class="v">${plata(impacto.recotiza, l)}</div><div class="p">${t.impSvc(cuenta.recotiza)} · ${p(impacto.recotiza)}%</div></div>
-          <div class="imp gone"><div class="k">${t.impGone}</div><div class="v">${plata(impacto.sale, l)}</div><div class="p">${t.impSvc(cuenta.sale)} · ${p(impacto.sale)}%</div></div>
+        <p class="label">${t.lChoques}</p>
+        <p class="lede">${t.ledeChoques}</p>
+        <div class="finds">
+${CHOQUES.map((h, i) => choque(h, i, l)).join('\n')}
         </div>
-        <p class="lede" style="margin-top:14px">${t.ledeImp1}</p>
-        <p class="lede">${t.ledeImp2}</p>
-        <div class="card" style="margin-top:4px">
-          <h4>${t.lNuevo}</h4>
-          <ul>${t.nuevos.map((i) => `\n            <li>${i}</li>`).join('')}
+      </section>
+
+      <section>
+        <p class="label">${t.lExtra}</p>
+        <div class="card">
+          <ul>${EXTRA.map((x) => `\n            <li><b>${esc(dCorto(x.d, l))}.</b> ${esc(x.t[l])}</li>`).join('')}
           </ul>
         </div>
+        <p class="lede" style="margin-top:12px">${t.nota}</p>
       </section>
 
       <section>
@@ -386,8 +375,8 @@ ${piePagina()}
 // --- Salida ------------------------------------------------------------------
 
 const SALIDAS = [
-  { l: 'es', html: 'diferencias.html', pdf: `Tourevo-${doc.numero}-${cliente.nombre}-Ajustes-ES.pdf` },
-  { l: 'en', html: 'diferencias-en.html', pdf: `Tourevo-${doc.numero}-${cliente.nombre}-Ajustes-EN.pdf` },
+  { l: 'es', html: 'diferencias.html', pdf: `Tourevo-${doc.numero}-${cliente.nombre}-Dias-y-horarios-ES.pdf` },
+  { l: 'en', html: 'diferencias-en.html', pdf: `Tourevo-${doc.numero}-${cliente.nombre}-Dias-y-horarios-EN.pdf` },
 ];
 
 for (const s of SALIDAS) {
@@ -395,9 +384,7 @@ for (const s of SALIDAS) {
   console.log(`✓ ${s.html}`);
 }
 console.log(
-  `\n  se mantiene  ${plata(impacto.mantiene, 'es')} (${cuenta.mantiene} servicios, ${pct(impacto.mantiene)}%)` +
-  `\n  recotizar    ${plata(impacto.recotiza, 'es')} (${cuenta.recotiza} servicios, ${pct(impacto.recotiza)}%)` +
-  `\n  sale         ${plata(impacto.sale, 'es')} (${cuenta.sale} servicios, ${pct(impacto.sale)}%)` +
-  `\n  control      ${plata(impacto.mantiene + impacto.recotiza + impacto.sale, 'es')} = pack ${plata(totalPack, 'es')}\n`);
+  CAT.map((c) => `  ${c.padEnd(6)} ${String(cuenta[c])} serv · ${plata(monto[c], 'es')}`).join('\n') +
+  `\n  control      ${plata(CAT.reduce((a, c) => a + monto[c], 0), 'es')} = pack ${plata(totalPack, 'es')}\n`);
 
-if (!soloHtml) await aPdf(SALIDAS, { aqui: AQUI, pie: `Tourevo · ${doc.numero} · ${cliente.nombre} · ajustes` });
+if (!soloHtml) await aPdf(SALIDAS, { aqui: AQUI, pie: `Tourevo · ${doc.numero} · ${cliente.nombre} · días y horarios` });

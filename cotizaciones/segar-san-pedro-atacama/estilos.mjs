@@ -295,6 +295,10 @@ export const estilosComparativo = `
   .imp.keep .v { color: var(--accent-deep); }
   .imp.req .v  { color: var(--summit); }
   .imp.gone .v { color: var(--warn); }
+  .imp.move .v { color: var(--warn); }
+  .impact.cuatro { grid-template-columns: repeat(4, 1fr); }
+  .impact.cuatro .v { font-size: 20px; }
+  .cmp td.svcname { font-size: 12.6px; line-height: 1.35; }
 
   /* ---- Preguntas abiertas ---- */
   .qs { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; counter-reset: q; }
@@ -303,7 +307,7 @@ export const estilosComparativo = `
   .qs b { font-weight: 700; }
   .qs span { color: var(--ink-soft); display: block; font-size: 12.6px; margin-top: 2px; }
 
-  @media (max-width: 640px) { .impact { grid-template-columns: 1fr; } }
+  @media (max-width: 640px) { .impact, .impact.cuatro { grid-template-columns: 1fr; } }
 
   @media print {
     .finds { display: block; }
@@ -319,5 +323,6 @@ export const estilosComparativo = `
     .daybar td { padding: 6px 10px; }
     .imp { padding: 12px 13px; }
     .imp .v { font-size: 19px; }
+    .impact.cuatro .v { font-size: 15px; }
   }
 `;

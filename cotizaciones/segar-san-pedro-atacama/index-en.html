@@ -1,0 +1,745 @@
+<!-- Generado por build.mjs — no editar a mano. Los precios viven en contenido.mjs. -->
+<title>Tourevo · San Pedro de Atacama — Segar</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+  :root {
+    --ground: #EEF3F3;
+    --paper: #FFFFFF;
+    --glacier: #E7F0F0;
+    --glacier-2: #F3F8F8;
+    --ink: #16232B;
+    --ink-soft: #566A72;
+    --ink-faint: #8497A0;
+    --line: #DBE6E6;
+    --line-soft: #EAF1F1;
+    --accent: #0F766E;
+    --accent-deep: #0B5B54;
+    --summit: #2F6E8F;
+    --warn: #B4632A;
+    --warn-wash: #FBF1E8;
+    --warn-line: #E9CFB6;
+    --shadow: 24px 40px 80px -40px rgba(16, 45, 50, .35);
+    --font-serif: "Iowan Old Style", "Palatino Linotype", "Palatino", "Georgia", serif;
+    --font-sans: system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --ground: #0A0F13; --paper: #121a20; --glacier: #172129; --glacier-2: #141d24;
+      --ink: #E7EDEE; --ink-soft: #9EACB2; --ink-faint: #6C7B82; --line: #26313A;
+      --line-soft: #1E2831; --accent: #2DD4BF; --accent-deep: #5EEAD4; --summit: #8FBAD3;
+      --warn: #E0955C; --warn-wash: #241A12; --warn-line: #4A3524;
+      --shadow: 24px 40px 90px -40px rgba(0, 0, 0, .7);
+    }
+  }
+
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: radial-gradient(120% 60% at 50% -10%, var(--glacier) 0%, transparent 60%), var(--ground);
+    color: var(--ink);
+    font-family: var(--font-sans);
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+    padding: clamp(16px, 4vw, 56px) 16px;
+  }
+  .wrap { max-width: 820px; margin: 0 auto; }
+  .paper { background: var(--paper); border: 1px solid var(--line); border-radius: 16px; box-shadow: var(--shadow); overflow: hidden; }
+
+  /* ---- Encabezado ---- */
+  .head { position: relative; padding: clamp(26px, 5vw, 44px) clamp(22px, 5vw, 48px) 26px; border-bottom: 1px solid var(--line); background: linear-gradient(180deg, var(--glacier-2), var(--paper)); overflow: hidden; }
+  .ridge { position: absolute; left: 0; right: 0; bottom: -1px; height: 46px; width: 100%; display: block; color: var(--accent); opacity: .10; }
+  .brandrow { display: flex; justify-content: space-between; align-items: flex-start; gap: 20px; flex-wrap: wrap; position: relative; z-index: 1; }
+  .brand { display: flex; align-items: center; gap: 12px; }
+  .mark { width: 42px; height: 42px; border-radius: 12px; flex: none; background: linear-gradient(140deg, var(--accent), var(--summit)); display: grid; place-items: center; color: #fff; box-shadow: 0 6px 16px -6px color-mix(in srgb, var(--accent) 70%, transparent); }
+  .wordmark { font-weight: 700; font-size: 20px; letter-spacing: -.01em; }
+  .wordmark small { display: block; font-size: 10.5px; font-weight: 600; letter-spacing: .18em; text-transform: uppercase; color: var(--ink-faint); margin-top: 2px; }
+  .eyebrow { font-size: 11px; font-weight: 700; letter-spacing: .2em; text-transform: uppercase; color: var(--accent); }
+  .doc-title { font-family: var(--font-serif); font-weight: 600; font-size: clamp(26px, 5.2vw, 36px); line-height: 1.05; margin: 14px 0 0; letter-spacing: -.01em; text-wrap: balance; position: relative; z-index: 1; }
+  .doc-sub { margin: 10px 0 0; font-size: 15px; color: var(--ink-soft); max-width: 56ch; position: relative; z-index: 1; }
+  .meta { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 18px; position: relative; z-index: 1; }
+  .chip { font-size: 12px; font-weight: 600; color: var(--ink-soft); background: var(--glacier); border: 1px solid var(--line); padding: 5px 11px; border-radius: 999px; font-variant-numeric: tabular-nums; }
+  .chip b { color: var(--ink); font-weight: 700; }
+
+  /* ---- Secciones ---- */
+  .body { padding: clamp(22px, 4.5vw, 40px) clamp(22px, 5vw, 48px) clamp(28px, 5vw, 44px); }
+  section + section { margin-top: clamp(26px, 4vw, 36px); }
+  .label { font-size: 11px; font-weight: 700; letter-spacing: .16em; text-transform: uppercase; color: var(--ink-faint); margin: 0 0 12px; display: flex; align-items: center; gap: 10px; }
+  .label::after { content: ""; flex: 1; height: 1px; background: var(--line); }
+  .lede { margin: 0 0 14px; font-size: 14.5px; color: var(--ink-soft); max-width: 68ch; }
+
+  .client { display: flex; align-items: baseline; gap: 10px 18px; flex-wrap: wrap; }
+  .client .name { font-size: 19px; font-weight: 700; }
+
+  .facts { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: var(--line); border: 1px solid var(--line); border-radius: 12px; overflow: hidden; }
+  .fact { background: var(--paper); padding: 14px 16px; }
+  .fact dt { font-size: 11px; font-weight: 700; letter-spacing: .09em; text-transform: uppercase; color: var(--ink-faint); margin: 0 0 4px; }
+  .fact dd { margin: 0; font-size: 15px; font-weight: 650; }
+
+  /* ---- Nota de bienvenida ---- */
+  .welcome { display: flex; gap: 16px; align-items: flex-start; padding: 20px 22px; background: linear-gradient(135deg, var(--glacier), var(--glacier-2)); border: 1px solid var(--line); border-left: 3px solid var(--accent); border-radius: 4px 14px 14px 4px; }
+  .welcome .monogram { width: 40px; height: 40px; border-radius: 50%; flex: none; background: linear-gradient(140deg, var(--accent), var(--summit)); color: #fff; display: grid; place-items: center; font-weight: 700; font-size: 15px; margin-top: 2px; }
+  .welcome .msg { font-family: var(--font-serif); font-size: 15.5px; line-height: 1.6; color: var(--ink); font-style: italic; margin: 0; }
+  .welcome .msg b { font-style: normal; font-weight: 600; }
+  .welcome .sig { display: block; margin-top: 10px; font-family: var(--font-sans); font-style: normal; font-size: 12.5px; font-weight: 600; color: var(--ink-soft); }
+  .welcome .sig b { color: var(--accent-deep); font-weight: 700; }
+
+  /* ---- Itinerario ---- */
+  .days { display: grid; gap: 14px; }
+  .day { border: 1px solid var(--line); border-radius: 13px; overflow: hidden; background: var(--paper); }
+  .day-head { display: flex; align-items: baseline; gap: 13px; padding: 12px 18px; background: var(--glacier-2); border-bottom: 1px solid var(--line); flex-wrap: wrap; }
+  .day-date { font-size: 11px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: var(--accent); font-variant-numeric: tabular-nums; }
+  .day-name { font-family: var(--font-serif); font-size: 16.5px; font-weight: 600; letter-spacing: -.01em; flex: 1; min-width: 160px; }
+  .day-sum { font-size: 12px; font-weight: 700; color: var(--ink-soft); background: var(--paper); border: 1px solid var(--line); padding: 4px 10px; border-radius: 999px; font-variant-numeric: tabular-nums; }
+
+  .svc { padding: 15px 18px; border-bottom: 1px solid var(--line-soft); }
+  .svc:last-child { border-bottom: 0; }
+  .svc-top { display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap; margin-bottom: 6px; }
+  .svc-t { font-size: 12.5px; font-weight: 700; color: var(--summit); font-variant-numeric: tabular-nums; }
+  .svc-h { font-size: 15.5px; font-weight: 750; letter-spacing: -.005em; flex: 1; min-width: 200px; }
+  .tag { font-size: 10.5px; font-weight: 700; letter-spacing: .09em; text-transform: uppercase; color: var(--accent); background: color-mix(in srgb, var(--accent) 10%, var(--paper)); border: 1px solid color-mix(in srgb, var(--accent) 28%, var(--line)); padding: 3px 9px; border-radius: 999px; }
+  .svc p { margin: 0; font-size: 13.8px; line-height: 1.5; color: var(--ink-soft); }
+  .svc .inc { margin-top: 8px; font-size: 13px; color: var(--ink); }
+  .svc .inc b { font-weight: 700; }
+  .svc .flag { margin-top: 9px; font-size: 12.5px; line-height: 1.45; color: var(--warn); background: var(--warn-wash); border: 1px solid var(--warn-line); border-radius: 9px; padding: 9px 12px; }
+
+  /* ---- Franja de subtotales por tour ---- */
+  .pstrip { display: flex; flex-wrap: wrap; gap: 1px; margin-top: 12px; background: var(--line); border: 1px solid var(--line); border-radius: 10px; overflow: hidden; }
+  .pstrip > div { background: var(--glacier-2); padding: 9px 14px; flex: 1 1 120px; }
+  .pstrip i { display: block; font-style: normal; font-size: 10px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--ink-faint); margin-bottom: 3px; }
+  .pstrip b { font-size: 14px; font-weight: 700; font-variant-numeric: tabular-nums; white-space: nowrap; }
+  .pstrip .sub { background: color-mix(in srgb, var(--accent) 9%, var(--paper)); flex: 1 1 150px; }
+  .pstrip .sub i { color: var(--accent-deep); }
+  .pstrip .sub b { color: var(--accent-deep); font-size: 15px; }
+  .pstrip .nil b { color: var(--ink-faint); font-weight: 650; }
+
+  /* ---- Tabla de precios ---- */
+  .tbl-wrap { border: 1px solid var(--line); border-radius: 12px; overflow: hidden; }
+  table { border-collapse: collapse; width: 100%; font-size: 13.5px; }
+  thead th { font-size: 10px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--ink-faint); background: var(--glacier-2); text-align: left; padding: 10px 14px; border-bottom: 1px solid var(--line); }
+  th.r, td.r { text-align: right; }
+  tbody td { padding: 10px 14px; border-bottom: 1px solid var(--line-soft); vertical-align: top; line-height: 1.4; }
+  tbody td.r { font-variant-numeric: tabular-nums; font-weight: 650; white-space: nowrap; }
+  tbody td.sub { font-weight: 750; color: var(--accent-deep); background: color-mix(in srgb, var(--accent) 5%, var(--paper)); }
+  tbody td em { font-style: normal; display: block; font-size: 12px; color: var(--ink-faint); margin-top: 2px; }
+  tbody td .n { display: inline-block; min-width: 17px; color: var(--ink-faint); font-weight: 700; font-variant-numeric: tabular-nums; }
+  tfoot td.r { white-space: nowrap; }
+  tfoot td { padding: 12px 14px; border-top: 2px solid var(--line); background: var(--glacier-2); font-weight: 750; font-size: 13.5px; font-variant-numeric: tabular-nums; }
+  tfoot td.sub { color: var(--accent-deep); background: color-mix(in srgb, var(--accent) 10%, var(--paper)); font-size: 15px; }
+
+  /* ---- Total del pack ---- */
+  .total { display: grid; grid-template-columns: 1fr auto; gap: 10px 24px; align-items: end; background: linear-gradient(135deg, var(--accent-deep), var(--summit)); color: #fff; border-radius: 14px; padding: 22px 24px; margin-top: 14px; }
+  .total .tlabel { font-size: 11px; font-weight: 700; letter-spacing: .16em; text-transform: uppercase; opacity: .82; }
+  .total .calc { font-size: 13.5px; font-weight: 600; opacity: .92; font-variant-numeric: tabular-nums; margin-top: 6px; }
+  .total .amount { font-family: var(--font-serif); font-size: clamp(30px, 6vw, 40px); font-weight: 600; line-height: 1; font-variant-numeric: tabular-nums; white-space: nowrap; }
+  .total .grp { grid-column: 1 / -1; display: flex; justify-content: space-between; align-items: baseline; gap: 16px; flex-wrap: wrap; border-top: 1px solid rgba(255,255,255,.28); padding-top: 12px; margin-top: 4px; font-size: 13.5px; font-weight: 650; font-variant-numeric: tabular-nums; opacity: .95; }
+  .total .grp b { font-size: 19px; font-weight: 700; font-family: var(--font-serif); }
+
+  /* ---- Alternativas ---- */
+  .alts { display: grid; gap: 14px; }
+  .alt { border: 1px solid var(--line); border-radius: 13px; overflow: hidden; }
+  .alt-head { display: flex; align-items: baseline; gap: 11px; padding: 12px 18px; background: var(--glacier-2); border-bottom: 1px solid var(--line); flex-wrap: wrap; }
+  .alt-rank { width: 22px; height: 22px; border-radius: 50%; flex: none; background: var(--accent); color: #fff; display: grid; place-items: center; font-size: 11.5px; font-weight: 700; align-self: center; }
+  .alt-h { font-family: var(--font-serif); font-size: 16.5px; font-weight: 600; flex: 1; min-width: 200px; }
+  .alt-t { font-size: 12.5px; font-weight: 700; color: var(--summit); font-variant-numeric: tabular-nums; }
+  .alt-body { padding: 14px 18px 16px; }
+  .alt-body p { margin: 0; font-size: 13.8px; line-height: 1.5; color: var(--ink-soft); }
+  .alt-body .inc { margin-top: 8px; font-size: 13px; color: var(--ink); }
+  .specs { display: flex; flex-wrap: wrap; gap: 7px; margin-top: 10px; }
+  .spec { font-size: 11.5px; font-weight: 650; color: var(--ink-soft); background: var(--glacier-2); border: 1px solid var(--line); padding: 4px 10px; border-radius: 8px; font-variant-numeric: tabular-nums; }
+  .delta { margin-top: 11px; font-size: 12.8px; font-weight: 650; color: var(--ink-soft); border-top: 1px dashed var(--line); padding-top: 10px; font-variant-numeric: tabular-nums; }
+  .delta b { color: var(--ink); font-weight: 750; }
+  .delta .up { color: var(--warn); font-weight: 750; }
+  .delta .down { color: var(--accent); font-weight: 750; }
+
+  /* ---- Flota ---- */
+  .fleet { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .veh { border: 1px solid var(--line); border-radius: 13px; overflow: hidden; background: var(--glacier-2); }
+  .veh img { display: block; width: 100%; height: 190px; object-fit: cover; background: var(--glacier); }
+  .veh .cap { padding: 12px 15px; }
+  .veh.sinfoto { display: flex; align-items: center; }
+  .veh.sinfoto .cap { padding: 13px 16px; }
+  .veh .cap h4 { margin: 0 0 3px; font-size: 14.5px; font-weight: 750; }
+  .veh .cap p { margin: 0; font-size: 12.5px; color: var(--ink-soft); }
+
+  /* ---- Condiciones ---- */
+  .cards { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .card { border: 1px solid var(--line); border-radius: 12px; padding: 17px 18px 15px; background: var(--glacier-2); }
+  .card h4 { margin: 0 0 10px; font-size: 12.8px; font-weight: 750; }
+  .card ul { margin: 0; padding: 0; list-style: none; display: grid; gap: 9px; }
+  .card li { font-size: 13.2px; color: var(--ink-soft); padding-left: 16px; position: relative; line-height: 1.45; }
+  .card li::before { content: ""; position: absolute; left: 2px; top: 8px; width: 5px; height: 5px; border-radius: 50%; background: var(--accent); }
+  .card.warn li::before { background: var(--warn); }
+  .card b { color: var(--ink); font-weight: 700; }
+
+  /* ---- Cierre ---- */
+  .cta { margin-top: clamp(24px, 4vw, 34px); text-align: center; padding: clamp(20px, 4vw, 28px); border: 1px dashed color-mix(in srgb, var(--accent) 45%, var(--line)); border-radius: 14px; background: var(--glacier-2); }
+  .cta .lead { margin: 0; font-family: var(--font-serif); font-size: 16px; font-style: italic; color: var(--ink); }
+  .cta .after { margin: 10px 0 0; font-size: 12.5px; color: var(--ink-soft); }
+  .foot { border-top: 1px solid var(--line); padding: 18px clamp(22px, 5vw, 48px); display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; background: var(--glacier-2); }
+  .foot .who { font-size: 13px; }
+  .foot .who span { color: var(--ink-soft); }
+  .foot .links { font-size: 12.5px; color: var(--ink-soft); }
+  .legend { max-width: 820px; margin: clamp(16px, 3vw, 22px) auto 0; font-size: 12px; color: var(--ink-faint); text-align: center; }
+
+  @media (max-width: 640px) {
+    .fleet, .cards { grid-template-columns: 1fr; }
+    .total { grid-template-columns: 1fr; }
+  }
+
+  @media print {
+    /* El PDF es un documento, no una pantalla: fijamos la paleta clara pase lo
+       que pase con el sistema del lector, y le pedimos al motor que no
+       descarte los fondos. */
+    :root {
+      --ground: #FFFFFF; --paper: #FFFFFF; --glacier: #E7F0F0; --glacier-2: #F5F9F9;
+      --ink: #16232B; --ink-soft: #4E626B; --ink-faint: #788B94; --line: #D3E0E0;
+      --line-soft: #E8F0F0; --accent: #0F766E; --accent-deep: #0B5B54; --summit: #2F6E8F;
+      --warn: #A0561F; --warn-wash: #FBF1E8; --warn-line: #E9CFB6;
+      --shadow: none;
+    }
+    * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+
+    body { background: #fff; padding: 0; font-size: 9.5pt; line-height: 1.42; orphans: 3; widows: 3; }
+    .wrap { max-width: none; }
+    .paper { border: 0; border-radius: 0; box-shadow: none; }
+    .head { padding: 0 0 14px; background: none; border-radius: 0; }
+    .ridge { display: none; }
+    .body { padding: 16px 0 0; }
+    .foot { padding: 12px 0 0; background: none; border-radius: 0; }
+    .legend { margin-top: 8px; }
+    section + section { margin-top: 18px; }
+
+    /* Chromium no fragmenta un contenedor grid entre páginas, así que las
+       pilas altas de una sola columna salen del grid para paginar como
+       bloques normales. */
+    .days, .alts { display: block; }
+    .day, .alt { margin-bottom: 10px; }
+    .day:last-child, .alt:last-child { margin-bottom: 0; }
+
+    /* Un día de itinerario puede pasar de media página: dejamos que se parta,
+       pero nunca justo después de su propio encabezado ni dentro de un
+       servicio. */
+    .day, .alt, .tbl-wrap, table { break-inside: auto; }
+    .day-head, .alt-head, .label, thead, .svc-top { break-after: avoid; }
+    .svc, .pstrip, tbody tr, tfoot tr, .card, .veh, .welcome, .total,
+    .facts, .cta, .alt-body, .delta { break-inside: avoid; }
+    thead { display: table-header-group; }
+    /* table-footer-group repite el pie en TODAS las páginas: el total del
+       programa aparecía a media tabla como si cerrara sólo esas filas. */
+    tfoot { display: table-row-group; }
+    .facts { grid-template-columns: repeat(3, 1fr); }
+
+    /* Ritmo más apretado en papel: la página es un presupuesto fijo. */
+    .day-head, .alt-head { padding: 8px 13px; }
+    .svc { padding: 11px 13px; }
+    .alt-body { padding: 11px 13px 12px; }
+    .pstrip > div { padding: 7px 11px; }
+    .card { padding: 13px; }
+    .card ul { gap: 7px; }
+    .welcome { padding: 15px 17px; }
+    tbody td { padding: 7px 11px; }
+    thead th { padding: 7px 11px; }
+    tfoot td { padding: 9px 11px; }
+    .total { padding: 16px 18px; margin-top: 11px; }
+    .veh img { height: 150px; }
+
+    /* El cierre tiene que caer entero en la última página: una hoja con sólo
+       el pie parece un PDF cortado. */
+    .cta { margin-top: 12px; padding: 15px; }
+    .foot, .legend { break-before: avoid; }
+  }
+</style>
+
+<div class="wrap">
+  <article class="paper">
+
+    <header class="head">
+      <svg class="ridge" viewBox="0 0 800 46" preserveAspectRatio="none" aria-hidden="true">
+        <path d="M0 46 L120 14 L210 34 L330 4 L430 30 L540 10 L650 32 L740 16 L800 30 L800 46 Z" fill="currentColor"/>
+      </svg>
+      <div class="brandrow">
+        <div class="brand">
+          <div class="mark" aria-hidden="true">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 20 L9 8 L13 15 L16 10 L21 20 Z"/></svg>
+          </div>
+          <div class="wordmark">Tourevo<small>Private experiences</small></div>
+        </div>
+        <div style="text-align:right"><div class="eyebrow">Atacama quotation</div></div>
+      </div>
+
+      <h1 class="doc-title">San Pedro de Atacama · five days in the desert</h1>
+      <p class="doc-sub">The programme adjusted to what we discussed, with every excursion broken down — service, park fees and subtotal — and the full pack total at the end. It also carries three alternatives for Thursday morning and the vehicles we run.</p>
+
+      <div class="meta">
+        <span class="chip">No. <b>COT-2026-0160</b></span>
+        <span class="chip">Issued <b>24 Aug 2026</b></span>
+        <span class="chip">Valid until <b>07 Sept 2026</b></span>
+      </div>
+    </header>
+
+    <div class="body">
+
+      <section>
+        <div class="welcome">
+          <div class="monogram" aria-hidden="true">JP</div>
+          <p class="msg">
+            Segar, thank you for trusting us with this trip. Here is the programme adjusted to what we discussed, with <b>every excursion broken down into service, park fees and a per-person subtotal</b>, and the pack total closed out at the end — so nothing is a surprise on arrival. At the end we have left three alternatives to Thursday morning, in order of preference, which we think are more fun than the sandboarding depending on the ages of the travellers.
+            <span class="sig">Warmly, <b>Juan Pablo</b> · Travel Manager, Tourevo</span>
+          </p>
+        </div>
+      </section>
+
+      <section>
+        <p class="label">Prepared for</p>
+        <div class="client"><span class="name">Segar</span></div>
+      </section>
+
+      <section>
+        <p class="label">The programme at a glance</p>
+        <dl class="facts">
+          <div class="fact"><dt>Dates</dt><dd>22 – 26 Sep 2026</dd></div>
+          <div class="fact"><dt>Days</dt><dd>5</dd></div>
+          <div class="fact"><dt>Base</dt><dd>San Pedro de Atacama</dd></div>
+          <div class="fact"><dt>Services</dt><dd>9</dd></div>
+          <div class="fact"><dt>Transfers</dt><dd>Private</dd></div>
+          <div class="fact"><dt>Travellers</dt><dd>2 · basis of quote</dd></div>
+        </dl>
+      </section>
+
+      <section>
+        <p class="label">Day by day, with a subtotal per tour</p>
+        <div class="days">
+
+      <article class="day">
+        <div class="day-head">
+          <span class="day-date">Tuesday 22 September</span>
+          <span class="day-name">Arrival in San Pedro</span>
+          <span class="day-sum">Subtotal per person: CLP 30,000</span>
+        </div>
+
+        <div class="svc">
+          <div class="svc-top">
+            <span class="svc-t">Time to be confirmed</span>
+            <span class="svc-h">Arrival transfer · El Loa Airport → San Pedro</span>
+            <span class="tag">Private service</span>
+          </div>
+          <p>Private transfer from Calama airport to your hotel in San Pedro de Atacama.</p>
+          
+          
+
+          <div class="pstrip">
+            <div><i>Service</i><b>CLP 30,000</b></div>
+            <div class="nil"><i>Park fees</i><b>No park fee</b></div>
+            <div class="sub"><i>Subtotal per person</i><b>CLP 30,000</b></div>
+          </div>
+        </div>
+      </article>
+
+      <article class="day">
+        <div class="day-head">
+          <span class="day-date">Wednesday 23 September</span>
+          <span class="day-name">Puritama, Valle de la Luna and the night sky</span>
+          <span class="day-sum">Subtotal per person: CLP 225,000</span>
+        </div>
+
+        <div class="svc">
+          <div class="svc-top">
+            <span class="svc-t">09:30 – 13:30 hrs</span>
+            <span class="svc-h">Puritama Hot Springs</span>
+            
+          </div>
+          <p>An invitation to slow down and unwind in the eight natural pools of the Puritama Hot Springs, known for their therapeutic warm waters and the beauty of the canyon that holds them.</p>
+          <p class="inc"><b>Includes:</b> Pisco sour and snack</p>
+          
+
+          <div class="pstrip">
+            <div><i>Service</i><b>CLP 75,000</b></div>
+            <div><i>Park fees</i><b>CLP 35,000</b></div>
+            <div class="sub"><i>Subtotal per person</i><b>CLP 110,000</b></div>
+          </div>
+        </div>
+
+        <div class="svc">
+          <div class="svc-top">
+            <span class="svc-t">16:30 – 20:30 hrs</span>
+            <span class="svc-h">Valle de la Luna South</span>
+            
+          </div>
+          <p>We head into the Cordillera de la Sal as far as El Vallecito, the off-circuit entrance to the Valle de la Luna, where we discover the remarkable Salt River and take in the panoramic view from the ledges above. We walk them past old salt-mining shafts and finish at an abandoned bus stranded in the middle of the range, a witness to the area’s busy mining past.</p>
+          <p class="inc"><b>Includes:</b> Snack</p>
+          <p class="flag">This circuit currently charges no park fee. One may be in force by your travel date: if so, we will tell you beforehand and charge it at the rate then published.</p>
+
+          <div class="pstrip">
+            <div><i>Service</i><b>CLP 75,000</b></div>
+            <div class="nil"><i>Park fees</i><b>No park fee</b></div>
+            <div class="sub"><i>Subtotal per person</i><b>CLP 75,000</b></div>
+          </div>
+        </div>
+
+        <div class="svc">
+          <div class="svc-top">
+            <span class="svc-t">21:00 – 23:00 hrs</span>
+            <span class="svc-h">Astronomy tour</span>
+            <span class="tag">Shared · coordinated by us</span>
+          </div>
+          <p>We do not operate the astronomy tour ourselves, but we coordinate it for you as a courtesy. It runs on a shared basis.</p>
+          <p class="inc"><b>Includes:</b> Hot or cold drink and snack</p>
+          
+
+          <div class="pstrip">
+            <div><i>Service</i><b>CLP 40,000</b></div>
+            <div class="nil"><i>Park fees</i><b>No park fee</b></div>
+            <div class="sub"><i>Subtotal per person</i><b>CLP 40,000</b></div>
+          </div>
+        </div>
+      </article>
+
+      <article class="day">
+        <div class="day-head">
+          <span class="day-date">Thursday 24 September</span>
+          <span class="day-name">Valle de Marte and the heart of the salt flat</span>
+          <span class="day-sum">Subtotal per person: CLP 218,500</span>
+        </div>
+
+        <div class="svc">
+          <div class="svc-top">
+            <span class="svc-t">09:30 – 13:30 hrs</span>
+            <span class="svc-h">Valle de Marte + Sandboarding</span>
+            
+          </div>
+          <p>We explore the corners and extraordinary passages of the Valle de Marte until we reach its dunes, where you can ride down on boards made for exactly this.</p>
+          <p class="inc"><b>Includes:</b> Snack and full sandboard equipment</p>
+          
+
+          <div class="pstrip">
+            <div><i>Service</i><b>CLP 110,000</b></div>
+            <div><i>Park fees</i><b>CLP 7,500</b></div>
+            <div class="sub"><i>Subtotal per person</i><b>CLP 117,500</b></div>
+          </div>
+        </div>
+
+        <div class="svc">
+          <div class="svc-top">
+            <span class="svc-t">15:30 – 19:30 hrs</span>
+            <span class="svc-h">Cejar Lagoon + Ojos de Tebenquiche + Tebenquiche Lagoon</span>
+            
+          </div>
+          <p>This classic of the heart of the Atacama salt flat opens with a refreshing swim in the emerald brine of Laguna Piedra (Cejar), where you float effortlessly, then continues to the Ojos de Tebenquiche and closes at Tebenquiche Lagoon and its extraordinary living rocks, colonised for millions of years by extremophiles that chose these improbable ecosystems to survive in, where until their discovery life was thought impossible. All of it under the steady gaze of the Andean volcanoes.</p>
+          <p class="inc"><b>Includes:</b> Pisco sour and snack</p>
+          <p class="flag">This ticket has to be bought in advance.</p>
+
+          <div class="pstrip">
+            <div><i>Service</i><b>CLP 80,000</b></div>
+            <div><i>Park fees</i><b>CLP 21,000</b></div>
+            <div class="sub"><i>Subtotal per person</i><b>CLP 101,000</b></div>
+          </div>
+        </div>
+      </article>
+
+      <article class="day">
+        <div class="day-head">
+          <span class="day-date">Friday 25 September</span>
+          <span class="day-name">Altiplano: Piedras Rojas and the lagoons</span>
+          <span class="day-sum">Subtotal per person: CLP 225,000</span>
+        </div>
+
+        <div class="svc">
+          <div class="svc-top">
+            <span class="svc-t">10:00 – 18:00 hrs</span>
+            <span class="svc-h">Piedras Rojas + Tuyajto Lagoon + Altiplanic Lagoons + Proto-villages + Andean towns</span>
+            
+          </div>
+          <p>This tour takes in the south-east of the Atacama salt flat along its eastern rim, including several high-Andean lagoons and salt flats — among them Miscanti and Miñiques — as well as millennia-old shelters used by hunter-gatherers: tireless nomads who, before domestication, followed the animals they depended on. We also drive through the villages of Socaire and Toconao.</p>
+          <p class="inc"><b>Includes:</b> Lunch in a natural setting and snack</p>
+          <p class="flag">This ticket has to be bought in advance.</p>
+
+          <div class="pstrip">
+            <div><i>Service</i><b>CLP 210,000</b></div>
+            <div><i>Park fees</i><b>CLP 15,000</b></div>
+            <div class="sub"><i>Subtotal per person</i><b>CLP 225,000</b></div>
+          </div>
+        </div>
+      </article>
+
+      <article class="day">
+        <div class="day-head">
+          <span class="day-date">Saturday 26 September</span>
+          <span class="day-name">Quitor and departure</span>
+          <span class="day-sum">Subtotal per person: CLP 111,000</span>
+        </div>
+
+        <div class="svc">
+          <div class="svc-top">
+            <span class="svc-t">08:00 – 10:00 hrs</span>
+            <span class="svc-h">Archaeological tour · Pukará de Quitor</span>
+            
+          </div>
+          <p>A visit to the Pukará de Quitor, landmark of the Spanish conquest in the area and a historical and cultural site of immense value, remembered above all as the last Atacameño stand against the Spanish invasion.</p>
+          <p class="inc"><b>Includes:</b> Snack</p>
+          <p class="flag">This ticket has to be bought in advance.</p>
+
+          <div class="pstrip">
+            <div><i>Service</i><b>CLP 75,000</b></div>
+            <div><i>Park fees</i><b>CLP 6,000</b></div>
+            <div class="sub"><i>Subtotal per person</i><b>CLP 81,000</b></div>
+          </div>
+        </div>
+
+        <div class="svc">
+          <div class="svc-top">
+            <span class="svc-t">Time to be confirmed</span>
+            <span class="svc-h">Departure transfer · San Pedro → El Loa Airport</span>
+            <span class="tag">Private service</span>
+          </div>
+          <p>Private transfer from your hotel in San Pedro de Atacama to Calama airport.</p>
+          
+          
+
+          <div class="pstrip">
+            <div><i>Service</i><b>CLP 30,000</b></div>
+            <div class="nil"><i>Park fees</i><b>No park fee</b></div>
+            <div class="sub"><i>Subtotal per person</i><b>CLP 30,000</b></div>
+          </div>
+        </div>
+      </article>
+        </div>
+      </section>
+
+      <section>
+        <p class="label">Price summary</p>
+        <p class="lede">All amounts are in Chilean pesos and are per person. The subtotal column already adds the service and its park fees together.</p>
+
+      <div class="tbl-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Service</th>
+              <th class="r">Service</th>
+              <th class="r">Park fees</th>
+              <th class="r">Subtotal</th>
+            </tr>
+          </thead>
+          <tbody>
+          <tr>
+            <td><span class="n">1</span></td>
+            <td><b>Arrival transfer · El Loa Airport → San Pedro</b><em>Tue 22 Sept · Time to be confirmed</em></td>
+            <td class="r">CLP 30,000</td>
+            <td class="r">—</td>
+            <td class="r sub">CLP 30,000</td>
+          </tr>
+          <tr>
+            <td><span class="n">2</span></td>
+            <td><b>Puritama Hot Springs</b><em>Wed 23 Sept · 09:30 – 13:30 hrs</em></td>
+            <td class="r">CLP 75,000</td>
+            <td class="r">CLP 35,000</td>
+            <td class="r sub">CLP 110,000</td>
+          </tr>
+          <tr>
+            <td><span class="n">3</span></td>
+            <td><b>Valle de la Luna South</b><em>Wed 23 Sept · 16:30 – 20:30 hrs</em></td>
+            <td class="r">CLP 75,000</td>
+            <td class="r">—</td>
+            <td class="r sub">CLP 75,000</td>
+          </tr>
+          <tr>
+            <td><span class="n">4</span></td>
+            <td><b>Astronomy tour</b><em>Wed 23 Sept · 21:00 – 23:00 hrs</em></td>
+            <td class="r">CLP 40,000</td>
+            <td class="r">—</td>
+            <td class="r sub">CLP 40,000</td>
+          </tr>
+          <tr>
+            <td><span class="n">5</span></td>
+            <td><b>Valle de Marte + Sandboarding</b><em>Thu 24 Sept · 09:30 – 13:30 hrs</em></td>
+            <td class="r">CLP 110,000</td>
+            <td class="r">CLP 7,500</td>
+            <td class="r sub">CLP 117,500</td>
+          </tr>
+          <tr>
+            <td><span class="n">6</span></td>
+            <td><b>Cejar Lagoon + Ojos de Tebenquiche + Tebenquiche Lagoon</b><em>Thu 24 Sept · 15:30 – 19:30 hrs</em></td>
+            <td class="r">CLP 80,000</td>
+            <td class="r">CLP 21,000</td>
+            <td class="r sub">CLP 101,000</td>
+          </tr>
+          <tr>
+            <td><span class="n">7</span></td>
+            <td><b>Piedras Rojas + Tuyajto Lagoon + Altiplanic Lagoons + Proto-villages + Andean towns</b><em>Fri 25 Sept · 10:00 – 18:00 hrs</em></td>
+            <td class="r">CLP 210,000</td>
+            <td class="r">CLP 15,000</td>
+            <td class="r sub">CLP 225,000</td>
+          </tr>
+          <tr>
+            <td><span class="n">8</span></td>
+            <td><b>Archaeological tour · Pukará de Quitor</b><em>Sat 26 Sept · 08:00 – 10:00 hrs</em></td>
+            <td class="r">CLP 75,000</td>
+            <td class="r">CLP 6,000</td>
+            <td class="r sub">CLP 81,000</td>
+          </tr>
+          <tr>
+            <td><span class="n">9</span></td>
+            <td><b>Departure transfer · San Pedro → El Loa Airport</b><em>Sat 26 Sept · Time to be confirmed</em></td>
+            <td class="r">CLP 30,000</td>
+            <td class="r">—</td>
+            <td class="r sub">CLP 30,000</td>
+          </tr>
+          </tbody>
+          <tfoot>
+            <tr>
+              <td colspan="2">Programme total</td>
+              <td class="r">CLP 725,000</td>
+              <td class="r">CLP 84,500</td>
+              <td class="r sub">CLP 809,500</td>
+            </tr>
+          </tfoot>
+        </table>
+      </div>
+
+      <div class="total">
+        <div>
+          <div class="tlabel">Pack total, per person</div>
+          <div class="calc">CLP 725,000 in services + CLP 84,500 in park fees</div>
+        </div>
+        <div class="amount">CLP 809,500</div>
+        <div class="grp">
+          <span>Pack total for 2 travellers</span>
+          <b>CLP 1,619,000</b>
+        </div>
+      </div>
+      </section>
+
+      <section>
+        <p class="label">Alternatives for Thursday 24, morning</p>
+        <p class="lede">All three replace <b>Valle de Marte + Sandboarding</b> on Thursday 24 in the morning, and are listed in order of preference. Under each one is its exact effect on the pack total.</p>
+        <div class="alts">
+
+      <article class="alt">
+        <div class="alt-head">
+          <span class="alt-rank">1</span>
+          <span class="alt-h">Vilama Waterfalls trek</span>
+          <span class="alt-t">10:00 – 13:30 hrs</span>
+        </div>
+        <div class="alt-body">
+          <p>A short trek up a ravine along a riverbed, between giant cacti and the shelters of ancient hunter-gatherers, with refreshing swims in waterfalls fed by pure mountain water.</p>
+          <p class="inc"><b>Includes:</b> Trail ration, safety equipment, trekking poles, first aid, local and satellite communications</p>
+          <div class="specs">
+            <span class="spec">Altitude 2,850 – 2,940 m</span>
+            <span class="spec">Distance 3 km</span>
+          </div>
+          <div class="pstrip">
+            <div><i>Minimum group rate for 2 travellers</i><b>CLP 210,000</b></div>
+            <div class="nil"><i>Park fees</i><b>No park fee</b></div>
+            <div class="sub"><i>Subtotal per person</i><b>CLP 105,000</b></div>
+          </div>
+          <p class="delta"><b>Effect on the pack:</b> Replaces the CLP 117,500 of Thursday AM. The pack total per person becomes <b>CLP 797,000</b> (<span class="down">down CLP 12,500</span>).</p>
+        </div>
+      </article>
+
+      <article class="alt">
+        <div class="alt-head">
+          <span class="alt-rank">2</span>
+          <span class="alt-h">Cornisas (Tunnel) trek + Valle de Marte</span>
+          <span class="alt-t">09:30 – 13:30 hrs</span>
+        </div>
+        <div class="alt-body">
+          <p>We head into the Llano de la Paciencia to pick up an old caravan route, later the line of the tunnel that ninety years ago linked Calama with San Pedro, then follow the ledges of the Catarpe Valley to the Valle de Marte — part of the heart of the Cordillera de la Sal — crossing its great dunes before taking the road back to San Pedro de Atacama.</p>
+          <p class="inc"><b>Includes:</b> Trail ration, safety equipment, trekking poles, first aid, local and satellite communications</p>
+          <div class="specs">
+            <span class="spec">Altitude 2,570 – 2,730 m</span>
+            <span class="spec">Distance 7.5 km</span>
+          </div>
+          <div class="pstrip">
+            <div><i>Minimum group rate for 2 travellers</i><b>CLP 270,000</b></div>
+            <div><i>Park fees</i><b>CLP 12,000 / 2 pax</b></div>
+            <div class="sub"><i>Subtotal per person</i><b>CLP 141,000</b></div>
+          </div>
+          <p class="delta"><b>Effect on the pack:</b> Replaces the CLP 117,500 of Thursday AM. The pack total per person becomes <b>CLP 833,000</b> (<span class="up">up CLP 23,500</span>).</p>
+        </div>
+      </article>
+
+      <article class="alt">
+        <div class="alt-head">
+          <span class="alt-rank">3</span>
+          <span class="alt-h">Biking in the Catarpe Valley and Garganta del Diablo</span>
+          <span class="alt-t">09:30 – 13:30 hrs</span>
+        </div>
+        <div class="alt-body">
+          <p>On this ride we follow the basin of the San Pedro river and thread the intricate passages and columns between the striking formations of the Cordillera de la Sal. An experience not to be missed.</p>
+          <p class="inc"><b>Includes:</b> Trail ration, bicycle and safety equipment</p>
+          
+          <div class="pstrip">
+            <div><i>Service</i><b>CLP 100,000</b></div>
+            <div><i>Park fees</i><b>CLP 5,000</b></div>
+            <div class="sub"><i>Subtotal per person</i><b>CLP 105,000</b></div>
+          </div>
+          <p class="delta"><b>Effect on the pack:</b> Replaces the CLP 117,500 of Thursday AM. The pack total per person becomes <b>CLP 797,000</b> (<span class="down">down CLP 12,500</span>).</p>
+        </div>
+      </article>
+        </div>
+      </section>
+
+      <section>
+        <p class="label">The vehicles we run</p>
+        <p class="lede">These are the vehicles we normally use on our programmes. Every private transfer and excursion in this quotation runs on this type of unit. Photographs are attached separately.</p>
+        <div class="fleet">
+
+        <figure class="veh sinfoto">
+          
+          <figcaption class="cap">
+            <h4>Chevrolet Tahoe</h4>
+            <p>4×4 · up to 5 passengers with luggage</p>
+          </figcaption>
+        </figure>
+
+        <figure class="veh sinfoto">
+          
+          <figcaption class="cap">
+            <h4>Toyota 4Runner SR5</h4>
+            <p>4×4 · up to 4 passengers with luggage</p>
+          </figcaption>
+        </figure>
+        </div>
+      </section>
+
+      <section>
+        <p class="label">Conditions and things to keep in mind</p>
+        <div class="cards">
+          <div class="card">
+            <h4>What the price covers</h4>
+            <ul>
+              <li>Every excursion in the programme with a guide, plus whatever each card lists under <b>Includes</b>.</li>
+              <li>Both <b>airport transfers in private service</b>, El Loa – San Pedro and back.</li>
+              <li>Coordination of the <b>astronomy tour</b>, which a third party operates on a shared basis and which we arrange for you as a courtesy.</li>
+              <li><b>Park fees</b> are itemised separately on each tour and added into the pack total. The service figure on its own does not include them.</li>
+            </ul>
+          </div>
+          <div class="card warn">
+            <h4>Worth knowing</h4>
+            <ul>
+              <li>Tickets for <b>Cejar and Tebenquiche, Piedras Rojas and the archaeological tour</b> are bought in advance.</li>
+              <li><b>Valle de la Luna South</b> currently charges no park fee, but one may be in force by your travel date.</li>
+              <li><b>Transfer</b> times are still to be coordinated and confirmed against your flights.</li>
+              <li>The first two alternatives are quoted as a <b>minimum group rate on a 2-traveller basis</b>: with a different party size the per-person figure changes.</li>
+              <li>Everything remains subject to availability at the time of confirmation.</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <div class="cta">
+        <p class="lead">We look forward to hearing from you so we can hold the spaces.</p>
+        <p class="after">This quotation is valid until 7 September 2026.</p>
+      </div>
+
+    </div>
+
+    <footer class="foot">
+      <div class="who"><b>Tourevo</b> <span>· Private experiences</span></div>
+      <div class="links">info@tourevo.cl · tourevo.cl</div>
+    </footer>
+
+  </article>
+</div>
+<p class="legend">Quotation COT-2026-0160 · Tourevo · Amounts in Chilean pesos</p>

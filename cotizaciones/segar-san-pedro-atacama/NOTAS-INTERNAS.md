@@ -14,7 +14,7 @@
 | `Tourevo-COT-2026-0160-Segar-ES.pdf` · `-EN.pdf` | Cotización, 7 páginas |
 | `Tourevo-COT-2026-0160-Segar-Dias-y-horarios-ES.pdf` · `-EN.pdf` | Comparativo contra el itinerario del sistema Tourevo, 5 páginas |
 | `Tourevo-COT-2026-0160-Segar-Itinerario-propuesto-ES.pdf` · `-EN.pdf` | Itinerario propuesto para mandarle al operador, 4 páginas |
-| `Tourevo-COT-2026-0160-Segar-Itinerario-y-diferencias.xlsx` | El mismo itinerario en el formato del export del cliente, con columnas de diferencias y correcciones. 4 hojas |
+| `Tourevo-COT-2026-0160-Segar-Itinerario-para-operador.xlsx` | Planilla para mandarle al operador, con dos columnas en blanco para que responda. 3 hojas |
 
 ---
 
@@ -111,40 +111,52 @@ en un tour astronómico privado con esa luna, o se reorienta a luna y planetas o
 no vale la pena. Es el tipo de cosa que conviene que el cliente sepa antes y no
 después.
 
-## Planilla para el cliente
+## Itinerario final propuesto
 
-`build-excel.py` genera el .xlsx en el mismo formato del export que manda el
-cliente — Fecha, Región, Destino, Inicio, Fin, Tipo, Servicio, Pax, Estado — y
-le agrega cinco columnas: **Opera, Cambio, Cómo estaba, Diferencia y corrección,
-Nota del itinerario y Respuesta**. Las notas del export del cliente van en su
-columna y cada una tiene su respuesta al lado.
+`itinerario.mjs` es la fuente única: la usan el PDF (ES/EN) y la planilla, así
+que los horarios no pueden quedar distintos entre documentos. **19 bloques, 8
+servicios nuestros, ningún día con más de dos salidas.**
 
-Cuatro hojas: el itinerario (24 bloques, 19 sin cambio · 2 movidos · 3 nuevos),
-las 12 preguntas al operador ordenadas por urgencia, los 9 servicios cotizados
-contra el sistema con sus valores, y una hoja de leyenda con el resumen por
-`COUNTIF` y de dónde sale cada dato.
+| Día | Programa |
+|---|---|
+| Mar 22 | Vuelo Santiago → Calama 15:33 · traslado 18:15 – 19:15 · llegada al hotel 19:15, noche libre |
+| Mié 23 | **Cejar 10:15 – 14:15** · tarde libre · Valle de la Luna 17:30 – 20:45 |
+| Jue 24 | Puritama 09:30 – 13:30 · **Quitor + Valle de la Muerte 14:30 – 18:30** · cena 20:00 · astronomía 22:15 |
+| Vie 25 | Altiplano 08:00 – 18:00 · cena 20:00 |
+| Sáb 26 | **Libre.** Check-out, traslado 10:24 – 11:44, vuelo 13:44 |
 
-Las respuestas que quedaron escritas en la planilla, por si hay que repetirlas:
+Las cuatro decisiones que hubo que tomar:
 
-- **«Can we add Rainbow Valley»** → no en el día de Piedras Rojas: sureste contra
-  noroeste. Media jornada propia; el único hueco es el 24 AM, donde está Puritama.
-- **«Can Pukara be visited between 3:30 - 8pm on the 23rd. Self guided?»** → sí se
-  puede por cuenta propia, pero no conviene, y en el 23 no cabe: el Valle de la
-  Luna toma 17:30–20:45. Queda el 26 a las 08:30 como ya está en el sistema.
-- **«Baltinache / Ver si es mejor en horario AM o PM»** → Baltinache no es Cejar.
-  El único hueco libre del 23 es la tarde, así que si reemplaza a Cejar va PM.
-  Para hacerlo AM habría que sacar la aclimatación.
-- **«26 Free»** → el 26 no está libre: Quitor 08:30–10:00, traslado 10:24–11:44 y
-  vuelo 13:44.
+1. **Cejar reemplaza la aclimatación del 23.** Salida 10:15 para estar a las 10:50
+   en el complejo, como se pidió. Ordena además la altura: 2.300 m el 23,
+   3.500 m el 24 en Puritama, sobre 4.000 m el 25 en Miscanti. El complejo cierra
+   los martes y el único martes del viaje es el 22, día de llegada sin excursiones.
+2. **Quitor y el Valle de la Muerte van juntos la tarde del 24.** Están a quince
+   minutos uno del otro, es un vehículo en vez de dos salidas, y es lo que el
+   cliente ya había decidido. El sandboard queda al final, 16:35 – 18:00, con la
+   luz y la temperatura de la tarde.
+3. **El 26 queda libre**, que era el pedido. Sacar Quitor de ahí es justamente lo
+   que lo permite.
+4. **El Valle de la Luna del 23 no se toca.** Con Cejar por la mañana, la tarde
+   queda con tres horas de margen y el atardecer sigue en su hora.
 
-Un detalle que apareció al cruzar: el export dice que el traslado del 22 termina
-**19:35** y el sistema dice **19:15**. Se tomó el del sistema, que calza con el
-check-in de las 19:35.
+El Valle del Arcoíris no cabe en ninguna parte con el 26 libre. Queda como
+pregunta al operador para que el cliente decida con el dato a la vista, no como
+algo que se descartó en silencio.
 
-**Nota de entorno:** el contenedor traía `libreoffice-core` pero no
-`libreoffice-calc`, así que ninguna planilla se podía abrir ni recalcular. Hay
-que instalarlo (`apt-get install -y libreoffice-calc`) antes de correr
-`scripts/recalc.py`.
+## Planilla para el operador
+
+`build-excel.py` genera el .xlsx leyendo el itinerario de `itinerario.mjs` y los
+precios de `contenido.mjs`. Tres hojas:
+
+- **Itinerario** — una línea por bloque, con «Qué necesitamos confirmar» y dos
+  columnas en amarillo para que el operador responda: **¿Factible?** y
+  **Comentarios**. Trae una fila de ejemplo que hay que borrar.
+- **Preguntas** — las cuatro transversales, con su columna de respuesta.
+- **Referencia** — qué cambió, los valores cotizados y de dónde sale cada dato.
+
+El comparativo de días y horarios (`build-diferencias.mjs`) sigue siendo el
+registro de cómo se llegó acá, pero **el plan vigente es este itinerario**.
 
 ## Pendientes
 
@@ -178,7 +190,8 @@ idiomas. Los `.html` son generados — no editarlos a mano.
 | `build.mjs` | Cotización |
 | `build-diferencias.mjs` | Comparativo de días y horarios contra el sistema, con los choques |
 | `build-itinerario.mjs` | Itinerario propuesto para el operador, con las preguntas a confirmar |
-| `build-excel.py` | Planilla .xlsx. Lee los precios de `contenido.mjs` vía node, así que no duplica montos |
+| `itinerario.mjs` | Itinerario propuesto. Fuente única del PDF y de la planilla |
+| `build-excel.py` | Planilla .xlsx para el operador. Lee itinerario y precios vía node, no duplica nada |
 
 Esta carpeta va en `cotizaciones/`, no en `propuestas/`: ese árbol se movió a
 `tourevo-cl/website/propuestas/` y el workflow de FTP publica cualquier cosa que

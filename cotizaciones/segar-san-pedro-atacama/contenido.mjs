@@ -12,7 +12,7 @@ export const doc = {
   numero: 'COT-2026-0160',
   emitida: '2026-08-24',
   vigencia: '2026-09-07',
-  pax: 2,
+  pax: 4,
   moneda: 'CLP',
 };
 
@@ -27,7 +27,7 @@ export const cliente = {
 export const programa = [
   {
     id: 'transfer-in',
-    fecha: '2026-09-22',
+    fecha: '2026-12-22',
     franja: 'transfer',
     horario: { es: 'Horario a coordinar', en: 'Time to be confirmed' },
     titulo: {
@@ -44,7 +44,7 @@ export const programa = [
   },
   {
     id: 'puritama',
-    fecha: '2026-09-23',
+    fecha: '2026-12-23',
     franja: 'am',
     horario: { es: '09:30 – 13:30 hrs.', en: '09:30 – 13:30 hrs' },
     titulo: { es: 'Termas de Puritama', en: 'Puritama Hot Springs' },
@@ -58,7 +58,7 @@ export const programa = [
   },
   {
     id: 'luna-sur',
-    fecha: '2026-09-23',
+    fecha: '2026-12-23',
     franja: 'pm',
     horario: { es: '16:30 – 20:30 hrs.', en: '16:30 – 20:30 hrs' },
     titulo: { es: 'Valle de la Luna Sur', en: 'Valle de la Luna South' },
@@ -76,7 +76,7 @@ export const programa = [
   },
   {
     id: 'astronomico',
-    fecha: '2026-09-23',
+    fecha: '2026-12-23',
     franja: 'noche',
     horario: { es: '21:00 – 23:00 hrs.', en: '21:00 – 23:00 hrs' },
     titulo: { es: 'Tour astronómico', en: 'Astronomy tour' },
@@ -91,7 +91,7 @@ export const programa = [
   },
   {
     id: 'marte-sandboard',
-    fecha: '2026-09-24',
+    fecha: '2026-12-24',
     franja: 'am',
     horario: { es: '09:30 – 13:30 hrs.', en: '09:30 – 13:30 hrs' },
     titulo: { es: 'Valle de Marte + Sandboard', en: 'Valle de Marte + Sandboarding' },
@@ -106,7 +106,7 @@ export const programa = [
   },
   {
     id: 'cejar',
-    fecha: '2026-09-24',
+    fecha: '2026-12-24',
     franja: 'pm',
     horario: { es: '15:30 – 19:30 hrs.', en: '15:30 – 19:30 hrs' },
     titulo: {
@@ -124,7 +124,7 @@ export const programa = [
   },
   {
     id: 'piedras-rojas',
-    fecha: '2026-09-25',
+    fecha: '2026-12-25',
     franja: 'fullday',
     horario: { es: '10:00 – 18:00 hrs.', en: '10:00 – 18:00 hrs' },
     titulo: {
@@ -142,7 +142,7 @@ export const programa = [
   },
   {
     id: 'arqueologico',
-    fecha: '2026-09-26',
+    fecha: '2026-12-26',
     franja: 'am',
     horario: { es: '08:00 – 10:00 hrs.', en: '08:00 – 10:00 hrs' },
     titulo: { es: 'Tour arqueológico · Pukará de Quitor', en: 'Archaeological tour · Pukará de Quitor' },
@@ -157,7 +157,7 @@ export const programa = [
   },
   {
     id: 'transfer-out',
-    fecha: '2026-09-26',
+    fecha: '2026-12-26',
     franja: 'transfer',
     horario: { es: 'Horario a confirmar', en: 'Time to be confirmed' },
     titulo: {

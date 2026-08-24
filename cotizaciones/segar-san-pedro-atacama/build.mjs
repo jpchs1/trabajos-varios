@@ -12,26 +12,13 @@
 import { readFileSync, existsSync, writeFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { createRequire } from 'node:module';
 
 import { doc, cliente, programa, alternativas, flota } from './contenido.mjs';
 import { estilos } from './estilos.mjs';
+import { plata, fecha, mayus, esc, cabecera, piePagina, aPdf } from './comun.mjs';
 
 const AQUI = dirname(fileURLToPath(import.meta.url));
 const soloHtml = process.argv.includes('--solo-html');
-
-// --- Formato -----------------------------------------------------------------
-
-const LOCALE = { es: 'es-CL', en: 'en-GB' };
-
-const plata = (n, l) => `CLP ${new Intl.NumberFormat(l === 'es' ? 'es-CL' : 'en-US').format(n)}`;
-
-const fecha = (iso, l, opts) =>
-  new Intl.DateTimeFormat(LOCALE[l], { timeZone: 'UTC', ...opts }).format(new Date(`${iso}T00:00:00Z`));
-
-const mayus = (s) => s.charAt(0).toUpperCase() + s.slice(1);
-
-const esc = (s) => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 
 // --- Cálculos ----------------------------------------------------------------
 // Un solo lugar hace las sumas. Los dos idiomas leen de acá, así que no pueden
@@ -94,7 +81,7 @@ const T = {
     firmante: 'Juan Pablo',
     cargo: 'Travel Manager, Tourevo',
     facts: [
-      ['Fechas', `22 – 26 sep 2026`],
+      ['Fechas', '22 – 26 dic 2026'],
       ['Días', '5'],
       ['Base', 'San Pedro de Atacama'],
       ['Servicios', String(programa.length)],
@@ -120,6 +107,9 @@ const T = {
     minGrupo: (n) => `Tarifa mínima por grupo de ${n} pax`,
     porPersona: 'por persona',
     efecto: 'Efecto en el pack',
+    recotizar: `Tarifa cotizada sobre base ${2} pax. Con ${doc.pax} pasajeros hay que volver a pedirla al operador.`,
+    refBase: (n) => `Referencia sobre base ${n} pax`,
+    efectoPendiente: `Queda por confirmar: depende de la tarifa para ${doc.pax} pasajeros.`,
     reemplaza: (d, nuevo) => `Reemplaza los ${plata(baseJueves, 'es')} del jueves AM. El total del pack por persona queda en <b>${plata(nuevo, 'es')}</b>`,
     sube: 'sube',
     baja: 'baja',
@@ -141,6 +131,7 @@ const T = {
       '<b>Valle de la Luna Sur</b> hoy no paga entrada, pero es posible que la cobren a la fecha del viaje.',
       'Los horarios de los <b>traslados</b> quedan por coordinar y confirmar según los vuelos.',
       `Las dos primeras alternativas se cotizan como <b>tarifa mínima de grupo sobre base ${doc.pax} pax</b>: con otra cantidad de pasajeros el valor por persona cambia.`,
+      'El <b>24 y 25 de diciembre</b> son Nochebuena y Navidad: la disponibilidad de guías y de los servicios de esos dos días hay que confirmarla primero, y puede haber recargo de feriado.',
       'Todo queda sujeto a disponibilidad al momento de confirmar.',
     ],
     ctaLead: 'Quedamos atentos a sus noticias para bloquear los cupos.',
@@ -170,7 +161,7 @@ const T = {
     firmante: 'Juan Pablo',
     cargo: 'Travel Manager, Tourevo',
     facts: [
-      ['Dates', '22 – 26 Sep 2026'],
+      ['Dates', '22 – 26 Dec 2026'],
       ['Days', '5'],
       ['Base', 'San Pedro de Atacama'],
       ['Services', String(programa.length)],
@@ -196,6 +187,9 @@ const T = {
     minGrupo: (n) => `Minimum group rate for ${n} travellers`,
     porPersona: 'per person',
     efecto: 'Effect on the pack',
+    recotizar: `Rate quoted on a ${2}-traveller basis. With ${doc.pax} travellers it has to be requested from the operator again.`,
+    refBase: (n) => `Reference on a ${n}-traveller basis`,
+    efectoPendiente: `Still to be confirmed: it depends on the rate for ${doc.pax} travellers.`,
     reemplaza: (d, nuevo) => `Replaces the ${plata(baseJueves, 'en')} of Thursday AM. The pack total per person becomes <b>${plata(nuevo, 'en')}</b>`,
     sube: 'up',
     baja: 'down',
@@ -217,6 +211,7 @@ const T = {
       '<b>Valle de la Luna South</b> currently charges no park fee, but one may be in force by your travel date.',
       '<b>Transfer</b> times are still to be coordinated and confirmed against your flights.',
       `The first two alternatives are quoted as a <b>minimum group rate on a ${doc.pax}-traveller basis</b>: with a different party size the per-person figure changes.`,
+      '<b>24 and 25 December</b> are Christmas Eve and Christmas Day: guide and service availability on those two days has to be confirmed first, and a holiday supplement may apply.',
       'Everything remains subject to availability at the time of confirmation.',
     ],
     ctaLead: 'We look forward to hearing from you so we can hold the spaces.',
@@ -227,11 +222,11 @@ const T = {
 };
 
 const NOMBRE_DIA = {
-  '2026-09-22': { es: 'Llegada a San Pedro', en: 'Arrival in San Pedro' },
-  '2026-09-23': { es: 'Puritama, Valle de la Luna y el cielo', en: 'Puritama, Valle de la Luna and the night sky' },
-  '2026-09-24': { es: 'Valle de Marte y el corazón del salar', en: 'Valle de Marte and the heart of the salt flat' },
-  '2026-09-25': { es: 'Altiplano: Piedras Rojas y las lagunas', en: 'Altiplano: Piedras Rojas and the lagoons' },
-  '2026-09-26': { es: 'Quitor y salida', en: 'Quitor and departure' },
+  '2026-12-22': { es: 'Llegada a San Pedro', en: 'Arrival in San Pedro' },
+  '2026-12-23': { es: 'Puritama, Valle de la Luna y el cielo', en: 'Puritama, Valle de la Luna and the night sky' },
+  '2026-12-24': { es: 'Valle de Marte y el corazón del salar', en: 'Valle de Marte and the heart of the salt flat' },
+  '2026-12-25': { es: 'Altiplano: Piedras Rojas y las lagunas', en: 'Altiplano: Piedras Rojas and the lagoons' },
+  '2026-12-26': { es: 'Quitor y salida', en: 'Quitor and departure' },
 };
 
 // --- Render ------------------------------------------------------------------
@@ -340,10 +335,16 @@ function alternativa(a, t, l) {
     ? ''
     : ` (<span class="${delta > 0 ? 'up' : 'down'}">${delta > 0 ? t.sube : t.baja} ${plata(Math.abs(delta), l)}</span>)`;
 
+  // Una tarifa mínima de grupo cotizada para 2 pax no se puede dividir entre 4
+  // y presentar como valor por persona: el operador tiene que recotizarla. En
+  // ese caso mostramos el mínimo tal cual, marcamos la referencia como lo que
+  // es y no inventamos un efecto sobre el total.
+  const desfasada = a.base > 1 && a.base !== doc.pax;
+
   const precio = a.base > 1
     ? `<div><i>${t.minGrupo(a.base)}</i><b>${plata(a.valor, l)}</b></div>
             ${a.entradas ? `<div><i>${t.strip.entradas}</i><b>${plata(a.entradas, l)} / ${a.base} pax</b></div>` : `<div class="nil"><i>${t.strip.entradas}</i><b>${t.sinEntradas}</b></div>`}
-            <div class="sub"><i>${t.strip.sub}</i><b>${plata(pp, l)}</b></div>`
+            <div class="sub"><i>${desfasada ? t.refBase(a.base) : t.strip.sub}</i><b>${plata(pp, l)}</b></div>`
     : `<div><i>${t.strip.valor}</i><b>${plata(a.valor, l)}</b></div>
             ${a.entradas ? `<div><i>${t.strip.entradas}</i><b>${plata(a.entradas, l)}</b></div>` : `<div class="nil"><i>${t.strip.entradas}</i><b>${t.sinEntradas}</b></div>`}
             <div class="sub"><i>${t.strip.sub}</i><b>${plata(pp, l)}</b></div>`;
@@ -369,7 +370,8 @@ function alternativa(a, t, l) {
           <div class="pstrip">
             ${precio}
           </div>
-          <p class="delta"><b>${t.efecto}:</b> ${t.reemplaza(delta, nuevo)}${signo}.</p>
+          <p class="delta"><b>${t.efecto}:</b> ${desfasada ? t.efectoPendiente : `${t.reemplaza(delta, nuevo)}${signo}.`}</p>
+          ${desfasada ? `<p class="flag">${t.recotizar}</p>` : ''}
         </div>
       </article>`;
 }
@@ -398,29 +400,16 @@ function pagina(l) {
 <div class="wrap">
   <article class="paper">
 
-    <header class="head">
-      <svg class="ridge" viewBox="0 0 800 46" preserveAspectRatio="none" aria-hidden="true">
-        <path d="M0 46 L120 14 L210 34 L330 4 L430 30 L540 10 L650 32 L740 16 L800 30 L800 46 Z" fill="currentColor"/>
-      </svg>
-      <div class="brandrow">
-        <div class="brand">
-          <div class="mark" aria-hidden="true">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 20 L9 8 L13 15 L16 10 L21 20 Z"/></svg>
-          </div>
-          <div class="wordmark">Tourevo<small>Private experiences</small></div>
-        </div>
-        <div style="text-align:right"><div class="eyebrow">${t.eyebrow}</div></div>
-      </div>
-
-      <h1 class="doc-title">${esc(t.h1)}</h1>
-      <p class="doc-sub">${esc(t.sub)}</p>
-
-      <div class="meta">
-        <span class="chip">${t.chipNo} <b>${doc.numero}</b></span>
-        <span class="chip">${t.chipEmitida} <b>${fecha(doc.emitida, l, { day: '2-digit', month: 'short', year: 'numeric' })}</b></span>
-        <span class="chip">${t.chipVigencia} <b>${fecha(doc.vigencia, l, { day: '2-digit', month: 'short', year: 'numeric' })}</b></span>
-      </div>
-    </header>
+${cabecera({
+      eyebrow: t.eyebrow,
+      h1: t.h1,
+      sub: t.sub,
+      chips: [
+        [t.chipNo, doc.numero],
+        [t.chipEmitida, fecha(doc.emitida, l, { day: '2-digit', month: 'short', year: 'numeric' })],
+        [t.chipVigencia, fecha(doc.vigencia, l, { day: '2-digit', month: 'short', year: 'numeric' })],
+      ],
+    })}
 
     <div class="body">
 
@@ -499,10 +488,7 @@ ${flota.map((v) => vehiculo(v, t, l)).join('\n')}
 
     </div>
 
-    <footer class="foot">
-      <div class="who">${t.footWho}</div>
-      <div class="links">info@tourevo.cl · tourevo.cl</div>
-    </footer>
+${piePagina()}
 
   </article>
 </div>
@@ -534,34 +520,4 @@ if (soloHtml) process.exit(0);
 
 // --- PDF ---------------------------------------------------------------------
 
-const require_ = createRequire(import.meta.url);
-let chromium;
-for (const c of ['playwright', '/opt/node22/lib/node_modules/playwright', 'playwright-core']) {
-  try { ({ chromium } = require_(c)); break; } catch { /* siguiente candidato */ }
-}
-if (!chromium) {
-  console.error('No se encontró Playwright. Corré `node build.mjs --solo-html` o instalá playwright.');
-  process.exit(1);
-}
-
-const pie = (tx) => `<div style="width:100%;font-size:7.5pt;font-family:Helvetica,Arial,sans-serif;color:#8497A0;padding:0 12mm;display:flex;justify-content:space-between;">
-  <span>${tx}</span><span><span class="pageNumber"></span> / <span class="totalPages"></span></span></div>`;
-
-const navegador = await chromium.launch({ args: ['--no-sandbox'] });
-for (const s of SALIDAS) {
-  const p = await navegador.newPage();
-  await p.emulateMedia({ colorScheme: 'light', media: 'print' });
-  await p.goto(`file://${join(AQUI, s.html)}`, { waitUntil: 'networkidle' });
-  await p.pdf({
-    path: join(AQUI, s.pdf),
-    format: 'A4',
-    printBackground: true,
-    displayHeaderFooter: true,
-    headerTemplate: '<div></div>',
-    footerTemplate: pie(`Tourevo · ${doc.numero} · ${cliente.nombre}`),
-    margin: { top: '11mm', bottom: '15mm', left: '12mm', right: '12mm' },
-  });
-  await p.close();
-  console.log(`✓ ${s.pdf}`);
-}
-await navegador.close();
+await aPdf(SALIDAS, { aqui: AQUI, pie: `Tourevo · ${doc.numero} · ${cliente.nombre}` });

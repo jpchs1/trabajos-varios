@@ -13,6 +13,7 @@
 |---|---|
 | `Tourevo-COT-2026-0160-Segar-ES.pdf` · `-EN.pdf` | Cotización, 7 páginas |
 | `Tourevo-COT-2026-0160-Segar-Dias-y-horarios-ES.pdf` · `-EN.pdf` | Comparativo contra el itinerario del sistema Tourevo, 5 páginas |
+| `Tourevo-COT-2026-0160-Segar-Itinerario-propuesto-ES.pdf` · `-EN.pdf` | Itinerario propuesto para mandarle al operador, 4 páginas |
 
 ---
 
@@ -88,6 +89,27 @@ antes de salir a Quitor).
 para aclimatar a 2.400 m antes de subir a 3.500 m, con Miscanti sobre 4.000 m el
 25. No conviene devolverlo al 23 sólo para descomprimir.
 
+## Itinerario propuesto para el operador
+
+Documento para pedirle al operador que confirme horarios. Respeta el itinerario
+que el cliente ya vio: de 23 bloques del día, **sólo se tocan 3**.
+
+| Cambio | Detalle |
+|---|---|
+| Valle de la Muerte, 24 dic | De 13:30–15:30 a **15:30–17:30**, ocupando la tarde libre que el itinerario ya tenía. Resuelve el choque con Puritama y saca el sandboard de la hora de más calor |
+| Cejar, 23 dic | **Nuevo, 13:30–16:30**, versión de 3 h sin la espera del atardecer en Tebenquiche. Es el único hueco donde entra completo |
+| Check-out, 26 dic | **Nuevo bloque 07:45–08:15**. Con el equipaje cargado, el traslado sale directo desde el pukará y los 24 minutos entre Quitor y las 10:24 dejan de importar |
+
+Todo lo demás — traslados, Puritama, Valle de la Luna, astronomía, el full day,
+Quitor, vuelos y comidas — queda en el día y la hora exactos que vio Segar.
+
+**Luna llena toda la estadía.** Calculado: del 22 al 26 de diciembre la luna va
+entre 92% y 100% iluminada, y la noche del 24 está en 99,4%. Ninguna noche del
+viaje es mejor, así que no se arregla moviéndola. Va como pregunta al operador:
+en un tour astronómico privado con esa luna, o se reorienta a luna y planetas o
+no vale la pena. Es el tipo de cosa que conviene que el cliente sepa antes y no
+después.
+
 ## Pendientes
 
 0. **La cotización todavía refleja los días del operador, no los del sistema.** Se dejó así a propósito: el comparativo es el puente. Una vez resueltos Cejar, sandboard-vs-quads y el horario del Valle de la Muerte, se realinea `contenido.mjs` y se regenera.
@@ -102,6 +124,7 @@ para aclimatar a 2.400 m antes de subir a 3.500 m, con Miscanti sobre 4.000 m el
 cd cotizaciones/segar-san-pedro-atacama
 node build.mjs               # cotización: HTML + PDF, ES y EN
 node build-diferencias.mjs   # días y horarios: HTML + PDF, ES y EN
+node build-itinerario.mjs    # itinerario propuesto: HTML + PDF, ES y EN
 # --solo-html en cualquiera de los dos si no hay Chromium a mano
 ```
 
@@ -117,6 +140,7 @@ idiomas. Los `.html` son generados — no editarlos a mano.
 | `comun.mjs` | Formato de moneda y fecha, cabecera, pie e impresión a PDF |
 | `build.mjs` | Cotización |
 | `build-diferencias.mjs` | Comparativo de días y horarios contra el sistema, con los choques |
+| `build-itinerario.mjs` | Itinerario propuesto para el operador, con las preguntas a confirmar |
 
 Esta carpeta va en `cotizaciones/`, no en `propuestas/`: ese árbol se movió a
 `tourevo-cl/website/propuestas/` y el workflow de FTP publica cualquier cosa que

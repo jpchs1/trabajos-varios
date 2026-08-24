@@ -1,8 +1,8 @@
-// Hoja de estilos compartida por las dos versiones. Es la misma paleta y la
-// misma tipografía de las propuestas anteriores de Tourevo: el documento tiene
-// que leerse como parte de la misma casa, no como un archivo suelto.
-
-export const estilos = `
+<!-- Generado por build-itinerario.mjs — no editar a mano. -->
+<title>Tourevo · Itinerario propuesto — Segar</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
   :root {
     --ground: #EEF3F3;
     --paper: #FFFFFF;
@@ -249,12 +249,7 @@ export const estilos = `
     .cta { margin-top: 12px; padding: 15px; }
     .foot, .legend { break-before: avoid; }
   }
-`;
 
-// Clases de los documentos de trabajo. `.badge`, `.find` y `.qs` las usan
-// tanto el comparativo como el itinerario propuesto, así que los dos importan
-// esta hoja: viven en un solo lugar y no se desincronizan.
-export const estilosComparativo = `
   /* ---- Hallazgos que hay que resolver ---- */
   .finds { display: grid; gap: 12px; }
   .find { border: 1px solid var(--line); border-left: 3px solid var(--summit); border-radius: 4px 12px 12px 4px; padding: 15px 18px; background: var(--glacier-2); }
@@ -326,11 +321,7 @@ export const estilosComparativo = `
     .imp .v { font-size: 19px; }
     .impact.cuatro .v { font-size: 15px; }
   }
-`;
 
-// Clases del itinerario propuesto: una línea de tiempo por día, con los
-// servicios nuestros destacados y el resto del día en gris para contexto.
-export const estilosItinerario = `
   .tl { padding: 9px 13px 13px; display: grid; gap: 3px; }
   .blk { display: grid; grid-template-columns: 74px 1fr auto; gap: 14px; padding: 10px 9px; border-radius: 9px; align-items: start; }
   .blk .hh { font-size: 12.5px; font-weight: 700; color: var(--summit); font-variant-numeric: tabular-nums; padding-top: 1px; line-height: 1.3; }
@@ -359,4 +350,367 @@ export const estilosItinerario = `
     .blk .nn { font-size: 8.6pt; }
     .leyenda { margin-bottom: 11px; }
   }
-`;
+</style>
+
+<div class="wrap">
+  <article class="paper">
+
+    <header class="head">
+      <svg class="ridge" viewBox="0 0 800 46" preserveAspectRatio="none" aria-hidden="true">
+        <path d="M0 46 L120 14 L210 34 L330 4 L430 30 L540 10 L650 32 L740 16 L800 30 L800 46 Z" fill="currentColor"/>
+      </svg>
+      <div class="brandrow">
+        <div class="brand">
+          <div class="mark" aria-hidden="true">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 20 L9 8 L13 15 L16 10 L21 20 Z"/></svg>
+          </div>
+          <div class="wordmark">Tourevo<small>Private experiences</small></div>
+        </div>
+        <div style="text-align:right"><div class="eyebrow">Itinerario propuesto</div></div>
+      </div>
+
+      <h1 class="doc-title">Horarios que necesitamos confirmar</h1>
+      <p class="doc-sub">Este es el itinerario que proponemos operar del 22 al 26 de diciembre. Está armado sobre el que el cliente ya revisó, así que casi todo queda tal cual: se mueve una excursión, se agrega la que faltaba y se suma un bloque de check-out.</p>
+
+      <div class="meta">
+        <span class="chip">Ref. <b>COT-2026-0160</b></span>
+        <span class="chip">Programa <b>22 – 26 dic 2026</b></span>
+        <span class="chip">Pasajeros <b>4</b></span>
+      </div>
+    </header>
+
+    <div class="body">
+
+      <section>
+        <p class="label">Lo único que se movió: 3 bloques</p>
+        <p class="lede">Todo lo demás queda exactamente en el día y la hora que el cliente ya vio.</p>
+        <div class="finds">
+
+        <article class="find">
+          <div class="find-top">
+            <span class="find-n">1</span>
+            <h4>El Valle de la Muerte pasa de 13:30 a 15:30</h4>
+          </div>
+          <p>El itinerario lo tenía de 13:30 a 15:30, justo cuando Puritama termina. Las termas están a unos 30 km de San Pedro: no se puede cerrar allá a las 13:30 y estar en el valle a las 13:30.</p>
+          <p>La tarde del 24 ya tenía una franja libre de 15:30 a 17:30, así que la excursión entra ahí sin tocar nada más del día. Además saca el sandboard de la hora de más calor y deja dos horas y media de descanso antes de la cena de Nochebuena.</p>
+        </article>
+
+        <article class="find">
+          <div class="find-top">
+            <span class="find-n">2</span>
+            <h4>Cejar entra la tarde del 23</h4>
+          </div>
+          <p>Cejar estaba cotizado y no aparecía en el itinerario, y el cliente preguntó justamente si la caminata se podía combinar con una flotada. La flotada es esta.</p>
+          <p>El 24 no cabe: si Cejar toma la tarde, el Valle de la Muerte se queda sin franja y el choque de las 13:30 vuelve. La tarde del 23 es el único hueco donde entra completo, entre la aclimatación que termina a las 13:00 y el Valle de la Luna que arranca a las 17:30. A favor: Cejar está a nivel del salar, así que no rompe la aclimatación del día.</p>
+        </article>
+
+        <article class="find">
+          <div class="find-top">
+            <span class="find-n">3</span>
+            <h4>El check-out del 26 se hace antes de salir a Quitor</h4>
+          </div>
+          <p>No es un cambio de horario, es un bloque nuevo de media hora a primera hora. Sin él, entre que Quitor termina a las 10:00 y el traslado sale a las 10:24 hay que volver del pukará, pasar por el hotel, hacer el check-out y cargar maletas en 24 minutos.</p>
+          <p>Con el equipaje ya en el vehículo, el traslado sale directo desde el pukará y la mañana deja de estar al filo.</p>
+        </article>
+        </div>
+      </section>
+
+      <section>
+        <p class="label">El día completo, hora por hora</p>
+        <p class="lede">Los 10 bloques marcados son los servicios que operamos nosotros. Los demás — vuelos, comidas, check-in y tiempo libre — van en gris, sólo para que se vea el día entero y se entienda de dónde sale cada horario.</p>
+        <p class="leyenda">
+          <span><i class="sw tourevo"></i>Servicio nuestro</span>
+          <span><i class="sw tercero"></i>Vuelos, comidas y check-in</span>
+          <span><i class="sw libre"></i>Tiempo libre</span>
+        </p>
+        <div class="days">
+
+      <article class="day">
+        <div class="day-head">
+          <span class="day-date">Martes, 22 de diciembre</span>
+          <span class="day-name">Llegada desde Puerto Natales</span>
+          <span class="day-sum">1 servicio nuestro</span>
+        </div>
+        <div class="tl">
+
+          <div class="blk tercero">
+            <div class="hh">06:35<i>07:05</i></div>
+            <div>
+              <div class="tt">Traslado al aeropuerto de Puerto Natales (PNT)</div>
+              
+            </div>
+            <span class="badge b-ok">Sin cambio</span>
+          </div>
+
+          <div class="blk tercero">
+            <div class="hh">09:05<i>12:14</i></div>
+            <div>
+              <div class="tt">Vuelo Puerto Natales → Santiago · LATAM</div>
+              
+            </div>
+            <span class="badge b-ok">Sin cambio</span>
+          </div>
+
+          <div class="blk tercero">
+            <div class="hh">13:45<i>15:15</i></div>
+            <div>
+              <div class="tt">Conexión en Santiago · almuerzo en el aeropuerto</div>
+              
+            </div>
+            <span class="badge b-ok">Sin cambio</span>
+          </div>
+
+          <div class="blk tercero">
+            <div class="hh">15:33<i>17:41</i></div>
+            <div>
+              <div class="tt">Vuelo Santiago → Calama (CJC) · LATAM</div>
+              
+            </div>
+            <span class="badge b-ok">Sin cambio</span>
+          </div>
+
+          <div class="blk tourevo">
+            <div class="hh">18:15<i>19:15</i></div>
+            <div>
+              <div class="tt">Traslado Calama → San Pedro de Atacama</div>
+              <span class="nn">Servicio privado. Recogida en la salida del vuelo LATAM de las 17:41.</span>
+            </div>
+            <span class="badge b-ok">Sin cambio</span>
+          </div>
+
+          <div class="blk tercero">
+            <div class="hh">19:35<i>20:30</i></div>
+            <div>
+              <div class="tt">Check-in en San Pedro y descanso</div>
+              
+            </div>
+            <span class="badge b-ok">Sin cambio</span>
+          </div>
+        </div>
+      </article>
+
+      <article class="day">
+        <div class="day-head">
+          <span class="day-date">Miércoles, 23 de diciembre</span>
+          <span class="day-name">Aclimatación, salar y atardecer</span>
+          <span class="day-sum">2 servicios nuestros</span>
+        </div>
+        <div class="tl">
+
+          <div class="blk tercero">
+            <div class="hh">09:00<i>13:00</i></div>
+            <div>
+              <div class="tt">Aclimatación · mañana tranquila en San Pedro</div>
+              <span class="nn">Falta definir si la quieren guiada o como tiempo libre. Si es guiada, la cotizamos.</span>
+            </div>
+            <span class="badge b-ok">Sin cambio</span>
+          </div>
+
+          <div class="blk tourevo">
+            <div class="hh">13:30<i>16:30</i></div>
+            <div>
+              <div class="tt">Laguna Cejar + Ojos de Tebenquiche + Laguna de Tebenquiche</div>
+              <span class="nn">Versión de <b>3 horas, sin la espera del atardecer en Tebenquiche</b>: el atardecer lo tienen esa misma tarde en el Valle de la Luna. Es el único hueco del programa donde Cejar entra completo. Vuelta al hotel 16:30, una hora antes de la recogida siguiente.</span>
+            </div>
+            <span class="badge b-x">Nuevo</span>
+          </div>
+
+          <div class="blk tourevo">
+            <div class="hh">17:30<i>20:45</i></div>
+            <div>
+              <div class="tt">Valle de la Luna al atardecer</div>
+              <span class="nn">Confirmar que a las 17:30 alcance el circuito <b>off circuit por el Vallecito</b>, que se hace caminando, y no el recorrido estándar.</span>
+            </div>
+            <span class="badge b-ok">Sin cambio</span>
+          </div>
+        </div>
+      </article>
+
+      <article class="day">
+        <div class="day-head">
+          <span class="day-date">Jueves, 24 de diciembre</span>
+          <span class="day-name">Puritama, Valle de la Muerte y Nochebuena</span>
+          <span class="day-sum">3 servicios nuestros</span>
+        </div>
+        <div class="tl">
+
+          <div class="blk tourevo">
+            <div class="hh">09:30<i>13:30</i></div>
+            <div>
+              <div class="tt">Termas de Puritama · 3.500 m</div>
+              <span class="nn">Se mantiene el 24 y no el 23: deja un día de aclimatación en San Pedro a 2.400 m antes de subir, con Miscanti sobre 4.000 m al día siguiente.</span>
+            </div>
+            <span class="badge b-ok">Sin cambio</span>
+          </div>
+
+          <div class="blk libre">
+            <div class="hh">13:30<i>15:15</i></div>
+            <div>
+              <div class="tt">Vuelta a San Pedro, almuerzo y descanso</div>
+              <span class="nn">Esta franja antes no existía: Puritama y el Valle de la Muerte estaban pegados a las 13:30, con las termas a unos 30 km.</span>
+            </div>
+            <span></span>
+          </div>
+
+          <div class="blk tourevo">
+            <div class="hh">15:30<i>17:30</i></div>
+            <div>
+              <div class="tt">Valle de la Muerte · sandboard</div>
+              <span class="nn">Estaba de 13:30 a 15:30, imposible pegado a Puritama. Pasa a la franja que el itinerario tenía como tarde libre, y de paso sale de la hora de más calor de un día de diciembre.</span>
+            </div>
+            <span class="badge b-chg">Movido</span>
+          </div>
+
+          <div class="blk libre">
+            <div class="hh">17:30<i>20:00</i></div>
+            <div>
+              <div class="tt">Descanso antes de la cena</div>
+              
+            </div>
+            <span></span>
+          </div>
+
+          <div class="blk tercero">
+            <div class="hh">20:00<i>22:00</i></div>
+            <div>
+              <div class="tt">Cena de Nochebuena</div>
+              
+            </div>
+            <span class="badge b-ok">Sin cambio</span>
+          </div>
+
+          <div class="blk tourevo">
+            <div class="hh">22:15<i>23:59</i></div>
+            <div>
+              <div class="tt">Astronomía privada</div>
+              <span class="nn">Sin cambio de hora. <b>Recogida en el restaurante a las 22:10</b>, no en el hotel: la cena termina 22:00. Ver la nota sobre la luna más abajo.</span>
+            </div>
+            <span class="badge b-ok">Sin cambio</span>
+          </div>
+        </div>
+      </article>
+
+      <article class="day">
+        <div class="day-head">
+          <span class="day-date">Viernes, 25 de diciembre</span>
+          <span class="day-name">Altiplano</span>
+          <span class="day-sum">1 servicio nuestro</span>
+        </div>
+        <div class="tl">
+
+          <div class="blk tourevo">
+            <div class="hh">08:00<i>18:00</i></div>
+            <div>
+              <div class="tt">Altiplano · Chaxa, Toconao, Miscanti y Piedras Rojas</div>
+              <span class="nn">Confirmar el alcance: <b>entra Chaxa</b>, con su propia entrada, y <b>salen Tuyajto y las protoaldeas</b> que estaban en lo cotizado. Almuerzo en hábitat natural.</span>
+            </div>
+            <span class="badge b-ok">Sin cambio</span>
+          </div>
+
+          <div class="blk tercero">
+            <div class="hh">20:00<i>21:30</i></div>
+            <div>
+              <div class="tt">Cena</div>
+              
+            </div>
+            <span class="badge b-ok">Sin cambio</span>
+          </div>
+        </div>
+      </article>
+
+      <article class="day">
+        <div class="day-head">
+          <span class="day-date">Sábado, 26 de diciembre</span>
+          <span class="day-name">Quitor y salida</span>
+          <span class="day-sum">3 servicios nuestros</span>
+        </div>
+        <div class="tl">
+
+          <div class="blk tourevo">
+            <div class="hh">07:45<i>08:15</i></div>
+            <div>
+              <div class="tt">Check-out y carga del equipaje</div>
+              <span class="nn">Bloque nuevo, y es el que destraba la mañana. Con el equipaje ya en el vehículo, el traslado sale <b>directo desde el pukará</b> y los 24 minutos entre Quitor y las 10:24 dejan de ser un problema.</span>
+            </div>
+            <span class="badge b-x">Nuevo</span>
+          </div>
+
+          <div class="blk tourevo">
+            <div class="hh">08:30<i>10:00</i></div>
+            <div>
+              <div class="tt">Pukará de Quitor · guiado</div>
+              <span class="nn">Hora y media. El guiado está cotizado a dos horas: confirmar si el recorrido entra, o si prefieren arrancar 08:15.</span>
+            </div>
+            <span class="badge b-ok">Sin cambio</span>
+          </div>
+
+          <div class="blk tourevo">
+            <div class="hh">10:24<i>11:44</i></div>
+            <div>
+              <div class="tt">Traslado a Calama</div>
+              <span class="nn">Sale desde el pukará, no desde el hotel. Llega 11:44 para el vuelo de las 13:44.</span>
+            </div>
+            <span class="badge b-ok">Sin cambio</span>
+          </div>
+
+          <div class="blk tercero">
+            <div class="hh">13:44<i>15:52</i></div>
+            <div>
+              <div class="tt">Vuelo Calama → Santiago · LATAM</div>
+              
+            </div>
+            <span class="badge b-ok">Sin cambio</span>
+          </div>
+
+          <div class="blk tercero">
+            <div class="hh">20:00<i>23:45</i></div>
+            <div>
+              <div class="tt">Check-in internacional en Santiago</div>
+              
+            </div>
+            <span class="badge b-ok">Sin cambio</span>
+          </div>
+
+          <div class="blk tercero">
+            <div class="hh">23:45</div>
+            <div>
+              <div class="tt">Vuelo Santiago → Dallas · AA940</div>
+              
+            </div>
+            <span class="badge b-ok">Sin cambio</span>
+          </div>
+        </div>
+      </article>
+        </div>
+      </section>
+
+      <section>
+        <p class="label">Lo que necesitamos que confirmen</p>
+        <p class="lede">En orden de urgencia. Las dos primeras condicionan el armado completo.</p>
+        <ol class="qs">
+          <li><span style="display:block"><b>Disponibilidad y recargo del 24 y 25 de diciembre.</b><span>Nochebuena y Navidad, con el full day del altiplano el 25. Es lo primero que necesitamos cerrar: si el 25 no hay operación, hay que rearmar el viaje entero.</span></span></li>
+          <li><span style="display:block"><b>¿Pueden operar Cejar el 23 de 13:30 a 16:30, en versión de 3 horas?</b><span>Sin la espera del atardecer en Tebenquiche. Si necesitan las 4 horas cotizadas, avísennos: la única forma de darlas es correr el Valle de la Luna de ese día, que ya está visto con el cliente.</span></span></li>
+          <li><span style="display:block"><b>¿Pueden correr el Valle de la Muerte al 24 de 15:30 a 17:30?</b><span>¿El sandboard funciona a esa hora o recomiendan otra franja?</span></span></li>
+          <li><span style="display:block"><b>Cuadriciclos: ¿los operan ustedes?</b><span>El cliente los pidió como alternativa al sandboard. El sandboard está cotizado; los cuadriciclos no. Si no los operan, ¿con quién se coordinan?</span></span></li>
+          <li><span style="display:block"><b>Astronomía del 24: la luna está llena.</b><span>La noche del 24 la luna va cerca del 99% iluminada, y ninguna otra noche del viaje es mejor — del 22 al 26 va entre 92% y 100%. ¿Cómo lo manejan en un privado? ¿Vale la pena igual, orientándolo a luna y planetas?</span></span></li>
+          <li><span style="display:block"><b>Recogida de la astronomía en el restaurante a las 22:10.</b><span>La cena de Nochebuena termina a las 22:00 y el tour arranca 22:15. Nos confirman el punto exacto.</span></span></li>
+          <li><span style="display:block"><b>Valle de la Luna del 23 arrancando a las 17:30.</b><span>¿Alcanza para el circuito off circuit por el Vallecito, que se hace caminando? Es el que está cotizado.</span></span></li>
+          <li><span style="display:block"><b>Full day del 25: alcance y entradas.</b><span>Entra Chaxa y salen Tuyajto y las protoaldeas respecto de lo cotizado. ¿Cómo queda el valor y qué entradas hay que comprar por adelantado?</span></span></li>
+          <li><span style="display:block"><b>Quitor el 26 en hora y media.</b><span>Está cotizado a dos horas. ¿Entra el recorrido guiado en 08:30–10:00, o mejor arrancamos 08:15?</span></span></li>
+          <li><span style="display:block"><b>Tarifas para 4 pasajeros y vehículo del full day.</b><span>Las alternativas de trekking venían cotizadas como mínimo de grupo para 2. Y para el full day al altiplano, con 4 pasajeros más guía-conductor y equipaje, ¿qué vehículo asignan?</span></span></li>
+        </ol>
+      </section>
+
+      <div class="cta">
+        <p class="lead">Quedamos atentos para cerrar horarios y bloquear los cupos.</p>
+      </div>
+
+    </div>
+
+    <footer class="foot">
+      <div class="who"><b>Tourevo</b> <span>· Private experiences</span></div>
+      <div class="links">info@tourevo.cl · tourevo.cl</div>
+    </footer>
+  </article>
+</div>
+<p class="legend">Itinerario propuesto sobre la cotización COT-2026-0160 · Tourevo</p>

@@ -14,6 +14,7 @@
 | `Tourevo-COT-2026-0160-Segar-ES.pdf` · `-EN.pdf` | Cotización, 7 páginas |
 | `Tourevo-COT-2026-0160-Segar-Dias-y-horarios-ES.pdf` · `-EN.pdf` | Comparativo contra el itinerario del sistema Tourevo, 5 páginas |
 | `Tourevo-COT-2026-0160-Segar-Itinerario-propuesto-ES.pdf` · `-EN.pdf` | Itinerario propuesto para mandarle al operador, 4 páginas |
+| `Tourevo-COT-2026-0160-Segar-Itinerario-y-diferencias.xlsx` | El mismo itinerario en el formato del export del cliente, con columnas de diferencias y correcciones. 4 hojas |
 
 ---
 
@@ -110,6 +111,41 @@ en un tour astronómico privado con esa luna, o se reorienta a luna y planetas o
 no vale la pena. Es el tipo de cosa que conviene que el cliente sepa antes y no
 después.
 
+## Planilla para el cliente
+
+`build-excel.py` genera el .xlsx en el mismo formato del export que manda el
+cliente — Fecha, Región, Destino, Inicio, Fin, Tipo, Servicio, Pax, Estado — y
+le agrega cinco columnas: **Opera, Cambio, Cómo estaba, Diferencia y corrección,
+Nota del itinerario y Respuesta**. Las notas del export del cliente van en su
+columna y cada una tiene su respuesta al lado.
+
+Cuatro hojas: el itinerario (24 bloques, 19 sin cambio · 2 movidos · 3 nuevos),
+las 12 preguntas al operador ordenadas por urgencia, los 9 servicios cotizados
+contra el sistema con sus valores, y una hoja de leyenda con el resumen por
+`COUNTIF` y de dónde sale cada dato.
+
+Las respuestas que quedaron escritas en la planilla, por si hay que repetirlas:
+
+- **«Can we add Rainbow Valley»** → no en el día de Piedras Rojas: sureste contra
+  noroeste. Media jornada propia; el único hueco es el 24 AM, donde está Puritama.
+- **«Can Pukara be visited between 3:30 - 8pm on the 23rd. Self guided?»** → sí se
+  puede por cuenta propia, pero no conviene, y en el 23 no cabe: el Valle de la
+  Luna toma 17:30–20:45. Queda el 26 a las 08:30 como ya está en el sistema.
+- **«Baltinache / Ver si es mejor en horario AM o PM»** → Baltinache no es Cejar.
+  El único hueco libre del 23 es la tarde, así que si reemplaza a Cejar va PM.
+  Para hacerlo AM habría que sacar la aclimatación.
+- **«26 Free»** → el 26 no está libre: Quitor 08:30–10:00, traslado 10:24–11:44 y
+  vuelo 13:44.
+
+Un detalle que apareció al cruzar: el export dice que el traslado del 22 termina
+**19:35** y el sistema dice **19:15**. Se tomó el del sistema, que calza con el
+check-in de las 19:35.
+
+**Nota de entorno:** el contenedor traía `libreoffice-core` pero no
+`libreoffice-calc`, así que ninguna planilla se podía abrir ni recalcular. Hay
+que instalarlo (`apt-get install -y libreoffice-calc`) antes de correr
+`scripts/recalc.py`.
+
 ## Pendientes
 
 0. **La cotización todavía refleja los días del operador, no los del sistema.** Se dejó así a propósito: el comparativo es el puente. Una vez resueltos Cejar, sandboard-vs-quads y el horario del Valle de la Muerte, se realinea `contenido.mjs` y se regenera.
@@ -125,6 +161,7 @@ cd cotizaciones/segar-san-pedro-atacama
 node build.mjs               # cotización: HTML + PDF, ES y EN
 node build-diferencias.mjs   # días y horarios: HTML + PDF, ES y EN
 node build-itinerario.mjs    # itinerario propuesto: HTML + PDF, ES y EN
+python3 build-excel.py       # planilla en el formato del export del cliente
 # --solo-html en cualquiera de los dos si no hay Chromium a mano
 ```
 
@@ -141,6 +178,7 @@ idiomas. Los `.html` son generados — no editarlos a mano.
 | `build.mjs` | Cotización |
 | `build-diferencias.mjs` | Comparativo de días y horarios contra el sistema, con los choques |
 | `build-itinerario.mjs` | Itinerario propuesto para el operador, con las preguntas a confirmar |
+| `build-excel.py` | Planilla .xlsx. Lee los precios de `contenido.mjs` vía node, así que no duplica montos |
 
 Esta carpeta va en `cotizaciones/`, no en `propuestas/`: ese árbol se movió a
 `tourevo-cl/website/propuestas/` y el workflow de FTP publica cualquier cosa que

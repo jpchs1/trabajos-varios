@@ -102,75 +102,112 @@ def poner(ws, fila, valores, fill=None, fuente=None):
 def sin_html(t):
     return t.replace('<b>', '').replace('</b>', '') if t else ''
 
-DIA_ES = ['lunes','martes','miércoles','jueves','viernes','sábado','domingo']
-def dia_nombre(iso):
+DIAS_SEM = {
+    'es': ['lunes', 'martes', 'miércoles', 'jueves', 'viernes', 'sábado', 'domingo'],
+    'en': ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'],
+}
+def dia_nombre(iso, l='es'):
     y, m, d = (int(x) for x in iso.split('-'))
-    return f'{DIA_ES[date(y, m, d).weekday()]} {d}'
+    return f'{DIAS_SEM[l][date(y, m, d).weekday()]} {d}'
 
-OPERA = {'tourevo': 'Tourevo', 'cliente': 'Cliente', 'libre': 'Libre'}
+OPERA = {
+    'es': {'tourevo': 'Tourevo', 'cliente': 'Cliente', 'libre': 'Libre'},
+    'en': {'tourevo': 'Tourevo', 'cliente': 'Client', 'libre': 'Free'},
+}
+
+# La misma hoja, en los dos idiomas. Los textos del itinerario ya vienen
+# bilingües de itinerario.mjs; acá sólo van los rótulos de la planilla.
+TXT = {
+  'es': {
+    'hoja': 'Itinerario',
+    'titulo': f'{CLIENTE["nombre"]} · San Pedro de Atacama · 22 al 26 de diciembre de 2026 · {PAX} pasajeros',
+    'instr': ('PARA EL OPERADOR: complete sólo las columnas I («¿Factible?») y J («Comentarios»), en amarillo. '
+              'El resto es referencia. En «¿Factible?» ponga Sí, No o Con cambios. '
+              'La columna Nº numera los {n} servicios que operamos nosotros: las filas sin número son '
+              'vuelos, comidas o tiempo libre. Las filas en ámbar cambiaron o necesitan una decisión.'),
+    'cols': [('Nº',6),('Fecha',11),('Día',13),('Inicio',8),('Fin',8),('Servicio',52),('Opera',10),
+             ('Qué necesitamos confirmar',60),('¿Factible?',13),('Comentarios del operador',40)],
+    'ejemplo': ['0','2026-12-00','ejemplo','00:00','00:00','EJEMPLO — borre esta fila','Tourevo',
+                'Así se ve una línea llena.','Con cambios','Se puede, pero salida 10:00.'],
+  },
+  'en': {
+    'hoja': 'Itinerary',
+    'titulo': f'{CLIENTE["nombre"]} · San Pedro de Atacama · 22 to 26 December 2026 · {PAX} travellers',
+    'instr': ('FOR THE OPERATOR: fill in only columns I (“Feasible?”) and J (“Comments”), in yellow. '
+              'Everything else is for reference. Under “Feasible?” put Yes, No or With changes. '
+              'Column Nº numbers the {n} services we operate: rows without a number are flights, meals '
+              'or free time. Rows in amber changed or need a decision.'),
+    'cols': [('Nº',6),('Date',11),('Day',13),('Start',8),('End',8),('Service',52),('Operated by',12),
+             ('What we need confirmed',60),('Feasible?',13),('Operator comments',40)],
+    'ejemplo': ['0','2026-12-00','example','00:00','00:00','EXAMPLE — delete this row','Tourevo',
+                'This is what a filled line looks like.','With changes','Doable, but departure at 10:00.'],
+  },
+}
 
 wb = Workbook()
 
-# --- Hoja 1: itinerario, con dos columnas para que el operador responda -------
+# --- Hojas 1 y 2: el itinerario, en español y en inglés -----------------------
+# La misma tabla dos veces. Los textos de cada bloque vienen bilingües de
+# itinerario.mjs, así que las dos hojas no pueden decir cosas distintas.
 
-ws = wb.active
-ws.title = 'Itinerario'
-ws['A1'] = f'{CLIENTE["nombre"]} · San Pedro de Atacama · 22 al 26 de diciembre de 2026 · {PAX} pasajeros'
-ws['A1'].font = Font(name=F, size=13, bold=True, color=TINTA)
 N_SERVICIOS = sum(1 for d in DIAS for b in d['blks'] if b['tipo'] == 'tourevo')
-ws['A2'] = ('PARA EL OPERADOR: complete sólo las columnas I («¿Factible?») y J («Comentarios»), en amarillo. '
-            'El resto es referencia. En «¿Factible?» ponga Sí, No o Con cambios. '
-            f'La columna Nº numera los {N_SERVICIOS} servicios que operamos nosotros: las filas sin número son '
-            'vuelos, comidas o tiempo libre. Las filas en ámbar cambiaron o necesitan una decisión.')
-ws['A2'].font = Font(name=F, size=10, color=AVISO)
-ws.merge_cells('A1:J1')
-ws.merge_cells('A2:J2')
-ws.row_dimensions[2].height = 16
-
-COLS = [('Nº',6),('Fecha',11),('Día',13),('Inicio',8),('Fin',8),('Servicio',52),('Opera',10),
-        ('Qué necesitamos confirmar',60),('¿Factible?',13),('Comentarios del operador',40)]
-hoja(ws, COLS, 4)
-
-fila = poner(ws, 5, ['0','2026-12-00','ejemplo','00:00','00:00','EJEMPLO — borre esta fila','Tourevo',
-                     'Así se ve una línea llena.','Con cambios','Se puede, pero salida 10:00.'],
-             fill=fill_am, fuente=td_it)
-
 FILL = {'movido': fill_amb, 'nuevo': fill_verd, 'decidir': fill_amb}
 fill_num = PatternFill('solid', fgColor=CABECERA)
-primera = fila
-nro = 0
-for d in DIAS:
-    for b in d['blks']:
-        es_nuestro = b['tipo'] == 'tourevo'
-        if es_nuestro:
-            nro += 1
-            for i in b.get('cot', []):
-                CUANDO[i] = f"{dia_nombre(d['f'])} · {b['h']} – {b.get('f2') or ''}"
-        f = FILL.get(b.get('e')) if (es_nuestro or b.get('e') == 'decidir') else fill_gris
-        servicio = b['t']['es']
-        if b.get('n'):
-            servicio += '\n' + sin_html(b['n']['es'])
-        fila = poner(ws, fila, [
-            nro if es_nuestro else None, d['f'], dia_nombre(d['f']), b['h'], b.get('f2') or '',
-            servicio, OPERA[b['tipo']], sin_html(b.get('conf', {}).get('es', '')), None, None,
-        ], fill=f, fuente=td if es_nuestro else td_sv)
-        r = fila - 1
-        ws.cell(row=r, column=6).font = td_b if es_nuestro else td_sv
-        for col in (4, 5, 7):
-            ws.cell(row=r, column=col).alignment = centro
-        for col in (9, 10):
-            ws.cell(row=r, column=col).fill = fill_am
-        # El número va en teal sólido: los ocho servicios nuestros se cuentan de
-        # un vistazo y no hay forma de saltarse uno.
-        c = ws.cell(row=r, column=1)
-        c.alignment = Alignment(vertical='center', horizontal='center')
-        if es_nuestro:
-            c.fill, c.font = fill_num, Font(name=F, size=11, bold=True, color='FFFFFFFF')
-ULTIMA = fila - 1
-ws.auto_filter.ref = f'A4:J{ULTIMA}'
-TOTAL_SERVICIOS = nro
 
-# --- Hoja 2: preguntas transversales ------------------------------------------
+
+def hoja_itinerario(ws, l):
+    """Escribe el itinerario completo en la hoja `ws`, en el idioma `l`."""
+    t = TXT[l]
+    ws.title = t['hoja']
+    ws['A1'] = t['titulo']
+    ws['A1'].font = Font(name=F, size=13, bold=True, color=TINTA)
+    ws['A2'] = t['instr'].format(n=N_SERVICIOS)
+    ws['A2'].font = Font(name=F, size=10, color=AVISO)
+    ws.merge_cells('A1:J1')
+    ws.merge_cells('A2:J2')
+    ws.row_dimensions[2].height = 16
+    hoja(ws, t['cols'], 4)
+
+    fila = poner(ws, 5, t['ejemplo'], fill=fill_am, fuente=td_it)
+    nro = 0
+    for d in DIAS:
+        for b in d['blks']:
+            es_nuestro = b['tipo'] == 'tourevo'
+            if es_nuestro:
+                nro += 1
+                if l == 'es':
+                    for i in b.get('cot', []):
+                        CUANDO[i] = f"{dia_nombre(d['f'])} · {b['h']} – {b.get('f2') or ''}"
+            f = FILL.get(b.get('e')) if (es_nuestro or b.get('e') == 'decidir') else fill_gris
+            servicio = b['t'][l]
+            if b.get('n'):
+                servicio += '\n' + sin_html(b['n'][l])
+            fila = poner(ws, fila, [
+                nro if es_nuestro else None, d['f'], dia_nombre(d['f'], l), b['h'], b.get('f2') or '',
+                servicio, OPERA[l][b['tipo']], sin_html(b.get('conf', {}).get(l, '')), None, None,
+            ], fill=f, fuente=td if es_nuestro else td_sv)
+            r = fila - 1
+            ws.cell(row=r, column=6).font = td_b if es_nuestro else td_sv
+            for col in (4, 5, 7):
+                ws.cell(row=r, column=col).alignment = centro
+            for col in (9, 10):
+                ws.cell(row=r, column=col).fill = fill_am
+            # El número va en teal sólido: los servicios nuestros se cuentan de
+            # un vistazo y no hay forma de saltarse uno.
+            c = ws.cell(row=r, column=1)
+            c.alignment = Alignment(vertical='center', horizontal='center')
+            if es_nuestro:
+                c.fill, c.font = fill_num, Font(name=F, size=11, bold=True, color='FFFFFFFF')
+    ultima = fila - 1
+    ws.auto_filter.ref = f'A4:J{ultima}'
+    return ultima, nro
+
+
+ws = wb.active
+ULTIMA, TOTAL_SERVICIOS = hoja_itinerario(ws, 'es')
+hoja_itinerario(wb.create_sheet(), 'en')
+
+# --- Hoja 3: preguntas transversales ------------------------------------------
 
 ws2 = wb.create_sheet('Preguntas')
 ws2['A1'] = 'Preguntas que no cuelgan de una línea del itinerario'
@@ -186,7 +223,7 @@ for i, q in enumerate(GENERALES, start=1):
     ws2.cell(row=fila-1, column=2).font = td_b
     ws2.cell(row=fila-1, column=4).fill = fill_am
 
-# --- Hoja 3: referencia -------------------------------------------------------
+# --- Hoja 4: referencia -------------------------------------------------------
 
 ws3 = wb.create_sheet('Referencia')
 ws3.column_dimensions['A'].width = 6
@@ -274,5 +311,5 @@ for k, v in FUENTES:
 
 SALIDA = AQUI / f'Tourevo-{DOC["numero"]}-{CLIENTE["nombre"]}-Itinerario-para-operador.xlsx'
 wb.save(SALIDA)
-print(f'✓ {SALIDA.name} · {ULTIMA-primera+1} bloques · {TOTAL_SERVICIOS} servicios nuestros · '
+print(f'✓ {SALIDA.name} · {ULTIMA-5} bloques · {TOTAL_SERVICIOS} servicios nuestros · '
       f'{len(PROGRAMA)} ítems cotizados, todos ubicados · {len(GENERALES)} preguntas')

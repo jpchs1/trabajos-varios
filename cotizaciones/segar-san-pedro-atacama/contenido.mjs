@@ -29,7 +29,7 @@ export const programa = [
     id: 'transfer-in',
     fecha: '2026-12-22',
     franja: 'transfer',
-    horario: { es: 'Horario a coordinar', en: 'Time to be confirmed' },
+    horario: { es: '18:15 – 20:00 hrs.', en: '18:15 – 20:00 hrs' },
     titulo: {
       es: 'Traslado de llegada · Aeropuerto El Loa → San Pedro',
       en: 'Arrival transfer · El Loa Airport → San Pedro',
@@ -41,10 +41,11 @@ export const programa = [
     etiqueta: { es: 'Servicio privado', en: 'Private service' },
     valor: 30000,
     entradas: 0,
+    entradasAnticipadas: true,
   },
   {
     id: 'puritama',
-    fecha: '2026-12-23',
+    fecha: '2026-12-24',
     franja: 'am',
     horario: { es: '09:30 – 13:30 hrs.', en: '09:30 – 13:30 hrs' },
     titulo: { es: 'Termas de Puritama', en: 'Puritama Hot Springs' },
@@ -55,12 +56,13 @@ export const programa = [
     incluye: { es: 'Pisco sour y snack', en: 'Pisco sour and snack' },
     valor: 75000,
     entradas: 35000,
+    entradasAnticipadas: true,
   },
   {
     id: 'luna-sur',
-    fecha: '2026-12-23',
+    fecha: '2026-12-24',
     franja: 'pm',
-    horario: { es: '16:30 – 20:30 hrs.', en: '16:30 – 20:30 hrs' },
+    horario: { es: '17:00 – 21:00 hrs.', en: '17:00 – 21:00 hrs' },
     titulo: { es: 'Valle de la Luna Sur', en: 'Valle de la Luna South' },
     texto: {
       es: 'Nos adentraremos por la Cordillera de la Sal hasta llegar al Vallecito, la entrada off circuit del Valle de la Luna, donde conoceremos el fascinante Río de Sal y disfrutaremos de una vista panorámica desde las cornisas del área. Las recorreremos caminando entre antiguos piques mineros de sal para terminar en un bus abandonado en medio de la cordillera, testigo del ajetreado pasado minero de la zona.',
@@ -69,6 +71,7 @@ export const programa = [
     incluye: { es: 'Snack', en: 'Snack' },
     valor: 75000,
     entradas: 0,
+    entradasAnticipadas: true,
     entradasNota: {
       es: 'Hoy este circuito no paga entrada a parques. Es posible que sí la cobren a la fecha del viaje: si ocurre, se informa antes y se cobra al valor vigente.',
       en: 'This circuit currently charges no park fee. One may be in force by your travel date: if so, we will tell you beforehand and charge it at the rate then published.',
@@ -88,12 +91,13 @@ export const programa = [
     etiqueta: { es: 'Compartido · coordinado por nosotros', en: 'Shared · coordinated by us' },
     valor: 40000,
     entradas: 0,
+    entradasAnticipadas: true,
   },
   {
     id: 'marte-sandboard',
     fecha: '2026-12-24',
-    franja: 'am',
-    horario: { es: '09:30 – 13:30 hrs.', en: '09:30 – 13:30 hrs' },
+    franja: 'pm',
+    horario: { es: '14:30 – 16:30 hrs.', en: '14:30 – 16:30 hrs' },
     titulo: { es: 'Valle de Marte + Sandboard', en: 'Valle de Marte + Sandboarding' },
     texto: {
       es: 'Recorreremos los rincones y extraordinarios pasajes del Valle de Marte hasta encontrar sus dunas, en las que podrán deslizarse sobre tablas especialmente adecuadas para disfrutar de este deporte.',
@@ -102,11 +106,12 @@ export const programa = [
     incluye: { es: 'Snack y equipo completo de sandboard', en: 'Snack and full sandboard equipment' },
     valor: 110000,
     entradas: 7500,
+    entradasAnticipadas: true,
     reemplazable: true,
   },
   {
     id: 'cejar',
-    fecha: '2026-12-24',
+    fecha: '2026-12-23',
     franja: 'pm',
     horario: { es: '15:30 – 19:30 hrs.', en: '15:30 – 19:30 hrs' },
     titulo: {
@@ -126,25 +131,25 @@ export const programa = [
     id: 'piedras-rojas',
     fecha: '2026-12-25',
     franja: 'fullday',
-    horario: { es: '10:00 – 18:00 hrs.', en: '10:00 – 18:00 hrs' },
+    horario: { es: '08:00 – 18:00 hrs.', en: '08:00 – 18:00 hrs' },
     titulo: {
-      es: 'Piedras Rojas + Laguna Tuyajto + Lagunas Altiplánicas + Protoaldeas + Pueblos',
-      en: 'Piedras Rojas + Tuyajto Lagoon + Altiplanic Lagoons + Proto-villages + Andean towns',
+      es: 'Altiplano · Laguna Chaxa, Toconao, Miscanti y Piedras Rojas',
+      en: 'Altiplano · Laguna Chaxa, Toconao, Miscanti and Piedras Rojas',
     },
     texto: {
       es: 'En este tour se conoce el sureste del salar de Atacama por su borde este, incluyendo diferentes lagunas y salares altoandinos, entre ellos las lagunas de Miscanti y Miñiques, así como refugios milenarios que sirvieron a cazadores y recolectores: incansables nómades que, antes de lograr la domesticación, siguieron a los animales necesarios para su supervivencia. Además pasaremos por el interior de los pueblos de Socaire y Toconao.',
       en: 'This tour takes in the south-east of the Atacama salt flat along its eastern rim, including several high-Andean lagoons and salt flats — among them Miscanti and Miñiques — as well as millennia-old shelters used by hunter-gatherers: tireless nomads who, before domestication, followed the animals they depended on. We also drive through the villages of Socaire and Toconao.',
     },
     incluye: { es: 'Almuerzo en hábitat natural y snack', en: 'Lunch in a natural setting and snack' },
-    valor: 210000,
+    valor: 270000,   // 25 dic con Chaxa, confirmado por el operador (era 210.000)
     entradas: 15000,
-    entradasAnticipadas: true,
+    entradasAnticipadas: true, // + la entrada de Chaxa, monto por confirmar
   },
   {
     id: 'arqueologico',
-    fecha: '2026-12-26',
+    fecha: '2026-12-23',
     franja: 'am',
-    horario: { es: '08:00 – 10:00 hrs.', en: '08:00 – 10:00 hrs' },
+    horario: { es: '09:30 – 11:30 hrs.', en: '09:30 – 11:30 hrs' },
     titulo: { es: 'Tour arqueológico · Pukará de Quitor', en: 'Archaeological tour · Pukará de Quitor' },
     texto: {
       es: 'Este tour permite conocer el clásico Pukará de Quitor, hito de la conquista española en la zona y vestigio histórico y cultural inconmensurable, destacando su importancia como la última resistencia atacameña contra la invasión hispánica.',
@@ -159,7 +164,7 @@ export const programa = [
     id: 'transfer-out',
     fecha: '2026-12-26',
     franja: 'transfer',
-    horario: { es: 'Horario a confirmar', en: 'Time to be confirmed' },
+    horario: { es: '10:00 – 11:45 hrs.', en: '10:00 – 11:45 hrs' },
     titulo: {
       es: 'Traslado de salida · San Pedro → Aeropuerto El Loa',
       en: 'Departure transfer · San Pedro → El Loa Airport',
@@ -171,6 +176,7 @@ export const programa = [
     etiqueta: { es: 'Servicio privado', en: 'Private service' },
     valor: 30000,
     entradas: 0,
+    entradasAnticipadas: true,
   },
 ];
 
@@ -199,6 +205,7 @@ export const alternativas = [
     },
     valor: 210000,
     entradas: 0,
+    entradasAnticipadas: true,
     base: 2,
     ficha: { altMin: 2850, altMax: 2940, distancia: 3 },
   },
@@ -220,6 +227,7 @@ export const alternativas = [
     },
     valor: 270000,
     entradas: 12000,
+    entradasAnticipadas: true,
     base: 2,
     ficha: { altMin: 2570, altMax: 2730, distancia: 7.5 },
   },
@@ -241,6 +249,7 @@ export const alternativas = [
     },
     valor: 100000,
     entradas: 5000,
+    entradasAnticipadas: true,
     base: 1,
   },
 ];

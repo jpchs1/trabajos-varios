@@ -117,9 +117,11 @@ ws = wb.active
 ws.title = 'Itinerario'
 ws['A1'] = f'{CLIENTE["nombre"]} · San Pedro de Atacama · 22 al 26 de diciembre de 2026 · {PAX} pasajeros'
 ws['A1'].font = Font(name=F, size=13, bold=True, color=TINTA)
+N_SERVICIOS = sum(1 for d in DIAS for b in d['blks'] if b['tipo'] == 'tourevo')
 ws['A2'] = ('PARA EL OPERADOR: complete sólo las columnas I («¿Factible?») y J («Comentarios»), en amarillo. '
             'El resto es referencia. En «¿Factible?» ponga Sí, No o Con cambios. '
-            'La columna Nº numera los 8 servicios que operamos nosotros: las filas sin número son vuelos, comidas o tiempo libre.')
+            f'La columna Nº numera los {N_SERVICIOS} servicios que operamos nosotros: las filas sin número son '
+            'vuelos, comidas o tiempo libre. Las filas en ámbar cambiaron o necesitan una decisión.')
 ws['A2'].font = Font(name=F, size=10, color=AVISO)
 ws.merge_cells('A1:J1')
 ws.merge_cells('A2:J2')
@@ -133,7 +135,7 @@ fila = poner(ws, 5, ['0','2026-12-00','ejemplo','00:00','00:00','EJEMPLO — bor
                      'Así se ve una línea llena.','Con cambios','Se puede, pero salida 10:00.'],
              fill=fill_am, fuente=td_it)
 
-FILL = {'movido': fill_amb, 'nuevo': fill_verd}
+FILL = {'movido': fill_amb, 'nuevo': fill_verd, 'decidir': fill_amb}
 fill_num = PatternFill('solid', fgColor=CABECERA)
 primera = fila
 nro = 0
@@ -144,7 +146,7 @@ for d in DIAS:
             nro += 1
             for i in b.get('cot', []):
                 CUANDO[i] = f"{dia_nombre(d['f'])} · {b['h']} – {b.get('f2') or ''}"
-        f = FILL.get(b.get('e')) if es_nuestro else fill_gris
+        f = FILL.get(b.get('e')) if (es_nuestro or b.get('e') == 'decidir') else fill_gris
         servicio = b['t']['es']
         if b.get('n'):
             servicio += '\n' + sin_html(b['n']['es'])

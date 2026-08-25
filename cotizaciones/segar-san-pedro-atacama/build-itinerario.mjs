@@ -23,6 +23,7 @@ const E = {
   igual:  { c: 'b-ok',  t: { es: 'Sin cambio', en: 'Unchanged' } },
   movido: { c: 'b-chg', t: { es: 'Movido', en: 'Moved' } },
   nuevo:  { c: 'b-x',   t: { es: 'Nuevo', en: 'New' } },
+  decidir:{ c: 'b-dec', t: { es: 'Decide Segar', en: 'Segar decides' } },
 };
 
 // --- Textos ------------------------------------------------------------------

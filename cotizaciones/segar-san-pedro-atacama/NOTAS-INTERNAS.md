@@ -111,63 +111,62 @@ en un tour astronómico privado con esa luna, o se reorienta a luna y planetas o
 no vale la pena. Es el tipo de cosa que conviene que el cliente sepa antes y no
 después.
 
-## Itinerario final propuesto
+## Itinerario final — con lo conversado con Francisco y con Segar (24 ago)
 
-`itinerario.mjs` es la fuente única: la usan el PDF (ES/EN) y la planilla, así
-que los horarios no pueden quedar distintos entre documentos. **19 bloques, 8
-servicios nuestros, ningún día con más de dos salidas.**
+**20 bloques, 9 servicios nuestros, los 9 ítems cotizados ubicados.**
 
 | Día | Programa |
 |---|---|
-| Mar 22 | Vuelo Santiago → Calama 15:33 · traslado 18:15 – 19:15 · llegada al hotel 19:15, noche libre |
-| Mié 23 | **Cejar 10:15 – 14:15** · tarde libre · Valle de la Luna 17:30 – 20:45 |
-| Jue 24 | Puritama 09:30 – 13:30 · **Quitor + Valle de la Muerte 14:30 – 18:30** · cena 20:00 · astronomía 22:15 |
-| Vie 25 | Altiplano 08:00 – 18:00 · cena 20:00 |
-| Sáb 26 | **Libre.** Check-out, traslado 10:24 – 11:44, vuelo 13:44 |
+| Mar 22 | Vuelo 15:33 – 17:41 · **traslado 18:15 – 20:00** · llegada al hotel, noche libre |
+| Mié 23 | **Quitor 09:30 – 11:30** · **Cejar 15:30 – 19:30** · **astronómico compartido 21:00 – 23:00** |
+| Jue 24 | **Puritama 09:30 – 13:30** · **sandboard 14:30 – 16:30** · **Vallecito 17:00 – 21:00** · cena 21:30 |
+| Vie 25 | **Altiplano con Chaxa 08:00 – 18:00** · cena 20:00 |
+| Sáb 26 | Libre · **traslado 10:00 – 11:45** · vuelo 13:44 |
 
-Las cuatro decisiones que hubo que tomar:
+### Lo que impuso el operador
 
-1. **Cejar reemplaza la aclimatación del 23.** Salida 10:15 para estar a las 10:50
-   en el complejo, como se pidió. Ordena además la altura: 2.300 m el 23,
-   3.500 m el 24 en Puritama, sobre 4.000 m el 25 en Miscanti. El complejo cierra
-   los martes y el único martes del viaje es el 22, día de llegada sin excursiones.
-2. **Quitor y el Valle de la Muerte van juntos la tarde del 24.** Están a quince
-   minutos uno del otro, es un vehículo en vez de dos salidas, y es lo que el
-   cliente ya había decidido. El sandboard queda al final, 16:35 – 18:00, con la
-   luz y la temperatura de la tarde.
-3. **El 26 queda libre**, que era el pedido. Sacar Quitor de ahí es justamente lo
-   que lo permite.
-4. **El Valle de la Luna del 23 no se toca.** Con Cejar por la mañana, la tarde
-   queda con tres horas de margen y el atardecer sigue en su hora.
+1. **Cejar sólo PM.** Las agencias no entran en la mañana, así que la salida de las 10:15 no existía. Va el 23, 15:30 – 19:30.
+2. **El Vallecito sale 17:00 como máximo**, no 17:30. Queda 17:00 – 21:00 y por eso **ya no cabe el mismo día que Cejar**: se cruzan. Cejar se queda el 23 (deja hora y media antes del astronómico) y el Vallecito pasa al 24.
+3. **Traslados de 1 h 45.** Cambia las dos puntas: llegada al hotel 20:00 el 22, salida 10:00 el 26.
+4. **Quitor y sandboard son excursiones distintas** aunque vayan seguidas. Acá quedaron en días distintos igual.
+5. **Altiplano con Chaxa: CLP 270.000 p/p el 25** (eran 210.000). El operador **no lo recomienda**, alarga mucho el día. Falta el monto de la entrada de Chaxa.
+6. **Astronómico privado el 24: CLP 600.000 el grupo.** Se descarta: vuelve el compartido cotizado, CLP 40.000 p/p, y al 23, que es la noche que pidió Segar.
+7. **Todas las entradas por adelantado**, incluidas Quitor y Marte, que las compra el operador.
+8. Las alternativas con «Valor Mínimo» eran para grupos de menos de 3 pax: **no aplican con 4** y además quedaron fuera de la elección.
 
-El Valle del Arcoíris no cabe en ninguna parte con el 26 libre. Queda como
-pregunta al operador para que el cliente decida con el dato a la vista, no como
-algo que se descartó en silencio.
+### Lo que definió Segar
 
-## Planilla para el operador
+- Astronomía el 23: sí.
+- Cejar en PM: OK.
+- Sandboard el 24: OK.
+- **Cena sin traslado nuestro:** usan el shuttle del hotel.
 
-`build-excel.py` genera el .xlsx leyendo el itinerario de `itinerario.mjs` y los
-precios de `contenido.mjs`. Tres hojas:
+### Lo único que queda por decidir
 
-- **Itinerario** — una línea por bloque. La columna **Nº** numera en teal los
-  ocho servicios que operamos nosotros, así que se cuentan de un vistazo y no
-  hay forma de saltarse uno; las filas sin número son vuelos, comidas o tiempo
-  libre. Después, «Qué necesitamos confirmar» y dos columnas en amarillo para
-  que el operador responda: **¿Factible?** y **Comentarios**. Trae una fila de
-  ejemplo que hay que borrar.
-- **Preguntas** — las cuatro transversales, con su columna de respuesta.
-- **Referencia** — qué cambió, los nueve ítems cotizados con **dónde cae cada
-  uno en el itinerario**, y de dónde sale cada dato.
+**La hora de la cena de Nochebuena.** El Vallecito termina 21:00 y la cena estaba a las 20:00. O se corre a las **21:30** —hora normal de Nochebuena en Chile— o el Valle de la Luna no puede ir el 24, y no queda otra tarde donde ponerlo.
+
+### Valores
+
+| | |
+|---|---|
+| Servicios | CLP 785.000 p/p (eran 725.000: +60.000 por Chaxa el 25) |
+| Entradas | CLP 84.500 p/p, **más la entrada de Chaxa que falta** |
+| **Pack por persona** | **CLP 869.500** |
+| Pack para 4 pax | CLP 3.478.000 |
+
+Faltan por confirmar los recargos de Nochebuena en Puritama, sandboard y
+Vallecito. El del 25 ya está dentro de los 270.000.
+
+## Documentos
+
+`itinerario.mjs` es la fuente única del PDF y de la planilla; `contenido.mjs`, la
+de los precios. El comparativo de días y horarios (`build-diferencias.mjs`) se
+eliminó: comparaba la cotización original contra un estado del sistema que ya
+cambió dos veces, y contradecía al itinerario vigente.
 
 `build-excel.py` **falla si algún servicio cotizado no aparece en el itinerario**,
 si aparece dos veces, o si un servicio nuestro se queda sin texto de
-confirmación. Se agregó después de que Puritama quedara con la columna de
-confirmación vacía y pareciera que no estaba en la planilla: estaba, pero sin
-nada que la señalara. Cada bloque de `itinerario.mjs` declara en `cot` qué ítems
-de la cotización cubre, y el build cruza esa lista contra `contenido.mjs`.
-
-El comparativo de días y horarios (`build-diferencias.mjs`) sigue siendo el
-registro de cómo se llegó acá, pero **el plan vigente es este itinerario**.
+confirmación. Cada bloque declara en `cot` qué ítems cubre.
 
 ## Pendientes
 
@@ -199,7 +198,6 @@ idiomas. Los `.html` son generados — no editarlos a mano.
 | `estilos.mjs` | Hoja compartida por los dos documentos, incluida la de impresión |
 | `comun.mjs` | Formato de moneda y fecha, cabecera, pie e impresión a PDF |
 | `build.mjs` | Cotización |
-| `build-diferencias.mjs` | Comparativo de días y horarios contra el sistema, con los choques |
 | `build-itinerario.mjs` | Itinerario propuesto para el operador, con las preguntas a confirmar |
 | `itinerario.mjs` | Itinerario propuesto. Fuente única del PDF y de la planilla |
 | `build-excel.py` | Planilla .xlsx para el operador. Lee itinerario y precios vía node, no duplica nada |

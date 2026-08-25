@@ -275,6 +275,7 @@ export const estilosComparativo = `
   .b-chg { color: var(--summit);      background: color-mix(in srgb, var(--summit) 12%, var(--paper)); border: 1px solid color-mix(in srgb, var(--summit) 30%, var(--line)); }
   .b-x   { color: var(--warn);        background: var(--warn-wash); border: 1px solid var(--warn-line); }
   .b-out { color: var(--ink-faint);   background: var(--glacier-2); border: 1px solid var(--line); }
+  .b-dec { color: #fff; background: var(--warn); border: 1px solid var(--warn); }
 
   /* ---- Comparativo día a día ---- */
   .cmp td { font-size: 13px; }

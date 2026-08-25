@@ -34,6 +34,24 @@ DOC, CLIENTE, PROGRAMA = COT['doc'], COT['cliente'], COT['programa']
 DIAS, CAMBIOS, GENERALES = ITI['dias'], ITI['cambios'], ITI['generales']
 PAX = DOC['pax']
 
+# Ningún servicio cotizado puede quedar fuera del itinerario. Puritama se
+# escapó una vez de la columna de confirmaciones; esto lo hace imposible.
+CUBIERTOS = [i for d in DIAS for b in d['blks'] for i in b.get('cot', [])]
+FALTAN = [s['id'] for s in PROGRAMA if s['id'] not in CUBIERTOS]
+SOBRAN = [i for i in CUBIERTOS if i not in {s['id'] for s in PROGRAMA}]
+REPETIDOS = [i for i in set(CUBIERTOS) if CUBIERTOS.count(i) > 1]
+SIN_CONF = [b['t']['es'] for d in DIAS for b in d['blks'] if b['tipo'] == 'tourevo' and not b.get('conf')]
+if FALTAN or SOBRAN or REPETIDOS or SIN_CONF:
+    raise SystemExit(
+        f'El itinerario no cuadra con la cotización.\n'
+        f'  Servicios cotizados que no aparecen: {FALTAN or "ninguno"}\n'
+        f'  Ids del itinerario que no existen en la cotización: {SOBRAN or "ninguno"}\n'
+        f'  Ids repetidos: {REPETIDOS or "ninguno"}\n'
+        f'  Servicios sin texto de confirmación: {SIN_CONF or "ninguno"}')
+
+# Dónde cae cada servicio cotizado dentro del itinerario.
+CUANDO = {}
+
 # --- Estilos ------------------------------------------------------------------
 
 F = 'Arial'
@@ -99,42 +117,56 @@ ws = wb.active
 ws.title = 'Itinerario'
 ws['A1'] = f'{CLIENTE["nombre"]} · San Pedro de Atacama · 22 al 26 de diciembre de 2026 · {PAX} pasajeros'
 ws['A1'].font = Font(name=F, size=13, bold=True, color=TINTA)
-ws['A2'] = ('PARA EL OPERADOR: complete sólo las columnas H («¿Factible?») e I («Comentarios»), en amarillo. '
-            'El resto es referencia. En «¿Factible?» ponga Sí, No o Con cambios.')
+ws['A2'] = ('PARA EL OPERADOR: complete sólo las columnas I («¿Factible?») y J («Comentarios»), en amarillo. '
+            'El resto es referencia. En «¿Factible?» ponga Sí, No o Con cambios. '
+            'La columna Nº numera los 8 servicios que operamos nosotros: las filas sin número son vuelos, comidas o tiempo libre.')
 ws['A2'].font = Font(name=F, size=10, color=AVISO)
-ws.merge_cells('A1:I1')
-ws.merge_cells('A2:I2')
+ws.merge_cells('A1:J1')
+ws.merge_cells('A2:J2')
 ws.row_dimensions[2].height = 16
 
-COLS = [('Fecha',11),('Día',13),('Inicio',8),('Fin',8),('Servicio',52),('Opera',10),
+COLS = [('Nº',6),('Fecha',11),('Día',13),('Inicio',8),('Fin',8),('Servicio',52),('Opera',10),
         ('Qué necesitamos confirmar',60),('¿Factible?',13),('Comentarios del operador',40)]
 hoja(ws, COLS, 4)
 
-fila = poner(ws, 5, ['2026-12-00','ejemplo','00:00','00:00','EJEMPLO — borre esta fila','Tourevo',
+fila = poner(ws, 5, ['0','2026-12-00','ejemplo','00:00','00:00','EJEMPLO — borre esta fila','Tourevo',
                      'Así se ve una línea llena.','Con cambios','Se puede, pero salida 10:00.'],
              fill=fill_am, fuente=td_it)
 
 FILL = {'movido': fill_amb, 'nuevo': fill_verd}
+fill_num = PatternFill('solid', fgColor=CABECERA)
 primera = fila
+nro = 0
 for d in DIAS:
     for b in d['blks']:
         es_nuestro = b['tipo'] == 'tourevo'
+        if es_nuestro:
+            nro += 1
+            for i in b.get('cot', []):
+                CUANDO[i] = f"{dia_nombre(d['f'])} · {b['h']} – {b.get('f2') or ''}"
         f = FILL.get(b.get('e')) if es_nuestro else fill_gris
         servicio = b['t']['es']
         if b.get('n'):
             servicio += '\n' + sin_html(b['n']['es'])
         fila = poner(ws, fila, [
-            d['f'], dia_nombre(d['f']), b['h'], b.get('f2') or '', servicio,
-            OPERA[b['tipo']], sin_html(b.get('conf', {}).get('es', '')), None, None,
+            nro if es_nuestro else None, d['f'], dia_nombre(d['f']), b['h'], b.get('f2') or '',
+            servicio, OPERA[b['tipo']], sin_html(b.get('conf', {}).get('es', '')), None, None,
         ], fill=f, fuente=td if es_nuestro else td_sv)
         r = fila - 1
-        ws.cell(row=r, column=5).font = td_b if es_nuestro else td_sv
-        for col in (3, 4, 6):
+        ws.cell(row=r, column=6).font = td_b if es_nuestro else td_sv
+        for col in (4, 5, 7):
             ws.cell(row=r, column=col).alignment = centro
-        for col in (8, 9):
+        for col in (9, 10):
             ws.cell(row=r, column=col).fill = fill_am
+        # El número va en teal sólido: los ocho servicios nuestros se cuentan de
+        # un vistazo y no hay forma de saltarse uno.
+        c = ws.cell(row=r, column=1)
+        c.alignment = Alignment(vertical='center', horizontal='center')
+        if es_nuestro:
+            c.fill, c.font = fill_num, Font(name=F, size=11, bold=True, color='FFFFFFFF')
 ULTIMA = fila - 1
-ws.auto_filter.ref = f'A4:I{ULTIMA}'
+ws.auto_filter.ref = f'A4:J{ULTIMA}'
+TOTAL_SERVICIOS = nro
 
 # --- Hoja 2: preguntas transversales ------------------------------------------
 
@@ -155,9 +187,9 @@ for i, q in enumerate(GENERALES, start=1):
 # --- Hoja 3: referencia -------------------------------------------------------
 
 ws3 = wb.create_sheet('Referencia')
-ws3.column_dimensions['A'].width = 8
-ws3.column_dimensions['B'].width = 46
-ws3.column_dimensions['C'].width = 96
+ws3.column_dimensions['A'].width = 6
+ws3.column_dimensions['B'].width = 42
+ws3.column_dimensions['C'].width = 88
 ws3['A1'] = f'{DOC["numero"]} · referencia interna'
 ws3['A1'].font = Font(name=F, size=13, bold=True, color=TINTA)
 
@@ -177,28 +209,30 @@ r += 1
 ws3.cell(row=r, column=1, value='VALORES COTIZADOS').font = Font(name=F, size=10, bold=True, color=CABECERA)
 r += 1
 TH3 = r
-for i, (t, w) in enumerate([('Nº',8),('Servicio cotizado',46),('Servicio p/p',16),('Entradas p/p',16),('Subtotal p/p',16),(f'Total {PAX} pax',16)], start=1):
+ANCHOS3 = [6, 42, 30, 15, 15, 15, 15]
+for i, t in enumerate(['Nº', 'Servicio cotizado', 'Cuándo va en el itinerario', 'Servicio p/p',
+                       'Entradas p/p', 'Subtotal p/p', f'Total {PAX} pax'], start=1):
     c = ws3.cell(row=TH3, column=i, value=t)
     c.font, c.fill, c.border, c.alignment = th, fill_th, borde, sinsalto
-for i, col in enumerate(['A','B','C','D','E','F']):
-    ws3.column_dimensions[col].width = [8,46,16,16,16,16][i]
+    ws3.column_dimensions[get_column_letter(i)].width = ANCHOS3[i-1]
 
 r = TH3 + 1
-for i, s in enumerate(PROGRAMA, start=1):
-    poner(ws3, r, [i, s['titulo']['es'], s['valor'], s['entradas'], None, None])
+for i, sv in enumerate(PROGRAMA, start=1):
+    poner(ws3, r, [i, sv['titulo']['es'], CUANDO[sv['id']], sv['valor'], sv['entradas'], None, None])
     ws3.cell(row=r, column=1).alignment = centro
-    ws3.cell(row=r, column=5, value=f'=C{r}+D{r}')
-    ws3.cell(row=r, column=6, value=f'=E{r}*{PAX}')
-    for col in range(3, 7):
+    ws3.cell(row=r, column=3).font = td_ac
+    ws3.cell(row=r, column=6, value=f'=D{r}+E{r}')
+    ws3.cell(row=r, column=7, value=f'=F{r}*{PAX}')
+    for col in range(4, 8):
         cc = ws3.cell(row=r, column=col)
         cc.number_format = '#,##0'
         cc.alignment = Alignment(vertical='top', horizontal='right')
-        cc.font = td_ac if col == 5 else td
+        cc.font = td_ac if col == 6 else td
         cc.border = borde
     r += 1
 
-poner(ws3, r, ['', 'TOTAL DEL PACK', None, None, None, None], fill=fill_verd)
-for col, letra in ((3,'C'), (4,'D'), (5,'E'), (6,'F')):
+poner(ws3, r, ['', 'TOTAL DEL PACK', '', None, None, None, None], fill=fill_verd)
+for col, letra in ((4,'D'), (5,'E'), (6,'F'), (7,'G')):
     c = ws3.cell(row=r, column=col, value=f'=SUM({letra}{TH3+1}:{letra}{r-1})')
     c.number_format, c.font = '#,##0', Font(name=F, size=10, bold=True, color=CABECERA)
     c.alignment, c.fill, c.border = Alignment(vertical='center', horizontal='right'), fill_verd, borde
@@ -209,10 +243,11 @@ r += 2
 ws3.cell(row=r, column=1, value='RESUMEN Y FUENTES').font = Font(name=F, size=10, bold=True, color=CABECERA)
 r += 1
 RESUMEN = [
- ('Bloques del itinerario', f"=COUNTA(Itinerario!A6:A{ULTIMA})"),
- ('De ellos, servicios Tourevo', f'=COUNTIF(Itinerario!F6:F{ULTIMA},"Tourevo")'),
- ('Total del pack por persona', f'=E{TOT}'),
- (f'Total del pack para {PAX} pax', f'=F{TOT}'),
+ ('Bloques del itinerario', f'=COUNTA(Itinerario!B6:B{ULTIMA})'),
+ ('De ellos, servicios que operamos', f'=COUNTA(Itinerario!A6:A{ULTIMA})'),
+ ('Ítems cotizados que cubren', f'=COUNTA(B{TH3+1}:B{TOT-1})'),
+ ('Total del pack por persona', f'=F{TOT}'),
+ (f'Total del pack para {PAX} pax', f'=G{TOT}'),
 ]
 for k, f in RESUMEN:
     ws3.cell(row=r, column=2, value=k).font = td
@@ -224,6 +259,7 @@ for k, f in RESUMEN:
 r += 1
 FUENTES = [
  ('Itinerario', 'itinerario.mjs, la misma fuente que el PDF del itinerario propuesto. Horarios y notas no se escriben dos veces.'),
+ ('Los 9 ítems en 8 bloques', 'Quitor y el Valle de la Muerte van juntos en un solo medio día el 24, así que los nueve servicios cotizados caben en ocho bloques. El build falla si alguno queda fuera.'),
  ('Valores', f'contenido.mjs, la misma fuente que la cotización {DOC["numero"]}. Sujetos a recotización: astronomía privada, alcance del full day del 25 y el medio día combinado Quitor + Valle de la Muerte.'),
  ('Cejar cierra los martes', 'Dato del cliente. El único martes del viaje es el 22, día de llegada sin excursiones, así que no afecta.'),
  ('Fase lunar del 24', 'Cálculo propio sobre la luna nueva del 6 ene 2000: la noche del 24 va al 99,4% de iluminación y ninguna otra noche del viaje baja del 92%.'),
@@ -236,4 +272,5 @@ for k, v in FUENTES:
 
 SALIDA = AQUI / f'Tourevo-{DOC["numero"]}-{CLIENTE["nombre"]}-Itinerario-para-operador.xlsx'
 wb.save(SALIDA)
-print(f'✓ {SALIDA.name} · {ULTIMA-primera+1} bloques · {len(GENERALES)} preguntas · {len(PROGRAMA)} servicios cotizados')
+print(f'✓ {SALIDA.name} · {ULTIMA-primera+1} bloques · {TOTAL_SERVICIOS} servicios nuestros · '
+      f'{len(PROGRAMA)} ítems cotizados, todos ubicados · {len(GENERALES)} preguntas')

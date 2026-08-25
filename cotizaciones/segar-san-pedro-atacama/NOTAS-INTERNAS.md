@@ -149,11 +149,22 @@ algo que se descartó en silencio.
 `build-excel.py` genera el .xlsx leyendo el itinerario de `itinerario.mjs` y los
 precios de `contenido.mjs`. Tres hojas:
 
-- **Itinerario** — una línea por bloque, con «Qué necesitamos confirmar» y dos
-  columnas en amarillo para que el operador responda: **¿Factible?** y
-  **Comentarios**. Trae una fila de ejemplo que hay que borrar.
+- **Itinerario** — una línea por bloque. La columna **Nº** numera en teal los
+  ocho servicios que operamos nosotros, así que se cuentan de un vistazo y no
+  hay forma de saltarse uno; las filas sin número son vuelos, comidas o tiempo
+  libre. Después, «Qué necesitamos confirmar» y dos columnas en amarillo para
+  que el operador responda: **¿Factible?** y **Comentarios**. Trae una fila de
+  ejemplo que hay que borrar.
 - **Preguntas** — las cuatro transversales, con su columna de respuesta.
-- **Referencia** — qué cambió, los valores cotizados y de dónde sale cada dato.
+- **Referencia** — qué cambió, los nueve ítems cotizados con **dónde cae cada
+  uno en el itinerario**, y de dónde sale cada dato.
+
+`build-excel.py` **falla si algún servicio cotizado no aparece en el itinerario**,
+si aparece dos veces, o si un servicio nuestro se queda sin texto de
+confirmación. Se agregó después de que Puritama quedara con la columna de
+confirmación vacía y pareciera que no estaba en la planilla: estaba, pero sin
+nada que la señalara. Cada bloque de `itinerario.mjs` declara en `cot` qué ítems
+de la cotización cubre, y el build cruza esa lista contra `contenido.mjs`.
 
 El comparativo de días y horarios (`build-diferencias.mjs`) sigue siendo el
 registro de cómo se llegó acá, pero **el plan vigente es este itinerario**.

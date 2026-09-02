@@ -1,0 +1,502 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Desaduanar una lancha en San Antonio</title>
+<meta name="description" content="Agencias de aduana con oficina en San Antonio para cotizar el desaduanamiento de una lancha sobre carro llegada desde EE.UU., con la pauta de costos y el correo de solicitud listo para enviar.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700&family=IBM+Plex+Mono:wght@400;500&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&display=swap">
+<style>
+  :root{
+    --paper:#eaf0ee;
+    --surface:#ffffff;
+    --surface-2:#f4f8f6;
+    --ink:#0f2428;
+    --ink-soft:#3d585c;
+    --muted:#6d878a;
+    --line:#ccdcd9;
+    --line-soft:#e0eae7;
+    --petrol:#0d5257;
+    --petrol-deep:#093a3e;
+    --signal:#bd5227;
+    --signal-wash:#f7ece5;
+    --shadow:0 1px 2px rgba(9,58,62,.06);
+    --display:"Archivo","Helvetica Neue",Arial,sans-serif;
+    --body:"Source Serif 4",Georgia,"Times New Roman",serif;
+    --mono:"IBM Plex Mono",ui-monospace,SFMono-Regular,Menlo,monospace;
+    color-scheme:light;
+  }
+  @media (prefers-color-scheme:dark){
+    :root:not([data-theme="light"]){
+      --paper:#091518;
+      --surface:#0e1f22;
+      --surface-2:#132a2d;
+      --ink:#e3ecea;
+      --ink-soft:#b6c9c8;
+      --muted:#8ba3a4;
+      --line:#22393c;
+      --line-soft:#1a2e31;
+      --petrol:#5fb9ae;
+      --petrol-deep:#8ad2c6;
+      --signal:#e5875b;
+      --signal-wash:#241e1a;
+      --shadow:0 1px 2px rgba(0,0,0,.35);
+      color-scheme:dark;
+    }
+  }
+  :root[data-theme="dark"]{
+    --paper:#091518;
+    --surface:#0e1f22;
+    --surface-2:#132a2d;
+    --ink:#e3ecea;
+    --ink-soft:#b6c9c8;
+    --muted:#8ba3a4;
+    --line:#22393c;
+    --line-soft:#1a2e31;
+    --petrol:#5fb9ae;
+    --petrol-deep:#8ad2c6;
+    --signal:#e5875b;
+    --signal-wash:#241e1a;
+    --shadow:0 1px 2px rgba(0,0,0,.35);
+    color-scheme:dark;
+  }
+
+  *{box-sizing:border-box}
+  body{
+    margin:0;
+    background:var(--paper);
+    color:var(--ink);
+    font-family:var(--body);
+    font-size:17px;
+    line-height:1.62;
+    -webkit-font-smoothing:antialiased;
+  }
+  .sheet{
+    max-width:1060px;
+    margin:0 auto;
+    padding:0 22px 80px;
+  }
+  a{color:var(--petrol);text-decoration:none;border-bottom:1px solid color-mix(in srgb,var(--petrol) 35%,transparent)}
+  a:hover{border-bottom-color:var(--petrol)}
+  a:focus-visible,button:focus-visible{outline:2px solid var(--signal);outline-offset:3px;border-radius:2px}
+
+  /* Masthead */
+  .masthead{border-top:5px solid var(--petrol);padding-top:26px;margin-top:0}
+  .eyebrow{
+    font-family:var(--mono);font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;
+    color:var(--signal);margin:0 0 14px;
+  }
+  .masthead h1{
+    font-family:var(--display);font-weight:700;font-size:clamp(2rem,5.2vw,3.1rem);
+    line-height:1.06;letter-spacing:-.022em;margin:0 0 14px;text-wrap:balance;
+  }
+  .standfirst{margin:0;max-width:62ch;color:var(--ink-soft);font-size:1.09rem}
+
+  /* Ficha */
+  .ficha{
+    display:grid;grid-template-columns:repeat(auto-fit,minmax(168px,1fr));
+    gap:0;margin:30px 0 0;border:1px solid var(--line);border-radius:3px;
+    background:var(--surface);overflow:hidden;
+  }
+  .ficha div{padding:13px 16px;border-right:1px solid var(--line-soft)}
+  .ficha div:last-child{border-right:none}
+  .ficha dt,.k{
+    font-family:var(--mono);font-size:.68rem;letter-spacing:.1em;text-transform:uppercase;
+    color:var(--muted);margin:0 0 5px;
+  }
+  .ficha dd{margin:0;font-family:var(--display);font-weight:600;font-size:1.02rem;line-height:1.3}
+  .ficha dd small{display:block;font-family:var(--body);font-weight:400;font-size:.83rem;color:var(--muted);margin-top:3px;letter-spacing:0}
+
+  /* Secciones */
+  section{margin-top:56px}
+  .sec-label{
+    font-family:var(--mono);font-size:.7rem;letter-spacing:.16em;text-transform:uppercase;
+    color:var(--muted);border-bottom:1px solid var(--line);padding-bottom:8px;margin:0 0 20px;
+    display:flex;justify-content:space-between;gap:14px;
+  }
+  .sec-label span:last-child{color:var(--signal)}
+  h2{
+    font-family:var(--display);font-weight:700;font-size:clamp(1.35rem,3vw,1.72rem);
+    line-height:1.18;letter-spacing:-.014em;margin:0 0 12px;text-wrap:balance;
+  }
+  h3{font-family:var(--display);font-weight:600;font-size:1.03rem;letter-spacing:-.005em;margin:26px 0 8px}
+  p{margin:0 0 14px;max-width:70ch}
+  .lede{color:var(--ink-soft)}
+
+  /* Tablas */
+  .scroller{overflow-x:auto;border:1px solid var(--line);border-radius:3px;background:var(--surface);box-shadow:var(--shadow)}
+  table{border-collapse:collapse;width:100%;min-width:880px;font-size:.94rem}
+  table td:first-child,table th:first-child{min-width:176px}
+  .pie{margin:11px 2px 0;font-size:.85rem;color:var(--muted);max-width:none}
+  th,td{text-align:left;vertical-align:top;padding:13px 16px;border-bottom:1px solid var(--line-soft)}
+  thead th{
+    font-family:var(--mono);font-weight:500;font-size:.68rem;letter-spacing:.1em;text-transform:uppercase;
+    color:var(--muted);background:var(--surface-2);border-bottom:1px solid var(--line);white-space:nowrap;
+  }
+  tbody tr:last-child td{border-bottom:none}
+  .ag{font-family:var(--display);font-weight:600;font-size:1rem;line-height:1.24;display:block}
+  .ag-sub{font-family:var(--body);font-size:.84rem;color:var(--muted);display:block;margin-top:3px}
+  td.contacto{font-family:var(--mono);font-size:.8rem;line-height:1.65;white-space:nowrap}
+  td.contacto a{border-bottom-color:transparent}
+  td.contacto a:hover{border-bottom-color:var(--petrol)}
+  td.dir{font-size:.88rem;color:var(--ink-soft);min-width:190px}
+  .num{font-family:var(--mono);font-variant-numeric:tabular-nums;white-space:nowrap}
+  .sello{
+    display:inline-block;font-family:var(--mono);font-size:.62rem;letter-spacing:.09em;text-transform:uppercase;
+    border:1px solid var(--petrol);color:var(--petrol);border-radius:2px;padding:1px 5px;margin-right:5px;
+    vertical-align:1px;
+  }
+  .sello.top{background:var(--signal);border-color:var(--signal);color:#fff}
+  :root[data-theme="dark"] .sello.top{color:#160e08}
+  @media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .sello.top{color:#160e08}}
+
+  /* Nota / aviso */
+  .nota{
+    border-left:3px solid var(--signal);background:var(--signal-wash);
+    padding:15px 18px;margin:24px 0;border-radius:0 3px 3px 0;font-size:.95rem;color:var(--ink-soft);
+  }
+  .nota strong{color:var(--ink);font-family:var(--display);font-weight:600}
+  .nota p{margin:0 0 8px;max-width:none}
+  .nota p:last-child{margin-bottom:0}
+
+  /* Listas de preguntas */
+  .preguntas{list-style:none;counter-reset:q;padding:0;margin:0;display:grid;gap:2px}
+  .preguntas li{
+    counter-increment:q;background:var(--surface);border:1px solid var(--line);border-radius:3px;
+    padding:15px 18px 15px 54px;position:relative;font-size:.96rem;
+  }
+  .preguntas li::before{
+    content:counter(q,decimal-leading-zero);position:absolute;left:18px;top:15px;
+    font-family:var(--mono);font-size:.75rem;color:var(--signal);letter-spacing:.04em;
+  }
+  .preguntas b{font-family:var(--display);font-weight:600;display:block;margin-bottom:2px}
+  .preguntas span{color:var(--ink-soft);font-size:.92rem}
+
+  /* Datos a entregar */
+  .datos{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:2px}
+  .datos article{background:var(--surface);border:1px solid var(--line);border-radius:3px;padding:16px 18px}
+  .datos h3{margin:0 0 10px;font-size:.94rem}
+  .datos ul{margin:0;padding-left:17px;font-size:.92rem;color:var(--ink-soft)}
+  .datos li{margin:5px 0}
+  .datos code{font-family:var(--mono);font-size:.85em;color:var(--petrol)}
+
+  /* Correo */
+  .correo{background:var(--surface);border:1px solid var(--line);border-radius:3px;overflow:hidden}
+  .correo header{
+    display:flex;justify-content:space-between;align-items:center;gap:14px;flex-wrap:wrap;
+    padding:11px 16px;background:var(--surface-2);border-bottom:1px solid var(--line);
+  }
+  .correo header .k{margin:0}
+  .correo pre{
+    margin:0;padding:20px 22px;font-family:var(--mono);font-size:.83rem;line-height:1.75;
+    white-space:pre-wrap;color:var(--ink);
+  }
+  button.copiar{
+    font-family:var(--mono);font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;
+    background:var(--petrol);color:var(--surface);border:none;border-radius:2px;
+    padding:7px 13px;cursor:pointer;
+  }
+  :root[data-theme="dark"] button.copiar{color:#06181a}
+  @media (prefers-color-scheme:dark){:root:not([data-theme="light"]) button.copiar{color:#06181a}}
+  button.copiar:hover{background:var(--petrol-deep)}
+
+  footer{margin-top:60px;border-top:1px solid var(--line);padding-top:22px;font-size:.86rem;color:var(--muted)}
+  footer h3{font-size:.84rem;font-family:var(--mono);font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin:0 0 8px}
+  footer ul{margin:0 0 18px;padding-left:18px}
+  footer li{margin:4px 0}
+  footer p{max-width:74ch}
+
+  @media (max-width:640px){
+    body{font-size:16px}
+    .sheet{padding:0 16px 60px}
+    .ficha div{border-right:none;border-bottom:1px solid var(--line-soft)}
+    .ficha div:last-child{border-bottom:none}
+    .preguntas li{padding-left:18px;padding-top:30px}
+    .preguntas li::before{top:11px}
+  }
+  @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<div class="sheet">
+
+<header class="masthead">
+  <p class="eyebrow">EE.UU. &rarr; Puerto de San Antonio &middot; CLSAI &middot; Septiembre 2026</p>
+  <h1>Desaduanar una lancha en San Antonio</h1>
+  <p class="standfirst">Agencias de aduana a las que pedir cotización por el desaduanamiento de una lancha sobre carro de arrastre llegada directo desde Estados Unidos, con la pauta de costos que deben responder y el correo listo para enviar.</p>
+
+  <dl class="ficha">
+    <div><dt class="k">Mercancía</dt><dd>Lancha + carro<small>Dos ítems, dos partidas</small></dd></div>
+    <div><dt class="k">Partidas probables</dt><dd>89.03 / 87.16<small>La subpartida la propone la agencia</small></dd></div>
+    <div><dt class="k">Ad valorem</dt><dd>6 % &oacute; 0 %<small>0 % con certificado de origen TLC EE.UU.</small></dd></div>
+    <div><dt class="k">IVA</dt><dd>19 %<small>Sobre CIF + ad valorem</small></dd></div>
+    <div><dt class="k">Suntuario</dt><dd>No aplica<small>Los yates salieron del art. 37 DL 825</small></dd></div>
+  </dl>
+</header>
+
+<section>
+  <p class="sec-label"><span>Selección</span><span>8 agencias</span></p>
+  <h2>Las agencias</h2>
+  <p class="lede">El criterio no fue el tamaño sino quién puede caminar hasta el terminal: oficina propia en San Antonio, experiencia declarada en carga rodante o suelta, y certificación OEA (Operador Económico Autorizado, que agiliza el trámite ante el Servicio Nacional de Aduanas). Las tres primeras son las que yo cotizaría sí o sí; el resto sirve para tener contraste de precio.</p>
+
+  <div class="scroller">
+  <table>
+    <thead>
+      <tr>
+        <th scope="col">Agencia</th>
+        <th scope="col">Por qué está en la lista</th>
+        <th scope="col">Oficina en San Antonio</th>
+        <th scope="col">Contacto</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="sello top">Prioridad</span><span class="ag">Agencia Durán</span><span class="ag-sub">46 años &middot; 14 oficinas</span></td>
+        <td><span class="sello">OEA</span> La única de la lista que declara explícitamente <b>vehículos motorizados</b> y carga de proyecto entre sus especialidades, y que dice operar en los cuatro terminales: DP World San Antonio, STI, Puerto Central y Panul. Es el perfil más cercano a una lancha sobre carro.</td>
+        <td class="dir">Blanco Encalada 840, of. 308</td>
+        <td class="contacto">+56 9 3507 0630<br><span style="color:var(--muted)">WhatsApp</span><br><a href="mailto:contacto@agenciaduran.cl">contacto@agenciaduran.cl</a><br><a href="https://www.agenciaduran.cl/sucursales/san-antonio/">agenciaduran.cl</a></td>
+      </tr>
+      <tr>
+        <td><span class="sello top">Prioridad</span><span class="ag">I. P. Hardy y Cía.</span><span class="ag-sub">Despachos desde 1922</span></td>
+        <td>Casa matriz en Valparaíso con oficina propia en San Antonio dedicada solo a despachos marítimos por ese puerto, coordinando almacenes extraportuarios y transporte. Un siglo de operación en la V Región: es la que menos probable es que se enrede con una carga rara.</td>
+        <td class="dir">Blanco Encalada 840, of. 701</td>
+        <td class="contacto">+56 35 2 213348<br><a href="mailto:sanantonio@hardy.cl">sanantonio@hardy.cl</a><br>+56 32 216 0000 <span style="color:var(--muted)">(matriz)</span><br><a href="https://hardy.cl/">hardy.cl</a></td>
+      </tr>
+      <tr>
+        <td><span class="sello top">Prioridad</span><span class="ag">Agencia Zulueta</span><span class="ag-sub">Fundada en 1950</span></td>
+        <td><span class="sello">OEA</span><span class="sello">ISO 9001</span> Es la que se compromete públicamente a <b>responder la cotización en 24 horas hábiles</b>, con formulario de cotización sin costo. Útil para fijar rápido un piso de precio contra el cual comparar a las demás.</td>
+        <td class="dir">Barros Luco 1610, of. 1003, piso 10, Edificio Bioceánico</td>
+        <td class="contacto">+56 2 2751 0900<br><a href="mailto:sanantonio@zulueta.cl">sanantonio@zulueta.cl</a><br><a href="mailto:servicioalcliente@zulueta.cl">servicioalcliente@zulueta.cl</a><br><a href="https://zulueta.cl/contacto/">zulueta.cl</a></td>
+      </tr>
+      <tr>
+        <td><span class="ag">Ester Coradines R. y Cía.</span><span class="ag-sub">San Antonio, Valparaíso, Los Andes, Pudahuel</span></td>
+        <td><span class="sello">OEA</span> Oficina propia en el mismo edificio del rubro en San Antonio y cobertura en los pasos que importan si la carga se mueve después. Estructura mediana: suele dar contraparte con nombre y apellido.</td>
+        <td class="dir">Blanco Encalada 840, of. 306</td>
+        <td class="contacto">+56 2 2895 2094<br><a href="mailto:jpardo@estercoradines.cl">jpardo@estercoradines.cl</a><br><a href="mailto:agencia@estercoradines.cl">agencia@estercoradines.cl</a><br><a href="https://estercoradines.cl/">estercoradines.cl</a></td>
+      </tr>
+      <tr>
+        <td><span class="ag">Agencia Alberto Romero</span><span class="ag-sub">7 oficinas &middot; matriz en Concepción</span></td>
+        <td>Sucursal San Antonio con teléfono fijo y dos celulares publicados, más oficina en Valparaíso y Los Andes. Buena para tener una cotización de una agencia con estructura fuera de la V Región, que a veces baja honorarios para entrar.</td>
+        <td class="dir">Blanco Encalada 840, of. 605, Edificio Doctor Flanagan</td>
+        <td class="contacto">+56 35 235 3080 / 3081<br>+56 9 6831 3308<br><a href="mailto:sucursalsanantonio@agenciaromero.cl">sucursalsanantonio@agenciaromero.cl</a><br><a href="https://agenciaromero.cl/wp/">agenciaromero.cl</a></td>
+      </tr>
+      <tr>
+        <td><span class="ag">Jorge Vega Díaz</span><span class="ag-sub">Valparaíso (matriz), Santiago, San Antonio</span></td>
+        <td>Agencia chica y regional, con oficina en Barrancas y no en el edificio de aduanas. Discurso de atención por tamaño de cliente: sirve cuando el despacho es uno solo y no querés ser el número de folio menor de la cartera.</td>
+        <td class="dir">Uno Norte 24-B, Barrancas</td>
+        <td class="contacto">+56 32 217 7322 / 7329<br><a href="mailto:agjvdsai@jvd.cl">agjvdsai@jvd.cl</a><br><a href="https://www.jvd.cl/sucursales/san-antonio/">jvd.cl</a></td>
+      </tr>
+      <tr>
+        <td><span class="ag">Agencia Aquiles Pérez</span><span class="ag-sub">Más de 35 años</span></td>
+        <td>Declara operación en Valparaíso, San Antonio y Santiago desde su oficina de Paseo Bulnes. Incluye asesoría en seguro de carga, lo que ayuda si todavía no está tomado el seguro del tramo marítimo.</td>
+        <td class="dir">Opera San Antonio desde Santiago<br>Paseo Bulnes 80, of. 73</td>
+        <td class="contacto">+56 2 3375 9971<br>+56 9 3451 1344 <span style="color:var(--muted)">(WhatsApp)</span><br><a href="mailto:contacto@agenciaperezg.cl">contacto@agenciaperezg.cl</a><br><a href="https://agenciaperezg.cl/">agenciaperezg.cl</a></td>
+      </tr>
+      <tr>
+        <td><span class="ag">Agencia Oyarzun</span><span class="ag-sub">11 sucursales</span></td>
+        <td>Cubre San Antonio con equipo de operación marítima y conoce los cuatro terminales. <b>Ojo:</b> publica un mínimo de USD 3.000 FOB para tomar despachos — si la lancha vale menos que eso, no corresponde llamarlos.</td>
+        <td class="dir">Cobertura San Antonio<br>Matriz: San Sebastián 2839, of. 311, Las Condes</td>
+        <td class="contacto">+56 9 9703 4849<br>+56 9 9488 2575<br><a href="mailto:agente@agenciaoyarzun.cl">agente@agenciaoyarzun.cl</a><br><a href="https://agenciaoyarzun.cl/sucursales/san-antonio/">agenciaoyarzun.cl</a></td>
+      </tr>
+    </tbody>
+  </table>
+  </div>
+  <p class="pie">Direcciones, teléfonos y correos tomados de los sitios de cada agencia en septiembre de 2026. Ninguna publica tarifas: los honorarios salen recién en la respuesta a la solicitud.</p>
+
+  <div class="nota">
+    <p><strong>Lo que no está verificado.</strong> Ninguna de las ocho publica experiencia específica en embarcaciones de recreo. Por eso la primera pregunta del correo es cuántas lanchas han desaduanado: la respuesta a eso ordena la lista mucho mejor que cualquier ranking hecho desde afuera.</p>
+    <p>Para chequear que el agente esté vigente: <a href="https://caduanera.cl/">Cámara Aduanera de Chile</a>, O'Higgins 1266 piso 3, Valparaíso, +56 32 2555 300. La aduana que va a tramitar el despacho es la <b>Administración de Aduana de San Antonio</b>, Angamos 1194, +56 35 2200 000.</p>
+  </div>
+</section>
+
+<section>
+  <p class="sec-label"><span>Pauta de costos</span><span>Pedir los 12 ítems</span></p>
+  <h2>Qué tienen que cotizar, línea por línea</h2>
+  <p class="lede">Una cotización de agencia que dice “gastos de internación: $XXX” no se puede comparar con otra. Pedí que respondan con estos doce ítems separados, cada uno con quién lo cobra, para que las tres cotizaciones queden lado a lado.</p>
+
+  <div class="scroller">
+  <table>
+    <thead>
+      <tr>
+        <th scope="col">Ítem</th>
+        <th scope="col">Quién lo cobra</th>
+        <th scope="col">Cómo se calcula</th>
+        <th scope="col">Orden de magnitud</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td><b>Derecho ad valorem</b></td><td>Tesorería / Aduana</td><td>6 % sobre valor CIF. <b>0 %</b> si la lancha es de fabricación estadounidense y viene con certificado de origen del TLC Chile–EE.UU.</td><td class="num">0 % – 6 %</td></tr>
+      <tr><td><b>IVA de importación</b></td><td>Tesorería / Aduana</td><td>19 % sobre CIF + ad valorem. Se paga completo aunque el arancel quede en cero.</td><td class="num">19 %</td></tr>
+      <tr><td><b>Honorarios de la agencia</b></td><td>Agencia de aduanas</td><td>Porcentaje del CIF con mínimo por despacho. Preguntá si la lancha y el carro cuentan como uno o dos despachos.</td><td class="num">$300.000 – $600.000</td></tr>
+      <tr><td><b>Gastos operacionales</b></td><td>Agencia de aduanas</td><td>Digitación de la DIN, courier de documentos, mensajería, retiro de originales. Van aparte de los honorarios y llevan IVA.</td><td class="num">Fijo, pedirlo</td></tr>
+      <tr><td><b>Gastos navieros en destino</b></td><td>Naviera / agente de nave</td><td>Emisión de BL, THC, desconsolidación si viene en contenedor, gate out. Los cobra la naviera, no la agencia, pero la agencia los conoce.</td><td class="num">Pedirlo</td></tr>
+      <tr><td><b>Almacenaje portuario</b></td><td>Terminal (STI / DPW / PCE)</td><td>Por día después de los días libres. Es el ítem que más se dispara si la documentación llega tarde.</td><td class="num">$100.000 – $300.000</td></tr>
+      <tr><td><b>Almacén extraportuario</b></td><td>Zona primaria</td><td>Solo si la carga sale del terminal antes del retiro. Para carga suelta o sobredimensionada suele ser el camino.</td><td class="num">Pedirlo</td></tr>
+      <tr><td><b>Aforo físico</b></td><td>Aduana + terminal</td><td>Si la DIN sale con examen, hay que pagar la movilización y la presentación de la carga. Con mercancía usada es probable.</td><td class="num">Pedirlo como escenario</td></tr>
+      <tr><td><b>Inspección SAG</b></td><td>Servicio Agrícola y Ganadero</td><td>El casco y el carro deben llegar limpios, sin tierra ni restos vegetales. Si hay rechazo, el lavado y la reinspección se pagan.</td><td class="num">Pedirlo como escenario</td></tr>
+      <tr><td><b>Transporte a destino</b></td><td>Transportista</td><td>San Antonio hasta el punto final. Con lancha sobre carro conviene preguntar si sale remolcada o en cama baja.</td><td class="num">Según destino</td></tr>
+      <tr><td><b>Matrícula de nave menor</b></td><td>DIRECTEMAR</td><td>Después de nacionalizar. Necesita la DIN, la liquidación de gravámenes y el título de dominio extranjero apostillado.</td><td class="num">Trámite posterior</td></tr>
+      <tr><td><b>Patente del carro</b></td><td>Municipalidad / Registro Civil</td><td>Inscripción, placa patente, SOAP y permiso de circulación. Bajo 3.860 kg se inscribe en la municipalidad; desde ahí, en el Registro Especial de Remolques del Registro Civil.</td><td class="num">Trámite posterior</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p class="pie">Los montos en pesos son referenciales de mercado para dimensionar una cotización, no precios ofertados. Todo lo que cobra la agencia y el transportista lleva IVA aparte; los impuestos de importación, no.</p>
+
+  <div class="nota">
+    <p><strong>El impuesto que sí puede aparecer después.</strong> Los yates ya no pagan el impuesto adicional a artículos suntuarios del art. 37 del DL 825, pero la Ley 21.420 creó un impuesto anual del <b>2 % sobre el valor de mercado</b> para yates de 122 UTA o más — unos $105 millones a valores de septiembre de 2026. Se devenga el 1 de enero según quién sea dueño al 31 de diciembre y se paga en abril. Si la lancha está debajo de ese umbral no aplica, pero conviene tenerlo escrito en la cotización para que nadie se lleve la sorpresa.</p>
+  </div>
+</section>
+
+<section>
+  <p class="sec-label"><span>Antecedentes</span><span>Sin esto no cotizan en firme</span></p>
+  <h2>Los datos que hay que darles</h2>
+  <p class="lede">Con menos que esto la respuesta va a ser un rango. Con esto, la agencia puede clasificar, calcular gravámenes y decir cuánto cobra.</p>
+
+  <div class="datos">
+    <article>
+      <h3>De la lancha</h3>
+      <ul>
+        <li>Marca, modelo y año</li>
+        <li>Eslora y manga</li>
+        <li><code>HIN</code> (número de casco)</li>
+        <li>Motor: marca, potencia, fueraborda o intraborda</li>
+        <li>Material del casco</li>
+        <li>País de fabricación</li>
+      </ul>
+    </article>
+    <article>
+      <h3>Del carro de arrastre</h3>
+      <ul>
+        <li><code>VIN</code> y año</li>
+        <li>Marca, ejes, peso bruto vehicular</li>
+        <li>Si va facturado aparte de la lancha</li>
+        <li>Título de dominio del carro</li>
+      </ul>
+    </article>
+    <article>
+      <h3>Comerciales</h3>
+      <ul>
+        <li>Valor de compra y moneda</li>
+        <li><code>Bill of Sale</code> y <code>Title</code></li>
+        <li>Certificado de origen TLC EE.UU. si existe</li>
+        <li>Incoterm pactado</li>
+        <li>Valor del flete y del seguro</li>
+      </ul>
+    </article>
+    <article>
+      <h3>Del embarque</h3>
+      <ul>
+        <li>Puerto de salida en EE.UU.</li>
+        <li>Modalidad: RORO, contenedor 40' o flat rack</li>
+        <li>Naviera, nave y viaje</li>
+        <li><code>MBL</code> / <code>HBL</code></li>
+        <li>ETA a San Antonio y terminal asignado</li>
+        <li>Packing list y fotos de la carga</li>
+      </ul>
+    </article>
+  </div>
+</section>
+
+<section>
+  <p class="sec-label"><span>Preguntas</span><span>Separan a la buena de la barata</span></p>
+  <h2>Siete preguntas que hay que hacer</h2>
+  <ol class="preguntas">
+    <li><b>¿Cuántas embarcaciones de recreo han desaduanado por San Antonio?</b><span>Pedí una referencia concreta del último año. Es el filtro real de esta lista.</span></li>
+    <li><b>¿Qué partida arancelaria proponen para la lancha y cuál para el carro?</b><span>La lancha entra por la 89.03 y el carro por la 87.16; la subpartida de la lancha depende de eslora y tipo de propulsión. Que lo escriban.</span></li>
+    <li><b>¿La lancha y el carro se declaran en una sola DIN o en dos?</b><span>Cambia los honorarios, y cambia qué documento queda a nombre del carro para poder patentarlo después.</span></li>
+    <li><b>¿Aplica 0 % de ad valorem por el TLC con Estados Unidos?</b><span>Y qué formato exacto de certificado de origen necesitan del vendedor. Es la diferencia entre pagar 6 % del CIF o nada.</span></li>
+    <li><b>¿Hay restricción para internar el carro de arrastre usado?</b><span>La Ley 18.483 prohíbe importar vehículos usados con excepciones. Un remolque no es motorizado, pero quiero la posición del agente por escrito antes de embarcar, no después.</span></li>
+    <li><b>¿Cuántos días libres de almacenaje tenemos y quién avisa cuando se acaban?</b><span>Pedí el compromiso de aviso. El almacenaje es el único costo de esta lista que crece solo.</span></li>
+    <li><b>¿Toman también la matrícula en DIRECTEMAR?</b><span>Algunas agencias hacen el trámite posterior o tienen con quién. Si no, hay que resolverlo aparte y presupuestarlo.</span></li>
+  </ol>
+</section>
+
+<section>
+  <p class="sec-label"><span>Correo</span><span>Mandarlo a las 8</span></p>
+  <h2>La solicitud, lista para enviar</h2>
+  <p class="lede">Mismo texto a todas, para que las respuestas sean comparables. Completá lo que está entre corchetes.</p>
+
+  <div class="correo">
+    <header>
+      <p class="k">Asunto: Cotización desaduanamiento lancha sobre carro — San Antonio</p>
+      <button class="copiar" type="button" id="btn-copiar">Copiar</button>
+    </header>
+    <pre id="texto-correo">Estimados:
+
+Necesito cotizar el desaduanamiento completo de una lancha sobre carro de
+arrastre que llega directo desde Estados Unidos al Puerto de San Antonio.
+
+ANTECEDENTES
+· Lancha: [marca, modelo, año], eslora [X] m, HIN [XXXXX],
+  motor [marca / HP / fueraborda o intraborda], fabricada en EE.UU.
+· Carro de arrastre: [marca, año], VIN [XXXXX], [N] ejes, PBV [X] kg.
+· Valor de compra: USD [XXX] (Bill of Sale y Title disponibles).
+· Embarque: [RORO / contenedor 40' / flat rack] desde [puerto],
+  naviera [XXX], nave [XXX], ETA San Antonio [fecha], BL [XXXXX].
+· Incoterm: [XXX]. Flete USD [XXX], seguro USD [XXX].
+
+LO QUE NECESITO EN LA COTIZACIÓN
+Doce ítems por separado, cada uno indicando quién lo cobra:
+ 1. Derecho ad valorem     7. Almacén extraportuario
+ 2. IVA de importación     8. Aforo físico (escenario)
+ 3. Honorarios agencia     9. Inspección SAG (escenario)
+ 4. Gastos operacionales  10. Transporte a [destino]
+ 5. Gastos navieros       11. Matrícula DIRECTEMAR
+ 6. Almacenaje portuario  12. Patente del carro
+
+CONSULTAS
+1. ¿Cuántas embarcaciones de recreo han desaduanado por San Antonio?
+2. ¿Qué partida proponen para la lancha (89.03) y para el carro (87.16)?
+3. ¿Una sola DIN o dos declaraciones separadas?
+4. ¿Aplica 0 % de ad valorem por el TLC con EE.UU.? ¿Qué certificado
+   de origen debo pedirle al vendedor y en qué formato?
+5. ¿Ven alguna restricción para internar el carro de arrastre usado?
+6. ¿Cuántos días libres de almacenaje tenemos y quién nos avisa?
+7. ¿Toman ustedes la matrícula en DIRECTEMAR o la derivan?
+
+Quedo atento a la propuesta y a los plazos.
+
+[Nombre]
+[Empresa / RUT]
+[Teléfono]</pre>
+  </div>
+</section>
+
+<footer>
+  <h3>Fuentes</h3>
+  <ul>
+    <li>Sitios de <a href="https://www.agenciaduran.cl/sucursales/san-antonio/">Agencia Durán</a>, <a href="https://hardy.cl/">I. P. Hardy</a>, <a href="https://zulueta.cl/contacto/">Zulueta</a>, <a href="https://estercoradines.cl/">Ester Coradines</a>, <a href="https://agenciaromero.cl/wp/">Alberto Romero</a>, <a href="https://www.jvd.cl/sucursales/san-antonio/">Jorge Vega Díaz</a>, <a href="https://agenciaperezg.cl/">Aquiles Pérez</a> y <a href="https://agenciaoyarzun.cl/">Oyarzun</a>, consultados en septiembre de 2026.</li>
+    <li><a href="https://www.aduana.cl/administracion-aduana-san-antonio/aduana/2013-03-28/160421.html">Administración Aduana de San Antonio</a> y <a href="https://caduanera.cl/">Cámara Aduanera de Chile</a>.</li>
+    <li>Impuesto a bienes de lujo de la Ley 21.420: <a href="https://www.circuloverde.cl/aplicacion-del-impuesto-a-la-propiedad-de-bienes-de-lujo-helicopteros-aviones-yates-y-un-grupo-de-automoviles-station-wagons-y-similares/">análisis de Círculo Verde</a>; valor UTM de septiembre 2026 según <a href="https://www.sii.cl/valores_y_fechas/utm/utm2026.htm">SII</a>.</li>
+    <li>Inscripción de carros de arrastre: <a href="https://www.autofact.cl/blog/mi-auto/tramites/carro-arrastre">Autofact</a>. Órdenes de magnitud de costos: <a href="https://www.imporlan.cl/cuanto-cuesta-importar-una-lancha-a-chile/">guía de costos de Imporlan</a>.</li>
+  </ul>
+  <p>Los montos son referenciales y sirven para leer una cotización, no la reemplazan. La clasificación arancelaria definitiva y la procedencia del beneficio del TLC las determina el agente de aduanas con los documentos a la vista.</p>
+</footer>
+
+</div>
+
+<script>
+(function(){
+  var btn = document.getElementById('btn-copiar');
+  var pre = document.getElementById('texto-correo');
+  if(!btn || !pre) return;
+  btn.addEventListener('click', function(){
+    var texto = pre.textContent;
+    var ok = function(){ btn.textContent = 'Copiado'; setTimeout(function(){ btn.textContent = 'Copiar'; }, 2000); };
+    var fallback = function(){
+      var ta = document.createElement('textarea');
+      ta.value = texto; ta.setAttribute('readonly',''); ta.style.position = 'fixed'; ta.style.opacity = '0';
+      document.body.appendChild(ta); ta.select();
+      try { document.execCommand('copy'); ok(); } catch(e){ btn.textContent = 'Copiá a mano'; }
+      document.body.removeChild(ta);
+    };
+    if(navigator.clipboard && navigator.clipboard.writeText){
+      navigator.clipboard.writeText(texto).then(ok, fallback);
+    } else { fallback(); }
+  });
+})();
+</script>
+</body>
+</html>

@@ -3,7 +3,7 @@
 Revisión previa al envío. **No se publica**: `scripts/deploy-ftp.sh` excluye `*.md`.
 
 - **Fuente:** programa ajustado que envió la agencia de San Pedro de Atacama a Juan Pablo.
-- **Emitida:** 04 sep 2026 · **Válida hasta:** 23 sep 2026 · **Viaje:** 22–26 dic 2026.
+- **Emitida:** 04 sep 2026 · **Viaje:** 22–26 dic 2026 · **Sujeta a disponibilidad** (no lleva fecha de validez).
 
 ---
 
@@ -27,6 +27,23 @@ El programa dice "Martes 22" a "Sábado 26" sin mes. En el calendario cercano el
 martes 22 / sábado 26 sólo calza en **sep 2026**, **dic 2026** y **jun 2027**.
 Confirmado por JP: diciembre 2026. Es además el único de los tres donde la
 política de 90/60 días del operador todavía tiene sentido al emitir.
+
+### Encuadre de la urgencia: disponibilidad, no validez
+
+Corregido a pedido de JP. La primera versión decía "válida hasta el 23 de
+septiembre", y eso estaba mal: **la cotización está sujeta a disponibilidad y no
+tiene cupo reservado hasta el abono**. El 23 de septiembre sigue apareciendo,
+pero sólo como lo que realmente es — el último día en que el operador devuelve
+el 100% del abono— y como argumento para cerrar antes, no como vencimiento.
+
+El argumento de cierre, tal como quedó en los dos documentos: diciembre es el
+mes más lleno en San Pedro, el 24 y 25 son los días que se cierran primero, y si
+la agenda de esta agencia se cierra hay que salir a buscar otra agencia, a otro
+precio, y el programa deja de ser este.
+
+Cambió en: el chip del encabezado ("Subject to availability"), la nota de
+apertura, el párrafo de cierre del bloque de avisos, la fila de 90 días de la
+línea de tiempo, las condiciones comerciales y el CTA.
 
 ### Los CLP 284.000 son SÓLO las entradas por adelantado
 
@@ -102,6 +119,9 @@ Programa 2.320.000 + entradas 324.000 = 2.644.000 · CLP 661.000 por persona.
 - [ ] **Confirmar por escrito con el operador** el punto 1 de arriba (jueves PM
       vs full day) y que las tarifas de menores sigan vigentes en diciembre.
 - [ ] **Cena de Nochebuena:** definir con Segar y reservar.
+- [ ] **Confirmar cupo con la agencia antes de enviar.** Los dos documentos
+      apuran el cierre por disponibilidad; conviene saber cuánta agenda queda
+      realmente para el 24 y 25 antes de decírselo al cliente.
 
 ---
 
@@ -115,14 +135,24 @@ venía apuntada a `jpchs1/trabajos-varios`, rama
 PDF, se mueve tal cual. Mientras tanto el workflow de FTP de este repo no sube
 nada porque nunca tuvo los secrets cargados.
 
-## Generar el PDF de nuevo
+## Los dos archivos
+
+| Archivo | Qué es |
+| --- | --- |
+| `index.html` → `Tourevo-COT-2026-0160-Segar.pdf` | La cotización completa, 10 páginas A4. |
+| `carta.html` → `Tourevo-COT-2026-0160-Segar-Carta.pdf` | La carta de presentación, 1 página A4. Va primero por WhatsApp; resume el total, el pago directo y la urgencia por disponibilidad, y pide las dos definiciones (cena del 24, edades). |
+
+## Generar los PDF de nuevo
 
 ```bash
 cd propuestas/segar-san-pedro-atacama
-chromium --headless --no-pdf-header-footer \
-  --print-to-pdf=Tourevo-COT-2026-0160-Segar.pdf "file://$PWD/index.html"
+for f in index carta; do
+  chromium --headless --no-pdf-header-footer \
+    --print-to-pdf="$f.pdf" "file://$PWD/$f.html"
+done
 ```
 
-El `@media print` del documento fija A4, márgenes de 12/10 mm y evita que se
-corten las tarjetas de día, las tablas y los bloques de condiciones. Salen 10
-páginas.
+El `@media print` de la cotización fija A4, márgenes de 12/10 mm y evita que se
+corten las tarjetas de día, las tablas y los bloques de condiciones: 10 páginas.
+La carta usa `zoom: .90` en impresión, que es lo que la deja en **una sola
+página** — si le agregás texto, revisá que siga saliendo en una.

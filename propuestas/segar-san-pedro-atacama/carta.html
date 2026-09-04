@@ -1,0 +1,196 @@
+<!doctype html>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Tourevo · San Pedro de Atacama — letter to Segar</title>
+<style>
+  :root {
+    --ground: #EEF3F3; --paper: #FFFFFF; --glacier: #E7F0F0; --glacier-2: #F3F8F8;
+    --ink: #16232B; --ink-soft: #566A72; --ink-faint: #8497A0;
+    --line: #DBE6E6; --line-soft: #EAF1F1;
+    --accent: #0F766E; --accent-deep: #0B5B54; --summit: #2F6E8F;
+    --warn: #B4632A; --warn-wash: #FBF1E8; --warn-line: #E9CFB6;
+    --shadow: 24px 40px 80px -40px rgba(16, 45, 50, .35);
+    --font-serif: "Iowan Old Style", "Palatino Linotype", "Palatino", "Georgia", serif;
+    --font-sans: system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --ground: #0A0F13; --paper: #121a20; --glacier: #172129; --glacier-2: #141d24;
+      --ink: #E7EDEE; --ink-soft: #9EACB2; --ink-faint: #6C7B82; --line: #26313A;
+      --line-soft: #1E2831; --accent: #2DD4BF; --accent-deep: #5EEAD4; --summit: #8FBAD3;
+      --warn: #E0955C; --warn-wash: #241A12; --warn-line: #4A3524;
+      --shadow: 24px 40px 90px -40px rgba(0, 0, 0, .7);
+    }
+  }
+  :root[data-theme="dark"] {
+    --ground: #0A0F13; --paper: #121a20; --glacier: #172129; --glacier-2: #141d24;
+    --ink: #E7EDEE; --ink-soft: #9EACB2; --ink-faint: #6C7B82; --line: #26313A;
+    --line-soft: #1E2831; --accent: #2DD4BF; --accent-deep: #5EEAD4; --summit: #8FBAD3;
+    --warn: #E0955C; --warn-wash: #241A12; --warn-line: #4A3524;
+    --shadow: 24px 40px 90px -40px rgba(0, 0, 0, .7);
+  }
+
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: radial-gradient(120% 60% at 50% -10%, var(--glacier) 0%, transparent 60%), var(--ground);
+    color: var(--ink); font-family: var(--font-sans); line-height: 1.5;
+    -webkit-font-smoothing: antialiased; padding: clamp(16px, 4vw, 56px) 16px;
+  }
+  .wrap { max-width: 720px; margin: 0 auto; }
+  .paper { background: var(--paper); border: 1px solid var(--line); border-radius: 16px; box-shadow: var(--shadow); overflow: hidden; }
+
+  .head { position: relative; padding: clamp(26px, 5vw, 40px) clamp(22px, 5vw, 44px) 22px; border-bottom: 1px solid var(--line); background: linear-gradient(180deg, var(--glacier-2), var(--paper)); overflow: hidden; }
+  .ridge { position: absolute; left: 0; right: 0; bottom: -1px; height: 40px; width: 100%; display: block; color: var(--accent); opacity: .10; }
+  .brandrow { display: flex; justify-content: space-between; align-items: flex-start; gap: 20px; flex-wrap: wrap; position: relative; z-index: 1; }
+  .brand { display: flex; align-items: center; gap: 12px; }
+  .mark { width: 42px; height: 42px; border-radius: 12px; flex: none; background: linear-gradient(140deg, var(--accent), var(--summit)); display: grid; place-items: center; color: #fff; box-shadow: 0 6px 16px -6px color-mix(in srgb, var(--accent) 70%, transparent); }
+  .wordmark { font-weight: 700; font-size: 20px; letter-spacing: -.01em; }
+  .wordmark small { display: block; font-size: 10.5px; font-weight: 600; letter-spacing: .18em; text-transform: uppercase; color: var(--ink-faint); margin-top: 2px; }
+  .ref { text-align: right; font-size: 11px; font-weight: 700; letter-spacing: .16em; text-transform: uppercase; color: var(--accent); line-height: 1.7; }
+  .ref span { display: block; color: var(--ink-faint); letter-spacing: .1em; }
+
+  .body { padding: clamp(20px, 4vw, 28px) clamp(22px, 5vw, 44px) clamp(20px, 4vw, 28px); }
+
+  .salute { font-family: var(--font-serif); font-size: 19px; font-weight: 600; margin: 0 0 13px; }
+  p.t { margin: 0 0 13px; font-size: 14px; line-height: 1.58; color: var(--ink-soft); }
+  p.t b { color: var(--ink); font-weight: 700; }
+  p.t:last-child { margin-bottom: 0; }
+
+  .points { list-style: none; margin: 15px 0 16px; padding: 0; display: grid; gap: 11px; }
+  .points li { display: grid; grid-template-columns: 26px 1fr; gap: 12px; align-items: start; font-size: 13.8px; line-height: 1.55; color: var(--ink-soft); break-inside: avoid; }
+  .points li b { color: var(--ink); font-weight: 700; }
+  .points .pic { width: 26px; height: 26px; border-radius: 8px; display: grid; place-items: center; margin-top: 1px; background: color-mix(in srgb, var(--accent) 14%, var(--paper)); color: var(--accent); }
+  .points li.urg .pic { background: color-mix(in srgb, var(--warn) 16%, var(--paper)); color: var(--warn); }
+
+  .figure { display: grid; grid-template-columns: 1fr auto; gap: 6px 20px; align-items: end;
+    background: linear-gradient(135deg, var(--accent-deep), var(--summit)); color: #fff;
+    border-radius: 14px; padding: 15px 20px; margin: 16px 0; }
+  @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .figure { color: #06201d; } }
+  :root[data-theme="dark"] .figure { color: #06201d; }
+  :root[data-theme="light"] .figure { color: #fff; }
+  .figure .k { font-size: 10.5px; font-weight: 700; letter-spacing: .16em; text-transform: uppercase; opacity: .82; }
+  .figure .d { font-size: 13px; font-weight: 600; opacity: .92; font-variant-numeric: tabular-nums; margin-top: 3px; }
+  .figure .v { font-family: var(--font-serif); font-size: clamp(26px, 5.4vw, 33px); font-weight: 600; line-height: 1; font-variant-numeric: tabular-nums; white-space: nowrap; }
+  .figure .sub { grid-column: 1 / -1; border-top: 1px solid rgba(255,255,255,.28); margin-top: 10px; padding-top: 9px; font-size: 12.5px; font-weight: 600; font-variant-numeric: tabular-nums; }
+
+  .urgent { border: 1px solid var(--warn-line); background: var(--warn-wash); border-radius: 14px; padding: 15px 18px; margin: 16px 0; break-inside: avoid; }
+  .urgent .h { display: flex; align-items: center; gap: 9px; font-size: 10.5px; font-weight: 700; letter-spacing: .16em; text-transform: uppercase; color: var(--warn); margin-bottom: 9px; }
+  .urgent p { margin: 0 0 9px; font-size: 13.5px; line-height: 1.55; color: var(--ink-soft); }
+  .urgent p:last-child { margin-bottom: 0; }
+  .urgent b { color: var(--ink); font-weight: 700; }
+
+  .ask { border: 1px solid var(--line); border-left: 3px solid var(--accent); border-radius: 4px 12px 12px 4px; background: var(--glacier-2); padding: 14px 18px; margin: 16px 0; break-inside: avoid; }
+  .ask h4 { margin: 0 0 8px; font-size: 11px; font-weight: 700; letter-spacing: .16em; text-transform: uppercase; color: var(--ink-faint); }
+  .ask ol { margin: 0; padding-left: 19px; display: grid; gap: 8px; }
+  .ask li { font-size: 13.5px; line-height: 1.52; color: var(--ink-soft); }
+  .ask li b { color: var(--ink); font-weight: 700; }
+
+  .sign { margin-top: 14px; padding-top: 12px; border-top: 1px solid var(--line); }
+  .sign .warm { font-family: var(--font-serif); font-style: italic; font-size: 14.5px; color: var(--ink-soft); margin: 0 0 8px; }
+  .sign .who { display: flex; align-items: center; gap: 13px; }
+  .sign .monogram { width: 36px; height: 36px; border-radius: 50%; flex: none; background: linear-gradient(140deg, var(--accent), var(--summit)); color: #fff; display: grid; place-items: center; font-weight: 700; font-size: 15px; }
+  .sign .nm { font-size: 16px; font-weight: 700; }
+  .sign .nm span { display: block; font-size: 13px; font-weight: 600; color: var(--ink-soft); margin-top: 2px; }
+  .sign .nm a { color: var(--summit); text-decoration: none; font-weight: 600; }
+
+  .foot { border-top: 1px solid var(--line); padding: 13px clamp(22px, 5vw, 44px); background: var(--glacier-2); font-size: 12px; color: var(--ink-faint); display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+  .foot b { color: var(--ink-soft); font-weight: 700; }
+
+  @media (max-width: 560px) { .figure { grid-template-columns: 1fr; } }
+
+  @page { size: A4; margin: 10mm; }
+  @media print {
+    body { padding: 0; background: #fff; }
+    .wrap { max-width: none; }
+    .paper { border: 0; border-radius: 0; box-shadow: none; }
+    .wrap { zoom: .90; }
+    .head { padding: 18px 6mm 15px; }
+    .body { padding: 18px 6mm 18px; }
+    .foot { padding: 14px 6mm; }
+    .figure, .urgent, .ask, .sign, .foot { break-inside: avoid; }
+    a { text-decoration: none; color: inherit; }
+  }
+</style>
+
+<div class="wrap">
+  <article class="paper">
+
+    <header class="head">
+      <svg class="ridge" viewBox="0 0 800 40" preserveAspectRatio="none" aria-hidden="true">
+        <path d="M0 40 L120 12 L210 30 L330 3 L430 26 L540 9 L650 28 L740 14 L800 26 L800 40 Z" fill="currentColor"/>
+      </svg>
+      <div class="brandrow">
+        <div class="brand">
+          <div class="mark" aria-hidden="true">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 20 L9 8 L13 15 L16 10 L21 20 Z"/></svg>
+          </div>
+          <div class="wordmark">Tourevo<small>South America by design</small></div>
+        </div>
+        <div class="ref">
+          COT-2026-0160
+          <span>04 September 2026</span>
+        </div>
+      </div>
+    </header>
+
+    <div class="body">
+
+      <p class="salute">Dear Segar,</p>
+
+      <p class="t">Attached is the quotation for your five days in San Pedro de Atacama — <b>Tuesday 22 to Saturday 26 December</b>, for the four of you: six excursions and two private airport transfers, read line by line against the December calendar before it reached you. Your hotel and your flights are not part of it — the transfers run to and from whichever hotel you choose, and I will happily quote both.</p>
+
+      <ul class="points">
+        <li>
+          <span class="pic" aria-hidden="true"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1v22M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg></span>
+          <span><b>You pay the agency in San Pedro directly, in your own name.</b> Every figure is the operator's own price — nothing added, no commission taken out, and Tourevo never holds your money. On confirmation I introduce you by name to the person who runs your week; they issue the invoice and your vouchers. I stay your contact throughout either way.</span>
+        </li>
+      </ul>
+
+      <div class="figure">
+        <div>
+          <div class="k">Total · 4 travellers</div>
+          <div class="d">Programme CLP 2,320,000 + all park entrance fees CLP 324,000</div>
+        </div>
+        <div class="v">CLP 2,644,000</div>
+        <div class="sub">CLP 661,000 per person · to confirm, the agency needs CLP 1,212,000 — 40% of the programme plus the park tickets they must buy in advance</div>
+      </div>
+
+      <div class="urgent">
+        <div class="h">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 8v5M12 17h.01"/><circle cx="12" cy="12" r="9"/></svg>
+          Subject to availability
+        </div>
+        <p>Nothing here is held until the agency has your confirmation — not the vehicles, not the excursion places, not the park tickets for the 24th and 25th. <b>December is the busiest month of the year in San Pedro</b> and those two dates are the hardest in it: the diary closes early, and for everyone at once. If it closes first, we do not get these dates back — we would be going to a different operator, at a different price, and the week in the attached document would not be the week you get.</p>
+        <p>And confirming early costs you nothing: the operator returns <b>the whole deposit</b> on any cancellation made 90 days or more out — on or before <b>23 September</b> for these dates. Say yes now and the week comes off the market while your money is still entirely recoverable.</p>
+      </div>
+
+      <div class="ask">
+        <h4>Two things I need from you</h4>
+        <ol>
+          <li><b>Christmas Eve dinner.</b> You are back in town at 20:30 on the 24th, and in Chile the celebration is that night — kitchens in San Pedro close early or run a set menu booked weeks ahead. Tell me what you would like and I book it the moment you confirm.</li>
+          <li><b>Are all four of you adults?</b> Three of the four parks charge less for under-18s. I have priced everyone as an adult; if that is wrong, the total comes down.</li>
+        </ol>
+      </div>
+
+      <p class="t">Reply to this and I take the dates off the agency's diary the same day.</p>
+
+      <div class="sign">
+        <p class="warm">With warm regards,</p>
+        <div class="who">
+          <span class="monogram" aria-hidden="true">JP</span>
+          <span class="nm">Juan Pablo
+            <span>Travel Manager, Tourevo · <a href="mailto:info@tourevo.cl">info@tourevo.cl</a></span>
+          </span>
+        </div>
+      </div>
+
+    </div>
+
+    <footer class="foot">
+      <span>Tourevo · Chilean DMC · <b>tourevo.cl</b> · Quotation <b>COT-2026-0160</b> · San Pedro de Atacama · 22–26 December 2026</span>
+    </footer>
+
+  </article>
+</div>

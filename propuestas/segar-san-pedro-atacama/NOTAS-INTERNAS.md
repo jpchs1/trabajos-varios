@@ -4,6 +4,11 @@ Revisión previa al envío. **No se publica**: `scripts/deploy-ftp.sh` excluye `
 
 - **Fuente:** el correo con el programa ajustado que la agencia de San Pedro de
   Atacama le envió a Juan Pablo.
+- **Relación:** es una **agencia de turismo asociada a la nuestra, que
+  recomendamos** — no es "nuestro operador". Los dos PDF la tratan así: la
+  primera mención dice "an associated travel agency in San Pedro de Atacama, one
+  we work alongside and recommend", y de ahí en adelante es "the agency". No
+  queda ni una mención a "our operator" en ninguno de los dos documentos.
 - **Emitida:** 04 sep 2026 · **Viaje:** 22–26 dic 2026 · 4 pasajeros.
 
 ## Regla de este documento
@@ -11,19 +16,19 @@ Revisión previa al envío. **No se publica**: `scripts/deploy-ftp.sh` excluye `
 **Los dos PDF sólo contienen lo que dice ese correo.** Nada de datos propios:
 sin altitudes, sin distancias, sin clima, sin códigos de aeropuerto, sin
 conversión a dólares, sin consejos de equipaje ni de vuelos, sin exclusiones que
-el operador no listó. Los siete servicios van en el orden y con los horarios,
+la agencia no listó. Los siete servicios van en el orden y con los horarios,
 descripciones, inclusiones y precios que él escribió, incluida la etiqueta "full
 day" del jueves 24 tal cual la puso.
 
 Lo único que se agrega es de forma, no de contenido: la traducción al inglés, el
-orden visual, y tres cosas que sí vienen de JP y no del operador —
+orden visual, y tres cosas que sí vienen de JP y no de la agencia —
 
 - el nombre de Segar y las fechas de diciembre 2026 (el correo dice sólo
   "Martes 22" y "Sábado 26", sin mes);
 - la **política de transparencia**: el pago va directo a la agencia de San Pedro,
   a nombre del pasajero, y Tourevo no agrega ni retiene nada;
-- el **cierre por disponibilidad**, redactado sobre las palabras del propio
-  operador ("nuestra agenda se llena anticipadamente y ya no admite el ingreso
+- el **cierre por disponibilidad**, redactado sobre las palabras de la propia
+  agencia ("nuestra agenda se llena anticipadamente y ya no admite el ingreso
   de otras nuevas").
 
 Lo demás derivado es aritmética sobre sus propias cifras: 580.000 × 4 =
@@ -56,7 +61,7 @@ cifras: 928.000 + 284.000 = 1.212.000, saldo al iniciar.
 
 - [ ] **Jueves 24.** Dice "full day: Valle de la Luna Sur" pero da horario 16:30
       a 20:30, y ese mismo día ya hay Puritama de 9:30 a 13:30. Va reproducido
-      tal cual, sin corregirlo. Conviene que el operador aclare si es error de
+      tal cual, sin corregirlo. Conviene que la agencia aclare si es error de
       etiqueta o de horario.
 - [ ] **Correo de Segar.** El bloque "Prepared for" va sin dirección.
 

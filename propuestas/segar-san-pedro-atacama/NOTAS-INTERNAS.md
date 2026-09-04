@@ -20,6 +20,12 @@ la agencia no listó. Los siete servicios van en el orden y con los horarios,
 descripciones, inclusiones y precios que él escribió, incluida la etiqueta "full
 day" del jueves 24 tal cual la puso.
 
+Y queda dicho en los dos documentos: **el formato es nuestro, el contenido es de
+ellos**. La nota de apertura de la cotización lo dice ("what we have done is put
+their quotation into this format so that it is easier to read and follow — the
+programme, the prices and the terms are theirs, unchanged"), el pie de la última
+página lo repite, y la carta lo dice en su primer párrafo.
+
 Lo único que se agrega es de forma, no de contenido: la traducción al inglés, el
 orden visual, y tres cosas que sí vienen de JP y no de la agencia —
 

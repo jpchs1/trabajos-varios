@@ -1,0 +1,607 @@
+<!doctype html>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Tourevo · Itinerario grupo Segar — Chile, 16–26 dic 2026</title>
+<style>
+  :root {
+    --ground: #EEF3F3;
+    --paper: #FFFFFF;
+    --glacier: #E7F0F0;
+    --glacier-2: #F3F8F8;
+    --ink: #16232B;
+    --ink-soft: #566A72;
+    --ink-faint: #8497A0;
+    --line: #DBE6E6;
+    --line-soft: #EAF1F1;
+    --accent: #0F766E;
+    --accent-deep: #0B5B54;
+    --summit: #2F6E8F;
+    --warn: #B4632A;
+    --warn-wash: #FBF1E8;
+    --warn-line: #E9CFB6;
+    --shadow: 24px 40px 80px -40px rgba(16, 45, 50, .35);
+    --font-serif: "Iowan Old Style", "Palatino Linotype", "Palatino", "Georgia", serif;
+    --font-sans: system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --ground: #0A0F13; --paper: #121a20; --glacier: #172129; --glacier-2: #141d24;
+      --ink: #E7EDEE; --ink-soft: #9EACB2; --ink-faint: #6C7B82; --line: #26313A;
+      --line-soft: #1E2831; --accent: #2DD4BF; --accent-deep: #5EEAD4; --summit: #8FBAD3;
+      --warn: #E0955C; --warn-wash: #241A12; --warn-line: #4A3524;
+      --shadow: 24px 40px 90px -40px rgba(0, 0, 0, .7);
+    }
+  }
+  :root[data-theme="dark"] {
+    --ground: #0A0F13; --paper: #121a20; --glacier: #172129; --glacier-2: #141d24;
+    --ink: #E7EDEE; --ink-soft: #9EACB2; --ink-faint: #6C7B82; --line: #26313A;
+    --line-soft: #1E2831; --accent: #2DD4BF; --accent-deep: #5EEAD4; --summit: #8FBAD3;
+    --warn: #E0955C; --warn-wash: #241A12; --warn-line: #4A3524;
+    --shadow: 24px 40px 90px -40px rgba(0, 0, 0, .7);
+  }
+
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background:
+      radial-gradient(120% 60% at 50% -10%, var(--glacier) 0%, transparent 60%),
+      var(--ground);
+    color: var(--ink);
+    font-family: var(--font-sans);
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+    padding: clamp(16px, 4vw, 56px) 16px;
+  }
+  .wrap { max-width: 800px; margin: 0 auto; }
+
+  .paper {
+    background: var(--paper);
+    border: 1px solid var(--line);
+    border-radius: 16px;
+    box-shadow: var(--shadow);
+    overflow: hidden;
+  }
+
+  /* ---- Header ---- */
+  .head {
+    position: relative;
+    padding: clamp(26px, 5vw, 44px) clamp(22px, 5vw, 48px) 26px;
+    border-bottom: 1px solid var(--line);
+    background: linear-gradient(180deg, var(--glacier-2), var(--paper));
+    overflow: hidden;
+  }
+  .ridge { position: absolute; left: 0; right: 0; bottom: -1px; height: 46px; width: 100%; display: block; color: var(--accent); opacity: .10; }
+  .brandrow { display: flex; justify-content: space-between; align-items: flex-start; gap: 20px; flex-wrap: wrap; position: relative; z-index: 1; }
+  .brand { display: flex; align-items: center; gap: 12px; }
+  .mark {
+    width: 42px; height: 42px; border-radius: 12px; flex: none;
+    background: linear-gradient(140deg, var(--accent), var(--summit));
+    display: grid; place-items: center; color: #fff;
+    box-shadow: 0 6px 16px -6px color-mix(in srgb, var(--accent) 70%, transparent);
+  }
+  .wordmark { font-weight: 700; font-size: 20px; letter-spacing: -.01em; }
+  .wordmark small { display: block; font-size: 10.5px; font-weight: 600; letter-spacing: .18em; text-transform: uppercase; color: var(--ink-faint); margin-top: 2px; }
+  .eyebrow { font-size: 11px; font-weight: 700; letter-spacing: .2em; text-transform: uppercase; color: var(--accent); }
+  .doc-title { font-family: var(--font-serif); font-weight: 600; font-size: clamp(26px, 5.2vw, 36px); line-height: 1.05; margin: 14px 0 0; letter-spacing: -.01em; text-wrap: balance; }
+  .doc-sub { margin: 10px 0 0; font-size: 15px; color: var(--ink-soft); max-width: 56ch; position: relative; z-index: 1; }
+
+  .meta { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 18px; position: relative; z-index: 1; }
+  .chip {
+    font-size: 12px; font-weight: 600; color: var(--ink-soft);
+    background: var(--glacier); border: 1px solid var(--line);
+    padding: 5px 11px; border-radius: 999px;
+    font-variant-numeric: tabular-nums;
+  }
+  .chip b { color: var(--ink); font-weight: 700; }
+
+  /* ---- Sections ---- */
+  .body { padding: clamp(22px, 4.5vw, 40px) clamp(22px, 5vw, 48px) clamp(28px, 5vw, 44px); }
+  section + section { margin-top: clamp(26px, 4vw, 36px); }
+  .label {
+    font-size: 11px; font-weight: 700; letter-spacing: .16em; text-transform: uppercase;
+    color: var(--ink-faint); margin: 0 0 12px; display: flex; align-items: center; gap: 10px;
+  }
+  .label::after { content: ""; flex: 1; height: 1px; background: var(--line); }
+  .lede { margin: 0 0 14px; font-size: 14.5px; line-height: 1.55; color: var(--ink-soft); }
+  .lede b { color: var(--ink); font-weight: 700; }
+
+  .client { display: flex; align-items: baseline; gap: 10px 18px; flex-wrap: wrap; }
+  .client .name { font-size: 19px; font-weight: 700; }
+  .client .mail { font-size: 14px; color: var(--summit); font-weight: 600; }
+
+  .facts { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 1px; background: var(--line); border: 1px solid var(--line); border-radius: 12px; overflow: hidden; }
+  .fact { background: var(--paper); padding: 14px 16px; }
+  .fact dt { font-size: 11px; font-weight: 700; letter-spacing: .09em; text-transform: uppercase; color: var(--ink-faint); margin: 0 0 4px; }
+  .fact dd { margin: 0; font-size: 15px; font-weight: 650; }
+
+  /* ---- Personal welcome note ---- */
+  .welcome {
+    display: flex; gap: 16px; align-items: flex-start;
+    padding: 20px 22px;
+    background: linear-gradient(135deg, var(--glacier), var(--glacier-2));
+    border: 1px solid var(--line); border-left: 3px solid var(--accent);
+    border-radius: 4px 14px 14px 4px;
+  }
+  .welcome .monogram {
+    width: 40px; height: 40px; border-radius: 50%; flex: none;
+    background: linear-gradient(140deg, var(--accent), var(--summit));
+    color: #fff; display: grid; place-items: center; font-weight: 700; font-size: 15px;
+    letter-spacing: .02em; margin-top: 2px;
+  }
+  .welcome .msg { font-family: var(--font-serif); font-size: 15.5px; line-height: 1.6; color: var(--ink); font-style: italic; margin: 0; }
+  .welcome .msg b { font-style: normal; font-weight: 600; }
+  .welcome .sig { display: block; margin-top: 10px; font-family: var(--font-sans); font-style: normal; font-size: 12.5px; font-weight: 600; color: var(--ink-soft); }
+  .welcome .sig b { color: var(--accent-deep); font-weight: 700; }
+
+  /* ---- Notice ---- */
+  .notice { border: 1px solid var(--warn-line); background: var(--warn-wash); border-radius: 14px; overflow: hidden; }
+  .notice-top { display: flex; align-items: center; gap: 9px; padding: 13px 20px; border-bottom: 1px solid var(--warn-line); font-size: 11px; font-weight: 700; letter-spacing: .16em; text-transform: uppercase; color: var(--warn); }
+  .notice-body { padding: 18px 20px 20px; }
+  .notice-body > p { margin: 0 0 14px; font-size: 14.5px; line-height: 1.55; color: var(--ink-soft); }
+  .notice-body > p:last-child { margin-bottom: 0; }
+  .notice-body b { color: var(--ink); font-weight: 700; }
+  .findings { list-style: none; margin: 0 0 16px; padding: 0; display: grid; gap: 12px; }
+  .findings li { display: grid; grid-template-columns: 22px 1fr; gap: 12px; align-items: start; font-size: 14.5px; line-height: 1.5; }
+  .findings .fic { width: 22px; height: 22px; border-radius: 50%; display: grid; place-items: center; margin-top: 1px; }
+  .findings .fic.no { background: color-mix(in srgb, var(--warn) 18%, var(--paper)); color: var(--warn); }
+  .findings .fic.yes { background: color-mix(in srgb, var(--accent) 16%, var(--paper)); color: var(--accent); }
+  .findings b { color: var(--ink); font-weight: 700; }
+  .findings span.det { color: var(--ink-soft); }
+
+  /* ---- Itinerary ---- */
+  .days { display: grid; gap: 14px; }
+  .day { border: 1px solid var(--line); border-radius: 13px; overflow: hidden; background: var(--paper); break-inside: avoid; }
+  .day-head { display: flex; align-items: center; gap: 13px; padding: 13px 18px; background: var(--glacier-2); border-bottom: 1px solid var(--line); flex-wrap: wrap; }
+  .day-date { font-size: 11px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: var(--accent); font-variant-numeric: tabular-nums; }
+  .day-name { font-family: var(--font-serif); font-size: 17px; font-weight: 600; letter-spacing: -.01em; flex: 1; min-width: 180px; }
+  .day-sleep { font-size: 12px; font-weight: 650; color: var(--ink-soft); background: var(--paper); border: 1px solid var(--line); padding: 4px 10px; border-radius: 999px; }
+  .day-sleep.xmas { color: var(--warn); border-color: var(--warn-line); background: var(--warn-wash); }
+  .stops { list-style: none; margin: 0; padding: 6px 18px 14px; display: grid; }
+  .stops li { display: grid; grid-template-columns: 92px 1fr; gap: 14px; padding: 10px 0; border-bottom: 1px solid var(--line-soft); font-size: 14.5px; line-height: 1.5; }
+  .stops li:last-child { border-bottom: 0; }
+  .stops .t { font-size: 12.5px; font-weight: 700; color: var(--summit); font-variant-numeric: tabular-nums; padding-top: 2px; }
+  .stops .d b { font-weight: 700; }
+  .stops .d em { display: block; font-style: normal; font-size: 13px; color: var(--ink-soft); margin-top: 2px; line-height: 1.45; }
+
+  /* ---- Tables ---- */
+  .tbl-wrap { overflow-x: auto; border: 1px solid var(--line); border-radius: 12px; }
+  table { border-collapse: collapse; width: 100%; min-width: 460px; font-size: 14px; }
+  thead th { font-size: 10.5px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: var(--ink-faint); background: var(--glacier-2); text-align: left; padding: 11px 16px; border-bottom: 1px solid var(--line); }
+  thead th.r, tbody td.r, tfoot td.r { text-align: right; }
+  thead th.r { white-space: nowrap; }
+  tbody td { padding: 12px 16px; border-bottom: 1px solid var(--line-soft); vertical-align: top; line-height: 1.45; }
+  tbody tr:last-child td { border-bottom: 0; }
+  tbody td.r { font-variant-numeric: tabular-nums; font-weight: 700; white-space: nowrap; }
+  tbody td b { font-weight: 700; }
+  tbody td em { font-style: normal; display: block; font-size: 12.5px; color: var(--ink-soft); margin-top: 2px; }
+  tfoot td { padding: 12px 16px; border-top: 1px solid var(--line); background: var(--glacier-2); font-size: 13px; font-weight: 700; font-variant-numeric: tabular-nums; }
+  .tag { display: inline-block; font-size: 10.5px; font-weight: 700; letter-spacing: .07em; text-transform: uppercase; padding: 3px 8px; border-radius: 999px; margin-top: 6px; }
+  .tag.pre { color: var(--warn); background: var(--warn-wash); border: 1px solid var(--warn-line); }
+  .tag.gate { color: var(--summit); background: var(--glacier); border: 1px solid var(--line); }
+  .tag.free { color: var(--accent); background: color-mix(in srgb, var(--accent) 10%, var(--paper)); border: 1px solid color-mix(in srgb, var(--accent) 30%, var(--line)); }
+
+  /* ---- Total ---- */
+  .total { display: grid; grid-template-columns: 1fr auto; gap: 8px 24px; align-items: end;
+    background: linear-gradient(135deg, var(--accent-deep), var(--summit));
+    color: #fff; border-radius: 14px; padding: 22px 24px; margin-top: 14px; }
+  @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .total { color: #06201d; } }
+  :root[data-theme="dark"] .total { color: #06201d; }
+  :root[data-theme="light"] .total { color: #fff; }
+  .total .tlabel { font-size: 11px; font-weight: 700; letter-spacing: .16em; text-transform: uppercase; opacity: .82; }
+  .total .calc { font-size: 13.5px; font-weight: 600; opacity: .92; font-variant-numeric: tabular-nums; }
+  .total .amount { font-family: var(--font-serif); font-size: clamp(28px, 5.6vw, 38px); font-weight: 600; line-height: 1; font-variant-numeric: tabular-nums; }
+
+  .subtotal { display: flex; justify-content: space-between; align-items: baseline; gap: 16px; flex-wrap: wrap;
+    border: 1px solid var(--line); border-radius: 12px; padding: 14px 18px; margin-top: 12px; background: var(--glacier-2); }
+  .subtotal .k { font-size: 12.5px; font-weight: 700; color: var(--ink-soft); }
+  .subtotal .v { font-size: 17px; font-weight: 700; font-variant-numeric: tabular-nums; }
+  .subtotal .v small { display: block; font-size: 11.5px; font-weight: 600; color: var(--ink-faint); text-align: right; margin-top: 2px; }
+
+  /* ---- Transparency block ---- */
+  .direct { border: 1px solid color-mix(in srgb, var(--accent) 40%, var(--line)); border-radius: 14px; overflow: hidden; }
+  .direct-top { display: flex; align-items: center; gap: 9px; padding: 13px 20px; background: var(--accent); color: #fff; font-size: 11px; font-weight: 700; letter-spacing: .16em; text-transform: uppercase; }
+  @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .direct-top { color: #06201d; } }
+  :root[data-theme="dark"] .direct-top { color: #06201d; }
+  :root[data-theme="light"] .direct-top { color: #fff; }
+  .direct-body { padding: 18px 20px 20px; background: color-mix(in srgb, var(--accent) 5%, var(--paper)); }
+  .direct-body ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 12px; }
+  .direct-body li { display: grid; grid-template-columns: 22px 1fr; gap: 12px; align-items: start; font-size: 14.5px; line-height: 1.5; color: var(--ink-soft); }
+  .direct-body li b { color: var(--ink); font-weight: 700; }
+  .direct-body .dic { width: 22px; height: 22px; border-radius: 50%; display: grid; place-items: center; margin-top: 1px; background: color-mix(in srgb, var(--accent) 16%, var(--paper)); color: var(--accent); }
+
+  /* ---- Payment schedule ---- */
+  .sched { display: grid; gap: 1px; background: var(--line); border: 1px solid var(--line); border-radius: 12px; overflow: hidden; }
+  .step { background: var(--paper); padding: 16px 18px; display: grid; grid-template-columns: 30px 1fr auto; gap: 14px; align-items: center; }
+  .step .n { width: 30px; height: 30px; border-radius: 50%; display: grid; place-items: center; font-size: 13px; font-weight: 700;
+    background: color-mix(in srgb, var(--accent) 14%, var(--paper)); color: var(--accent); }
+  .step .w { font-size: 14.5px; font-weight: 700; }
+  .step .w em { display: block; font-style: normal; font-size: 12.5px; font-weight: 450; color: var(--ink-soft); margin-top: 3px; line-height: 1.45; }
+  .step .a { font-size: 16px; font-weight: 700; font-variant-numeric: tabular-nums; white-space: nowrap; text-align: right; }
+  .step.hi { background: color-mix(in srgb, var(--accent) 7%, var(--paper)); }
+
+  /* ---- Cancellation timeline ---- */
+  .tl { display: grid; gap: 1px; background: var(--line); border: 1px solid var(--line); border-radius: 12px; overflow: hidden; }
+  .tl-row { background: var(--paper); padding: 14px 18px; display: grid; grid-template-columns: 190px 1fr; gap: 16px; align-items: baseline; }
+  .tl-row .when { font-size: 12.5px; font-weight: 700; color: var(--summit); font-variant-numeric: tabular-nums; }
+  .tl-row .what { font-size: 14px; line-height: 1.45; color: var(--ink-soft); }
+  .tl-row .what b { color: var(--ink); font-weight: 700; }
+  .tl-row.good { background: color-mix(in srgb, var(--accent) 7%, var(--paper)); }
+  .tl-row.good .when { color: var(--accent); }
+  .tl-row.bad .when { color: var(--warn); }
+
+  /* ---- Two-column info ---- */
+  .cols { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(16px, 3vw, 26px); }
+  .card { border: 1px solid var(--line); border-radius: 12px; padding: 18px 18px 16px; background: var(--glacier-2); break-inside: avoid; }
+  .card h4 { margin: 0 0 10px; font-size: 13px; font-weight: 750; letter-spacing: .02em; }
+  .card ul { margin: 0; padding: 0; list-style: none; display: grid; gap: 9px; }
+  .card li { font-size: 13.5px; color: var(--ink-soft); padding-left: 16px; position: relative; line-height: 1.45; }
+  .card li::before { content: ""; position: absolute; left: 2px; top: 8px; width: 5px; height: 5px; border-radius: 50%; background: var(--accent); }
+  .card.warn li::before { background: var(--warn); }
+  .card b { color: var(--ink); font-weight: 700; }
+
+  /* ---- Hallmark ---- */
+  .sello { border: 1px solid var(--line); border-radius: 14px; overflow: hidden; }
+  .sello-top { padding: 13px 20px; background: var(--accent); color: #fff; font-size: 12px; font-weight: 700; letter-spacing: .16em; text-transform: uppercase; display: flex; align-items: center; gap: 9px; }
+  @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .sello-top { color: #06201d; } }
+  :root[data-theme="dark"] .sello-top { color: #06201d; }
+  :root[data-theme="light"] .sello-top { color: #fff; }
+  .sello-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(215px, 1fr)); gap: 1px; background: var(--line); }
+  .value { background: var(--paper); padding: 17px 18px; display: flex; gap: 13px; align-items: flex-start; }
+  .value .vic { width: 30px; height: 30px; border-radius: 9px; flex: none; display: grid; place-items: center; background: color-mix(in srgb, var(--accent) 15%, var(--paper)); color: var(--accent); margin-top: 1px; }
+  .value h5 { margin: 0 0 3px; font-size: 14px; font-weight: 750; }
+  .value p { margin: 0; font-size: 13px; line-height: 1.45; color: var(--ink-soft); }
+
+  /* ---- Conditions ---- */
+  .terms { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 1px; background: var(--line); border: 1px solid var(--line); border-radius: 12px; overflow: hidden; }
+  .term { background: var(--paper); padding: 15px 16px; }
+  .term .k { font-size: 11px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--ink-faint); margin-bottom: 5px; }
+  .term .v { font-size: 13.5px; font-weight: 600; line-height: 1.4; }
+  .fine { margin: 11px 0 0; font-size: 12px; color: var(--ink-faint); line-height: 1.5; }
+  .fine b { color: var(--ink-soft); }
+
+  /* ---- CTA ---- */
+  .cta { margin-top: clamp(26px, 4vw, 36px); text-align: center; padding: clamp(22px, 4vw, 30px); border: 1px dashed color-mix(in srgb, var(--accent) 45%, var(--line)); border-radius: 14px; background: var(--glacier-2); }
+  .cta .lead { margin: 0 0 16px; font-family: var(--font-serif); font-size: 16px; font-style: italic; color: var(--ink); }
+  .cta .btn { display: inline-flex; align-items: center; gap: 10px; background: var(--accent); color: #fff; font-weight: 700; font-size: 15px; padding: 14px 28px; border-radius: 10px; text-decoration: none; box-shadow: 0 10px 24px -12px color-mix(in srgb, var(--accent) 80%, transparent); }
+  @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .cta .btn { color: #06201d; } }
+  :root[data-theme="dark"] .cta .btn { color: #06201d; }
+  :root[data-theme="light"] .cta .btn { color: #fff; }
+  .cta .btn:focus-visible { outline: 3px solid var(--summit); outline-offset: 3px; }
+  .cta .after { margin: 12px 0 0; font-size: 12.5px; color: var(--ink-soft); }
+  .cta .after span { font-weight: 700; color: var(--ink); }
+
+  /* ---- Footer ---- */
+  .foot { border-top: 1px solid var(--line); padding: 20px clamp(22px, 5vw, 48px); display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; background: var(--glacier-2); }
+  .foot .who { font-size: 13px; }
+  .foot .who b { font-weight: 700; }
+  .foot .who span { color: var(--ink-soft); }
+  .foot .links { font-size: 12.5px; color: var(--ink-soft); display: flex; gap: 14px; flex-wrap: wrap; }
+  .foot .links a { color: var(--summit); text-decoration: none; font-weight: 600; }
+
+  .legend { max-width: 800px; margin: clamp(16px, 3vw, 22px) auto 0; font-size: 12px; color: var(--ink-faint); text-align: center; }
+
+  @media (max-width: 620px) {
+    .cols { grid-template-columns: 1fr; }
+    .total { grid-template-columns: 1fr; }
+    .stops li { grid-template-columns: 78px 1fr; gap: 10px; }
+    .tl-row { grid-template-columns: 1fr; gap: 4px; }
+    .step { grid-template-columns: 30px 1fr; }
+    .step .a { grid-column: 2; text-align: left; }
+  }
+
+  /* ---- Print / PDF ---- */
+  @page { size: A4; margin: 12mm 10mm; }
+  @media print {
+    body { padding: 0; background: #fff; }
+    .wrap { max-width: none; }
+    .head { padding: 22px 6mm 20px; }
+    .body { padding: 18px 6mm 22px; }
+    .foot { padding: 16px 6mm; }
+    section + section { margin-top: 22px; }
+    .days { gap: 10px; }
+    .stops li { padding: 8px 0; }
+    .paper { border: 0; border-radius: 0; box-shadow: none; }
+    .head { break-after: avoid; }
+    section { break-inside: auto; }
+    .label { break-after: avoid; }
+    .notice, .direct, .sello, .terms, .tl, .sched, .total, .subtotal, .cta, .welcome, .facts { break-inside: avoid; }
+    .tbl-wrap { overflow: visible; }
+    table { min-width: 0; }
+    tbody tr { break-inside: avoid; }
+    .foot { break-inside: avoid; }
+    a { text-decoration: none; color: inherit; }
+  }
+</style>
+<div class="wrap">
+  <article class="paper">
+
+    <header class="head">
+      <svg class="ridge" viewBox="0 0 800 46" preserveAspectRatio="none" aria-hidden="true">
+        <path d="M0 46 L120 14 L210 34 L330 4 L430 30 L540 10 L650 32 L740 16 L800 30 L800 46 Z" fill="currentColor"/>
+      </svg>
+      <div class="brandrow">
+        <div class="brand">
+          <div class="mark" aria-hidden="true">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 20 L9 8 L13 15 L16 10 L21 20 Z"/></svg>
+          </div>
+          <div class="wordmark">Tourevo<small>South America by design</small></div>
+        </div>
+        <div style="text-align:right">
+          <div class="eyebrow">Itinerario · documento para socio</div>
+        </div>
+      </div>
+
+      <h1 class="doc-title">Grupo Segar · Chile</h1>
+      <p class="doc-sub">Once días entre la Patagonia y el desierto de Atacama, del miércoles 16 al sábado 26 de diciembre de 2026, para cuatro viajeros de Estados Unidos. Éste es el itinerario tal como está cargado hoy en el sistema de Tourevo.</p>
+
+      <div class="meta">
+        <span class="chip">Ref. <b>Q-SEGAR26</b></span>
+        <span class="chip">Emitido <b>08 sep 2026</b></span>
+        <span class="chip">Viajeros <b>4</b></span>
+        <span class="chip">Idioma <b>inglés</b></span>
+      </div>
+    </header>
+
+    <div class="body">
+
+      <section>
+        <div class="welcome">
+          <div class="monogram" aria-hidden="true">JP</div>
+          <p class="msg">
+            Carla — acá va el itinerario completo del grupo Segar, que es el primer caso que queremos trabajar con ustedes. Está armado y coordinado por nosotros, con los vuelos internacionales y domésticos ya comprados y los hoteles reservados por el cliente. <b>Lo que sigue abierto son los servicios en destino</b>, y ahí es donde nos interesa escucharlos.
+            <span class="sig">Un abrazo, <b>Juan Pablo</b> · Travel Manager, Tourevo</span>
+          </p>
+        </div>
+      </section>
+
+      <section>
+        <p class="label">De un vistazo</p>
+        <dl class="facts">
+          <div class="fact"><dt>Fechas</dt><dd>16–26 dic 2026</dd></div>
+          <div class="fact"><dt>Viajeros</dt><dd>4 · dos parejas</dd></div>
+          <div class="fact"><dt>Origen</dt><dd>Dallas (DFW)</dd></div>
+          <div class="fact"><dt>Ruta</dt><dd>Patagonia + Atacama</dd></div>
+        </dl>
+      </section>
+
+      <section>
+        <p class="label">El grupo</p>
+        <p class="lede">Cuatro viajeros, <b>dos parejas que viajan juntas</b>: Segar y Shreya, y Suppiah y Renuka. Vienen desde Estados Unidos y <b>hablan inglés</b>, así que todo servicio en destino tiene que poder atenderse en ese idioma. Segar es quien coordina por el grupo y sigue el viaje desde el portal de cliente de Tourevo, donde ve el calendario día por día, las descripciones y sus documentos.</p>
+      </section>
+
+      <section>
+        <p class="label">Cómo llegan y cómo salen</p>
+        <div class="tbl-wrap">
+          <table>
+            <thead><tr><th>Cuándo</th><th>Qué pasa</th></tr></thead>
+            <tbody>
+              <tr>
+                <td><b>Mié 16 dic</b></td>
+                <td><b>Segar y Shreya llegan a Santiago 07:45</b><em>Vuelo desde Dallas. Migración y aduana en Santiago, y siguen el mismo día en vuelo doméstico a Puerto Natales.</em></td>
+              </tr>
+              <tr>
+                <td><b>Jue 17 dic</b></td>
+                <td><b>Suppiah y Renuka se suman en Puerto Natales</b><em>Llegan a Santiago la noche anterior y toman el vuelo doméstico de la mañana; están en Puerto Natales cerca del mediodía. El día 16 el grupo es sólo de dos personas.</em></td>
+              </tr>
+              <tr>
+                <td><b>Mar 22 dic</b></td>
+                <td><b>Patagonia → San Pedro de Atacama</b><em>Día de traslado entero, por tierra y aire. Llegan a El Loa (Calama) por la tarde; el traslado privado al hotel sale 18:15.</em></td>
+              </tr>
+              <tr>
+                <td><b>Sáb 26 dic</b></td>
+                <td><b>Salida</b><em>Traslado San Pedro → El Loa a las 10:00 para el vuelo Calama–Santiago de las 13:44, y esa misma noche los cuatro vuelan de Santiago a Dallas.</em></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="fine"><b>Todos los vuelos, internacionales y domésticos, ya están comprados.</b> Son el marco fijo del viaje: cualquier servicio en destino se acopla a ellos, no al revés.</p>
+      </section>
+
+      <section>
+        <p class="label">Alojamiento</p>
+        <div class="tbl-wrap">
+          <table>
+            <thead><tr><th>Noches</th><th>Dónde</th></tr></thead>
+            <tbody>
+              <tr><td><b>16–22 dic</b><em>6 noches</em></td><td><b>Hotel La Tropilla</b><em>El Ovejero 1123, Puerto Natales · reservado por el cliente</em></td></tr>
+              <tr><td><b>22–26 dic</b><em>4 noches</em></td><td><b>Hotel Cumbres San Pedro de Atacama</b><em>Reservado por el cliente</em></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section>
+        <p class="label">Patagonia · 16 al 21 de diciembre</p>
+        <p class="lede">Seis días con base en Puerto Natales. El servicio está coordinado con operadores locales de la zona.</p>
+        <div class="days">
+
+          <article class="day">
+            <div class="day-head">
+              <span class="day-date">Mié 16</span>
+              <span class="day-name">Llegada y bajada al sur</span>
+              <span class="day-sleep">Puerto Natales</span>
+            </div>
+            <ul class="stops">
+              <li><span class="t">día</span><span class="d"><b>Santiago y vuelo a Puerto Natales</b><em>Llegan de Dallas por la mañana y siguen el mismo día. Sólo Segar y Shreya.</em></span></li>
+              <li><span class="t">tarde</span><span class="d"><b>Costanera del Seno Última Esperanza</b></span></li>
+            </ul>
+          </article>
+
+          <article class="day">
+            <div class="day-head">
+              <span class="day-date">Jue 17</span>
+              <span class="day-name">Base de las Torres</span>
+              <span class="day-sleep">Puerto Natales</span>
+            </div>
+            <ul class="stops">
+              <li><span class="t">día</span><span class="d"><b>Trekking Base de las Torres · 21 km</b><em>El día central del viaje. Salida temprano desde Puerto Natales.</em></span></li>
+              <li><span class="t">mediodía</span><span class="d"><b>Suppiah y Renuka se incorporan</b><em>No alcanzan el trekking de ese día.</em></span></li>
+            </ul>
+          </article>
+
+          <article class="day">
+            <div class="day-head">
+              <span class="day-date">Vie 18</span>
+              <span class="day-name">Balmaceda y Serrano</span>
+              <span class="day-sleep">Puerto Natales</span>
+            </div>
+            <ul class="stops">
+              <li><span class="t">día</span><span class="d"><b>Navegación por el fiordo</b><em>Hasta el glaciar Balmaceda y desembarco en el Serrano.</em></span></li>
+            </ul>
+          </article>
+
+          <article class="day">
+            <div class="day-head">
+              <span class="day-date">Sáb 19</span>
+              <span class="day-name">Full Paine</span>
+              <span class="day-sleep">Puerto Natales</span>
+            </div>
+            <ul class="stops">
+              <li><span class="t">día</span><span class="d"><b>El parque completo en un circuito</b><em>Salida al amanecer.</em></span></li>
+            </ul>
+          </article>
+
+          <article class="day">
+            <div class="day-head">
+              <span class="day-date">Dom 20</span>
+              <span class="day-name">Glaciar Grey</span>
+              <span class="day-sleep">Puerto Natales</span>
+            </div>
+            <ul class="stops">
+              <li><span class="t">día</span><span class="d"><b>Catamarán al glaciar Grey</b></span></li>
+            </ul>
+          </article>
+
+          <article class="day">
+            <div class="day-head">
+              <span class="day-date">Lun 21</span>
+              <span class="day-name">Valle del Francés</span>
+              <span class="day-sleep">Puerto Natales</span>
+            </div>
+            <ul class="stops">
+              <li><span class="t">día</span><span class="d"><b>Valle del Francés</b><em>Se entra y se sale por el catamarán en el lago Pehoé.</em></span></li>
+            </ul>
+          </article>
+
+        </div>
+      </section>
+
+      <section>
+        <p class="label">San Pedro de Atacama · 22 al 26 de diciembre</p>
+        <p class="lede">Cuatro noches en San Pedro. <b>Este tramo está cotizado y a punto de confirmarse</b> con una agencia de la zona con la que trabajamos, y va acá para que vean el programa completo del viaje. Los horarios son los que están cargados en el calendario del cliente.</p>
+        <div class="days">
+
+          <article class="day">
+            <div class="day-head">
+              <span class="day-date">Mar 22</span>
+              <span class="day-name">Llegada al desierto</span>
+              <span class="day-sleep">San Pedro</span>
+            </div>
+            <ul class="stops">
+              <li><span class="t">18:15–20:00</span><span class="d"><b>Traslado privado El Loa (Calama) → hotel en San Pedro</b></span></li>
+            </ul>
+          </article>
+
+          <article class="day">
+            <div class="day-head">
+              <span class="day-date">Mié 23</span>
+              <span class="day-name">Arcoíris y el corazón del salar</span>
+              <span class="day-sleep">San Pedro</span>
+            </div>
+            <ul class="stops">
+              <li><span class="t">9:30–13:30</span><span class="d"><b>Valle del Arcoíris</b><em>Cordillera de Domeyko y el pucará de Chuschul.</em></span></li>
+              <li><span class="t">15:30–19:30</span><span class="d"><b>Laguna Cejar · Ojos de Tebenquiche · Laguna de Tebenquiche</b></span></li>
+            </ul>
+          </article>
+
+          <article class="day">
+            <div class="day-head">
+              <span class="day-date">Jue 24</span>
+              <span class="day-name">Puritama y Valle de la Luna</span>
+              <span class="day-sleep xmas">Nochebuena</span>
+            </div>
+            <ul class="stops">
+              <li><span class="t">9:30–13:30</span><span class="d"><b>Termas de Puritama</b></span></li>
+              <li><span class="t">13:30–16:30</span><span class="d"><b>Tarde libre</b></span></li>
+              <li><span class="t">16:30–20:30</span><span class="d"><b>Valle de la Luna Sur</b><em>Cordillera de la Sal, el Vallecito y el Río de Sal.</em></span></li>
+              <li><span class="t">21:00–23:00</span><span class="d"><b>Cena de Nochebuena</b></span></li>
+            </ul>
+          </article>
+
+          <article class="day">
+            <div class="day-head">
+              <span class="day-date">Vie 25</span>
+              <span class="day-name">Altiplano</span>
+              <span class="day-sleep">San Pedro</span>
+            </div>
+            <ul class="stops">
+              <li><span class="t">10:00–18:00</span><span class="d"><b>Piedras Rojas · Laguna Tuyajto · Lagunas Altiplánicas · Protoaldeas · Pueblos</b><em>Miscanti y Miñiques, Socaire y Toconao. Almuerzo en ruta.</em></span></li>
+            </ul>
+          </article>
+
+          <article class="day">
+            <div class="day-head">
+              <span class="day-date">Sáb 26</span>
+              <span class="day-name">Salida</span>
+              <span class="day-sleep">Vuelo 13:44</span>
+            </div>
+            <ul class="stops">
+              <li><span class="t">10:00–11:44</span><span class="d"><b>Traslado privado hotel en San Pedro → El Loa (Calama)</b><em>El vuelo a Santiago sale 13:44 y está comprado.</em></span></li>
+            </ul>
+          </article>
+
+        </div>
+      </section>
+
+      <section>
+        <p class="label">Cómo trabajamos este viaje</p>
+        <div class="cols">
+          <div class="card">
+            <h4>Lo que hace Tourevo</h4>
+            <ul>
+              <li>Armamos el itinerario y <b>coordinamos a los operadores de cada zona</b>: guía de montaña en Paine, servicios de desierto en Atacama.</li>
+              <li>Los vuelos y hoteles los tiene el cliente; nosotros los cargamos, los cuidamos y ajustamos el día alrededor de ellos.</li>
+              <li>El cliente sigue todo desde su portal, con calendario, descripciones y documentos.</li>
+            </ul>
+          </div>
+          <div class="card">
+            <h4>Cómo se paga</h4>
+            <ul>
+              <li><b>El cliente le paga a cada proveedor directamente</b>, a su nombre. Tourevo no retiene ni traslada ese dinero.</li>
+              <li>Lo que nos paga a nosotros es la planificación y la coordinación, aparte.</li>
+              <li>Si en su caso el modelo es otro — tarifa neta, facturación al DMC — lo conversamos y lo adaptamos.</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <section>
+        <p class="label">Qué está cerrado y qué sigue abierto</p>
+        <ul class="findings">
+          <li><span class="fic yes" aria-hidden="true"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 L9 17 L4 12"/></svg></span><span><b>Cerrado ·</b> <span class="det">vuelos internacionales y domésticos, comprados. Hoteles en Puerto Natales y San Pedro, reservados.</span></span></li>
+          <li><span class="fic yes" aria-hidden="true"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 L9 17 L4 12"/></svg></span><span><b>Cotizado ·</b> <span class="det">el programa completo de San Pedro de Atacama, del 22 al 26.</span></span></li>
+          <li><span class="fic no" aria-hidden="true"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M12 8v5M12 17h.01"/></svg></span><span><b>Abierto ·</b> <span class="det">todo lo que ustedes puedan aportar sobre este perfil de viajero — y, sobre todo, cómo lo trabajamos juntos de acá en adelante.</span></span></li>
+        </ul>
+      </section>
+
+      <section>
+        <p class="label">Lo que nos ayudaría saber</p>
+        <div class="terms">
+          <div class="term"><div class="k">Servicio</div><div class="v">¿Privado o compartido, y cómo se arma el vehículo por grupo?</div></div>
+          <div class="term"><div class="k">Guía</div><div class="v">¿En qué idioma guían? Los cuatro viajeros son de Estados Unidos.</div></div>
+          <div class="term"><div class="k">Horarios</div><div class="v">¿A qué hora es el pick-up de cada servicio?</div></div>
+          <div class="term"><div class="k">Reserva</div><div class="v">¿Qué necesitan de nosotros para cotizar y para confirmar?</div></div>
+        </div>
+      </section>
+
+    </div>
+
+    <footer class="foot">
+      <div class="who"><b>Juan Pablo</b> <span>· Travel Manager, Tourevo</span></div>
+      <div class="links"><a href="https://tourevo.cl">tourevo.cl</a><a href="mailto:info@tourevo.cl">info@tourevo.cl</a></div>
+    </footer>
+
+  </article>
+</div>
+<p class="legend">Tourevo · Itinerario Q-SEGAR26 · grupo Segar · Chile, 16 al 26 de diciembre de 2026 · documento para socio comercial</p>

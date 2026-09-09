@@ -42,9 +42,8 @@ Actions*), que el workflow `deploy-ftp.yml` lee en cada push a `main` que toque
 > contenedor sale sólo por HTTPS/443: el puerto 21 (FTP) y el 22 (SSH/SFTP) están
 > cerrados. Comprobado — `curl ftp://ftp.gnu.org/` da timeout mientras
 > `curl https://ftp.gnu.org/` responde 200 desde el mismo contenedor. Este script
-> es para el runner de GitHub y para la máquina de JP. Si el agente tiene que
-> dejar algo en el servidor, la vía es un workflow con `workflow_dispatch` que él
-> dispara por HTTPS y el runner ejecuta.
+> es para el runner de GitHub y para la máquina de JP; el agente publica
+> mergeando, que es lo que dispara el workflow.
 
 Para un archivo suelto no hace falta el script:
 

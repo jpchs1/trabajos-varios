@@ -34,11 +34,17 @@ Credenciales, siempre del entorno y nunca del código:
 FTP_HOST   FTP_USER   FTP_PASSWORD   [FTP_PORT=21]   [FTP_REMOTE_DIR]   [FTP_LOCAL_DIR]
 ```
 
-Hoy viven como secrets de GitHub Actions (*Settings → Secrets and variables →
+Viven como secrets de GitHub Actions (*Settings → Secrets and variables →
 Actions*), que el workflow `deploy-ftp.yml` lee en cada push a `main` que toque
-`propuestas/`. **El agente no las ve desde ahí**: para que pueda subir archivos
-él mismo tienen que estar además como variables de entorno del entorno de Claude
-Code en la web.
+`propuestas/`.
+
+> **El agente no puede usar FTP**, y cargarle las credenciales no lo arregla. Su
+> contenedor sale sólo por HTTPS/443: el puerto 21 (FTP) y el 22 (SSH/SFTP) están
+> cerrados. Comprobado — `curl ftp://ftp.gnu.org/` da timeout mientras
+> `curl https://ftp.gnu.org/` responde 200 desde el mismo contenedor. Este script
+> es para el runner de GitHub y para la máquina de JP. Si el agente tiene que
+> dejar algo en el servidor, la vía es un workflow con `workflow_dispatch` que él
+> dispara por HTTPS y el runner ejecuta.
 
 Para un archivo suelto no hace falta el script:
 

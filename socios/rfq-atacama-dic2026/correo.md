@@ -2,44 +2,51 @@
 
 **Para:** reservas@hotelescumbres.cl
 **Desde:** info@tourevo.cl (Outlook)
-**Asunto:** Cotización de traslados y excursiones · grupo de 4 · 22 al 26 de diciembre 2026
+**Asunto:** Cotización traslados y excursiones, 22 al 26 de diciembre 2026 (4 pax)
 **Adjunto:** `Tourevo-Cotizacion-San-Pedro-22-26-dic-2026.pdf`
 
 ---
 
-¡Hola! ¿Cómo están?
+Hola, cómo están?
 
-Soy Juan Pablo, de Tourevo, agencia y tour operador en Santiago. Les escribo
-porque tenemos un grupo familiar de cuatro pasajeros que se aloja con ustedes
-del 22 al 26 de diciembre de 2026, y nos encantaría cotizar con ustedes los
-traslados desde y hacia Calama y las excursiones de esos días.
+Soy Juan Pablo, de Tourevo, agencia y tour operador en Santiago. Tenemos un
+grupo familiar de 4 pasajeros que se aloja con ustedes del 22 al 26 de
+diciembre, y queremos cotizar los traslados desde y hacia Calama más las
+excursiones de esos días.
 
-Les adjunto un PDF con todo el detalle para que no tengan que adivinar nada:
-los siete servicios que necesitamos, los horarios —que ya vienen fijados por
-los vuelos, que están comprados— y un resumen de lo que nos ayudaría que venga
-en la respuesta.
+Les mando un PDF con el detalle: los servicios que necesitamos y los horarios,
+que ya están fijos porque los vuelos están comprados.
 
-Lo primero y más importante: **¿tienen disponibilidad para esas fechas?** Con
-eso solo ya podemos avanzar, el resto lo vamos afinando juntos.
+Lo que necesito saber primero es si tienen disponibilidad esas fechas. Con eso
+avanzamos y el resto lo vamos viendo.
 
-Cualquier cosa que no se entienda del documento, me escriben o me llaman con
-toda confianza. Y si esto sale bien, ojalá sea el primero de varios: estamos
-armando nuestra operación en San Pedro y nos interesa mucho trabajar con
-ustedes de forma continua.
+Cualquier duda me escriben.
 
-¡Muchas gracias y que tengan una linda semana!
+Muchas gracias, quedo atento.
 
 Juan Pablo
-Tourevo · Santiago de Chile
-info@tourevo.cl · +56 9 4021 1459 · tourevo.cl
+Tourevo · Santiago
+info@tourevo.cl · +56 9 4021 1459
 
 ---
 
+## Por qué está escrito así
+
+Se sacó todo lo que delata un texto armado por máquina:
+
+- **Sin signos de apertura.** `cómo están?` y no `¿cómo están?` Nadie los usa
+  escribiendo rápido.
+- **Sin rayas ni guiones largos.** Es la marca más obvia de todas.
+- **Sin negritas.** En un correo de tres párrafos no hace falta destacar nada.
+- **Sin la segunda pedida.** La versión anterior cerraba proponiendo trabajar
+  de forma continua. En un primer correo se pregunta una cosa sola; lo demás
+  se propone cuando contesten.
+- **Más corto:** de 210 a 110 palabras.
+
 ## Notas
 
-- El PDF **no lleva el nombre del huésped** — verificado contra el texto del PDF
-  ya generado, no contra el HTML. Va como «grupo familiar, dos parejas».
-- Tampoco lleva las tarifas de la agencia asociada de San Pedro. Que coticen a
-  ciegas es la única forma de que la comparación sirva para algo.
+- El PDF no lleva el nombre del huésped, verificado contra el texto del PDF ya
+  generado. Va como «grupo familiar, dos parejas».
+- Tampoco lleva las tarifas de la agencia asociada de San Pedro.
 - El correo dice que el grupo se aloja con ellos pero no da el nombre. Si piden
-  la reserva para ubicarla, ahí se decide si darla — no antes.
+  la reserva para ubicarla, ahí se decide.

@@ -40,9 +40,74 @@ $HVKAB_B64  = 'LyoqCiAqIEhPTVZVSyAtIFByZWNpb3MgZW4gdml2byBkZXNkZSBBaXJibmIgKGh2a
 $HVKAB_MD5  = '5d635af1a6bbc1f86e64087ae7a7c4c9';
 $HVKAB_NAME = 'HOMVUK Precios Airbnb';
 
-printf( "HOMVUK %s · PHP %s (%s) · %s\n\n", basename( __FILE__ ), PHP_VERSION, PHP_SAPI, date( 'Y-m-d H:i' ) );
+printf( "HOMVUK %s · PHP %s (%s) · %s\n", basename( __FILE__ ), PHP_VERSION, PHP_SAPI, date( 'Y-m-d H:i' ) );
 
-require __DIR__ . '/wp-load.php';
+/**
+ * Encuentra la instalacion de WordPress.
+ *
+ * Asumir que esta en la misma carpeta que el script fallaba en silencio -el
+ * require moria antes de que nada se imprimiera- cuando WordPress no vive en
+ * public_html. Se busca hacia arriba y un nivel hacia abajo, y se puede forzar
+ * con WP_PATH=/ruta/a/wordpress php <script>.
+ */
+function hvkp_buscar_wordpress( $desde ) {
+    $forzado = getenv( 'WP_PATH' );
+    if ( $forzado ) {
+        $forzado = rtrim( $forzado, '/' );
+        foreach ( array( $forzado . '/wp-load.php', $forzado ) as $c ) {
+            if ( is_file( $c ) && 'wp-load.php' === basename( $c ) ) {
+                return $c;
+            }
+        }
+        echo "[ERROR] WP_PATH=$forzado no contiene wp-load.php\n";
+        exit( 1 );
+    }
+
+    $dir = $desde;
+    for ( $i = 0; $i < 6; $i++ ) {
+        if ( is_file( $dir . '/wp-load.php' ) ) {
+            return $dir . '/wp-load.php';
+        }
+        $padre = dirname( $dir );
+        if ( $padre === $dir ) {
+            break;
+        }
+        $dir = $padre;
+    }
+
+    // Un nivel hacia abajo. Si aparece mas de una instalacion no se elige por
+    // el agente: equivocarse de sitio aqui es escribir en la base que no era.
+    foreach ( array( $desde, dirname( $desde ) ) as $base ) {
+        $cand = array_values( array_filter( (array) glob( $base . '/*/wp-load.php' ), 'is_file' ) );
+        if ( 1 === count( $cand ) ) {
+            return $cand[0];
+        }
+        if ( count( $cand ) > 1 ) {
+            echo "[ERROR] Hay varias instalaciones de WordPress cerca:\n";
+            foreach ( $cand as $c ) {
+                echo '          ' . dirname( $c ) . "\n";
+            }
+            echo "        Elige una:  WP_PATH=<la que sea> php " . basename( __FILE__ ) . "\n";
+            exit( 1 );
+        }
+    }
+    return '';
+}
+
+$hvkp_wp = hvkp_buscar_wordpress( __DIR__ );
+if ( ! $hvkp_wp ) {
+    echo "[ERROR] No encontre WordPress (wp-load.php) desde " . __DIR__ . "\n";
+    echo "        Buscalo con:  find ~ -maxdepth 4 -name wp-load.php 2>/dev/null\n";
+    echo "        Y luego:      WP_PATH=/la/carpeta/que/salga php " . basename( __FILE__ ) . "\n";
+    exit( 1 );
+}
+if ( dirname( $hvkp_wp ) !== __DIR__ ) {
+    echo 'WordPress: ' . dirname( $hvkp_wp ) . "\n";
+}
+echo "\n";
+
+require $hvkp_wp;
+
 global $wpdb;
 
 $tabla = $wpdb->prefix . 'snippets';

@@ -244,6 +244,10 @@ if ( 'pausas' === $mode ) {
             echo "sin anuncio\n";
             continue;
         }
+        if ( ! function_exists( 'hvkab_estado_anuncio' ) ) {
+            echo "el snippet cargado es anterior; vuelve a correr: php hvkp-airbnb.php\n";
+            continue;
+        }
         $e = hvkab_estado_anuncio( $lid, true );
         if ( 'ok' === $e['estado'] ) {
             echo "activo\n";
@@ -377,8 +381,18 @@ $ok[] = 'Caches purgadas';
 
 // El snippet se guardo en la base de datos, pero este proceso no lo tiene
 // cargado. Se evalua aqui para poder comprobar de verdad que funciona.
+//
+// Salvo que Code Snippets ya haya cargado la version ANTERIOR: entonces las
+// funciones existen y volver a evaluarlas seria un fatal por redeclararlas. En
+// ese caso la comprobacion se hace con lo que hay, y lo que solo trae la
+// version nueva se salta -por eso cada uso va con function_exists-. Al volver
+// a correr el script ya esta la nueva y se comprueba entera.
+$hvkab_viejo = false;
 if ( ! function_exists( 'hvkab_precio' ) ) {
     eval( $code );
+} else {
+    // Una funcion que solo existe en la version que se acaba de instalar.
+    $hvkab_viejo = ! function_exists( 'hvkab_limpieza' );
 }
 
 /* --- ¿Se llega a Airbnb desde este servidor? ----------------------------- */
@@ -442,7 +456,8 @@ foreach ( hvkab_cli_props() as $pid ) {
     if ( ! hvkab_listing_id( $pid ) ) {
         continue;
     }
-    $l = hvkab_limpieza( $pid );
+    $l = function_exists( 'hvkab_limpieza' ) ? hvkab_limpieza( $pid )
+        : (float) get_post_meta( $pid, 'hvkab_limpieza', true );
     printf( "  %-46s %s\n", mb_substr( get_the_title( $pid ), 0, 44 ),
         $l > 0 ? hvkab_cli_clp( $l ) : 'sin cargar  ->  php hvkp-airbnb.php limpieza '
             . get_post_field( 'post_name', $pid ) . ' MONTO' );
@@ -475,6 +490,12 @@ if ( $prop ) {
 }
 
 /* --- Resumen -------------------------------------------------------------- */
+
+if ( $hvkab_viejo ) {
+    $warn[] = 'La comprobacion de arriba corrio con la version anterior del snippet, que es la '
+        . 'que este proceso tenia cargada. La nueva ya esta guardada y el sitio la usa desde '
+        . 'ahora; vuelve a correr "php hvkp-airbnb.php" si quieres verla comprobada entera.';
+}
 
 echo "\n";
 foreach ( $ok as $l )   { echo "[OK]    $l\n"; }

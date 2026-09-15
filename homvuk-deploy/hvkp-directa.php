@@ -265,9 +265,6 @@ if ( is_wp_error( $res ) ) {
     }
 }
 
-echo "\n== HOMVUK - Reserva Directa ==\n";
-foreach ( $ok as $m )   { echo "[OK]    $m\n"; }
-foreach ( $warn as $m ) { echo "[AVISO] $m\n"; }
 // El endpoint de cotizacion: si el alcance del snippet no fuera el correcto,
 // admin-ajax.php devolveria "0" y la pagina se quedaria sin cifras.
 $prueba = wp_remote_post( admin_url( 'admin-ajax.php' ), array(
@@ -297,6 +294,9 @@ if ( is_wp_error( $prueba ) ) {
     }
 }
 
+echo "\n== HOMVUK - Reserva Directa ==\n";
+foreach ( $ok as $m )   { echo "[OK]    $m\n"; }
+foreach ( $warn as $m ) { echo "[AVISO] $m\n"; }
 echo "\n== Tu enlace al generador ==\n";
 echo "Guardalo en favoritos. Funciona en cualquier navegador, tambien de incognito\n";
 echo "y en el telefono, sin iniciar sesion. Es privado: no lo compartas.\n\n";

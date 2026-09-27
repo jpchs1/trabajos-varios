@@ -1,0 +1,460 @@
+<!doctype html>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Tourevo · San Pedro de Atacama — condiciones · revisión en español</title>
+<style>
+  :root {
+    --ground: #EEF3F3;
+    --paper: #FFFFFF;
+    --glacier: #E7F0F0;
+    --glacier-2: #F3F8F8;
+    --ink: #16232B;
+    --ink-soft: #566A72;
+    --ink-faint: #8497A0;
+    --line: #DBE6E6;
+    --line-soft: #EAF1F1;
+    --accent: #0F766E;
+    --accent-deep: #0B5B54;
+    --summit: #2F6E8F;
+    --warn: #B4632A;
+    --warn-wash: #FBF1E8;
+    --warn-line: #E9CFB6;
+    --shadow: 24px 40px 80px -40px rgba(16, 45, 50, .35);
+    --font-serif: "Iowan Old Style", "Palatino Linotype", "Palatino", "Georgia", serif;
+    --font-sans: system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --ground: #0A0F13; --paper: #121a20; --glacier: #172129; --glacier-2: #141d24;
+      --ink: #E7EDEE; --ink-soft: #9EACB2; --ink-faint: #6C7B82; --line: #26313A;
+      --line-soft: #1E2831; --accent: #2DD4BF; --accent-deep: #5EEAD4; --summit: #8FBAD3;
+      --warn: #E0955C; --warn-wash: #241A12; --warn-line: #4A3524;
+      --shadow: 24px 40px 90px -40px rgba(0, 0, 0, .7);
+    }
+  }
+  :root[data-theme="dark"] {
+    --ground: #0A0F13; --paper: #121a20; --glacier: #172129; --glacier-2: #141d24;
+    --ink: #E7EDEE; --ink-soft: #9EACB2; --ink-faint: #6C7B82; --line: #26313A;
+    --line-soft: #1E2831; --accent: #2DD4BF; --accent-deep: #5EEAD4; --summit: #8FBAD3;
+    --warn: #E0955C; --warn-wash: #241A12; --warn-line: #4A3524;
+    --shadow: 24px 40px 90px -40px rgba(0, 0, 0, .7);
+  }
+
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background:
+      radial-gradient(120% 60% at 50% -10%, var(--glacier) 0%, transparent 60%),
+      var(--ground);
+    color: var(--ink);
+    font-family: var(--font-sans);
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+    padding: clamp(16px, 4vw, 56px) 16px;
+  }
+  .wrap { max-width: 800px; margin: 0 auto; }
+
+  .paper {
+    background: var(--paper);
+    border: 1px solid var(--line);
+    border-radius: 16px;
+    box-shadow: var(--shadow);
+    overflow: hidden;
+  }
+
+  /* ---- Header ---- */
+  .head {
+    position: relative;
+    padding: clamp(26px, 5vw, 44px) clamp(22px, 5vw, 48px) 26px;
+    border-bottom: 1px solid var(--line);
+    background: linear-gradient(180deg, var(--glacier-2), var(--paper));
+    overflow: hidden;
+  }
+  .ridge { position: absolute; left: 0; right: 0; bottom: -1px; height: 46px; width: 100%; display: block; color: var(--accent); opacity: .10; }
+  .brandrow { display: flex; justify-content: space-between; align-items: flex-start; gap: 20px; flex-wrap: wrap; position: relative; z-index: 1; }
+  .brand { display: flex; align-items: center; gap: 12px; }
+  .mark {
+    width: 42px; height: 42px; border-radius: 12px; flex: none;
+    background: linear-gradient(140deg, var(--accent), var(--summit));
+    display: grid; place-items: center; color: #fff;
+    box-shadow: 0 6px 16px -6px color-mix(in srgb, var(--accent) 70%, transparent);
+  }
+  .wordmark { font-weight: 700; font-size: 20px; letter-spacing: -.01em; }
+  .wordmark small { display: block; font-size: 10.5px; font-weight: 600; letter-spacing: .18em; text-transform: uppercase; color: var(--ink-faint); margin-top: 2px; }
+  .eyebrow { font-size: 11px; font-weight: 700; letter-spacing: .2em; text-transform: uppercase; color: var(--accent); }
+  .doc-title { font-family: var(--font-serif); font-weight: 600; font-size: clamp(26px, 5.2vw, 36px); line-height: 1.05; margin: 14px 0 0; letter-spacing: -.01em; text-wrap: balance; }
+  .doc-sub { margin: 10px 0 0; font-size: 15px; color: var(--ink-soft); max-width: 56ch; position: relative; z-index: 1; }
+
+  .meta { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 18px; position: relative; z-index: 1; }
+  .chip {
+    font-size: 12px; font-weight: 600; color: var(--ink-soft);
+    background: var(--glacier); border: 1px solid var(--line);
+    padding: 5px 11px; border-radius: 999px;
+    font-variant-numeric: tabular-nums;
+  }
+  .chip b { color: var(--ink); font-weight: 700; }
+
+  /* ---- Sections ---- */
+  .body { padding: clamp(22px, 4.5vw, 40px) clamp(22px, 5vw, 48px) clamp(28px, 5vw, 44px); }
+  section + section { margin-top: clamp(26px, 4vw, 36px); }
+  .label {
+    font-size: 11px; font-weight: 700; letter-spacing: .16em; text-transform: uppercase;
+    color: var(--ink-faint); margin: 0 0 12px; display: flex; align-items: center; gap: 10px;
+  }
+  .label::after { content: ""; flex: 1; height: 1px; background: var(--line); }
+  .lede { margin: 0 0 14px; font-size: 14.5px; line-height: 1.55; color: var(--ink-soft); }
+  .lede b { color: var(--ink); font-weight: 700; }
+
+  .client { display: flex; align-items: baseline; gap: 10px 18px; flex-wrap: wrap; }
+  .client .name { font-size: 19px; font-weight: 700; }
+  .client .mail { font-size: 14px; color: var(--summit); font-weight: 600; }
+
+  .facts { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 1px; background: var(--line); border: 1px solid var(--line); border-radius: 12px; overflow: hidden; }
+  .fact { background: var(--paper); padding: 14px 16px; }
+  .fact dt { font-size: 11px; font-weight: 700; letter-spacing: .09em; text-transform: uppercase; color: var(--ink-faint); margin: 0 0 4px; }
+  .fact dd { margin: 0; font-size: 15px; font-weight: 650; }
+
+  /* ---- Personal welcome note ---- */
+  .welcome {
+    display: flex; gap: 16px; align-items: flex-start;
+    padding: 20px 22px;
+    background: linear-gradient(135deg, var(--glacier), var(--glacier-2));
+    border: 1px solid var(--line); border-left: 3px solid var(--accent);
+    border-radius: 4px 14px 14px 4px;
+  }
+  .welcome .monogram {
+    width: 40px; height: 40px; border-radius: 50%; flex: none;
+    background: linear-gradient(140deg, var(--accent), var(--summit));
+    color: #fff; display: grid; place-items: center; font-weight: 700; font-size: 15px;
+    letter-spacing: .02em; margin-top: 2px;
+  }
+  .welcome .msg { font-family: var(--font-serif); font-size: 15.5px; line-height: 1.6; color: var(--ink); font-style: italic; margin: 0; }
+  .welcome .msg b { font-style: normal; font-weight: 600; }
+  .welcome .sig { display: block; margin-top: 10px; font-family: var(--font-sans); font-style: normal; font-size: 12.5px; font-weight: 600; color: var(--ink-soft); }
+  .welcome .sig b { color: var(--accent-deep); font-weight: 700; }
+
+  /* ---- Notice ---- */
+  .notice { border: 1px solid var(--warn-line); background: var(--warn-wash); border-radius: 14px; overflow: hidden; }
+  .notice-top { display: flex; align-items: center; gap: 9px; padding: 13px 20px; border-bottom: 1px solid var(--warn-line); font-size: 11px; font-weight: 700; letter-spacing: .16em; text-transform: uppercase; color: var(--warn); }
+  .notice-body { padding: 18px 20px 20px; }
+  .notice-body > p { margin: 0 0 14px; font-size: 14.5px; line-height: 1.55; color: var(--ink-soft); }
+  .notice-body > p:last-child { margin-bottom: 0; }
+  .notice-body b { color: var(--ink); font-weight: 700; }
+  .findings { list-style: none; margin: 0 0 16px; padding: 0; display: grid; gap: 12px; }
+  .findings li { display: grid; grid-template-columns: 22px 1fr; gap: 12px; align-items: start; font-size: 14.5px; line-height: 1.5; }
+  .findings .fic { width: 22px; height: 22px; border-radius: 50%; display: grid; place-items: center; margin-top: 1px; }
+  .findings .fic.no { background: color-mix(in srgb, var(--warn) 18%, var(--paper)); color: var(--warn); }
+  .findings .fic.yes { background: color-mix(in srgb, var(--accent) 16%, var(--paper)); color: var(--accent); }
+  .findings b { color: var(--ink); font-weight: 700; }
+  .findings span.det { color: var(--ink-soft); }
+
+  /* ---- Itinerary ---- */
+  .days { display: grid; gap: 14px; }
+  .day { border: 1px solid var(--line); border-radius: 13px; overflow: hidden; background: var(--paper); break-inside: avoid; }
+  .day-head { display: flex; align-items: center; gap: 13px; padding: 13px 18px; background: var(--glacier-2); border-bottom: 1px solid var(--line); flex-wrap: wrap; }
+  .day-date { font-size: 11px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: var(--accent); font-variant-numeric: tabular-nums; }
+  .day-name { font-family: var(--font-serif); font-size: 17px; font-weight: 600; letter-spacing: -.01em; flex: 1; min-width: 180px; }
+  .day-sleep { font-size: 12px; font-weight: 650; color: var(--ink-soft); background: var(--paper); border: 1px solid var(--line); padding: 4px 10px; border-radius: 999px; }
+  .day-sleep.xmas { color: var(--warn); border-color: var(--warn-line); background: var(--warn-wash); }
+  .stops { list-style: none; margin: 0; padding: 6px 18px 14px; display: grid; }
+  .stops li { display: grid; grid-template-columns: 92px 1fr; gap: 14px; padding: 10px 0; border-bottom: 1px solid var(--line-soft); font-size: 14.5px; line-height: 1.5; }
+  .stops li:last-child { border-bottom: 0; }
+  .stops .t { font-size: 12.5px; font-weight: 700; color: var(--summit); font-variant-numeric: tabular-nums; padding-top: 2px; }
+  .stops .d b { font-weight: 700; }
+  .stops .d em { display: block; font-style: normal; font-size: 13px; color: var(--ink-soft); margin-top: 2px; line-height: 1.45; }
+
+  /* ---- Tables ---- */
+  .tbl-wrap { overflow-x: auto; border: 1px solid var(--line); border-radius: 12px; }
+  table { border-collapse: collapse; width: 100%; min-width: 460px; font-size: 14px; }
+  thead th { font-size: 10.5px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: var(--ink-faint); background: var(--glacier-2); text-align: left; padding: 11px 16px; border-bottom: 1px solid var(--line); }
+  thead th.r, tbody td.r, tfoot td.r { text-align: right; }
+  thead th.r { white-space: nowrap; }
+  tbody td { padding: 12px 16px; border-bottom: 1px solid var(--line-soft); vertical-align: top; line-height: 1.45; }
+  tbody tr:last-child td { border-bottom: 0; }
+  tbody td.r { font-variant-numeric: tabular-nums; font-weight: 700; white-space: nowrap; }
+  tbody td b { font-weight: 700; }
+  tbody td em { font-style: normal; display: block; font-size: 12.5px; color: var(--ink-soft); margin-top: 2px; }
+  tfoot td { padding: 12px 16px; border-top: 1px solid var(--line); background: var(--glacier-2); font-size: 13px; font-weight: 700; font-variant-numeric: tabular-nums; }
+  .tag { display: inline-block; font-size: 10.5px; font-weight: 700; letter-spacing: .07em; text-transform: uppercase; padding: 3px 8px; border-radius: 999px; margin-top: 6px; }
+  .tag.pre { color: var(--warn); background: var(--warn-wash); border: 1px solid var(--warn-line); }
+  .tag.gate { color: var(--summit); background: var(--glacier); border: 1px solid var(--line); }
+  .tag.free { color: var(--accent); background: color-mix(in srgb, var(--accent) 10%, var(--paper)); border: 1px solid color-mix(in srgb, var(--accent) 30%, var(--line)); }
+
+  /* ---- Total ---- */
+  .total { display: grid; grid-template-columns: 1fr auto; gap: 8px 24px; align-items: end;
+    background: linear-gradient(135deg, var(--accent-deep), var(--summit));
+    color: #fff; border-radius: 14px; padding: 22px 24px; margin-top: 14px; }
+  @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .total { color: #06201d; } }
+  :root[data-theme="dark"] .total { color: #06201d; }
+  :root[data-theme="light"] .total { color: #fff; }
+  .total .tlabel { font-size: 11px; font-weight: 700; letter-spacing: .16em; text-transform: uppercase; opacity: .82; }
+  .total .calc { font-size: 13.5px; font-weight: 600; opacity: .92; font-variant-numeric: tabular-nums; }
+  .total .amount { font-family: var(--font-serif); font-size: clamp(28px, 5.6vw, 38px); font-weight: 600; line-height: 1; font-variant-numeric: tabular-nums; }
+
+  .subtotal { display: flex; justify-content: space-between; align-items: baseline; gap: 16px; flex-wrap: wrap;
+    border: 1px solid var(--line); border-radius: 12px; padding: 14px 18px; margin-top: 12px; background: var(--glacier-2); }
+  .subtotal .k { font-size: 12.5px; font-weight: 700; color: var(--ink-soft); }
+  .subtotal .v { font-size: 17px; font-weight: 700; font-variant-numeric: tabular-nums; }
+  .subtotal .v small { display: block; font-size: 11.5px; font-weight: 600; color: var(--ink-faint); text-align: right; margin-top: 2px; }
+
+  /* ---- Transparency block ---- */
+  .direct { border: 1px solid color-mix(in srgb, var(--accent) 40%, var(--line)); border-radius: 14px; overflow: hidden; }
+  .direct-top { display: flex; align-items: center; gap: 9px; padding: 13px 20px; background: var(--accent); color: #fff; font-size: 11px; font-weight: 700; letter-spacing: .16em; text-transform: uppercase; }
+  @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .direct-top { color: #06201d; } }
+  :root[data-theme="dark"] .direct-top { color: #06201d; }
+  :root[data-theme="light"] .direct-top { color: #fff; }
+  .direct-body { padding: 18px 20px 20px; background: color-mix(in srgb, var(--accent) 5%, var(--paper)); }
+  .direct-body ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 12px; }
+  .direct-body li { display: grid; grid-template-columns: 22px 1fr; gap: 12px; align-items: start; font-size: 14.5px; line-height: 1.5; color: var(--ink-soft); }
+  .direct-body li b { color: var(--ink); font-weight: 700; }
+  .direct-body .dic { width: 22px; height: 22px; border-radius: 50%; display: grid; place-items: center; margin-top: 1px; background: color-mix(in srgb, var(--accent) 16%, var(--paper)); color: var(--accent); }
+
+  /* ---- Payment schedule ---- */
+  .sched { display: grid; gap: 1px; background: var(--line); border: 1px solid var(--line); border-radius: 12px; overflow: hidden; }
+  .step { background: var(--paper); padding: 16px 18px; display: grid; grid-template-columns: 30px 1fr auto; gap: 14px; align-items: center; }
+  .step .n { width: 30px; height: 30px; border-radius: 50%; display: grid; place-items: center; font-size: 13px; font-weight: 700;
+    background: color-mix(in srgb, var(--accent) 14%, var(--paper)); color: var(--accent); }
+  .step .w { font-size: 14.5px; font-weight: 700; }
+  .step .w em { display: block; font-style: normal; font-size: 12.5px; font-weight: 450; color: var(--ink-soft); margin-top: 3px; line-height: 1.45; }
+  .step .a { font-size: 16px; font-weight: 700; font-variant-numeric: tabular-nums; white-space: nowrap; text-align: right; }
+  .step.hi { background: color-mix(in srgb, var(--accent) 7%, var(--paper)); }
+
+  /* ---- Cancellation timeline ---- */
+  .tl { display: grid; gap: 1px; background: var(--line); border: 1px solid var(--line); border-radius: 12px; overflow: hidden; }
+  .tl-row { background: var(--paper); padding: 14px 18px; display: grid; grid-template-columns: 190px 1fr; gap: 16px; align-items: baseline; }
+  .tl-row .when { font-size: 12.5px; font-weight: 700; color: var(--summit); font-variant-numeric: tabular-nums; }
+  .tl-row .what { font-size: 14px; line-height: 1.45; color: var(--ink-soft); }
+  .tl-row .what b { color: var(--ink); font-weight: 700; }
+  .tl-row.good { background: color-mix(in srgb, var(--accent) 7%, var(--paper)); }
+  .tl-row.good .when { color: var(--accent); }
+  .tl-row.bad .when { color: var(--warn); }
+
+  /* ---- Two-column info ---- */
+  .cols { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(16px, 3vw, 26px); }
+  .card { border: 1px solid var(--line); border-radius: 12px; padding: 18px 18px 16px; background: var(--glacier-2); break-inside: avoid; }
+  .card h4 { margin: 0 0 10px; font-size: 13px; font-weight: 750; letter-spacing: .02em; }
+  .card ul { margin: 0; padding: 0; list-style: none; display: grid; gap: 9px; }
+  .card li { font-size: 13.5px; color: var(--ink-soft); padding-left: 16px; position: relative; line-height: 1.45; }
+  .card li::before { content: ""; position: absolute; left: 2px; top: 8px; width: 5px; height: 5px; border-radius: 50%; background: var(--accent); }
+  .card.warn li::before { background: var(--warn); }
+  .card b { color: var(--ink); font-weight: 700; }
+
+  /* ---- Hallmark ---- */
+  .sello { border: 1px solid var(--line); border-radius: 14px; overflow: hidden; }
+  .sello-top { padding: 13px 20px; background: var(--accent); color: #fff; font-size: 12px; font-weight: 700; letter-spacing: .16em; text-transform: uppercase; display: flex; align-items: center; gap: 9px; }
+  @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .sello-top { color: #06201d; } }
+  :root[data-theme="dark"] .sello-top { color: #06201d; }
+  :root[data-theme="light"] .sello-top { color: #fff; }
+  .sello-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(215px, 1fr)); gap: 1px; background: var(--line); }
+  .value { background: var(--paper); padding: 17px 18px; display: flex; gap: 13px; align-items: flex-start; }
+  .value .vic { width: 30px; height: 30px; border-radius: 9px; flex: none; display: grid; place-items: center; background: color-mix(in srgb, var(--accent) 15%, var(--paper)); color: var(--accent); margin-top: 1px; }
+  .value h5 { margin: 0 0 3px; font-size: 14px; font-weight: 750; }
+  .value p { margin: 0; font-size: 13px; line-height: 1.45; color: var(--ink-soft); }
+
+  /* ---- Conditions ---- */
+  .terms { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 1px; background: var(--line); border: 1px solid var(--line); border-radius: 12px; overflow: hidden; }
+  .term { background: var(--paper); padding: 15px 16px; }
+  .term .k { font-size: 11px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--ink-faint); margin-bottom: 5px; }
+  .term .v { font-size: 13.5px; font-weight: 600; line-height: 1.4; }
+  .fine { margin: 11px 0 0; font-size: 12px; color: var(--ink-faint); line-height: 1.5; }
+  .fine b { color: var(--ink-soft); }
+
+  /* ---- CTA ---- */
+  .cta { margin-top: clamp(26px, 4vw, 36px); text-align: center; padding: clamp(22px, 4vw, 30px); border: 1px dashed color-mix(in srgb, var(--accent) 45%, var(--line)); border-radius: 14px; background: var(--glacier-2); }
+  .cta .lead { margin: 0 0 16px; font-family: var(--font-serif); font-size: 16px; font-style: italic; color: var(--ink); }
+  .cta .btn { display: inline-flex; align-items: center; gap: 10px; background: var(--accent); color: #fff; font-weight: 700; font-size: 15px; padding: 14px 28px; border-radius: 10px; text-decoration: none; box-shadow: 0 10px 24px -12px color-mix(in srgb, var(--accent) 80%, transparent); }
+  @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .cta .btn { color: #06201d; } }
+  :root[data-theme="dark"] .cta .btn { color: #06201d; }
+  :root[data-theme="light"] .cta .btn { color: #fff; }
+  .cta .btn:focus-visible { outline: 3px solid var(--summit); outline-offset: 3px; }
+  .cta .after { margin: 12px 0 0; font-size: 12.5px; color: var(--ink-soft); }
+  .cta .after span { font-weight: 700; color: var(--ink); }
+
+  /* ---- Footer ---- */
+  .foot { border-top: 1px solid var(--line); padding: 20px clamp(22px, 5vw, 48px); display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; background: var(--glacier-2); }
+  .foot .who { font-size: 13px; }
+  .foot .who b { font-weight: 700; }
+  .foot .who span { color: var(--ink-soft); }
+  .foot .links { font-size: 12.5px; color: var(--ink-soft); display: flex; gap: 14px; flex-wrap: wrap; }
+  .foot .links a { color: var(--summit); text-decoration: none; font-weight: 600; }
+
+  .legend { max-width: 800px; margin: clamp(16px, 3vw, 22px) auto 0; font-size: 12px; color: var(--ink-faint); text-align: center; }
+
+  @media (max-width: 620px) {
+    .cols { grid-template-columns: 1fr; }
+    .total { grid-template-columns: 1fr; }
+    .stops li { grid-template-columns: 78px 1fr; gap: 10px; }
+    .tl-row { grid-template-columns: 1fr; gap: 4px; }
+    .step { grid-template-columns: 30px 1fr; }
+    .step .a { grid-column: 2; text-align: left; }
+  }
+
+  /* ---- Print / PDF ---- */
+  @page { size: A4; margin: 12mm 10mm; }
+  @media print {
+    body { padding: 0; background: #fff; }
+    .wrap { max-width: none; }
+    .head { padding: 22px 6mm 20px; }
+    .body { padding: 18px 6mm 22px; }
+    .foot { padding: 16px 6mm; }
+    section + section { margin-top: 22px; }
+    .days { gap: 10px; }
+    .stops li { padding: 8px 0; }
+    .paper { border: 0; border-radius: 0; box-shadow: none; }
+    .head { break-after: avoid; }
+    section { break-inside: auto; }
+    .label { break-after: avoid; }
+    .notice, .direct, .sello, .terms, .tl, .sched, .total, .subtotal, .cta, .welcome, .facts { break-inside: avoid; }
+    .tbl-wrap { overflow: visible; }
+    table { min-width: 0; }
+    tbody tr { break-inside: avoid; }
+    .foot { break-inside: avoid; }
+    a { text-decoration: none; color: inherit; }
+  }
+
+  tr.tot td { background: var(--glacier-2); font-weight: 700; border-top: 1px solid var(--line); }
+  @media print { .wrap { zoom: .67; } section + section { margin-top: 16px; } }
+  tr.tot td { background: var(--glacier-2); font-weight: 700; border-top: 1px solid var(--line); }
+  .ladder td:first-child { width: 46%; }
+  .ladder td b { color: var(--ink); }
+  .never td { background: color-mix(in srgb, var(--warn) 7%, var(--paper)); }
+  .never td b { color: var(--warn); }
+  @media print { section + section { margin-top: 18px; } }
+</style>
+<div class="wrap">
+  <article class="paper">
+    <header class="head">
+      <svg class="ridge" viewBox="0 0 800 46" preserveAspectRatio="none" aria-hidden="true"><path d="M0 46 L120 14 L210 34 L330 4 L430 30 L540 10 L650 32 L740 16 L800 30 L800 46 Z" fill="currentColor"/></svg>
+      <div class="brandrow">
+        <div class="brand">
+          <div class="mark" aria-hidden="true"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 20 L9 8 L13 15 L16 10 L21 20 Z"/></svg></div>
+          <div class="wordmark">Tourevo<small>South America by design</small></div>
+        </div>
+        <div style="text-align:right"><div class="eyebrow">Atacama · condiciones · revisión</div></div>
+      </div>
+      <h1 class="doc-title">Lo que están aceptando</h1>
+      <p class="doc-sub">Todas las condiciones que van a regir sus cuatro días en el desierto, dichas en simple: qué pasa si cancelan, cuándo hay que pagar, y la única pregunta sobre la altura que necesitamos que contesten antes de reservar.</p>
+      <div class="meta">
+        <span class="chip">Para <b>COT-2026-0161</b></span>
+        <span class="chip">Fechas <b>22–26 dic 2026</b></span>
+        <span class="chip">Pasajeros <b>4</b></span>
+      </div>
+    </header>
+
+    <div class="body">
+
+      <section>
+        <div class="welcome">
+          <div class="monogram" aria-hidden="true">JP</div>
+          <p class="msg">
+            Segar, su operador en terreno en San Pedro es <b>Feel Atacama</b>, y nos hicieron llegar sus condiciones. Como <b>ustedes les pagan directamente y a su propio nombre</b>, esas condiciones los rigen a ustedes y no a nosotros. Por eso mismo las leo yo primero, y por eso nada de esto va escondido al final de una página. Todo lo que les puede costar plata o un día está acá abajo.
+            <span class="sig">Un abrazo, <b>Juan Pablo</b> · Travel Manager, Tourevo</span>
+          </p>
+        </div>
+      </section>
+
+      <section>
+        <p class="label">Las cuatro que importan</p>
+        <div class="terms">
+          <div class="term"><div class="k">Plazo de pago</div><div class="v">Con tarjeta, hasta el <b>lun 21 dic</b></div></div>
+          <div class="term"><div class="k">Cancelación sin costo</div><div class="v">7 días desde la reserva</div></div>
+          <div class="term"><div class="k">Último plazo para el 70%</div><div class="v">72 horas antes</div></div>
+          <div class="term"><div class="k">Entradas a parques</div><div class="v">Emitidas, no se devuelven nunca</div></div>
+        </div>
+      </section>
+
+      <section>
+        <p class="label">El pago</p>
+        <p class="lede">Feel Atacama va a enviar un <b>link de pago para tarjeta internacional</b>, así ustedes les pagan directamente, a su propio nombre, y queda acreditado en el momento en que aprietan el botón. Tiene que estar <b>recibido y confirmado 24 horas antes del primer servicio</b>, que es el traslado desde Calama el martes 22 de diciembre: o sea que el pago tiene que estar cursado el <b>lunes 21 de diciembre</b>. Una reserva no pagada a esa fecha se cancela automáticamente, y no hay ningún plazo de gracia escrito en ninguna parte.</p>
+        <p class="fine">Pedimos un link de tarjeta y no una transferencia a propósito: un giro internacional en semana de Navidad puede demorar más de lo que el plazo permite, y un banco lento no debería poder costarles el viaje. Pagar con tarjeta además les deja el respaldo de su emisor detrás del pago.</p>
+      </section>
+
+      <section>
+        <p class="label">Si necesitan cancelar</p>
+        <div class="tbl-wrap">
+          <table class="ladder">
+            <thead><tr><th>Cuándo cancelan</th><th>Qué se devuelve</th></tr></thead>
+            <tbody>
+              <tr><td><b>Dentro de los 7 días de la reserva</b><em>siempre que hayan reservado con más de 7 días de anticipación al primer servicio</em></td><td>Todo</td></tr>
+              <tr><td><b>Después de eso, y hasta 72 horas antes</b></td><td><b>70%</b> — se retiene un 30% como señal</td></tr>
+              <tr><td><b>A menos de 72 horas, o no presentarse</b></td><td>Nada</td></tr>
+              <tr class="never"><td><b>Las entradas a parques, una vez emitidas</b><em>con cualquier anticipación, por temprano que sea</em></td><td><b>No se devuelven nunca</b></td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="fine">Una enfermedad cambia esto sólo con certificado médico, emitido por el CESFAM de San Pedro, o en Santiago si es ahí donde están, con fecha y hora que coincidan con la excursión y enviado a ellos <b>dentro de las 12 horas</b> siguientes. Pasada esa ventana el monto se pierde. Incluso con el certificado, las entradas no se devuelven. <b>Les pedimos que confirmen en qué momento exacto emiten las entradas</b>, porque ése es el instante en que esa parte del precio deja de ser recuperable.</p>
+      </section>
+
+      <section>
+        <p class="label">Si ellos tienen que cancelar un día</p>
+        <p class="lede">El clima, un camino cerrado por seguridad, una decisión de la autoridad del parque. Si pasa, ustedes eligen entre tres: otra fecha, otra excursión del mismo valor, o la plata de ese día de vuelta.</p>
+        <p class="fine">Dicho con honestidad: en un viaje de cuatro días «otra fecha» muchas veces no existe, no hay un día de sobra donde correr el viernes. Y más allá de esas tres opciones no hay compensación. Esa es su posición, y es lo habitual en el rubro.</p>
+        <div class="direct">
+          <div class="direct-top">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 L9 17 L4 12"/></svg>
+            Qué hacemos nosotros
+          </div>
+          <div class="direct-body">
+            <p style="margin:0;font-size:14.5px;line-height:1.55">Si un día se cae, resolverlo no es tarea de ustedes. Les escribimos <b>el mismo día</b> con opciones concretas —parte del valor de vuelta, mejorar algo que ya tengan contratado, o un crédito— y eligen la que prefieran. No van a estar parados en el lobby de un hotel negociando en castellano.</p>
+          </div>
+        </div>
+      </section>
+
+      <section>
+        <div class="notice">
+          <div class="notice-top">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 9v4M12 17h.01M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0Z"/></svg>
+            La altura · esta necesitamos que la contesten antes de reservar
+          </div>
+          <div class="notice-body">
+            <p>El viernes 25 de diciembre se pasan <b>varias horas por encima de los 4.000 metros</b>: Piedras Rojas y las lagunas altiplánicas. Puritama, el jueves, ronda los 3.500. San Pedro mismo está a 2.400.</p>
+            <p>El operador declara que <b>no recomienda subir por encima de los 3.500 metros</b> a nadie con antecedentes de <b>enfermedad cardíaca, diabetes, epilepsia, asma o hipertensión</b>, y la decisión final el día de la excursión la toma el guía: puede pedirle a un pasajero que se quede fuera de una actividad.</p>
+            <p><b>Entonces: ¿alguna de esas condiciones aplica a alguno de los cuatro?</b> Díganlo ahora, en confianza. Hay una buena versión de este viaje en cualquiera de los dos casos —el viernes se puede rearmar, o cambiar por algo más bajo— pero necesitamos saberlo mientras todavía se puede cambiar, y no la mañana del 25 en la recogida.</p>
+          </div>
+        </div>
+      </section>
+
+      <section>
+        <p class="label">Los vuelos, y por qué acá el seguro no es opcional</p>
+        <p class="lede">El traslado de llegada está calzado con su vuelo a Calama. Si ese vuelo se atrasa o se cancela, <b>el traslado se pierde y no se devuelve</b>: sus condiciones lo excluyen de forma expresa, y lo mismo corre para cualquier excursión que se pierdan por esa causa. Los costos médicos, de rescate y de hospital durante las excursiones también son de ustedes: si alguna vez hace falta una evacuación, el guía puede pedirla, y la cuenta sigue al pasajero.</p>
+        <p class="fine">Nada de esto es inusual. Es sencillamente el argumento a favor de un seguro de viaje con buena cobertura médica y de interrupción de viaje, y conviene contratarlo antes de pagar el saldo y no después.</p>
+      </section>
+
+      <section>
+        <p class="label">Vale la pena saberlo, y nada es una sorpresa</p>
+        <div class="cols">
+          <div class="card">
+            <h4>El día de la excursión</h4>
+            <ul>
+              <li><b>Los horarios de recogida llegan tarde.</b> Las salidas de la mañana se confirman cerca de las 21:00 de la noche anterior; las de la tarde, cerca de las 12:30 del mismo día. <b>Pedimos el del 24 con anticipación</b>, porque el Valle de la Luna de esa tarde tiene que devolverlos a tiempo para la cena.</li>
+              <li><b>El atardecer es clima.</b> El Valle de la Luna es una salida de atardecer y nadie controla si se ve. Si no se ve, no hay devolución: está dicho así de claro en sus condiciones.</li>
+              <li><b>El itinerario se puede reordenar</b> por logística. Las excursiones se mantienen; el orden puede moverse.</li>
+            </ul>
+          </div>
+          <div class="card warn">
+            <h4>La letra chica, completa</h4>
+            <ul>
+              <li><b>Los drones están prohibidos</b> en los parques y reservas. La sanción es multa más expulsión inmediata: conviene saberlo antes de que uno entre en una maleta.</li>
+              <li><b>El vehículo.</b> La suciedad o el daño se cobran <b>desde CLP 30.000</b>, más si necesita limpieza especializada. El mal de altura del viernes es la versión realista de esto.</li>
+              <li><b>Los objetos personales</b> son responsabilidad de ustedes durante las excursiones.</li>
+              <li><b>Las normas de los parques.</b> Al pasajero que las incumpla le pueden cancelar la excursión sin devolución.</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <section>
+        <div class="cta">
+          <p class="lead">Esto es todo, no hay nada guardado para después.</p>
+          <p class="fine" style="margin:0">El contrato propio de Feel Atacama va junto con esto, completo, así que nada de lo de acá depende de nuestro resumen. Todo lo que paguen va a ellos y a nadie más: nosotros no sacamos nada de ahí ni lo retenemos nunca. Si hay algo de todo esto que quieran discutir, dígannos: parte lo podemos plantear con ellos en su nombre.</p>
+        </div>
+      </section>
+
+    </div>
+
+    <div class="foot">
+      <span>Tourevo · San Pedro de Atacama · 22 al 26 de diciembre de 2026 · condiciones que acompañan a COT-2026-0161</span>
+    </div>
+  </article>
+</div>

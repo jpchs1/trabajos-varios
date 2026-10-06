@@ -33,6 +33,11 @@ error_reporting( E_ALL );
  *   email=...           y con  avisar=si  se le manda el enlace por correo
  *   telefono=...        origen=airbnb|whatsapp|directo      notas="..."
  *
+ * Revisar y corregir:
+ *   php hvkp-reserva.php revisar            que reservas hay y que esta cruzado
+ *   php hvkp-reserva.php cancelar CODIGO    la deja fuera y revoca sus enlaces
+ *   php hvkp-reserva.php mover CODIGO unidad=magnolio-1506
+ *
  * Consultar:
  *   php hvkp-reserva.php listar
  *   php hvkp-reserva.php ver CODIGO
@@ -219,8 +224,135 @@ if ( 'ver' === $modo ) {
     exit( 0 );
 }
 
+if ( 'revisar' === $modo ) {
+    $TA = $wpdb->prefix . 'portal_airbnb_reservations';
+    $hay_tabla = $wpdb->get_var( $wpdb->prepare( 'SHOW TABLES LIKE %s', $TA ) ) === $TA;
+
+    echo "== Reservas del portal ==\n\n";
+    $rs = $wpdb->get_results(
+        "SELECT r.*, u.name AS unit_name FROM $TR r LEFT JOIN $TU u ON r.unit_id = u.id
+         ORDER BY r.check_in DESC LIMIT 60" );
+    foreach ( (array) $rs as $r ) {
+        printf( "  %-16s %-24s %-18s %s a %s  %s\n", $r->reservation_code,
+            mb_substr( $r->guest_name . ' ' . $r->guest_last_name, 0, 22 ),
+            mb_substr( (string) $r->unit_name, 0, 16 ), $r->check_in, $r->check_out, $r->status );
+    }
+    if ( ! $rs ) { echo "  (ninguna)\n"; }
+
+    if ( $hay_tabla ) {
+        echo "\n== Reservas de Airbnb ==\n\n";
+        $as = $wpdb->get_results(
+            "SELECT a.*, u.name AS unit_name FROM $TA a LEFT JOIN $TU u ON a.unit_id = u.id
+             ORDER BY a.check_in DESC LIMIT 60" );
+        foreach ( (array) $as as $a2 ) {
+            printf( "  %-16s %-24s %-18s %s a %s  portal=%s\n", $a2->airbnb_code,
+                mb_substr( $a2->guest_first_name . ' ' . $a2->guest_last_name, 0, 22 ),
+                mb_substr( (string) $a2->unit_name, 0, 16 ), $a2->check_in, $a2->check_out,
+                $a2->portal_reservation_id ? $a2->portal_reservation_id : '-' );
+        }
+        if ( ! $as ) { echo "  (ninguna)\n"; }
+    }
+
+    echo "\n== Problemas ==\n\n";
+    $malo = 0;
+
+    // Lo que explica que un huesped vea la reserva de otro: al validar un
+    // codigo se mira primero la tabla del portal y despues la de Airbnb, asi
+    // que un codigo repetido entre las dos lo atiende la del portal.
+    if ( $hay_tabla ) {
+        $choques = $wpdb->get_results(
+            "SELECT a.airbnb_code, a.guest_first_name AS a_nom, a.guest_last_name AS a_ape,
+                    r.id AS r_id, r.guest_name AS r_nom, r.guest_last_name AS r_ape,
+                    ur.name AS r_unidad, ua.name AS a_unidad
+             FROM $TA a
+             JOIN $TR r ON r.reservation_code = a.airbnb_code
+             LEFT JOIN $TU ur ON r.unit_id = ur.id
+             LEFT JOIN $TU ua ON a.unit_id = ua.id" );
+        foreach ( (array) $choques as $c ) {
+            $malo++;
+            echo "  [X] El codigo {$c->airbnb_code} esta en las dos tablas.\n";
+            echo "      En Airbnb es de {$c->a_nom} {$c->a_ape} ({$c->a_unidad}),\n";
+            echo "      pero en el portal lo tiene {$c->r_nom} {$c->r_ape} ({$c->r_unidad}).\n";
+            echo "      Quien lo teclee va a ver la del portal. Quita la que sobre:\n";
+            echo "        php hvkp-reserva.php cancelar {$c->airbnb_code}\n\n";
+        }
+
+        // Una fila de Airbnb apuntando a una reserva del portal de otro huesped.
+        $cruces = $wpdb->get_results(
+            "SELECT a.airbnb_code, a.guest_last_name AS a_ape, r.reservation_code,
+                    r.guest_last_name AS r_ape
+             FROM $TA a JOIN $TR r ON r.id = a.portal_reservation_id
+             WHERE a.portal_reservation_id IS NOT NULL
+               AND LOWER(a.guest_last_name) <> LOWER(r.guest_last_name)" );
+        foreach ( (array) $cruces as $c ) {
+            $malo++;
+            echo "  [X] {$c->airbnb_code} (de {$c->a_ape}) esta enlazada con la reserva\n";
+            echo "      {$c->reservation_code}, que es de {$c->r_ape}.\n\n";
+        }
+    }
+
+    // Dos reservas pisandose en la misma unidad.
+    $solapes = $wpdb->get_results(
+        "SELECT a.reservation_code AS c1, b.reservation_code AS c2, u.name AS unidad,
+                a.guest_last_name AS ape1, b.guest_last_name AS ape2
+         FROM $TR a JOIN $TR b ON a.unit_id = b.unit_id AND a.id < b.id
+         LEFT JOIN $TU u ON a.unit_id = u.id
+         WHERE a.status != 'cancelled' AND b.status != 'cancelled'
+           AND a.check_in < b.check_out AND a.check_out > b.check_in" );
+    foreach ( (array) $solapes as $s2 ) {
+        $malo++;
+        echo "  [!] {$s2->c1} ({$s2->ape1}) y {$s2->c2} ({$s2->ape2}) se pisan en {$s2->unidad}.\n\n";
+    }
+
+    if ( ! $malo ) { echo "  (ninguno)\n\n"; }
+    exit( 0 );
+}
+
+if ( 'cancelar' === $modo ) {
+    $cod = isset( $args[1] ) ? strtoupper( $args[1] ) : '';
+    if ( ! $cod ) {
+        echo "[ERROR] Uso: php hvkp-reserva.php cancelar CODIGO\n";
+        exit( 1 );
+    }
+    $r = $wpdb->get_row( $wpdb->prepare(
+        "SELECT r.*, u.name AS unit_name FROM $TR r LEFT JOIN $TU u ON r.unit_id = u.id
+         WHERE r.reservation_code = %s", $cod ) );
+    if ( ! $r ) {
+        echo "[ERROR] No hay ninguna reserva del portal con el codigo $cod.\n";
+        exit( 1 );
+    }
+    $wpdb->update( $TR, array( 'status' => 'cancelled' ), array( 'id' => (int) $r->id ) );
+    $wpdb->update( $TT, array( 'active' => 0 ), array( 'reservation_id' => (int) $r->id ) );
+    echo "[OK]    Cancelada la reserva $cod de {$r->guest_name} {$r->guest_last_name} ({$r->unit_name}).\n";
+    echo "        Sus enlaces dejan de servir. No se borro nada: queda como 'cancelled'.\n";
+    exit( 0 );
+}
+
+if ( 'mover' === $modo ) {
+    $cod = isset( $args[1] ) ? strtoupper( $args[1] ) : '';
+    $dst = isset( $args['unidad'] ) ? $args['unidad'] : '';
+    if ( ! $cod || ! $dst ) {
+        echo "[ERROR] Uso: php hvkp-reserva.php mover CODIGO unidad=magnolio-1506\n";
+        exit( 1 );
+    }
+    $r = $wpdb->get_row( $wpdb->prepare( "SELECT * FROM $TR WHERE reservation_code = %s", $cod ) );
+    if ( ! $r ) {
+        echo "[ERROR] No hay ninguna reserva con el codigo $cod.\n";
+        exit( 1 );
+    }
+    $u2 = hvkr_unidad( $dst );
+    if ( ! $u2 ) {
+        echo "[ERROR] No existe la unidad '$dst'. Las que hay: php hvkp-reserva.php unidades\n";
+        exit( 1 );
+    }
+    $wpdb->update( $TR, array( 'unit_id' => (int) $u2->id ), array( 'id' => (int) $r->id ) );
+    echo "[OK]    $cod ({$r->guest_name} {$r->guest_last_name}) queda en {$u2->name}.\n";
+    exit( 0 );
+}
+
 if ( 'crear' !== $modo ) {
-    echo "[ERROR] Argumento no reconocido: $modo. Usa 'crear', 'ver', 'listar' o 'unidades'.\n";
+    echo "[ERROR] Argumento no reconocido: $modo. Usa 'crear', 'ver', 'listar',\n";
+    echo "        'revisar', 'cancelar', 'mover' o 'unidades'.\n";
     exit( 1 );
 }
 
@@ -259,6 +391,23 @@ if ( ! $in || ! $out || strtotime( $out ) <= strtotime( $in ) ) {
 $codigo = isset( $args['codigo'] ) ? strtoupper( preg_replace( '/[^A-Za-z0-9\-]/', '', $args['codigo'] ) ) : '';
 if ( ! $codigo ) {
     $codigo = 'HVK-' . strtoupper( wp_generate_password( 8, false, false ) );
+}
+
+// Al validar, el portal mira sus propias reservas ANTES que las de Airbnb. Asi
+// que ponerle a una reserva del portal el codigo de Airbnb de otro huesped se
+// lo secuestra: el dueño del codigo acaba viendo esta pantalla.
+$TA = $wpdb->prefix . 'portal_airbnb_reservations';
+if ( $wpdb->get_var( $wpdb->prepare( 'SHOW TABLES LIKE %s', $TA ) ) === $TA ) {
+    $duenno = $wpdb->get_row( $wpdb->prepare(
+        "SELECT guest_first_name, guest_last_name, check_in, check_out
+         FROM $TA WHERE airbnb_code = %s", $codigo ) );
+    if ( $duenno && strcasecmp( trim( $duenno->guest_last_name ), trim( $args['apellido'] ) ) !== 0 ) {
+        echo "[ERROR] El codigo $codigo ya es el de la reserva de Airbnb de\n";
+        echo "        {$duenno->guest_first_name} {$duenno->guest_last_name} ({$duenno->check_in} a {$duenno->check_out}).\n";
+        echo "        Si lo usas aqui, esa persona entraria a esta pantalla en vez de a la suya.\n";
+        echo "        Deja el codigo fuera y se genera uno nuevo.\n";
+        exit( 1 );
+    }
 }
 
 // Un codigo repetido dejaria a dos huespedes entrando a la misma pantalla.

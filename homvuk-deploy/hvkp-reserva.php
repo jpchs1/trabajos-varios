@@ -269,6 +269,23 @@ if ( 'revisar' === $modo ) {
     $TA = $wpdb->prefix . 'portal_airbnb_reservations';
     $hay_tabla = $wpdb->get_var( $wpdb->prepare( 'SHOW TABLES LIKE %s', $TA ) ) === $TA;
 
+    // La sincronizacion con Airbnb corre cada hora y es la que trae los
+    // codigos nuevos. Si lleva mucho parada, un huesped recien reservado no
+    // puede entrar todavia, y eso no se nota hasta que escribe preguntando.
+    $ult = get_option( 'hvkp_last_airbnb_sync', '' );
+    echo "== Sincronizacion con Airbnb ==\n\n";
+    if ( ! $ult ) {
+        echo "  Nunca corrio. Lanzala desde Escritorio -> HOMVUK Portal -> Airbnb.\n\n";
+    } else {
+        $hace = (int) round( ( current_time( 'timestamp' ) - strtotime( $ult ) ) / 60 );
+        printf( "  Ultima vez: %s (hace %s)\n", $ult,
+            $hace < 90 ? "$hace min" : round( $hace / 60 ) . ' h' );
+        if ( $hace > 180 ) {
+            echo "  Lleva parada mas de tres horas: deberia correr cada hora.\n";
+        }
+        echo "\n";
+    }
+
     echo "== Reservas del portal ==\n\n";
     $rs = $wpdb->get_results(
         "SELECT r.*, u.name AS unit_name FROM $TR r LEFT JOIN $TU u ON r.unit_id = u.id

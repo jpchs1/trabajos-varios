@@ -35,6 +35,7 @@ error_reporting( E_ALL );
  *
  * Revisar y corregir:
  *   php hvkp-reserva.php revisar            que reservas hay y que esta cruzado
+ *   php hvkp-reserva.php simular CODIGO     a que reserva llega ese codigo
  *   php hvkp-reserva.php cancelar CODIGO    la deja fuera y revoca sus enlaces
  *   php hvkp-reserva.php mover CODIGO unidad=magnolio-1506
  *
@@ -283,7 +284,12 @@ if ( 'revisar' === $modo ) {
                     r.guest_last_name AS r_ape
              FROM $TA a JOIN $TR r ON r.id = a.portal_reservation_id
              WHERE a.portal_reservation_id IS NOT NULL
-               AND LOWER(a.guest_last_name) <> LOWER(r.guest_last_name)" );
+               AND LOWER(a.guest_last_name) <> LOWER(r.guest_last_name)
+               -- El iCal de Airbnb no trae nombres: los deja en 'Airbnb Guest'.
+               -- Comparar contra ese relleno marcaba como cruce cualquier
+               -- reserva a la que alguien le hubiera puesto el nombre a mano.
+               AND LOWER(a.guest_last_name) NOT IN ('guest', 'airbnb guest', '')
+               AND LOWER(r.guest_last_name) NOT IN ('guest', 'airbnb guest', '')" );
         foreach ( (array) $cruces as $c ) {
             $malo++;
             echo "  [X] {$c->airbnb_code} (de {$c->a_ape}) esta enlazada con la reserva\n";
@@ -305,6 +311,64 @@ if ( 'revisar' === $modo ) {
     }
 
     if ( ! $malo ) { echo "  (ninguno)\n\n"; }
+    exit( 0 );
+}
+
+if ( 'simular' === $modo ) {
+    $cod = isset( $args[1] ) ? strtoupper( trim( $args[1] ) ) : '';
+    if ( ! $cod ) {
+        echo "[ERROR] Uso: php hvkp-reserva.php simular CODIGO\n";
+        echo "        Dice a que reserva llega ese codigo, sin tocar nada.\n";
+        exit( 1 );
+    }
+
+    echo "== Que pasa si alguien teclea $cod ==\n\n";
+
+    // El portal mira en este orden, y se queda con la primera que encuentra.
+    $r = $wpdb->get_row( $wpdb->prepare(
+        "SELECT r.*, u.name AS unit_name FROM $TR r LEFT JOIN $TU u ON r.unit_id = u.id
+         WHERE r.reservation_code = %s AND r.status != 'cancelled'", $cod ) );
+    if ( $r ) {
+        echo "  1. Lo encuentra entre las reservas del portal. Veria:\n\n";
+        printf( "       Hola, %s\n", $r->guest_name );
+        printf( "       %s · %s al %s\n\n", $r->unit_name, $r->check_in, $r->check_out );
+        echo "     Enlace: " . hvkr_enlace( (int) $r->id ) . "\n\n";
+        exit( 0 );
+    }
+    echo "  1. No esta entre las reservas del portal.\n";
+
+    $TA = $wpdb->prefix . 'portal_airbnb_reservations';
+    if ( $wpdb->get_var( $wpdb->prepare( 'SHOW TABLES LIKE %s', $TA ) ) !== $TA ) {
+        echo "  2. No hay tabla de reservas de Airbnb.\n\n";
+        echo "  => El portal le diria que el codigo no sirve.\n\n";
+        exit( 0 );
+    }
+    $a2 = $wpdb->get_row( $wpdb->prepare(
+        "SELECT a.*, u.name AS unit_name FROM $TA a LEFT JOIN $TU u ON a.unit_id = u.id
+         WHERE a.airbnb_code = %s AND a.status != 'cancelled'", $cod ) );
+    if ( ! $a2 ) {
+        echo "  2. Tampoco entre las de Airbnb.\n\n";
+        echo "  => El portal le diria que el codigo no sirve. Si la reserva existe en\n";
+        echo "     Airbnb, falta sincronizarla: Escritorio -> HOMVUK Portal -> Airbnb.\n\n";
+        exit( 0 );
+    }
+
+    echo "  2. Esta entre las de Airbnb. Veria:\n\n";
+    printf( "       Hola, %s\n", $a2->guest_first_name );
+    printf( "       %s · %s al %s\n\n", $a2->unit_name, $a2->check_in, $a2->check_out );
+    if ( $a2->portal_reservation_id ) {
+        $p = $wpdb->get_row( $wpdb->prepare(
+            "SELECT r.*, u.name AS unit_name FROM $TR r LEFT JOIN $TU u ON r.unit_id = u.id
+             WHERE r.id = %d", (int) $a2->portal_reservation_id ) );
+        if ( $p ) {
+            printf( "     Usa la reserva del portal %s (%s %s, %s).\n",
+                $p->reservation_code, $p->guest_name, $p->guest_last_name, $p->unit_name );
+            echo "     Enlace: " . hvkr_enlace( (int) $p->id ) . "\n\n";
+        }
+    } else {
+        echo "     Todavia no tiene reserva del portal: se le crea una la primera vez\n";
+        echo "     que entre, con el codigo ABB-$cod.\n\n";
+    }
     exit( 0 );
 }
 
@@ -352,7 +416,7 @@ if ( 'mover' === $modo ) {
 
 if ( 'crear' !== $modo ) {
     echo "[ERROR] Argumento no reconocido: $modo. Usa 'crear', 'ver', 'listar',\n";
-    echo "        'revisar', 'cancelar', 'mover' o 'unidades'.\n";
+    echo "        'revisar', 'simular', 'cancelar', 'mover' o 'unidades'.\n";
     exit( 1 );
 }
 

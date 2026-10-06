@@ -139,6 +139,42 @@ function hvkr_args( $argv ) {
     return $a;
 }
 
+/**
+ * Caza los marcadores de ejemplo pegados tal cual.
+ *
+ * Pasa a menudo: se copia una linea de instrucciones con SU-APELLIDO o MONTO
+ * dentro y se ejecuta sin cambiarlo. Da igual de quien sea la culpa; el
+ * resultado es un huesped llamado "Alfredo SU-APELLIDO", y eso lo ve el
+ * huesped. Mas vale negarse y decirlo.
+ */
+function hvkr_marcador( $v ) {
+    $t = strtoupper( trim( (string) $v ) );
+    if ( '' === $t ) {
+        return false;
+    }
+    $palabras = 'APELLIDO|NOMBRE|CODIGO|MONTO|SLUG|NUMERO|UNIDAD|FECHA|EMAIL|TELEFONO|NOTAS';
+    return (bool) preg_match( '/^(SU|TU|EL|LA|MI)?[\s_-]*(' . $palabras . ')S?([\s_-]|$)/', $t )
+        || (bool) preg_match( '/(QUE-?SALGA|LO-?QUE-?SEA|XXXX|\.\.\.)/', $t );
+}
+
+function hvkr_rechaza_marcadores( $args ) {
+    foreach ( array( 'nombre', 'apellido', 'unidad', 'codigo', 'email', 'telefono' ) as $k ) {
+        if ( isset( $args[ $k ] ) && hvkr_marcador( $args[ $k ] ) ) {
+            echo "[ERROR] '{$args[$k]}' parece un ejemplo, no un dato real.\n";
+            echo "        Esa linea venia con un hueco que habia que rellenar.\n";
+            echo "        Cambia $k= por el valor de verdad y vuelve a correrla.\n";
+            exit( 1 );
+        }
+    }
+    foreach ( $args as $k => $v ) {
+        if ( is_int( $k ) && hvkr_marcador( $v ) ) {
+            echo "[ERROR] '$v' parece un ejemplo, no un dato real.\n";
+            echo "        Esa linea venia con un hueco que habia que rellenar.\n";
+            exit( 1 );
+        }
+    }
+}
+
 function hvkr_unidad( $ref ) {
     global $wpdb, $TU;
     return $wpdb->get_row( $wpdb->prepare(
@@ -175,6 +211,7 @@ function hvkr_mostrar( $r ) {
 
 $args = hvkr_args( $argv );
 $modo = isset( $args[0] ) ? strtolower( $args[0] ) : 'crear';
+hvkr_rechaza_marcadores( $args );
 
 /* =========================================================================
  * Consultar

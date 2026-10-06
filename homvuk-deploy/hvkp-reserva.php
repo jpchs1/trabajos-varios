@@ -36,6 +36,8 @@ error_reporting( E_ALL );
  * Revisar y corregir:
  *   php hvkp-reserva.php revisar            que reservas hay y que esta cruzado
  *   php hvkp-reserva.php simular CODIGO     a que reserva llega ese codigo
+ *   php hvkp-reserva.php enlace CODIGO      prepara el acceso de quien ya tiene
+ *       codigo de Airbnb, y con nombre= y apellido= lo saluda por su nombre
  *   php hvkp-reserva.php cancelar CODIGO    la deja fuera y revoca sus enlaces
  *   php hvkp-reserva.php mover CODIGO unidad=magnolio-1506
  *
@@ -163,7 +165,8 @@ function hvkr_enlace( $res_id ) {
 }
 
 function hvkr_mostrar( $r ) {
-    printf( "  %s %s · %s\n", $r->guest_name, $r->guest_last_name, $r->unit_name );
+    $unidad = ! empty( $r->unit_name ) ? $r->unit_name : '(sin unidad)';
+    printf( "  %s %s · %s\n", $r->guest_name, $r->guest_last_name, $unidad );
     printf( "  %s al %s · %d huespedes · %s\n",
         $r->check_in, $r->check_out, (int) $r->guests_count, $r->source );
     printf( "\n  Codigo:  %s\n", $r->reservation_code );
@@ -372,6 +375,47 @@ if ( 'simular' === $modo ) {
     exit( 0 );
 }
 
+if ( 'enlace' === $modo ) {
+    $cod = isset( $args[1] ) ? strtoupper( trim( $args[1] ) ) : '';
+    if ( ! $cod ) {
+        echo "[ERROR] Uso: php hvkp-reserva.php enlace CODIGO\n";
+        echo "        Con el codigo de Airbnb del huesped, le prepara su acceso.\n";
+        echo "        Opcional: nombre=Alfredo apellido=Perez  para saludarlo por su nombre.\n";
+        exit( 1 );
+    }
+
+    // El mismo camino que recorre el portal cuando el huesped teclea su
+    // codigo, pero hecho aqui: asi se le puede mandar el enlace ya listo en
+    // vez de pedirle que teclee nada.
+    $res = HVKP_Token::validate_by_code( $cod );
+    if ( ! $res ) {
+        echo "[ERROR] El portal no reconoce el codigo $cod.\n";
+        echo "        Miralo con: php hvkp-reserva.php simular $cod\n";
+        exit( 1 );
+    }
+
+    // El iCal de Airbnb no trae nombres: llegan como 'Airbnb Guest', y el
+    // portal saluda con eso. Si se sabe el real, se pone.
+    if ( ! empty( $args['nombre'] ) || ! empty( $args['apellido'] ) ) {
+        $campos = array();
+        if ( ! empty( $args['nombre'] ) ) {
+            $campos['guest_name'] = sanitize_text_field( $args['nombre'] );
+        }
+        if ( ! empty( $args['apellido'] ) ) {
+            $campos['guest_last_name'] = sanitize_text_field( $args['apellido'] );
+        }
+        $wpdb->update( $TR, $campos, array( 'id' => (int) $res->id ) );
+        $res = $wpdb->get_row( $wpdb->prepare(
+            "SELECT r.*, u.name AS unit_name FROM $TR r LEFT JOIN $TU u ON r.unit_id = u.id
+             WHERE r.id = %d", (int) $res->id ) );
+    }
+
+    echo "[OK]    Acceso listo.\n\n";
+    hvkr_mostrar( $res );
+    echo "\n  Mandale el enlace: entra directo, sin teclear nada.\n\n";
+    exit( 0 );
+}
+
 if ( 'cancelar' === $modo ) {
     $cod = isset( $args[1] ) ? strtoupper( $args[1] ) : '';
     if ( ! $cod ) {
@@ -416,7 +460,7 @@ if ( 'mover' === $modo ) {
 
 if ( 'crear' !== $modo ) {
     echo "[ERROR] Argumento no reconocido: $modo. Usa 'crear', 'ver', 'listar',\n";
-    echo "        'revisar', 'simular', 'cancelar', 'mover' o 'unidades'.\n";
+    echo "        'revisar', 'simular', 'enlace', 'cancelar', 'mover' o 'unidades'.\n";
     exit( 1 );
 }
 
